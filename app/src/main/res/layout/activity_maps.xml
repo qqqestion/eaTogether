@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".MapsActivity"
     android:orientation="vertical">
-
-    <Button
+    <fragment
+        android:id="@+id/googleMaps"
+        android:name="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/mapButton"
-        android:text="@string/open_map"/>
+        android:layout_height="match_parent"
+        />
 
 </LinearLayout>

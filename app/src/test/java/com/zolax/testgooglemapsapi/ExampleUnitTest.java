@@ -1,4 +1,4 @@
-package com.emoji.eatogether;
+package com.zolax.testgooglemapsapi;
 
 import org.junit.Test;
 
