@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">eaTogether</string>
+    <string name="app_name">Test Google Maps API</string>
+    <string name="open_map">Open Map</string>
+    <string name="google_map_key">AIzaSyDCvP07ssvmpkykrJ3QN5_BzGifwa4Weqo</string>
 </resources>
