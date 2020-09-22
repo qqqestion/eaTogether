@@ -1,4 +1,4 @@
-package com.emoji.eatogether;
+package com.zolax.testsql;
 
 import android.content.Context;
 
@@ -21,6 +21,7 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.emoji.eatogether", appContext.getPackageName());
+
+        assertEquals("com.zolax.testsql", appContext.getPackageName());
     }
 }

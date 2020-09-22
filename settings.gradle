@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "eaTogether"
+rootProject.name='test sql'

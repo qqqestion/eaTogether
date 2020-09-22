@@ -1,4 +1,4 @@
-package com.emoji.eatogether;
+package com.zolax.testsql;
 
 import org.junit.Test;
 
