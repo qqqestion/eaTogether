@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "31226130660",
+    "firebase_url": "https://test-f35e0.firebaseio.com",
+    "project_id": "test-f35e0",
+    "storage_bucket": "test-f35e0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:31226130660:android:da69efd982f9e125b97cf1",
+        "android_client_info": {
+          "package_name": "com.zolax.testsql"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "31226130660-pb7604l5l1vljfjbaqbp96rtuj9tmdki.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zolax.testsql",
+            "certificate_hash": "f0b3a0a6f49925b71a42a84291be098ea8e6e449"
+          }
+        },
+        {
+          "client_id": "31226130660-qc41m6e8q4pp6evtka2q35792ru5v3v2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBvEadtrDEQ4UiJCUi8rp3Lcwj4Itcask"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "31226130660-qc41m6e8q4pp6evtka2q35792ru5v3v2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

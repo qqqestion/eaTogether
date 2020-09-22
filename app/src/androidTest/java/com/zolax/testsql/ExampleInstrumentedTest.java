@@ -1,4 +1,4 @@
-package com.zolax.testgooglemapsapi;
+package com.zolax.testsql;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("com.zolax.testgooglemapsapi", appContext.getPackageName());
+        assertEquals("com.zolax.testsql", appContext.getPackageName());
     }
 }

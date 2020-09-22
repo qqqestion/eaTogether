@@ -1,4 +1,4 @@
-package com.zolax.testgooglemapsapi;
+package com.zolax.testsql;
 
 import org.junit.Test;
 
