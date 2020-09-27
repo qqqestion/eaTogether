@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">eaTogether</string>
+    <string name="add_value_to_firebase">Add Value to Firebase</string>
+    <string name="input_name">Username</string>
+    <string name="input_value">Value</string>
+    <string name="input_email">Email</string>
+    <string name="register_new_user">Register New User</string>
 </resources>
