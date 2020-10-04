@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorGreen">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="411dp"
+        android:layout_height="631dp"
+        android:background="@drawable/navbar_down"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="104dp" />
+
+    <ImageButton
+        android:id="@+id/button4"
+        android:layout_width="36dp"
+        android:layout_height="40dp"
+        android:background="@color/colorGreen"
+        android:checked="true"
+        android:src="@drawable/navigationbutton"
+        tools:ignore="MissingConstraints,UnknownId"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="16dp" />
+
+
+    <TextView
+        android:id="@+id/profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/profile"
+        android:textColor="@color/colorWhite"
+        android:textSize="20dp"
+        tools:layout_editor_absoluteX="162dp"
+        tools:layout_editor_absoluteY="29dp" />
+
+    <ImageButton
+        android:id="@+id/profile_photo"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:background="@drawable/profile_photo"
+        tools:layout_editor_absoluteX="140dp"
+        tools:layout_editor_absoluteY="150dp" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:background="@drawable/rounded_button_pink"
+        android:text="@string/log_out"
+        android:textColor="@color/colorWhite"
+        tools:layout_editor_absoluteX="130dp"
+        tools:layout_editor_absoluteY="638dp" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="540dp"
+        tools:layout_editor_absoluteY="300dp"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/surname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Имя"
+            android:textSize="@dimen/text_size" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textColor="@color/colorDark"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textColor="@color/colorDark"/>
+
+        <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        android:textColor="@color/colorDark"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textColor="@color/colorDark"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textColor="@color/colorDark"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textColor="@color/colorDark"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textColor="@color/colorDark"/>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
