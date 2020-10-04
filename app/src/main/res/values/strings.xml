@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">eaTogether</string>
+    <string name="email">Email</string>
+    <string name="register">Регистация</string>
+    <string name="login">Вход</string>
+    <string name="password">Пароль</string>
+    <string name="log_in">Войти</string>
+    <string name="cancel">Отмена</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="birthday">День рождения</string>
+    <string name="description">Напишите несколько слов о себе</string>
+    <string name="confirm_password">Повторить пароль</string>
+    <string name="eatogether">eaTogether</string>
+    <string name="profile">Профиль</string>
+    <string name="hi">Привет!</string>
+    <string name="hi_2">С кем сегодня поедим?</string>
+    <string name="log_out">Выйти</string>
+    <string name="change_photo">Изменить фотографию</string>
 </resources>

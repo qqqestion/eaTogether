@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foregroundTint="@color/colorLiteGrey"
+    tools:context=".WelcomeActivity">
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginBottom="221dp"
+        android:background="@drawable/rounded_button_green"
+        android:text="@string/login"
+        android:textColor="#EEEEEE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="520dp"
+        android:layout_marginEnd="56dp"
+        android:background="@drawable/rounded_button_green"
+        android:text="@string/register"
+        android:textColor="#EEEEEE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="125dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="225dp"
+        android:background="@drawable/rounded_button_light_grey"
+        android:fontFamily="@font/spirax"
+        android:text="@string/eatogether"
+        android:textAllCaps = "false"
+        android:textColor="#E9AD95"
+        android:textSize="40dp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
+<!--    <ImageView-->
+<!--        android:id="@+id/button3"-->
+<!--        android:layout_width="338dp"-->
+<!--        android:layout_height="98dp"-->
+<!--        android:layout_marginStart="30dp"-->
+<!--        android:layout_marginTop="125dp"-->
+<!--        android:layout_marginEnd="30dp"-->
+<!--        android:layout_marginBottom="225dp"-->
+<!--        android:background="@drawable/rounded_button_light_grey"-->
+<!--        android:src="@drawable/eatogether"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/btn_login"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.49"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        tools:ignore="MissingConstraints" />-->
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/fon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--    <?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--        xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--        xmlns:tools="http://schemas.android.com/tools"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:context=".WelcomeActivity">-->
+
+<!--    <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:orientation="vertical"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--        <Button-->
+<!--                android:id="@+id/btn_login"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/login" />-->
+
+<!--        <Button-->
+<!--                android:id="@+id/btn_register"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/register"/>-->
+<!--    </LinearLayout>-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->
