@@ -134,7 +134,7 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/login_confirm"
+        android:id="@+id/register_confirm"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="3dp"
@@ -148,11 +148,11 @@
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/login_cancel"
+        android:id="@+id/register_cancel"
         android:layout_width="130dp"
         android:layout_height="0dp"
         android:layout_marginBottom="91dp"
-        android:background=""
+        android:background="@android:color/transparent"
         android:text="@string/cancel"
         android:textColor="#EEEEEE"
         app:layout_constraintBottom_toBottomOf="parent"
