@@ -27,6 +27,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        System.out.println("Hello, World!");
+
         Button cancelBtn = findViewById(R.id.login_cancel);
         Button loginBtn = findViewById(R.id.login_confirm);
         mAuth = FirebaseAuth.getInstance();
