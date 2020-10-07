@@ -1,137 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:foregroundTint="@color/colorLiteGrey">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foregroundTint="@color/colorLiteGrey">
 
     <View
-            android:id="@+id/view"
-            android:layout_width="0dp"
-            android:layout_height="180dp"
-            android:background="@drawable/navbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints" />
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:background="@drawable/navbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
 
     <ImageButton
-            android:id="@+id/button4"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="116dp"
-            android:background="@color/colorGreen"
-            android:checked="true"
-            android:src="@drawable/navigationbutton"
-            app:layout_constraintEnd_toStartOf="@+id/textView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints,UnknownId" />
+        android:id="@+id/button4"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorGreen"
+        android:checked="true"
+        android:src="@drawable/navigationbutton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints,UnknownId" />
 
 
     <TextView
-            android:id="@+id/profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="23dp"
-            android:text="@string/profile"
-            android:textColor="@color/colorWhite"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/profile_photo"
-            app:layout_constraintHorizontal_bias="0.866"
-            app:layout_constraintStart_toEndOf="@+id/button4"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/profile"
+        android:layout_width="89dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/profile"
+        android:textColor="@color/colorWhite"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view" />
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="52dp"
-            android:layout_marginEnd="161dp"
-            android:text="@string/hi"
-            android:textColor="@color/colorWhite"
-            android:textSize="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/profile_photo"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteY="80dp" />
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="40dp"
+        android:text="@string/hi"
+        android:textColor="@color/colorWhite"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/profile_photo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button4"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hi_2"
-            android:textColor="@color/colorWhite"
-            android:textSize="14dp"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="52dp"
-            tools:layout_editor_absoluteY="115dp" />
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hi_2"
+        android:textColor="@color/colorWhite"
+        android:textSize="14dp"
+        app:layout_constraintEnd_toStartOf="@+id/profile_photo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:ignore="MissingConstraints" />
 
     <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Недельная статистика"
-            android:textColor="@color/colorDark"
-            android:textSize="20dp"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="52dp"
-            tools:layout_editor_absoluteY="213dp" />
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Недельная статистика"
+        android:textColor="@color/colorDark"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        tools:ignore="MissingConstraints" />
 
     <ImageButton
-            android:id="@+id/profile_photo"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
-            android:layout_marginTop="52dp"
-            android:layout_marginEnd="28dp"
-            android:layout_marginBottom="34dp"
-            android:background="@drawable/profile_photo"
-            app:layout_constraintBottom_toBottomOf="@+id/button3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button4" />
+        android:id="@+id/profile_photo"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="34dp"
+        android:background="@drawable/profile_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button4" />
+
+    <!--    <Button-->
+    <!--        android:layout_width="135dp"-->
+    <!--        android:layout_height="135dp"-->
+    <!--        android:background="@drawable/rounded_button_pink"-->
+    <!--        android:clickable="false"-->
+    <!--        android:textAllCaps="false"-->
+    <!--        tools:ignore="MissingConstraints"-->
+    <!--        tools:layout_editor_absoluteX="32dp"-->
+    <!--        tools:layout_editor_absoluteY="255dp" />-->
+
+    <!--    <Button-->
+    <!--            android:layout_width="135dp"-->
+    <!--            android:layout_height="135dp"-->
+    <!--            android:background="@drawable/rounded_button_pink"-->
+    <!--            tools:ignore="MissingConstraints"-->
+    <!--            android:clickable="false"-->
+    <!--            android:textAllCaps="false"-->
+    <!--            tools:layout_editor_absoluteX="52dp"-->
+    <!--            tools:layout_editor_absoluteY="455dp" />-->
+
+    <!--    <Button-->
+    <!--            android:layout_width="135dp"-->
+    <!--            android:layout_height="135dp"-->
+    <!--            android:background="@drawable/rounded_button_pink"-->
+    <!--            tools:ignore="MissingConstraints"-->
+    <!--            android:clickable="false"-->
+    <!--            android:textAllCaps="false"-->
+    <!--            tools:layout_editor_absoluteX="230dp"-->
+    <!--            tools:layout_editor_absoluteY="455dp" />-->
+
+    <!--    <Button-->
+    <!--        android:id="@+id/button"-->
+    <!--        android:layout_width="135dp"-->
+    <!--        android:layout_height="135dp"-->
+    <!--        android:layout_marginTop="24dp"-->
+    <!--        android:background="@drawable/rounded_button_pink"-->
+    <!--        android:clickable="false"-->
+    <!--        android:textAllCaps="false"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/textView3"-->
+    <!--        tools:ignore="MissingConstraints"-->
+    <!--        tools:layout_editor_absoluteX="197dp" />-->
 
     <Button
-            android:layout_width="135dp"
-            android:layout_height="135dp"
-            android:background="@drawable/rounded_button_pink"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="52dp"
-            tools:layout_editor_absoluteY="305dp" />
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button_pink"
+        android:text="Больше"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout2"
+        tools:ignore="MissingConstraints" />
 
-    <Button
-            android:layout_width="135dp"
-            android:layout_height="135dp"
-            android:background="@drawable/rounded_button_pink"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="52dp"
-            tools:layout_editor_absoluteY="455dp" />
+    <TableLayout
+        android:id="@+id/tableLayout2"
+        android:layout_width="270dp"
+        android:layout_height="270dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
-    <Button
-            android:layout_width="135dp"
-            android:layout_height="135dp"
-            android:background="@drawable/rounded_button_pink"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="230dp"
-            tools:layout_editor_absoluteY="455dp" />
+        <TableRow >
 
-    <Button
-            android:layout_width="135dp"
-            android:layout_height="135dp"
-            android:background="@drawable/rounded_button_pink"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="230dp"
-            tools:layout_editor_absoluteY="305dp" />
+            <Button
+                android:id="@+id/buttonTable1"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                android:background="@drawable/rounded_button_pink"
+                android:clickable="false"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-    <Button
-            android:layout_width="150dp"
-            android:layout_height="45dp"
-            android:background="@drawable/rounded_button_pink"
-            android:text="Больше"
-            android:textColor="@color/colorWhite"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="127dp"
-            tools:layout_editor_absoluteY="608dp" />
+            <Button
+                android:id="@+id/buttonTable2"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                android:background="@drawable/rounded_button_pink"
+                android:clickable="false"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        </TableRow>
+
+        <TableRow android:layout_width="270dp">
+
+            <Button
+                android:id="@+id/buttonTable3"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                android:background="@drawable/rounded_button_pink"
+                android:clickable="false"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+
+            <Button
+                android:id="@+id/buttonTable4"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                android:background="@drawable/rounded_button_pink"
+                android:clickable="false"
+                android:textAllCaps="false"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        </TableRow>
+    </TableLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
