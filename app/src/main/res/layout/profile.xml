@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorGreen">
+    android:background="@color/colorGreen"
+    >
 
     <View
         android:id="@+id/view"
-        android:layout_width="396dp"
-        android:layout_height="862dp"
+        android:layout_width="match_parent"
+        android:layout_height="850dp"
         android:layout_marginTop="24dp"
         android:background="@drawable/navbar_down"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -26,7 +27,7 @@
         android:layout_marginTop="16dp"
         android:background="@color/colorGreen"
         android:checked="true"
-        android:src="@drawable/navigationbutton"
+        android:src="@drawable/back_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints,UnknownId" />
@@ -89,6 +90,13 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_photo"
         tools:ignore="MissingConstraints">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Имя"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp" />
+
         <EditText
             android:id="@+id/name"
             android:layout_width="match_parent"
@@ -96,7 +104,15 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             android:text="Имя"
-            android:textColor="@color/colorDark" />
+            android:textColor="@color/colorDark"
+            android:drawableRight="@drawable/edit_pen"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Фамилия"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/surname"
@@ -105,8 +121,15 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             android:text="Фамилия"
-            android:textColor="@color/colorDark" />
+            android:textColor="@color/colorDark"
+            android:drawableRight="@drawable/edit_pen"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Дата рождения"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp" />
         <EditText
             android:id="@+id/birthday"
             android:layout_width="match_parent"
@@ -114,7 +137,15 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             android:text="Дата рождения"
-            android:textColor="@color/colorDark" />
+            android:textColor="@color/colorDark"
+            android:drawableRight="@drawable/edit_pen"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Город"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/location"
@@ -123,30 +154,62 @@
             android:imeOptions="actionNext"
             android:inputType="text"
             android:text="Город"
-            android:textColor="@color/colorDark" />
+            android:textColor="@color/colorDark"
+            android:drawableRight="@drawable/edit_pen"/>
 
-        <EditText
-            android:id="@+id/food_preferences"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:imeOptions="actionNext"
-            android:inputType="text"
             android:text="Вкусовые предпочтения"
-            android:textColor="@color/colorDark" />
-
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp" />
+        <!--            Это как бы выпадающий список-->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+            <Spinner
+                android:id="@+id/food_preferences"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Вкусовые предпочтения"></Spinner>
+        </LinearLayout>
+<!--        <EditText-->
+<!--            android:id="@+id/food_preferences"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:imeOptions="actionNext"-->
+<!--            android:inputType="text"-->
+<!--            android:text="Вкусовые предпочтения"-->
+<!--            android:textColor="@color/colorDark"-->
+<!--            android:drawableRight="@drawable/edit_pen"/>-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Контактные данные"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp" />
         <EditText
             android:id="@+id/contacts"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="74dp"
+            android:drawableRight="@drawable/edit_pen"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:text="Контактные данные"
             android:textColor="@color/colorDark" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Обо мне"
+            android:textColor="@color/colorBlack"
+            android:textSize="20sp" />
         <EditText
             android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="67dp"
+            android:drawableRight="@drawable/edit_pen"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:text="Обо мне"

@@ -61,11 +61,12 @@ public class RegisterActivity extends AppCompatActivity {
         List<Integer> requiredFields = new ArrayList<>(Arrays.asList(
                 R.id.register_email,
                 R.id.register_password,
-                R.id.register_password_confirmation,
-                R.id.register_name,
-                R.id.register_surname,
-                R.id.register_birthday,
-                R.id.register_description)
+                R.id.register_password_confirmation
+//                R.id.register_name,
+//                R.id.register_surname,
+//                R.id.register_birthday,
+//                R.id.register_description
+        )
         );
         final Map<Integer, String> fields = new HashMap<>();
 
@@ -97,10 +98,10 @@ public class RegisterActivity extends AppCompatActivity {
                             Intent intent = new Intent(getApplication(), ProfileActivity.class);
                             FirebaseUser user = mAuth.getCurrentUser();
                             DatabaseReference userRef = mUsersRef.child(user.getUid());
-                            userRef.child("name").setValue(fields.get(R.id.register_name));
-                            userRef.child("surname").setValue(fields.get(R.id.register_surname));
-                            userRef.child("birthday").setValue(fields.get(R.id.register_birthday));
-                            userRef.child("description").setValue(fields.get(R.id.register_description));
+//                            userRef.child("name").setValue(fields.get(R.id.register_name));
+//                            userRef.child("surname").setValue(fields.get(R.id.register_surname));
+//                            userRef.child("birthday").setValue(fields.get(R.id.register_birthday));
+//                            userRef.child("description").setValue(fields.get(R.id.register_description));
                             startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.

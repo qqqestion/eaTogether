@@ -94,47 +94,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/button4" />
 
-    <!--    <Button-->
-    <!--        android:layout_width="135dp"-->
-    <!--        android:layout_height="135dp"-->
-    <!--        android:background="@drawable/rounded_button_pink"-->
-    <!--        android:clickable="false"-->
-    <!--        android:textAllCaps="false"-->
-    <!--        tools:ignore="MissingConstraints"-->
-    <!--        tools:layout_editor_absoluteX="32dp"-->
-    <!--        tools:layout_editor_absoluteY="255dp" />-->
-
-    <!--    <Button-->
-    <!--            android:layout_width="135dp"-->
-    <!--            android:layout_height="135dp"-->
-    <!--            android:background="@drawable/rounded_button_pink"-->
-    <!--            tools:ignore="MissingConstraints"-->
-    <!--            android:clickable="false"-->
-    <!--            android:textAllCaps="false"-->
-    <!--            tools:layout_editor_absoluteX="52dp"-->
-    <!--            tools:layout_editor_absoluteY="455dp" />-->
-
-    <!--    <Button-->
-    <!--            android:layout_width="135dp"-->
-    <!--            android:layout_height="135dp"-->
-    <!--            android:background="@drawable/rounded_button_pink"-->
-    <!--            tools:ignore="MissingConstraints"-->
-    <!--            android:clickable="false"-->
-    <!--            android:textAllCaps="false"-->
-    <!--            tools:layout_editor_absoluteX="230dp"-->
-    <!--            tools:layout_editor_absoluteY="455dp" />-->
-
-    <!--    <Button-->
-    <!--        android:id="@+id/button"-->
-    <!--        android:layout_width="135dp"-->
-    <!--        android:layout_height="135dp"-->
-    <!--        android:layout_marginTop="24dp"-->
-    <!--        android:background="@drawable/rounded_button_pink"-->
-    <!--        android:clickable="false"-->
-    <!--        android:textAllCaps="false"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textView3"-->
-    <!--        tools:ignore="MissingConstraints"-->
-    <!--        tools:layout_editor_absoluteX="197dp" />-->
+    <ImageButton
+        android:id="@+id/profile_settings"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/settings"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_photo"
+        app:layout_constraintEnd_toEndOf="@+id/profile_photo"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/profile_photo"
+        app:layout_constraintTop_toTopOf="@+id/profile_photo"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:layout_width="150dp"
