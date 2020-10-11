@@ -7,18 +7,6 @@
     android:background="@color/colorGreen"
     >
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="850dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/navbar_down"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile"
-        tools:ignore="MissingConstraints" />
-
     <ImageButton
         android:id="@+id/button4"
         android:layout_width="36dp"
@@ -79,15 +67,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_photo" />
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="401dp"
+        android:layout_height="858dp"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/navbar_down"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_photo"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toStartOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/btn_login"
         tools:ignore="MissingConstraints">
 
         <TextView
@@ -101,11 +100,11 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableRight="@drawable/edit_pen"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:text="Имя"
-            android:textColor="@color/colorDark"
-            android:drawableRight="@drawable/edit_pen"/>
+            android:textColor="@color/colorDark" />
 
         <TextView
             android:layout_width="match_parent"
@@ -118,11 +117,11 @@
             android:id="@+id/surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableRight="@drawable/edit_pen"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:text="Фамилия"
-            android:textColor="@color/colorDark"
-            android:drawableRight="@drawable/edit_pen"/>
+            android:textColor="@color/colorDark" />
 
         <TextView
             android:layout_width="match_parent"
@@ -130,15 +129,16 @@
             android:text="Дата рождения"
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />
+
         <EditText
             android:id="@+id/birthday"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableRight="@drawable/edit_pen"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:text="Дата рождения"
-            android:textColor="@color/colorDark"
-            android:drawableRight="@drawable/edit_pen"/>
+            android:textColor="@color/colorDark" />
 
         <TextView
             android:layout_width="match_parent"
@@ -151,11 +151,11 @@
             android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:drawableRight="@drawable/edit_pen"
             android:imeOptions="actionNext"
             android:inputType="text"
             android:text="Город"
-            android:textColor="@color/colorDark"
-            android:drawableRight="@drawable/edit_pen"/>
+            android:textColor="@color/colorDark" />
 
         <TextView
             android:layout_width="match_parent"
@@ -164,31 +164,35 @@
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />
         <!--            Это как бы выпадающий список-->
+        <!--        <EditText-->
+        <!--            android:id="@+id/food_preferences"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:imeOptions="actionNext"-->
+        <!--            android:inputType="text"-->
+        <!--            android:text="Вкусовые предпочтения"-->
+        <!--            android:textColor="@color/colorDark"-->
+        <!--            android:drawableRight="@drawable/edit_pen"/>-->
+
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical">
+
             <Spinner
                 android:id="@+id/food_preferences"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Вкусовые предпочтения"></Spinner>
         </LinearLayout>
-<!--        <EditText-->
-<!--            android:id="@+id/food_preferences"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:imeOptions="actionNext"-->
-<!--            android:inputType="text"-->
-<!--            android:text="Вкусовые предпочтения"-->
-<!--            android:textColor="@color/colorDark"-->
-<!--            android:drawableRight="@drawable/edit_pen"/>-->
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Контактные данные"
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />
+
         <EditText
             android:id="@+id/contacts"
             android:layout_width="match_parent"
@@ -205,6 +209,7 @@
             android:text="Обо мне"
             android:textColor="@color/colorBlack"
             android:textSize="20sp" />
+
         <EditText
             android:id="@+id/description"
             android:layout_width="match_parent"
