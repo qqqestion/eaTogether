@@ -1,6 +1,6 @@
 *.iml
-.*
 !.gitignore
+.*
 /local.properties
 /build
 /captures
