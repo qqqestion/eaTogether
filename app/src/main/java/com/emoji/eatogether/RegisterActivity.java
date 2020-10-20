@@ -58,58 +58,60 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void onClickRegister(View view) {
-        List<Integer> requiredFields = new ArrayList<>(Arrays.asList(
-                R.id.register_email,
-                R.id.register_password,
-                R.id.register_password_confirmation
+        // TODO: исправить это!!!
+        setContentView(R.layout.activity_register_step_2);
+//        List<Integer> requiredFields = new ArrayList<>(Arrays.asList(
+//                R.id.register_email,
+//                R.id.register_password,
+//                R.id.register_password_confirmation
 //                R.id.register_name,
 //                R.id.register_surname,
 //                R.id.register_birthday,
 //                R.id.register_description
-        )
-        );
-        final Map<Integer, String> fields = new HashMap<>();
-
-        boolean isOkay = true;
-        for (int i = 0; i < requiredFields.size(); i++) {
-            EditText field = findViewById(requiredFields.get(i));
-            String value = field.getText().toString();
-            fields.put(requiredFields.get(i), value);
-            if (value.equals("")) {
-                field.setError("Required");
-                isOkay = false;
-            }
-        }
-        if (!isOkay) {
-            return;
-        }
-
-        if (!fields.get(R.id.register_password).equals(fields.get(R.id.register_password_confirmation))) {
-            Toast.makeText(getApplication(), "Password and password confirmation must be the same", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        mAuth.createUserWithEmailAndPassword(fields.get(R.id.register_email), fields.get(R.id.register_password))
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            Intent intent = new Intent(getApplication(), ProfileActivity.class);
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            DatabaseReference userRef = mUsersRef.child(user.getUid());
+//        )
+//        );
+//        final Map<Integer, String> fields = new HashMap<>();
+//
+//        boolean isOkay = true;
+//        for (int i = 0; i < requiredFields.size(); i++) {
+//            EditText field = findViewById(requiredFields.get(i));
+//            String value = field.getText().toString();
+//            fields.put(requiredFields.get(i), value);
+//            if (value.equals("")) {
+//                field.setError("Required");
+//                isOkay = false;
+//            }
+//        }
+//        if (!isOkay) {
+//            return;
+//        }
+//
+//        if (!fields.get(R.id.register_password).equals(fields.get(R.id.register_password_confirmation))) {
+//            Toast.makeText(getApplication(), "Password and password confirmation must be the same", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        mAuth.createUserWithEmailAndPassword(fields.get(R.id.register_email), fields.get(R.id.register_password))
+//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        if (task.isSuccessful()) {
+//                            // Sign in success, update UI with the signed-in user's information
+//                            Log.d(TAG, "createUserWithEmail:success");
+//                            Intent intent = new Intent(getApplication(), ProfileActivity.class);
+//                            FirebaseUser user = mAuth.getCurrentUser();
+//                            DatabaseReference userRef = mUsersRef.child(user.getUid());
 //                            userRef.child("name").setValue(fields.get(R.id.register_name));
 //                            userRef.child("surname").setValue(fields.get(R.id.register_surname));
 //                            userRef.child("birthday").setValue(fields.get(R.id.register_birthday));
 //                            userRef.child("description").setValue(fields.get(R.id.register_description));
-                            startActivity(intent);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.d(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(getApplication(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+//                            startActivity(intent);
+//                        } else {
+//                            // If sign in fails, display a message to the user.
+//                            Log.d(TAG, "createUserWithEmail:failure", task.getException());
+//                            Toast.makeText(getApplication(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
     }
 
     public void onClickCancel(View view) {

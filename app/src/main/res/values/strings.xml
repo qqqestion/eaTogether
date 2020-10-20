@@ -17,5 +17,5 @@
     <string name="hi_2">С кем сегодня поедим?</string>
     <string name="log_out">Выйти</string>
     <string name="change_photo">Изменить фотографию</string>
-    <string name="continue">Продолжить</string>
+    <string name="my_continue">Продолжить</string>
 </resources>
