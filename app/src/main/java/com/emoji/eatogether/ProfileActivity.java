@@ -31,11 +31,11 @@ public class ProfileActivity extends AppCompatActivity {
 //        final TextView birthdayTextView = findViewById(R.id.birthday);
 //        final TextView descriptionTextView = findViewById(R.id.description);
 //
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        if (user == null) {
-//            Intent intent = new Intent(getApplication(), LoginActivity.class);
-//            startActivity(intent);
-//        }
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user == null) {
+            Intent intent = new Intent(getApplication(), LoginActivity.class);
+            startActivity(intent);
+        }
 //        emailTextView.setText(user.getEmail());
 //        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("users").child(user.getUid());
 //        userRef.addValueEventListener(new ValueEventListener() {
