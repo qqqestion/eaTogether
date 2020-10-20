@@ -45,7 +45,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-//        rootRef = FirebaseDatabase.getInstance().getReference().child("users");
+        rootRef = FirebaseDatabase.getInstance().getReference();
+
+        User user = new User(rootRef.child(User.DB_PREFIX).push());
+        user.addFirstName("Bob");
+        user.addLastName("Martin");
+        user.addDescription("I'm smart boy. You'll like me!");
+        user.addBirthday("2000-12-31");
+        user.save();
+
 //        rootRef.push().setValue(new User());
         textView = findViewById(R.id.text);
 
