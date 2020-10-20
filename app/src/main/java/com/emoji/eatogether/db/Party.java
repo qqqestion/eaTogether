@@ -1,13 +1,18 @@
 package com.emoji.eatogether.db;
 
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @IgnoreExtraProperties
 public class Party extends DatabaseModel {
     public static String DB_PREFIX = "parties";
+
+
 
     public Party() {
         super(null);
@@ -40,5 +45,12 @@ public class Party extends DatabaseModel {
     @Override
     public String toString() {
         return modelRef.getKey();
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+
+        return result;
     }
 }
