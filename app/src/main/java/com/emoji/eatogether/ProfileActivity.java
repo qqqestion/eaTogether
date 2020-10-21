@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,6 +26,14 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         mAuth = FirebaseAuth.getInstance();
+
+        ImageButton editProfileBtn = findViewById(R.id.profile_settings);
+        editProfileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickEditProfile(view);
+            }
+        });
     }
 
     @Override
@@ -34,5 +44,10 @@ public class ProfileActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplication(), WelcomeActivity.class);
             startActivity(intent);
         }
+    }
+
+    private void onClickEditProfile(View view) {
+        Intent intent = new Intent(getApplication(), EditProfileActivity.class);
+        startActivity(intent);
     }
 }

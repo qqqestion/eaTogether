@@ -9,7 +9,7 @@
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
     <string name="birthday">День рождения</string>
-    <string name="description">Напишите несколько слов о себе</string>
+    <string name="description">Обо мне</string>
     <string name="confirm_password">Повторить пароль</string>
     <string name="eatogether">eaTogether</string>
     <string name="profile">Профиль</string>

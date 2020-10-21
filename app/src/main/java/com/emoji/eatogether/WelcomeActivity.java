@@ -17,7 +17,7 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        Button loginBtn = findViewById(R.id.btn_login);
+        Button loginBtn = findViewById(R.id.btn_change_photo);
         Button registerBtn = findViewById(R.id.btn_register);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
