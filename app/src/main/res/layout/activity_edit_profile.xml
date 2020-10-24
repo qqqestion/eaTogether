@@ -36,38 +36,46 @@
             android:id="@+id/profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="@string/profile"
             android:textColor="@color/colorWhite"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/edit_profile_back_btn"
             app:layout_constraintEnd_toStartOf="@+id/edit_profile_save_btn"
             app:layout_constraintStart_toEndOf="@+id/edit_profile_back_btn"
-            app:layout_constraintTop_toTopOf="@+id/edit_profile_back_btn" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     <ScrollView
             android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:background="@drawable/navbar_down"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile">
+            app:layout_constraintTop_toBottomOf="@+id/profile"
+            app:layout_constraintVertical_bias="0.0">
 
 
         <LinearLayout
+                android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:orientation="vertical">
 
-            <ImageButton
+            <ImageView
                     android:id="@+id/profile_photo"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:layout_gravity="center"
+                    android:scaleType="centerCrop"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/profile_photo" />
+                    android:src="@drawable/image"
+                    android:background="@drawable/profile_photo"
+                    android:contentDescription="TODO" />
 
             <Button
                     android:id="@+id/btn_change_photo"
@@ -87,12 +95,11 @@
                     android:textSize="20sp" />
 
             <EditText
-                    android:id="@+id/first_name"
+                    android:id="@+id/first_name_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/edit_pen"
                     android:hint="Имя"
-                    android:imeOptions="actionNext"
                     android:inputType="text"
                     android:textColor="@color/colorDark" />
 
@@ -104,12 +111,11 @@
                     android:textSize="20sp" />
 
             <EditText
-                    android:id="@+id/last_name"
+                    android:id="@+id/last_name_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/edit_pen"
                     android:hint="Фамилия"
-                    android:imeOptions="actionNext"
                     android:inputType="text"
                     android:textColor="@color/colorDark" />
 
@@ -121,12 +127,11 @@
                     android:textSize="20sp" />
 
             <EditText
-                    android:id="@+id/birthday"
+                    android:id="@+id/birthday_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/edit_pen"
                     android:hint="Дата рождения"
-                    android:imeOptions="actionNext"
                     android:inputType="date"
                     android:textColor="@color/colorDark" />
 
@@ -138,12 +143,11 @@
                     android:textSize="20sp" />
 
             <EditText
-                    android:id="@+id/email"
+                    android:id="@+id/email_input"
                     android:layout_width="match_parent"
                     android:layout_height="74dp"
                     android:drawableRight="@drawable/edit_pen"
                     android:hint="Контактные данные"
-                    android:imeOptions="actionNext"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/colorDark" />
 
@@ -155,13 +159,12 @@
                     android:textSize="20sp" />
 
             <EditText
-                    android:id="@+id/description"
+                    android:id="@+id/description_input"
                     android:layout_width="match_parent"
                     android:layout_height="67dp"
                     android:layout_weight="1"
                     android:drawableRight="@drawable/edit_pen"
                     android:hint="@string/description"
-                    android:imeOptions="actionNext"
                     android:inputType="text"
                     android:textColor="@color/colorDark" />
 
