@@ -40,4 +40,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.4.0'
     implementation 'com.google.firebase:firebase-storage:19.2.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+    compileOnly 'com.google.android.wearable:wearable:2.5.0'
 }

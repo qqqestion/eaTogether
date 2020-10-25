@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <TextView
+            android:id="@+id/party_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="40sp" />
+
+    <TextView
+            android:id="@+id/party_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp" />
+
+    <TextView
+            android:id="@+id/party_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp" />
+
+    <Button
+            android:id="@+id/enter_party_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Войти в компанию"
+            android:layout_gravity="center" />
+
+    <ListView
+            android:id="@+id/user_array"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+</LinearLayout>
