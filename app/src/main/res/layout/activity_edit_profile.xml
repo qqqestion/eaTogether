@@ -1,91 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorGreen">
+        android:background="@color/colorGreen"
+        android:orientation="vertical">
 
-    <ImageButton
-            android:id="@+id/edit_profile_back_btn"
-            android:layout_width="wrap_content"
+    <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:background="@android:color/transparent"
-            android:checked="true"
-            android:contentDescription="BackButton"
-            android:src="@drawable/back_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
 
-    <ImageButton
-            android:id="@+id/edit_profile_save_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@android:color/transparent"
-            android:checked="true"
-            android:contentDescription="TODO"
-            android:src="@drawable/savebutton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+                android:id="@+id/edit_profile_back_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="BackButton"
+                android:src="@drawable/back_button" />
 
-    <TextView
-            android:id="@+id/profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/profile"
-            android:textColor="@color/colorWhite"
-            android:textSize="20sp"
-            app:layout_constraintEnd_toStartOf="@+id/edit_profile_save_btn"
-            app:layout_constraintStart_toEndOf="@+id/edit_profile_back_btn"
-            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+                android:id="@+id/profile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:text="@string/profile"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"
+                android:textSize="20sp" />
+
+
+        <ImageButton
+                android:id="@+id/edit_profile_save_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="TODO"
+                android:src="@drawable/savebutton" />
+    </LinearLayout>
 
 
     <ScrollView
             android:id="@+id/scroll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="15dp"
-            android:background="@drawable/navbar_down"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profile"
-            app:layout_constraintVertical_bias="0.0">
+            android:layout_weight="2"
+            android:background="@drawable/navbar_down">
 
 
         <LinearLayout
-                android:padding="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
 
             <ImageView
                     android:id="@+id/profile_photo"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
-                    android:layout_gravity="center"
-                    android:scaleType="centerCrop"
-                    android:layout_marginTop="16dp"
-                    android:src="@drawable/image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:background="@drawable/profile_photo"
-                    android:contentDescription="TODO" />
+                    android:contentDescription="TODO"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/image" />
 
             <Button
                     android:id="@+id/btn_change_photo"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/rounded_button_green"
                     android:text="Изменить фото"
                     android:textColor="#EEEEEE"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" />
 
             <TextView
                     android:layout_width="match_parent"
@@ -98,9 +93,9 @@
                     android:id="@+id/first_name_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/edit_pen"
+                    android:drawableEnd="@drawable/edit_pen"
                     android:hint="Имя"
-                    android:inputType="text"
+                    android:inputType="textPersonName"
                     android:textColor="@color/colorDark" />
 
             <TextView
@@ -114,7 +109,7 @@
                     android:id="@+id/last_name_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/edit_pen"
+                    android:drawableEnd="@drawable/edit_pen"
                     android:hint="Фамилия"
                     android:inputType="text"
                     android:textColor="@color/colorDark" />
@@ -130,7 +125,7 @@
                     android:id="@+id/birthday_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/edit_pen"
+                    android:drawableEnd="@drawable/edit_pen"
                     android:hint="Дата рождения"
                     android:inputType="date"
                     android:textColor="@color/colorDark" />
@@ -161,8 +156,7 @@
             <EditText
                     android:id="@+id/description_input"
                     android:layout_width="match_parent"
-                    android:layout_height="67dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:drawableRight="@drawable/edit_pen"
                     android:hint="@string/description"
                     android:inputType="text"
@@ -172,7 +166,6 @@
                     android:id="@+id/btn_sign_out"
                     android:layout_width="150dp"
                     android:layout_height="45dp"
-                    android:layout_gravity="center"
                     android:layout_marginTop="16dp"
                     android:background="@drawable/rounded_button_pink"
                     android:text="@string/log_out"
@@ -181,4 +174,4 @@
 
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -12,8 +12,6 @@ import java.util.Map;
 public class Party extends DatabaseModel {
     public static String DB_PREFIX = "parties";
 
-
-
     public Party() {
         super(null);
     }
@@ -52,5 +50,9 @@ public class Party extends DatabaseModel {
         HashMap<String, Object> result = new HashMap<>();
 
         return result;
+    }
+
+    public String getTime() {
+        return "Hello";
     }
 }
