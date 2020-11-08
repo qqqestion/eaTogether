@@ -1,84 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:foregroundTint="@color/colorLiteGrey"
-    tools:context=".WelcomeActivity">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background"
+        android:foregroundTint="@color/colorLiteGrey"
+        tools:context=".WelcomeActivity">
+
+    <TextView
+            android:layout_width="@dimen/eatogether_title_width"
+            android:layout_height="@dimen/eatogether_title_height"
+            android:layout_marginTop="@dimen/eatogether_title_mangin_top"
+            android:background="@drawable/rounded_button_light_grey"
+            android:fontFamily="@font/spirax"
+            android:gravity="center"
+            android:text="@string/eatogether"
+            android:textColor="@color/colorPink"
+            android:textSize="@dimen/eatogether_title_font"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn_change_photo"
-        android:layout_width="130dp"
-        android:layout_height="55dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/rounded_button_green"
-        android:text="@string/login"
-        android:textColor="#EEEEEE"
-        app:layout_constraintBottom_toTopOf="@+id/btn_register"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
+            android:id="@+id/welcome_log_in_btn"
+            android:layout_width="130dp"
+            android:layout_height="55dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_button_green"
+            android:text="@string/login"
+            android:textColor="@color/colorLiteGrey"
+            app:layout_constraintBottom_toTopOf="@+id/welcome_register_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_register"
-        android:layout_width="150dp"
-        android:layout_height="55dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/rounded_button_green"
-        android:text="@string/register"
-        android:textColor="#EEEEEE"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="350dp"
-        android:layout_height="110dp"
-        android:layout_marginTop="125dp"
-        android:background="@drawable/rounded_button_light_grey"
-        android:clickable="false"
-        android:fontFamily="@font/spirax"
-        android:text="@string/eatogether"
-        android:textAllCaps="false"
-        android:textColor="#E9AD95"
-        android:textSize="40dp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-<!--    <ImageView-->
-<!--        android:id="@+id/button3"-->
-<!--        android:layout_width="338dp"-->
-<!--        android:layout_height="98dp"-->
-<!--        android:layout_marginStart="30dp"-->
-<!--        android:layout_marginTop="125dp"-->
-<!--        android:layout_marginEnd="30dp"-->
-<!--        android:layout_marginBottom="225dp"-->
-<!--        android:background="@drawable/rounded_button_light_grey"-->
-<!--        android:src="@drawable/eatogether"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/btn_login"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.49"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        tools:ignore="MissingConstraints" />-->
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/fon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+            android:id="@+id/welcome_register_btn"
+            android:layout_width="150dp"
+            android:layout_height="55dp"
+            android:layout_marginBottom="@dimen/auth_buttons_margin_bot"
+            android:background="@drawable/rounded_button_green"
+            android:text="@string/register"
+            android:textColor="@color/colorLiteGrey"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

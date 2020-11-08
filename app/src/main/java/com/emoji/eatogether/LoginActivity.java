@@ -29,8 +29,8 @@ public class LoginActivity extends AppCompatActivity {
 
         System.out.println("Hello, World!");
 
-        Button cancelBtn = findViewById(R.id.login_cancel);
-        Button loginBtn = findViewById(R.id.login_confirm);
+        Button cancelBtn = findViewById(R.id.login_cancel_btn);
+        Button loginBtn = findViewById(R.id.login_confirm_btn);
         mAuth = FirebaseAuth.getInstance();
 
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -52,8 +52,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onClickLogin(View view) {
-        EditText emailField = findViewById(R.id.login_email);
-        EditText passwordField = findViewById(R.id.login_password);
+        EditText emailField = findViewById(R.id.login_email_field);
+        EditText passwordField = findViewById(R.id.login_password_field);
         String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
         mAuth.signInWithEmailAndPassword(email, password)

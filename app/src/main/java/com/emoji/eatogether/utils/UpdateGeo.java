@@ -1,4 +1,4 @@
-package com.emoji.eatogether;
+package com.emoji.eatogether.utils;
 
 import android.Manifest;
 import android.content.Context;
@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.emoji.eatogether.R;
 
 import java.io.IOException;
 import java.util.List;

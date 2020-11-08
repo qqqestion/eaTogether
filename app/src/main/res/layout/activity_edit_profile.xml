@@ -20,12 +20,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@android:color/transparent"
-                android:contentDescription="BackButton"
-                android:src="@drawable/back_button" />
+                android:contentDescription="@string/content_description_back_btn"
+                android:src="@drawable/btn_back" />
 
 
         <TextView
-                android:id="@+id/profile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -43,18 +42,17 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@android:color/transparent"
-                android:contentDescription="TODO"
-                android:src="@drawable/savebutton" />
+                android:contentDescription="@string/content_description_save_btn"
+                android:src="@drawable/btn_save" />
     </LinearLayout>
 
 
     <ScrollView
-            android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="15dp"
             android:layout_weight="2"
-            android:background="@drawable/navbar_down">
+            android:background="@drawable/rounded_panel_down">
 
 
         <LinearLayout
@@ -69,17 +67,18 @@
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:background="@drawable/profile_photo"
-                    android:contentDescription="TODO"
+                    android:contentDescription="@string/content_description_profile_image"
                     android:scaleType="centerCrop"
                     android:src="@drawable/image" />
 
             <Button
-                    android:id="@+id/btn_change_photo"
+                    android:id="@+id/welcome_log_in_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_button_green"
+                    android:background="@drawable/rounded_button_pink"
+                    android:padding="10dp"
                     android:text="Изменить фото"
-                    android:textColor="#EEEEEE"
+                    android:textColor="@color/colorLiteGrey"
                     android:textSize="12sp" />
 
             <TextView

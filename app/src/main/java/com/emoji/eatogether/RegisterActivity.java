@@ -9,8 +9,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.emoji.eatogether.db.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,32 +26,31 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
-
     private FirebaseAuth mAuth;
     private DatabaseReference mUsersRef;
+    private Button nextBtn;
+    private Button backBtn;
     private final String TAG = "RegisterActivity: ";
+    private boolean isFirstStepCompleted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        Button registerBtn = findViewById(R.id.register_confirm);
-        Button cancelBtn = findViewById(R.id.register_cancel);
+        nextBtn = findViewById(R.id.register_next_and_confirm);
+        backBtn = findViewById(R.id.register_cancel_and_back);
         mAuth = FirebaseAuth.getInstance();
-        mUsersRef = FirebaseDatabase.getInstance().getReference().child("users");
+        mUsersRef = FirebaseDatabase.getInstance().getReference(User.DB_PREFIX);
 
-        registerBtn.setOnClickListener(new View.OnClickListener() {
+        nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickRegister(view);
+                onClickNext(view);
             }
         });
-        cancelBtn.setOnClickListener(new View.OnClickListener() {
+        backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onClickCancel(view);
@@ -57,11 +58,19 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    public void onClickRegister(View view) {
+    public void onClickNext(View view) {
+        if (!isFirstStepCompleted) {
+            onStepForward();
+        } else {
+
         List<Integer> requiredFields = new ArrayList<>(Arrays.asList(
-                R.id.register_email,
-                R.id.register_password,
-                R.id.register_password_confirmation
+                R.id.register_email_field,
+                R.id.register_password_field,
+                R.id.register_password_confirmation_field,
+                R.id.register_first_name_field,
+                R.id.register_last_name_field,
+                R.id.register_birthday_field,
+                R.id.register_description_field
         ));
         final Map<Integer, String> fields = new HashMap<>();
 
@@ -79,17 +88,24 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        if (!fields.get(R.id.register_password).equals(fields.get(R.id.register_password_confirmation))) {
+        if (!fields.get(R.id.register_password_field).equals(fields.get(R.id.register_password_confirmation_field))) {
             Toast.makeText(getApplication(), "Password and password confirmation must be the same", Toast.LENGTH_SHORT).show();
             return;
         }
-        mAuth.createUserWithEmailAndPassword(fields.get(R.id.register_email), fields.get(R.id.register_password))
+        mAuth.createUserWithEmailAndPassword(fields.get(R.id.register_email_field), fields.get(R.id.register_password_field))
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            User userData = new User(mUsersRef.child(user.getUid()));
+                            userData.setFirstName(fields.get(R.id.register_first_name_field));
+                            userData.setLastName(fields.get(R.id.register_last_name_field));
+                            userData.setBirthday(fields.get(R.id.register_birthday_field));
+                            userData.setDescription(fields.get(R.id.register_description_field));
+                            userData.save();
                             Intent intent = new Intent(getApplication(), ProfileActivity.class);
                             startActivity(intent);
                         } else {
@@ -99,14 +115,47 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+        }
     }
 
     public void onClickCancel(View view) {
-        finish();
+        if (isFirstStepCompleted) {
+            onStepBack();
+        } else {
+            finish();
+        }
     }
 
-    protected static boolean isDateValid(String sDate) {
-//        return Pattern.matches("[0123456789]{1,2}\.", sDate);
-        return true;
+    private void onStepForward() {
+        LinearLayout registerFirstStep = findViewById(R.id.register_first_step);
+        registerFirstStep.setVisibility(View.GONE);
+
+        LinearLayout registerSecondStep = findViewById(R.id.register_second_step);
+        registerSecondStep.setVisibility(View.VISIBLE);
+        isFirstStepCompleted = true;
+
+        nextBtn.setText(R.string.register);
+        backBtn.setText(R.string.back);
+    }
+
+    private void onStepBack() {
+        LinearLayout registerFirstStep = findViewById(R.id.register_first_step);
+        registerFirstStep.setVisibility(View.VISIBLE);
+
+        LinearLayout registerSecondStep = findViewById(R.id.register_second_step);
+        registerSecondStep.setVisibility(View.GONE);
+        isFirstStepCompleted = false;
+
+        nextBtn.setText(R.string.next);
+        backBtn.setText(R.string.cancel);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isFirstStepCompleted) {
+            onStepBack();
+        } else {
+            super.onBackPressed();
+        }
     }
 }
