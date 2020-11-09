@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -20,14 +22,14 @@ class InformationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_information)
         val latLng = LatLng(intent.getDoubleExtra("lat", 0.0), intent.getDoubleExtra("lng", 0.0))
         val parser = PlaceDataParser()
-        val text = findViewById<TextView>(R.id.text)
         val myService: ExecutorService = Executors.newFixedThreadPool(1)
         val result = myService.submit(Callable {
             return@Callable parser.execute(latLng)
         })
-        text.text = result.get().toString()
-
-
-
+        val data = result.get()
+        val adapter = RestaurantListAdapter(this,data)
+        val list =findViewById<RecyclerView>(R.id.list)
+        list.adapter = adapter
+        list.layoutManager =LinearLayoutManager(this)
     }
 }
