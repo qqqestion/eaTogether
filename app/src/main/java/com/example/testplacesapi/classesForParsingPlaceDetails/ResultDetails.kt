@@ -6,10 +6,11 @@ import com.example.testplacesapi.classesForParsingPlaces.Photo
 class ResultDetails(
     var business_status: String,
     var name: String,
-    var photos: Array<Photo>,
-    var opening_hours: OpeningHours,
+    var photos: List<Photo>?,
+    var opening_hours: OpeningHours?,
     var rating: Double,
-    var types: Array<String>,
+    var types: List<String>,
+    var reviews: List<Review>?,
     var formatted_address: String,
     var formatted_phone_number: String,
 ) {
