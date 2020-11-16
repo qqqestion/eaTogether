@@ -5,11 +5,11 @@ class Result(
     var geometry: Geometry,
     var icon: String,
     var name: String,
-    var photos: Array<Photo>,
+    var photos: List<Photo>?,
     var place_id: String,
     var rating: Double,
     var reference: String,
-    var types: Array<String>,
+    var types: List<String>,
     var utc_offset: Int,
     var vicinity: String,
-){}
+) {}

@@ -69,6 +69,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     override fun onMapClick(location: LatLng) {
+        mMap.clear()
         createMarker(location)
     }
 
