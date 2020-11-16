@@ -1,4 +1,4 @@
-package com.example.testplacesapi.classesForParsing
+package com.example.testplacesapi.classesForParsingPlaces
 
 class Result(
     var business_status: String,

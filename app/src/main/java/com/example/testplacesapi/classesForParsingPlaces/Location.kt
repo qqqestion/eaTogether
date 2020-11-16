@@ -1,4 +1,4 @@
-package com.example.testplacesapi.classesForParsing
+package com.example.testplacesapi.classesForParsingPlaces
 
 class Location(
     var lat: Double,

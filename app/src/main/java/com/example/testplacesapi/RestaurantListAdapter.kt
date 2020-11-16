@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testplacesapi.classesForParsing.Basic
-import com.example.testplacesapi.classesForParsing.Result
+import com.example.testplacesapi.classesForParsingPlaces.Basic
+import com.example.testplacesapi.classesForParsingPlaces.Result
 import com.squareup.picasso.Picasso
 
 
@@ -36,6 +37,14 @@ class RestaurantListAdapter(
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.itemView.setOnClickListener {
+            val fragment = RestaurantDetailsFragment.newInstance(data.results[position].place_id)
+            if(context is AppCompatActivity){
+                context.supportFragmentManager.
+                beginTransaction().addToBackStack(null).
+                replace(R.id.layout_for_fragments,fragment).commit()
+            }
+        }
         holder.bind(data.results[position])
         Picasso.with(context).load(data.results[position].icon).resize(150,150).into(holder.icon)
     }
