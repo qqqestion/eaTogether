@@ -20,7 +20,7 @@ class RestaurantListAdapter(
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var icon: ImageView = itemView.findViewById(R.id.icon)
+        var photo: ImageView = itemView.findViewById(R.id.place_image)
         private var name: TextView = itemView.findViewById(R.id.name)
         private var rating: TextView = itemView.findViewById(R.id.rating)
         private var vicinity: TextView = itemView.findViewById(R.id.vicinity)
@@ -39,14 +39,20 @@ class RestaurantListAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
             val fragment = RestaurantDetailsFragment.newInstance(data.results[position].place_id)
-            if(context is AppCompatActivity){
-                context.supportFragmentManager.
-                beginTransaction().addToBackStack(null).
-                replace(R.id.layout_for_fragments,fragment).commit()
+            if (context is AppCompatActivity) {
+                context.supportFragmentManager.beginTransaction().addToBackStack(null)
+                    .replace(R.id.layout_for_fragments, fragment).commit()
             }
         }
-        holder.bind(data.results[position])
-        Picasso.with(context).load(data.results[position].icon).resize(150,150).into(holder.icon)
+        val place: Result = data.results[position]
+        holder.bind(place)
+        val url: String?
+        if (place.photos.isNullOrEmpty()) {
+            url = place.icon
+        } else {
+            url = PlaceDataParser().getPhotoUrl(place.photos!![0].photo_reference, 150, 150)
+        }
+        Picasso.with(context).load(url).resize(150, 150).into(holder.photo)
     }
 
     override fun getItemCount(): Int {

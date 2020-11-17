@@ -1,4 +1,4 @@
-package com.example.testplacesapi.classesForParsingPlaces
+package com.example.testplacesapi.classesForParsingPlaceDetails
 
 class Review(
     var author_name: String,
