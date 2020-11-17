@@ -1,11 +1,15 @@
 package com.example.testplacesapi
 
-import com.example.testplacesapi.classesForParsingPlaces.Basic
 import com.example.testplacesapi.classesForParsingPlaceDetails.BasicDetails
+import com.example.testplacesapi.classesForParsingPlaces.Basic
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.gson.Gson
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.net.URL
+import java.util.*
 
 class PlaceDataParser {
     private val apiKey = "AIzaSyDCvP07ssvmpkykrJ3QN5_BzGifwa4Weqo"
@@ -14,7 +18,6 @@ class PlaceDataParser {
                 latLng.latitude + "," +
                 latLng.longitude + "&radius=1000&type=restaurant" +
                 "&key=" + apiKey
-
         return downloadURL(url)
     }
 
