@@ -8,14 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testplacesapi.classesForParsingPlaces.ResultSet
 import com.example.testplacesapi.classesForParsingPlaces.BasicLocation
 import com.squareup.picasso.Picasso
 
 
 class RestaurantListAdapter(
     private val context: Context,
-    private val data: ResultSet,
+    private val data: List<BasicLocation>,
 ) : RecyclerView.Adapter<RestaurantListAdapter.MyViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -38,13 +37,13 @@ class RestaurantListAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
-            val fragment = RestaurantDetailsFragment.newInstance(data.basicLocations[position].placeId)
+            val fragment = RestaurantDetailsFragment.newInstance(data[position].placeId)
             if (context is AppCompatActivity) {
                 context.supportFragmentManager.beginTransaction().addToBackStack(null)
                     .replace(R.id.layout_for_fragments, fragment).commit()
             }
         }
-        val place: BasicLocation = data.basicLocations[position]
+        val place: BasicLocation = data[position]
         holder.bind(place)
         val url: String?
         if (place.photos.isNullOrEmpty()) {
@@ -56,6 +55,6 @@ class RestaurantListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return data.basicLocations.size
+        return data.size
     }
 }
