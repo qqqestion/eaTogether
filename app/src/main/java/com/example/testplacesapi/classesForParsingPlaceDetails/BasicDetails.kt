@@ -1,6 +1,6 @@
 package com.example.testplacesapi.classesForParsingPlaceDetails
 
-import com.example.testplacesapi.classesForParsingPlaces.Result
+import com.google.gson.annotations.SerializedName
 
 class BasicDetails(
     var result: ResultDetails,

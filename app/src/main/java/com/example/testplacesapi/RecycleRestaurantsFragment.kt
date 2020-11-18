@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testplacesapi.classesForParsingPlaces.Basic
+import com.example.testplacesapi.classesForParsingPlaces.ResultSet
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -43,14 +43,14 @@ class RecycleRestaurantsFragment : Fragment() {
         return view
     }
 
-    private fun createRecycleView(data: Basic, view:View) {
+    private fun createRecycleView(data: ResultSet, view:View) {
         val adapter = RestaurantListAdapter(view.context, data)
         val list = view.findViewById<RecyclerView>(R.id.list)
         list.adapter = adapter
         list.layoutManager = LinearLayoutManager(view.context)
     }
 
-    private suspend fun getData(latLng: LatLng): Basic {
+    private suspend fun getData(latLng: LatLng): ResultSet {
         return withContext(Dispatchers.IO) {
             val parser = PlaceDataParser()
             return@withContext parser.execute(latLng)

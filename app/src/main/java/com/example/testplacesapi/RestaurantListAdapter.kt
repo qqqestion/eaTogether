@@ -8,14 +8,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testplacesapi.classesForParsingPlaces.Basic
-import com.example.testplacesapi.classesForParsingPlaces.Result
+import com.example.testplacesapi.classesForParsingPlaces.ResultSet
+import com.example.testplacesapi.classesForParsingPlaces.BasicLocation
 import com.squareup.picasso.Picasso
 
 
 class RestaurantListAdapter(
     private val context: Context,
-    private val data: Basic,
+    private val data: ResultSet,
 ) : RecyclerView.Adapter<RestaurantListAdapter.MyViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -25,10 +25,10 @@ class RestaurantListAdapter(
         private var rating: TextView = itemView.findViewById(R.id.rating)
         private var vicinity: TextView = itemView.findViewById(R.id.vicinity)
 
-        fun bind(result: Result) {
-            name.text = result.name
-            rating.text = result.rating.toString()
-            vicinity.text = result.vicinity
+        fun bind(basicLocation: BasicLocation) {
+            name.text = basicLocation.name
+            rating.text = basicLocation.rating.toString()
+            vicinity.text = basicLocation.vicinity
         }
     }
 
@@ -38,13 +38,13 @@ class RestaurantListAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
-            val fragment = RestaurantDetailsFragment.newInstance(data.results[position].place_id)
+            val fragment = RestaurantDetailsFragment.newInstance(data.basicLocations[position].placeId)
             if (context is AppCompatActivity) {
                 context.supportFragmentManager.beginTransaction().addToBackStack(null)
                     .replace(R.id.layout_for_fragments, fragment).commit()
             }
         }
-        val place: Result = data.results[position]
+        val place: BasicLocation = data.basicLocations[position]
         holder.bind(place)
         val url: String?
         if (place.photos.isNullOrEmpty()) {
@@ -56,6 +56,6 @@ class RestaurantListAdapter(
     }
 
     override fun getItemCount(): Int {
-        return data.results.size
+        return data.basicLocations.size
     }
 }
