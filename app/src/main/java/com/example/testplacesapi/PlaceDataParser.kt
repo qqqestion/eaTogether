@@ -40,22 +40,22 @@ class PlaceDataParser {
     }
 
     suspend fun getPlaceByName(query: String): ArrayList<BasicLocation> {
-        val fields = arrayListOf<String>(
+        val fields = arrayListOf(
             "name", "geometry", "place_id",
         )
-        val url = baseUrl + "/place/findplacefromtext/json?" +
+        val url = baseUrl + "/place/textsearch/json?" +
                 "language=ru" +
-                "&input=${URLEncoder.encode(
+                "&query=${URLEncoder.encode(
                     query,
                     "utf-8"
                 )}" + // TODO: спросить что за предупреждение
-                "&inputtype=textquery" +
-                "&fields=${fields.joinToString(",")}" +
+//                "&inputtype=textquery" +
+//                "&fields=${fields.joinToString(",")}" +
                 "&key=$apiKey"
         val jsonResp = getJsonElement(asyncDownloadURL(url)).asJsonObject
         val basicLocationListType: Type = object : TypeToken<ArrayList<BasicLocation>?>() {}.type
         return Gson().fromJson(
-            jsonResp.get("candidates").asJsonArray,
+            jsonResp.get("results").asJsonArray,
             basicLocationListType
         )
     }

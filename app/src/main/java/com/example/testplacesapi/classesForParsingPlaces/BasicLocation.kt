@@ -2,7 +2,7 @@ package com.example.testplacesapi.classesForParsingPlaces
 
 import com.google.gson.annotations.SerializedName
 
-class BasicLocation(
+data class BasicLocation(
     @SerializedName("business_status") var businessStatus: String,
     var geometry: Geometry,
     var icon: String,
@@ -14,4 +14,8 @@ class BasicLocation(
     var types: List<String>,
     var utc_offset: Int,
     var vicinity: String,
-) {}
+) {
+    override fun toString(): String {
+        return "BasicLocation(businessStatus='$businessStatus', geometry=$geometry, icon='$icon', name='$name', photos=$photos, placeId='$placeId', rating=$rating, reference='$reference', types=$types, utc_offset=$utc_offset, vicinity='$vicinity')"
+    }
+}
