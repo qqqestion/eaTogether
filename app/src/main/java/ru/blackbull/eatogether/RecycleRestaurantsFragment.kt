@@ -1,4 +1,4 @@
-package com.example.testplacesapi
+package ru.blackbull.eatogether
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,7 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testplacesapi.classesForParsingPlaces.BasicLocation
+import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.classesForParsingPlaces.BasicLocation
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

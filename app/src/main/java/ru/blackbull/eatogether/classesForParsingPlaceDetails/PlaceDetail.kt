@@ -1,7 +1,6 @@
-package com.example.testplacesapi.classesForParsingPlaceDetails
+package ru.blackbull.eatogether.classesForParsingPlaceDetails
 
-import com.example.testplacesapi.classesForParsingPlaces.Geometry
-import com.example.testplacesapi.classesForParsingPlaces.Photo
+import ru.blackbull.eatogether.classesForParsingPlaces.Photo
 
 class PlaceDetail(
     var business_status: String,

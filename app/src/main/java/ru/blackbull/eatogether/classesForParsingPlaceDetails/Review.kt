@@ -1,4 +1,4 @@
-package com.example.testplacesapi.classesForParsingPlaceDetails
+package ru.blackbull.eatogether.classesForParsingPlaceDetails
 
 class Review(
     var author_name: String,

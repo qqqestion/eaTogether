@@ -1,4 +1,4 @@
-package com.example.testplacesapi.classesForParsingPlaces
+package ru.blackbull.eatogether.classesForParsingPlaces
 
 class Location(
     var lat: Double,

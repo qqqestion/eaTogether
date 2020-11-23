@@ -1,4 +1,4 @@
-package com.example.testplacesapi
+package ru.blackbull.eatogether
 
 import org.junit.Test
 

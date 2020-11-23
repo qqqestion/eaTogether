@@ -1,4 +1,4 @@
-package com.example.testplacesapi
+package ru.blackbull.eatogether
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,7 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.example.testplacesapi.classesForParsingPlaces.BasicLocation
+import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.classesForParsingPlaces.BasicLocation
 import com.squareup.picasso.Picasso
 
 

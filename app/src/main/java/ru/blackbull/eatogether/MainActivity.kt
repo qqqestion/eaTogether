@@ -1,10 +1,11 @@
-package com.example.testplacesapi
+package ru.blackbull.eatogether
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import ru.blackbull.eatogether.R
 
 class MainActivity : AppCompatActivity() {
 

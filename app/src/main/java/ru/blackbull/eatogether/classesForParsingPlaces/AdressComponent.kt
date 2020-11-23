@@ -1,6 +1,4 @@
-package com.example.testplacesapi.classesForParsingPlaces
-
-import com.google.gson.annotations.SerializedName
+package ru.blackbull.eatogether.classesForParsingPlaces
 
 class AdressComponent(
     var long_name: String,

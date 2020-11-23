@@ -5,5 +5,5 @@
     android:id="@+id/list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InformationActivity"
+    tools:context="ru.blackbull.eatogether.InformationActivity"
     tools:listitem="@layout/restaurant_list_item" />

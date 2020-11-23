@@ -1,7 +1,7 @@
-package com.example.testplacesapi
+package ru.blackbull.eatogether
 
-import com.example.testplacesapi.classesForParsingPlaceDetails.PlaceDetail
-import com.example.testplacesapi.classesForParsingPlaces.BasicLocation
+import ru.blackbull.eatogether.classesForParsingPlaceDetails.PlaceDetail
+import ru.blackbull.eatogether.classesForParsingPlaces.BasicLocation
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.JsonElement

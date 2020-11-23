@@ -1,9 +1,8 @@
-package com.example.testplacesapi
+package ru.blackbull.eatogether
 
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -14,6 +13,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import ru.blackbull.eatogether.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
@@ -28,7 +28,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import com.example.testplacesapi.InformationActivity as informationActivity1
+import ru.blackbull.eatogether.InformationActivity as informationActivity1
 
 internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, TextWatcher, View.OnKeyListener,
