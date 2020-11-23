@@ -72,7 +72,7 @@
                     android:src="@drawable/image" />
 
             <Button
-                    android:id="@+id/welcome_log_in_btn"
+                    android:id="@+id/profile_change_photo_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_button_pink"

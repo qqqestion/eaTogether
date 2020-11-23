@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-            android:id="@+id/welcome_log_in_btn"
+            android:id="@+id/profile_change_photo_btn"
             android:layout_width="130dp"
             android:layout_height="55dp"
             android:layout_marginBottom="8dp"
