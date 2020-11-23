@@ -69,14 +69,34 @@
             app:layout_constraintTop_toBottomOf="@+id/open_now" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/party_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            android:padding="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/phone" />
+
+        <TextView
+            android:id="@+id/review_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Отзывы"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/party_list" />
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/review_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:nestedScrollingEnabled="false"
-            app:layout_constraintEnd_toEndOf="parent"
             android:padding="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/phone" />
+            app:layout_constraintTop_toBottomOf="@id/review_hint" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

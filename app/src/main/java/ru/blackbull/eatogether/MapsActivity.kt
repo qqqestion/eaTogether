@@ -13,8 +13,11 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.google.android.gms.common.api.Status
 import ru.blackbull.eatogether.R
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -68,7 +71,28 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     private fun getCurrentLocation() {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-            val latLng = LatLng(it.latitude, it.longitude)
+            location ->
+//            if (location == null || location.accuracy > 100) {
+//                val mLocationCallback = object : LocationCallback() {
+//                    override fun onLocationResult(locationResult: LocationResult?) {
+//                        stopLocationUpdates()
+//                        if (locationResult != null && locationResult.locations.isNotEmpty()) {
+//                            val newLocation = locationResult.locations[0]
+//                            callback.onCallback(Status.SUCCESS, newLocation)
+//                        } else {
+//                            callback.onCallback(Status.ERROR_LOCATION, null)
+//                        }
+//                    }
+//                }
+//
+//                fusedLocationProviderClient!!.requestLocationUpdates(
+//                    getLocationRequest(),
+//                    mLocationCallback, null
+//                )
+//            } else {
+//                callback.onCallback(Status.SUCCESS, location)
+//            }
+            val latLng = LatLng(location.latitude, location.longitude)
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15F));
         }
 
@@ -87,12 +111,15 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onMapClick(location: LatLng) {
         mMap.clear()
-        createMarker(location, "user",BitmapDescriptorFactory.HUE_GREEN)
+        createMarker(location, "user", BitmapDescriptorFactory.HUE_GREEN)
     }
 
     private fun createMarker(location: LatLng, tag: String, color: Float) {
-        val marker = mMap.addMarker(MarkerOptions().position(location).icon(
-            BitmapDescriptorFactory.defaultMarker(color)))
+        val marker = mMap.addMarker(
+            MarkerOptions().position(location).icon(
+                BitmapDescriptorFactory.defaultMarker(color)
+            )
+        )
         marker.tag = tag
     }
 

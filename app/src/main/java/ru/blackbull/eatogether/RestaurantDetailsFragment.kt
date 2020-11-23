@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import ru.blackbull.eatogether.R
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -35,7 +34,7 @@ class RestaurantDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val parser = PlaceDataParser()
-        val view = inflater.inflate(R.layout.fragment_restaurant_details, container, false)
+        val view = inflater.inflate(R.layout.fragment_restaurant_detail, container, false)
 
         GlobalScope.launch(Dispatchers.Main) {
             val placeData = parser.getPlaceDetail(placeID!!)
