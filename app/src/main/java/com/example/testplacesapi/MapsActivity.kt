@@ -3,6 +3,7 @@ package com.example.testplacesapi
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -85,11 +87,12 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onMapClick(location: LatLng) {
         mMap.clear()
-        createMarker(location, "user")
+        createMarker(location, "user",BitmapDescriptorFactory.HUE_GREEN)
     }
 
-    private fun createMarker(location: LatLng, tag: String) {
-        val marker = mMap.addMarker(MarkerOptions().position(location))
+    private fun createMarker(location: LatLng, tag: String, color: Float) {
+        val marker = mMap.addMarker(MarkerOptions().position(location).icon(
+            BitmapDescriptorFactory.defaultMarker(color)))
         marker.tag = tag
     }
 
@@ -147,7 +150,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 Log.d("search", "searchPlace: ${place.name}")
                 createMarker(
                     LatLng(place.geometry.location.lat, place.geometry.location.lng),
-                    place.placeId
+                    place.placeId,
+                    BitmapDescriptorFactory.HUE_RED
                 )
             }
         }
