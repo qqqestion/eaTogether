@@ -9,7 +9,7 @@ public abstract class DatabaseModel {
 
     public DatabaseModel(String id, String databasePrefix) {
         this.id = id;
-        this.modelRef = FirebaseDatabase.getInstance().getReference(databasePrefix).child(id);
+        this.modelRef = FirebaseDatabase.getInstance("https://eatogether-a8490.firebaseio.com/").getReference(databasePrefix).child(id);
     }
 
     public DatabaseModel(DatabaseReference modelRef) {
@@ -17,4 +17,8 @@ public abstract class DatabaseModel {
     }
 
     public abstract void save();
+
+    public DatabaseReference getRef() {
+        return modelRef;
+    }
 }

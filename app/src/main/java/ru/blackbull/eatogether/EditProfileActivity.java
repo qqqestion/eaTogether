@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +40,7 @@ import ru.blackbull.eatogether.db.User;
 import ru.blackbull.eatogether.validators.UserValidator;
 
 public class EditProfileActivity extends AppCompatActivity {
-    private static final String TAG = "EditProfileActivity";
+    private static final String TAG = "TagForDebug";
     private static final int PICK_IMAGE = 1;
 
     private EditText firstNameEditText;
@@ -58,22 +59,28 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         // Проверка авторизации при каждом открытии приложения
+//        firstNameEditText.focu();
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
             Intent intent = new Intent(this, WelcomeActivity.class);
             startActivity(intent);
         }
-        userRef = FirebaseDatabase.getInstance().getReference(User.DB_PREFIX).child(user.getUid());
+        userRef = new User(user.getUid()).getRef();
         emailEditText.setText(user.getEmail());
 
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User dataUser = snapshot.getValue(User.class);
+                if (dataUser == null) {
+                    Log.d(TAG, "onDataChange(USER==NULL): " + snapshot.getValue(String.class));
+                    return;
+                }
                 firstNameEditText.setText(dataUser.getFirstName());
                 lastNameEditText.setText(dataUser.getLastName());
                 birthdayEditText.setText(dataUser.getBirthday());
                 descriptionEditText.setText(dataUser.getDescription());
+                Log.d(TAG, "onDataChange: " + dataUser);
             }
 
             @Override
@@ -84,19 +91,19 @@ public class EditProfileActivity extends AppCompatActivity {
         userRef.addListenerForSingleValueEvent(userListener);
 
         StorageReference ref = FirebaseStorage.getInstance().getReference().child(user.getUid());
-        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                userImage.setImageURI(uri);
-                Toast.makeText(getApplicationContext(), uri.toString(), Toast.LENGTH_LONG).show();
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(EditProfileActivity.class.getName(), "Downloading image failed: " + e);
-                Toast.makeText(getApplicationContext(), "Ошибка при загрузки фотографии", Toast.LENGTH_LONG).show();
-            }
-        }).getResult();
+//        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//            @Override
+//            public void onSuccess(Uri uri) {
+//                userImage.setImageURI(uri);
+//                Toast.makeText(getApplicationContext(), uri.toString(), Toast.LENGTH_LONG).show();
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.d(EditProfileActivity.class.getName(), "Downloading image failed: " + e);
+//                Toast.makeText(getApplicationContext(), "Ошибка при загрузки фотографии", Toast.LENGTH_LONG).show();
+//            }
+//        }).getResult();
     }
 
     @Override

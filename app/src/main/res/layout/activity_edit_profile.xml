@@ -15,13 +15,13 @@
 
         <ImageButton
                 android:id="@+id/edit_profile_back_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/image_button_size"
+                android:layout_height="@dimen/image_button_size"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/content_description_back_btn"
-                android:src="@drawable/btn_back" />
+                android:src="@drawable/ic_baseline_arrow_back_ios_24" />
 
 
         <TextView
@@ -34,18 +34,16 @@
                 android:textColor="@color/colorWhite"
                 android:textSize="20sp" />
 
-
         <ImageButton
                 android:id="@+id/edit_profile_save_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/image_button_size"
+                android:layout_height="@dimen/image_button_size"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/content_description_save_btn"
-                android:src="@drawable/btn_save" />
+                android:src="@drawable/ic_baseline_check_24" />
     </LinearLayout>
-
 
     <ScrollView
             android:layout_width="match_parent"
@@ -58,6 +56,8 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="10dp">
@@ -92,7 +92,7 @@
                     android:id="@+id/first_name_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/edit_pen"
+                    android:drawableEnd="@drawable/ic_baseline_edit_24"
                     android:hint="Имя"
                     android:inputType="textPersonName"
                     android:textColor="@color/colorDark" />
@@ -108,7 +108,7 @@
                     android:id="@+id/last_name_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/edit_pen"
+                    android:drawableEnd="@drawable/ic_baseline_edit_24"
                     android:hint="Фамилия"
                     android:inputType="text"
                     android:textColor="@color/colorDark" />
@@ -124,7 +124,7 @@
                     android:id="@+id/birthday_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableEnd="@drawable/edit_pen"
+                    android:drawableEnd="@drawable/ic_baseline_edit_24"
                     android:hint="Дата рождения"
                     android:inputType="date"
                     android:textColor="@color/colorDark" />
@@ -140,7 +140,7 @@
                     android:id="@+id/email_input"
                     android:layout_width="match_parent"
                     android:layout_height="74dp"
-                    android:drawableRight="@drawable/edit_pen"
+                    android:drawableRight="@drawable/ic_baseline_edit_24"
                     android:hint="Контактные данные"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/colorDark" />
@@ -156,7 +156,7 @@
                     android:id="@+id/description_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:drawableRight="@drawable/edit_pen"
+                    android:drawableRight="@drawable/ic_baseline_edit_24"
                     android:hint="@string/description"
                     android:inputType="text"
                     android:textColor="@color/colorDark" />

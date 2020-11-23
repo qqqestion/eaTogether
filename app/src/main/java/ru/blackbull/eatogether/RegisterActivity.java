@@ -33,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     private DatabaseReference mUsersRef;
     private Button nextBtn;
     private Button backBtn;
-    private final String TAG = "RegisterActivity: ";
+    private final String TAG = RegisterActivity.class.getName();
     private boolean isFirstStepCompleted = false;
 
     @Override

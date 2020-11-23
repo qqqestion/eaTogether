@@ -86,11 +86,6 @@ public class User extends DatabaseModel {
         }
     }
 
-    @Override
-    public String toString() {
-        return modelRef.getKey();
-    }
-
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -133,5 +128,17 @@ public class User extends DatabaseModel {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", birthday='" + birthday + '\'' +
+                ", description='" + description + '\'' +
+                ", imageUri=" + imageUri +
+                ", id='" + id + '\'' +
+                '}';
     }
 }
