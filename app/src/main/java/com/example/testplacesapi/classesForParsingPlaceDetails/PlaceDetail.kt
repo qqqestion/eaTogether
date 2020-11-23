@@ -3,7 +3,7 @@ package com.example.testplacesapi.classesForParsingPlaceDetails
 import com.example.testplacesapi.classesForParsingPlaces.Geometry
 import com.example.testplacesapi.classesForParsingPlaces.Photo
 
-class ResultDetails(
+class PlaceDetail(
     var business_status: String,
     var name: String,
     var photos: List<Photo>?,

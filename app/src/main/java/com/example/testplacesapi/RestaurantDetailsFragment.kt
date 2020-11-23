@@ -37,7 +37,7 @@ class RestaurantDetailsFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_restaurant_details, container, false)
 
         GlobalScope.launch(Dispatchers.Main) {
-            val placeData = parser.getGSONPlaceDetails(placeID!!).result
+            val placeData = parser.getPlaceDetail(placeID!!)
             view.findViewById<TextView>(R.id.name).text = placeData.name
             view.findViewById<TextView>(R.id.address).text = placeData.formatted_address
             view.findViewById<TextView>(R.id.phone).text = placeData.formatted_phone_number

@@ -5,6 +5,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
+import android.view.KeyEvent
+import android.view.View
+import android.widget.EditText
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -16,13 +23,18 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import com.example.testplacesapi.InformationActivity as informationActivity1
 
 internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
-    GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+    GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, TextWatcher, View.OnKeyListener,
+    GoogleMap.OnMapLongClickListener {
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var searchField: EditText
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,8 +43,10 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         checkAccessLocationPermission()
 
+        searchField = findViewById(R.id.search)
+        searchField.addTextChangedListener(this)
+        searchField.setOnKeyListener(this)
     }
-
 
     private fun checkAccessLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
@@ -64,18 +78,19 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         mMap.setOnMapClickListener(this)
         intent = Intent(this, informationActivity1::class.java)
         mMap.setOnMarkerClickListener(this)
+        mMap.setOnMapLongClickListener(this)
         mMap.isMyLocationEnabled = true
         getCurrentLocation()
     }
 
     override fun onMapClick(location: LatLng) {
         mMap.clear()
-        createMarker(location)
+        createMarker(location, "user")
     }
 
-    private fun createMarker(location: LatLng) {
-        val marker = mMap.addMarker(MarkerOptions().position(location).title("My marker!"))
-        marker.tag = "marker"
+    private fun createMarker(location: LatLng, tag: String) {
+        val marker = mMap.addMarker(MarkerOptions().position(location))
+        marker.tag = tag
     }
 
     override fun onRequestPermissionsResult(
@@ -92,11 +107,54 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     override fun onMarkerClick(it: Marker): Boolean {
-        if (it.tag == "marker") {
+        if (it.tag == "user") {
             intent.putExtra("lat", it.position.latitude)
             intent.putExtra("lng", it.position.longitude)
             startActivity(intent)
+        } else {
+            // TODO: отработать нажатие на маркер заведения
         }
         return false
+    }
+
+    override fun afterTextChanged(p0: Editable?) {
+
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+    }
+
+    override fun onTextChanged(changedText: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    }
+
+    override fun onKey(view: View?, keyCode: Int, event: KeyEvent?): Boolean {
+        if (event?.action == KeyEvent.ACTION_DOWN) {
+            if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
+                Toast.makeText(this, searchField.text.toString(), Toast.LENGTH_SHORT).show()
+                searchPlace(searchField.text.toString())
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private fun searchPlace(query: String) {
+        mMap.clear()
+        GlobalScope.launch(Dispatchers.Main) {
+            val placeList = PlaceDataParser().getPlaceByName(query)
+            for (place in placeList) {
+                Log.d("search", "searchPlace: ${place.name}")
+                createMarker(
+                    LatLng(place.geometry.location.lat, place.geometry.location.lng),
+                    place.placeId
+                )
+            }
+        }
+
+    }
+
+    override fun onMapLongClick(p0: LatLng?) {
+        Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show()
     }
 }
