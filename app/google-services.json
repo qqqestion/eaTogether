@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "697487927411",
+    "firebase_url": "https://eatogether-a8490.firebaseio.com",
+    "project_id": "eatogether-a8490",
+    "storage_bucket": "eatogether-a8490.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:697487927411:android:28c5db6eb8a59a65e5a206",
+        "android_client_info": {
+          "package_name": "ru.blackbull.eatogether"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "697487927411-tf6kou6271l5cl1jl1mk5sikauieo465.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWDGJalvmvDxficDxUmZmsPg2AB-FqlWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "697487927411-tf6kou6271l5cl1jl1mk5sikauieo465.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
