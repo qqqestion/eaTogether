@@ -1,11 +1,15 @@
 package ru.blackbull.eatogether
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
-import ru.blackbull.eatogether.R
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,5 +22,6 @@ class MainActivity : AppCompatActivity() {
         mapButton.setOnClickListener(View.OnClickListener {
             startActivity(intent)
         })
+
     }
 }
