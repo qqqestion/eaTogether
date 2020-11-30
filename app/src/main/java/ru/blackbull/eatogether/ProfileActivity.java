@@ -34,7 +34,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         drawerList.setOnItemClickListener(this);
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.profile_fragment_container, new ProfileFragment());
+        ft.add(R.id.profile_fragment_container, new ProfileFragment());
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         ft.commit();
     }
