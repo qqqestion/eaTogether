@@ -14,8 +14,10 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.collections.Company
 
 
-class CompaniesAdapter(private val context: Context , private val companiesList: List<Company>) :
-    RecyclerView.Adapter<CompaniesAdapter.CompaniesVH>() {
+class CompaniesAdapter(
+    private val context: Context ,
+    private val companiesList: List<Company>
+) : RecyclerView.Adapter<CompaniesAdapter.CompaniesVH>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     class CompaniesVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
