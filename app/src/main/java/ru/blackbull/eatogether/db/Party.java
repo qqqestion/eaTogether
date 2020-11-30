@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,19 +38,6 @@ public class Party extends DatabaseModel {
         userArray.put(userID, true);
     }
 
-    public void addTitle(String title) {
-        this.title = title;
-    }
-
-
-    public void addDescription(String description) {
-        this.description = description;
-    }
-
-    public void addTime(String time) {
-        this.time = time;
-    }
-
     @Override
     public void save() {
 //        modelRef.setValue(toMap());
@@ -58,13 +46,7 @@ public class Party extends DatabaseModel {
 
     @Override
     public String toString() {
-        return "Party{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", time='" + time + '\'' +
-                ", userArray=" + userArray +
-                ", id='" + id + '\'' +
-                '}';
+        return modelRef.getKey();
     }
 
     @Exclude
