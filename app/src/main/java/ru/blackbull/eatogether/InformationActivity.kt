@@ -3,6 +3,7 @@ package ru.blackbull.eatogether
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.fragments.RecycleRestaurantsFragment
 
 class InformationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

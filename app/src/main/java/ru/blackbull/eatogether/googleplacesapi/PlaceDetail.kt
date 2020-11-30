@@ -1,8 +1,6 @@
-package ru.blackbull.eatogether.classesForParsingPlaceDetails
+package ru.blackbull.eatogether.googleplacesapi
 
-import ru.blackbull.eatogether.classesForParsingPlaces.Photo
-
-class PlaceDetail(
+data class PlaceDetail(
     var business_status: String,
     var name: String,
     var photos: List<Photo>?,
@@ -14,4 +12,7 @@ class PlaceDetail(
     var formatted_phone_number: String,
 ) {
 
+    fun getIsOpen(): Boolean? {
+        return opening_hours?.open_now
+    }
 }

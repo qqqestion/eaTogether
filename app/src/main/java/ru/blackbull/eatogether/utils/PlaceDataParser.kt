@@ -1,7 +1,7 @@
-package ru.blackbull.eatogether
+package ru.blackbull.eatogether.utils
 
-import ru.blackbull.eatogether.classesForParsingPlaceDetails.PlaceDetail
-import ru.blackbull.eatogether.classesForParsingPlaces.BasicLocation
+import ru.blackbull.eatogether.googleplacesapi.PlaceDetail
+import ru.blackbull.eatogether.googleplacesapi.BasicLocation
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.JsonElement
@@ -23,8 +23,8 @@ class PlaceDataParser {
 
     suspend fun getPlaceDetail(placeID: String): PlaceDetail {
         val fields = arrayListOf(
-            "name", "rating", "formatted_phone_number",
-            "review", "photos", "formatted_address", "opening_hours"
+            "name" , "rating" , "formatted_phone_number" ,
+            "review" , "photos" , "formatted_address" , "opening_hours"
         )
         val language = "ru"
         val url = baseUrl + "/place/details/json?" +
@@ -34,33 +34,33 @@ class PlaceDataParser {
                 "&key=$apiKey"
         val jsonResp = getJsonElement(asyncDownloadURL(url)).asJsonObject
         return Gson().fromJson(
-            jsonResp.get("result").asJsonObject,
+            jsonResp.get("result").asJsonObject ,
             PlaceDetail::class.java
         )
     }
 
     suspend fun getPlaceByName(query: String): ArrayList<BasicLocation> {
         val fields = arrayListOf(
-            "name", "geometry", "place_id",
+            "name" , "geometry" , "place_id" ,
         )
         val url = baseUrl + "/place/textsearch/json?" +
                 "language=ru" +
-                "&query=${URLEncoder.encode(
-                    query,
-                    "utf-8"
-                )}" + // TODO: спросить что за предупреждение
-//                "&inputtype=textquery" +
-//                "&fields=${fields.joinToString(",")}" +
+                "&query=${
+                    URLEncoder.encode(
+                        query ,
+                        "utf-8"
+                    )
+                }" + // TODO: спросить что за предупреждение
                 "&key=$apiKey"
         val jsonResp = getJsonElement(asyncDownloadURL(url)).asJsonObject
         val basicLocationListType: Type = object : TypeToken<ArrayList<BasicLocation>?>() {}.type
         return Gson().fromJson(
-            jsonResp.get("results").asJsonArray,
+            jsonResp.get("results").asJsonArray ,
             basicLocationListType
         )
     }
 
-    fun getPhotoUrl(photoReference: String, width: Int, height: Int): String {
+    fun getPhotoUrl(photoReference: String , width: Int , height: Int): String {
         val url = baseUrl + "/place/photo?" +
                 "maxwidth=" + width +
                 "&maxheight=" + height +
@@ -79,7 +79,7 @@ class PlaceDataParser {
         val jsonResp = getJsonElement(asyncDownloadURL(url)).asJsonObject
         val basicLocationListType: Type = object : TypeToken<ArrayList<BasicLocation>?>() {}.type
         return Gson().fromJson(
-            jsonResp.get("results").asJsonArray,
+            jsonResp.get("results").asJsonArray ,
             basicLocationListType
         )
     }

@@ -13,11 +13,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.google.android.gms.common.api.Status
-import ru.blackbull.eatogether.R
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import ru.blackbull.eatogether.utils.PlaceDataParser
 import ru.blackbull.eatogether.InformationActivity as informationActivity1
 
 internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,

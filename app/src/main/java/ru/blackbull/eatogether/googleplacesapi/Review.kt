@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.classesForParsingPlaceDetails
+package ru.blackbull.eatogether.googleplacesapi
 
 class Review(
     var author_name: String,

@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.classesForParsingPlaces
+package ru.blackbull.eatogether.googleplacesapi
 
 class Photo(
     var photo_reference: String,

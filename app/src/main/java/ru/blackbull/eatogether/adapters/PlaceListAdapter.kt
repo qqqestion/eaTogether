@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether
+package ru.blackbull.eatogether.adapters
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,15 +8,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.classesForParsingPlaces.BasicLocation
+import ru.blackbull.eatogether.googleplacesapi.BasicLocation
 import com.squareup.picasso.Picasso
+import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.fragments.PlaceDetailFragment
+import ru.blackbull.eatogether.utils.PlaceDataParser
 
 
-class RestaurantListAdapter(
+class PlaceListAdapter(
     private val context: Context,
     private val data: List<BasicLocation>,
-) : RecyclerView.Adapter<RestaurantListAdapter.MyViewHolder>() {
+) : RecyclerView.Adapter<PlaceListAdapter.MyViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -33,12 +35,12 @@ class RestaurantListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(inflater.inflate(R.layout.restaurant_list_item, parent, false))
+        return MyViewHolder(inflater.inflate(R.layout.place_list_item, parent, false))
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
-            val fragment = RestaurantDetailsFragment.newInstance(data[position].placeId)
+            val fragment = PlaceDetailFragment.newInstance(data[position].placeId)
             if (context is AppCompatActivity) {
                 context.supportFragmentManager.beginTransaction().addToBackStack(null)
                     .replace(R.id.layout_for_fragments, fragment).commit()
