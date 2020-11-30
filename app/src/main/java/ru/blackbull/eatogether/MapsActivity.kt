@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,6 +49,17 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         searchField = findViewById(R.id.search)
         searchField.addTextChangedListener(this)
         searchField.setOnKeyListener(this)
+        FirebaseAuth.getInstance().signInWithEmailAndPassword("hello.world@email.com", "Aa123456789").addOnSuccessListener {
+            Toast.makeText(
+                this ,
+                "Авторизация прошла" ,
+                Toast.LENGTH_SHORT
+            ).show() }.addOnFailureListener {
+            Toast.makeText(
+                this ,
+                "Неудача" ,
+                Toast.LENGTH_SHORT
+            ).show() }
     }
 
     private fun checkAccessLocationPermission() {

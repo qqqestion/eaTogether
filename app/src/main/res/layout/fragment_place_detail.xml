@@ -10,9 +10,6 @@
         android:layout_height="match_parent"
         tools:context="ru.blackbull.eatogether.RestaurantDetailsFragment">
 
-        <!-- TODO: Update blank fragment layout -->
-
-
         <ImageView
             android:id="@+id/image"
             android:layout_width="0dp"
@@ -69,22 +66,22 @@
             app:layout_constraintTop_toBottomOf="@+id/open_now" />
 
         <Button
+            android:id="@+id/create_party"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Создать компанию"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/create_party"
-            app:layout_constraintTop_toBottomOf="@id/phone"
-            android:text="Создать компанию" />
+            app:layout_constraintTop_toBottomOf="@id/phone" />
 
         <TextView
+            android:id="@+id/party_hint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/create_party"
-            android:id="@+id/party_hint"
+            android:text="Компании"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            android:text="Компании"/>
+            app:layout_constraintTop_toBottomOf="@id/create_party" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/party_list"

@@ -9,11 +9,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.FirebaseApp
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -28,11 +29,17 @@ import ru.blackbull.eatogether.db.PartyManager
 
 private const val KEY = "place_id"
 
-class PlaceDetailFragment : Fragment() , ChildEventListener , View.OnClickListener {
-    // TODO: Rename and change types of parameters
+class PlaceDetailFragment : Fragment() , ChildEventListener ,
+    View.OnClickListener {
+
     private var placeId: String? = null
+
     private var partyList: ArrayList<Party>? = null
     private var adapter: PartyListAdapter? = null
+
+    private var placeNameText: TextView? = null
+    private var placeAddressText: TextView? = null
+
     private val TAG = "TagForDebug"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,14 +54,19 @@ class PlaceDetailFragment : Fragment() , ChildEventListener , View.OnClickListen
         container: ViewGroup? ,
         savedInstanceState: Bundle?
     ): View? {
-        val layout = inflater.inflate(R.layout.fragment_place_detail , container , false)
+        val layout = inflater.inflate(R.layout.fragment_place_detail ,
+            container , false)
+        placeNameText = layout.findViewById(R.id.name)
+        placeAddressText = layout.findViewById(R.id.address)
 
         val parser = PlaceDataParser()
         FirebaseApp.initializeApp(context!!)
         val partyManager = PartyManager()
+        Log.d(TAG , "onCreateView: ")
         partyList = partyManager.getByPlaceId(placeId!! , this)
 
         val partyRecyclerView: RecyclerView = layout.findViewById(R.id.party_list)
+
         adapter = PartyListAdapter(context!! , partyList!!)
         partyRecyclerView.adapter = adapter
 //        partyList.no
@@ -63,8 +75,8 @@ class PlaceDetailFragment : Fragment() , ChildEventListener , View.OnClickListen
 
         GlobalScope.launch(Dispatchers.Main) {
             val placeData = parser.getPlaceDetail(placeId!!)
-            layout.findViewById<TextView>(R.id.name).text = placeData.name
-            layout.findViewById<TextView>(R.id.address).text = placeData.formatted_address
+            placeNameText!!.text = placeData.name
+            placeAddressText!!.text = placeData.formatted_address
             layout.findViewById<TextView>(R.id.phone).text = placeData.formatted_phone_number
             if (placeData.getIsOpen() == true) {
                 layout.findViewById<TextView>(R.id.open_now).text = "Открыто"
@@ -99,12 +111,14 @@ class PlaceDetailFragment : Fragment() , ChildEventListener , View.OnClickListen
 
     override fun onChildAdded(snapshot: DataSnapshot , previousChildName: String?) {
         val party = snapshot.getValue(Party::class.java)
+        var msg = "failed -> ${snapshot.value}"
         if (party != null && party.placeId == placeId) {
-//            Log.d(TAG , "onChildAdded: " + party.placeId)
             partyList!!.add(party)
             adapter!!.notifyDataSetChanged()
-            Log.d("TagForDebug" , "onChildAdded: $party")
+            msg = "successfully -> $party"
         }
+        msg = "onChildAdded: $msg"
+        Log.d("TagForDebug" , msg)
     }
 
     override fun onChildChanged(snapshot: DataSnapshot , previousChildName: String?) {
@@ -124,6 +138,22 @@ class PlaceDetailFragment : Fragment() , ChildEventListener , View.OnClickListen
     }
 
     override fun onClick(p0: View?) {
-        
+        if (context is AppCompatActivity) {
+            (context as AppCompatActivity).supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.layout_for_fragments,
+                    CreatePartyFragment.newInstance(placeId!!,
+                        placeNameText!!.text as String , placeAddressText!!.text as String
+                    ))
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG , "onDestroyView: ")
+        val ref: DatabaseReference = FirebaseDatabase.getInstance().reference.child(Party.DB_PREFIX)
+        ref.removeEventListener(this)
     }
 }

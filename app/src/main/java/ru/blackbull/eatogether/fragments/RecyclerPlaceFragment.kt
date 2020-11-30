@@ -43,9 +43,6 @@ class RecycleRestaurantsFragment : Fragment() {
         val position = LatLng(lat!!, lng!!)
         GlobalScope.launch(Dispatchers.Main) {
             val result = getData(position)
-            for (location in result) {
-                Log.d(TAG, "place id: " + location.placeId)
-            }
             createRecycleView(result, view)
         }
         return view

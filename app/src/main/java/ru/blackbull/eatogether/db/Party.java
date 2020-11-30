@@ -138,4 +138,8 @@ public class Party extends DatabaseModel {
         }
         return false;
     }
+
+    public boolean isValid() {
+        return true;
+    }
 }
