@@ -27,7 +27,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_profile);
         mAuth = FirebaseAuth.getInstance();
         titles = getResources().getStringArray(R.array.titles);
-
         drawerLayout = findViewById(R.id.profile_drawer_layout);
         drawerList = findViewById(R.id.profile_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, titles));
