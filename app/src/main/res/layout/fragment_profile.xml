@@ -23,7 +23,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:background="@color/colorGreen"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/content_description_menu_btn"
             android:src="@drawable/btn_navigation"
             app:layout_constraintStart_toStartOf="parent"

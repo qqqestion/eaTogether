@@ -1,5 +1,6 @@
 package ru.blackbull.eatogether.fragments
 
+import android.icu.number.NumberFormatter.with
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,29 +14,37 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.blackbull.eatogether.utils.PlaceDataParser
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.adapters.CompaniesAdapter
 import ru.blackbull.eatogether.adapters.PartyListAdapter
 import ru.blackbull.eatogether.adapters.ReviewAdapter
 import ru.blackbull.eatogether.db.Party
 import ru.blackbull.eatogether.db.PartyManager
+import ru.blackbull.eatogether.googleplacesapi.PlaceDetail
+import ru.blackbull.eatogether.modules.NetworkModule
 
 
 private const val KEY = "place_id"
 
 class PlaceDetailFragment : Fragment() , ChildEventListener ,
     View.OnClickListener {
+    private val theGooglePlaceApiService = NetworkModule.theGooglePlaceApiService
 
     private var placeId: String? = null
 
     private var partyList: ArrayList<Party>? = null
-    private var adapter: PartyListAdapter? = null
+    private var adapter: CompaniesAdapter? = null
 
     private var placeNameText: TextView? = null
     private var placeAddressText: TextView? = null
@@ -62,12 +71,14 @@ class PlaceDetailFragment : Fragment() , ChildEventListener ,
         val parser = PlaceDataParser()
         FirebaseApp.initializeApp(context!!)
         val partyManager = PartyManager()
-        Log.d(TAG , "onCreateView: ")
+        Log.d(TAG , "onCreateView: " +
+                FirebaseAuth.getInstance().currentUser!!.uid)
         partyList = partyManager.getByPlaceId(placeId!! , this)
 
         val partyRecyclerView: RecyclerView = layout.findViewById(R.id.party_list)
 
-        adapter = PartyListAdapter(context!! , partyList!!)
+//        adapter = PartyListAdapter(context!! , partyList!!)
+        adapter = CompaniesAdapter(context!!, partyList!!)
         partyRecyclerView.adapter = adapter
 //        partyList.no
         layout.findViewById<Button>(R.id.create_party).setOnClickListener(this)
@@ -97,6 +108,19 @@ class PlaceDetailFragment : Fragment() , ChildEventListener ,
                 reviewRecyclerView.visibility = View.GONE
             }
         }
+
+        val placeDetailCall: Call<PlaceDetail> = theGooglePlaceApiService.getPlaceDetail(placeId!!)
+        placeDetailCall.enqueue(object : Callback<PlaceDetail> {
+            override fun onResponse(call: Call<PlaceDetail> , response: Response<PlaceDetail>) {
+                val placeDetail = response.body()
+                Log.d("RetrofitDebug" , "onFailure: $placeDetail")
+            }
+
+            override fun onFailure(call: Call<PlaceDetail> , t: Throwable) {
+                Log.d("RetrofitDebug" , "onFailure: ${t.stackTrace}")
+            }
+        })
+
         return layout
     }
 
@@ -115,6 +139,7 @@ class PlaceDetailFragment : Fragment() , ChildEventListener ,
         if (party != null && party.placeId == placeId) {
             partyList!!.add(party)
             adapter!!.notifyDataSetChanged()
+            party.id = snapshot.key
             msg = "successfully -> $party"
         }
         msg = "onChildAdded: $msg"

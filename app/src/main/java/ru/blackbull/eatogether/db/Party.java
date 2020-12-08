@@ -6,7 +6,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,11 +46,6 @@ public class Party extends DatabaseModel {
         modelRef.updateChildren(toMap());
     }
 
-    @Override
-    public String toString() {
-        return modelRef.getKey();
-    }
-
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
@@ -57,6 +54,8 @@ public class Party extends DatabaseModel {
         result.put(DESCRIPTION_PREFIX, description);
         result.put(USER_ARRAY_PREFIX, userArray);
         result.put("placeId", placeId);
+        Date d = new Date();
+        result.put("test", new Date());
 
         return result;
     }
@@ -71,6 +70,9 @@ public class Party extends DatabaseModel {
 
     public String getId() {
         return modelRef.getKey();
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -123,5 +125,17 @@ public class Party extends DatabaseModel {
 
     public boolean isValid() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Party{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", time='" + time + '\'' +
+                ", userArray=" + userArray +
+                ", placeId='" + placeId + '\'' +
+                ", id='" + id + '\'' +
+                '}';
     }
 }

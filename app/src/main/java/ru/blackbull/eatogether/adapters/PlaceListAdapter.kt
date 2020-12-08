@@ -16,8 +16,8 @@ import ru.blackbull.eatogether.utils.PlaceDataParser
 
 
 class PlaceListAdapter(
-    private val context: Context,
-    private val data: List<BasicLocation>,
+    private val context: Context ,
+    private val data: List<BasicLocation> ,
 ) : RecyclerView.Adapter<PlaceListAdapter.MyViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -34,16 +34,16 @@ class PlaceListAdapter(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(inflater.inflate(R.layout.place_list_item, parent, false))
+    override fun onCreateViewHolder(parent: ViewGroup , viewType: Int): MyViewHolder {
+        return MyViewHolder(inflater.inflate(R.layout.place_list_item , parent , false))
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MyViewHolder , position: Int) {
         holder.itemView.setOnClickListener {
             val fragment = PlaceDetailFragment.newInstance(data[position].placeId)
             if (context is AppCompatActivity) {
                 context.supportFragmentManager.beginTransaction().addToBackStack(null)
-                    .replace(R.id.layout_for_fragments, fragment).commit()
+                    .replace(R.id.layout_for_fragments , fragment).commit()
             }
         }
         val place: BasicLocation = data[position]
@@ -52,9 +52,9 @@ class PlaceListAdapter(
         if (place.photos.isNullOrEmpty()) {
             url = place.icon
         } else {
-            url = PlaceDataParser().getPhotoUrl(place.photos!![0].photo_reference, 150, 150)
+            url = PlaceDataParser().getPhotoUrl(place.photos!![0].photo_reference , 150 , 150)
         }
-        Picasso.with(context).load(url).resize(150, 150).into(holder.photo)
+        Picasso.with(context).load(url).resize(150 , 150).into(holder.photo)
     }
 
     override fun getItemCount(): Int {

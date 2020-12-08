@@ -1,5 +1,6 @@
 package ru.blackbull.eatogether.utils
 
+import android.util.Log
 import ru.blackbull.eatogether.googleplacesapi.PlaceDetail
 import ru.blackbull.eatogether.googleplacesapi.BasicLocation
 import com.google.android.gms.maps.model.LatLng
@@ -15,7 +16,7 @@ import java.net.URLEncoder
 
 
 class PlaceDataParser {
-    private val apiKey = "AIzaSyDCvP07ssvmpkykrJ3QN5_BzGifwa4Weqo"
+    private val apiKey = "AIzaSyBTkTz_lNZdylZI6vu3jvnJuGfekHxwXBA"
 
     companion object {
         private const val baseUrl = "https://maps.googleapis.com/maps/api"
@@ -33,6 +34,7 @@ class PlaceDataParser {
                 "&fields=${fields.joinToString(",")}" +
                 "&key=$apiKey"
         val jsonResp = getJsonElement(asyncDownloadURL(url)).asJsonObject
+        Log.d("RetrofitDebug" , "onFailure: $url")
         return Gson().fromJson(
             jsonResp.get("result").asJsonObject ,
             PlaceDetail::class.java
@@ -96,6 +98,7 @@ class PlaceDataParser {
         if (status == "OK") {
             return jsonResp
         }
+        Log.d("GoogleDebugShit" , "getJsonElement: $jsonResp")
         throw RuntimeException("Get invalid status: $status")
     }
 }
