@@ -1,6 +1,7 @@
 package ru.blackbull.eatogether
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -9,8 +10,10 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -26,6 +29,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,11 +44,13 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var searchField: EditText
+    private lateinit var bottomSheet:BottomSheetDialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+        bottomSheet = createBottomSheet(this)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         checkAccessLocationPermission()
 
@@ -153,9 +159,17 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
             intent.putExtra("lng", it.position.longitude)
             startActivity(intent)
         } else {
-            // TODO: отработать нажатие на маркер заведения
+            bottomSheet.show()
         }
         return false
+    }
+
+    fun createBottomSheet(context: Context) : BottomSheetDialog{
+        val bottomSheetDialog: BottomSheetDialog = BottomSheetDialog(context,R.style.BottomSheetDialogTheme)
+        val bottomSheetView : View = LayoutInflater.from(applicationContext)
+            .inflate(R.layout.map_search_bottom_sheet, findViewById<LinearLayout>(R.id.container_bottom_sheet))
+        bottomSheetDialog.setContentView(bottomSheetView)
+        return bottomSheetDialog
     }
 
     override fun afterTextChanged(p0: Editable?) {
