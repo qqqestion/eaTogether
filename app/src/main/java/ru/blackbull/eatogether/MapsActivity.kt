@@ -32,20 +32,25 @@ import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import ru.blackbull.eatogether.extensions.shortToast
 import ru.blackbull.eatogether.googleplacesapi.ResultList
 import ru.blackbull.eatogether.modules.NetworkModule
 
-internal class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
-    GoogleMap.OnMapClickListener , GoogleMap.OnMarkerClickListener , TextWatcher ,
-    View.OnKeyListener ,
-    GoogleMap.OnMapLongClickListener {
+class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
+    GoogleMap.OnMapClickListener , GoogleMap.OnMarkerClickListener ,
+    View.OnKeyListener , GoogleMap.OnMapLongClickListener {
 
     private val theGooglePlaceApiService = NetworkModule.theGooglePlaceApiService
+
+    private val REQUEST_CODE: Int = 0
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var searchField: EditText
     private lateinit var bottomSheet: BottomSheetDialog
+
+    private var userMaker: Marker? = null
+    private var placeMarkers: MutableList<Marker> = mutableListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,45 +58,31 @@ internal class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
         setContentView(R.layout.activity_maps)
         bottomSheet = createBottomSheet(this)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        checkAccessLocationPermission()
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
 
         searchField = findViewById(R.id.search)
-        searchField.addTextChangedListener(this)
         searchField.setOnKeyListener(this)
+
         FirebaseAuth.getInstance()
             .signInWithEmailAndPassword("hello.world@email.com" , "Aa123456789")
-            .addOnSuccessListener {
+            .addOnFailureListener {
+                it.printStackTrace()
                 Toast.makeText(
                     this ,
-                    "Авторизация прошла" ,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }.addOnFailureListener {
-                Toast.makeText(
-                    this ,
-                    "Неудача" ,
+                    "Ошибка авторизации" ,
                     Toast.LENGTH_SHORT
                 ).show()
             }
     }
 
-    private fun checkAccessLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(
-                this ,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-            ActivityCompat.requestPermissions(this , permissions , 0)
-        } else {
-            val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
-        }
+    override fun onResume() {
+        super.onResume()
+        checkAccessLocationPermission()
     }
 
-
-    private fun getCurrentLocation() {
+    private fun checkAccessLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this ,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -100,40 +91,27 @@ internal class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
+            val permissions = arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION ,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+            ActivityCompat.requestPermissions(this , permissions , REQUEST_CODE)
         }
-        Log.d("DebugAPI" , "getCurrentLocation: success")
-        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-//            if (location == null || location.accuracy > 100) {
-//                val mLocationCallback = object : LocationCallback() {
-//                    override fun onLocationResult(locationResult: LocationResult?) {
-//                        stopLocationUpdates()
-//                        if (locationResult != null && locationResult.locations.isNotEmpty()) {
-//                            val newLocation = locationResult.locations[0]
-//                            callback.onCallback(Status.SUCCESS, newLocation)
-//                        } else {
-//                            callback.onCallback(Status.ERROR_LOCATION, null)
-//                        }
-//                    }
-//                }
-//
-//                fusedLocationProviderClient!!.requestLocationUpdates(
-//                    getLocationRequest(),
-//                    mLocationCallback, null
-//                )
-//            } else {
-//                callback.onCallback(Status.SUCCESS, location)
-//            }
+    }
+
+
+    private fun getCurrentLocation() {
+        try {
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
 //            val latLng = LatLng(location.latitude , location.longitude)
-            val latLng = LatLng(59.941170, 30.302707)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng , 15F));
+                val latLng = LatLng(59.941170 , 30.302707)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng , 15F))
+            }
+            Log.d("DebugAPI" , "getCurrentLocation: success")
+        } catch (exp: SecurityException) {
+            exp.printStackTrace()
+            Log.d("DebugAPI" , "getCurrentLocation: failed: ${exp.message}")
+            checkAccessLocationPermission()
         }
 
     }
@@ -145,22 +123,36 @@ internal class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
         intent = Intent(this , InformationActivity::class.java)
         mMap.setOnMarkerClickListener(this)
         mMap.setOnMapLongClickListener(this)
-        mMap.isMyLocationEnabled = true
+        try {
+            mMap.isMyLocationEnabled = true
+        } catch (exp: SecurityException) {
+            exp.printStackTrace()
+            Log.d("DebugAPI" , "onMapReady: failed: ${exp.message}")
+            checkAccessLocationPermission()
+        }
         getCurrentLocation()
     }
 
     override fun onMapClick(location: LatLng) {
-        mMap.clear()
-        createMarker(location , "user" , BitmapDescriptorFactory.HUE_GREEN)
+        userMaker?.remove()
+        userMaker = createMarker(
+            location , "user" ,
+            BitmapDescriptorFactory.HUE_BLUE
+        )
     }
 
-    private fun createMarker(location: LatLng , tag: String , color: Float) {
+    private fun createMarker(
+        location: LatLng ,
+        tag: String ,
+        color: Float
+    ): Marker {
         val marker = mMap.addMarker(
             MarkerOptions().position(location).icon(
                 BitmapDescriptorFactory.defaultMarker(color)
             )
         )
         marker.tag = tag
+        return marker
     }
 
     override fun onRequestPermissionsResult(
@@ -169,7 +161,9 @@ internal class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
         grantResults: IntArray
     ) {
 
-        if (requestCode == 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == REQUEST_CODE &&
+            grantResults[0] == PackageManager.PERMISSION_GRANTED
+        ) {
             val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
             mapFragment.getMapAsync(this)
@@ -187,7 +181,7 @@ internal class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
         return false
     }
 
-    fun createBottomSheet(context: Context): BottomSheetDialog {
+    private fun createBottomSheet(context: Context): BottomSheetDialog {
         val bottomSheetDialog: BottomSheetDialog =
             BottomSheetDialog(context , R.style.BottomSheetDialogTheme)
         val bottomSheetView: View = LayoutInflater.from(applicationContext)
@@ -199,21 +193,16 @@ internal class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
         return bottomSheetDialog
     }
 
-    override fun afterTextChanged(p0: Editable?) {
-
-    }
-
-    override fun beforeTextChanged(p0: CharSequence? , p1: Int , p2: Int , p3: Int) {
-
-    }
-
-    override fun onTextChanged(changedText: CharSequence? , p1: Int , p2: Int , p3: Int) {
-    }
-
-    override fun onKey(view: View? , keyCode: Int , event: KeyEvent?): Boolean {
+    override fun onKey(
+        view: View? ,
+        keyCode: Int ,
+        event: KeyEvent?
+    ): Boolean {
         if (event?.action == KeyEvent.ACTION_DOWN) {
-            if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
-                Toast.makeText(this , searchField.text.toString() , Toast.LENGTH_SHORT).show()
+            if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
+                keyCode == KeyEvent.KEYCODE_ENTER
+            ) {
+                shortToast(searchField.text.toString())
                 searchPlace(searchField.text.toString())
                 return true;
             }
@@ -222,21 +211,28 @@ internal class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
     }
 
     private fun searchPlace(placeName: String) {
-        mMap.clear()
+        placeMarkers.forEach {
+            it.remove()
+        }
         val responseCall = theGooglePlaceApiService.getPlacesByName(placeName)
         responseCall.enqueue(object : Callback<ResultList> {
-            override fun onResponse(call: Call<ResultList> , response: Response<ResultList>) {
+            override fun onResponse(
+                call: Call<ResultList> ,
+                response: Response<ResultList>
+            ) {
                 val responseResult = response.body()
                 if (responseResult?.status == "OK") {
                     Log.d(
                         "DebugAPI" ,
                         "Retrofit -> onResponse: success: ${responseResult.placeList}"
                     )
-                    for (place in responseResult.placeList) {
-                        createMarker(
-                            LatLng(place.geometry.location.lat , place.geometry.location.lng) ,
-                            place.placeId ,
-                            BitmapDescriptorFactory.HUE_RED
+                    responseResult.placeList.forEach {
+                        placeMarkers.add(
+                            createMarker(
+                                LatLng(it.geometry.location.lat , it.geometry.location.lng) ,
+                                it.placeId ,
+                                BitmapDescriptorFactory.HUE_RED
+                            )
                         )
                     }
                 } else {
@@ -252,19 +248,6 @@ internal class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
                 Log.d("DebugAPI" , "Retrofit -> onFailure: ${t.message}")
             }
         })
-
-//        GlobalScope.launch(Dispatchers.Main) {
-//            val placeList = PlaceDataParser().getPlaceByName(placeName)
-//            for (place in placeList) {
-//                Log.d("search" , "searchPlace: ${place.name}")
-//                createMarker(
-//                    LatLng(place.geometry.location.lat , place.geometry.location.lng) ,
-//                    place.placeId ,
-//                    BitmapDescriptorFactory.HUE_RED
-//                )
-//            }
-//        }
-
     }
 
     override fun onMapLongClick(p0: LatLng?) {
