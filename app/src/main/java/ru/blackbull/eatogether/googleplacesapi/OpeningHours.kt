@@ -1,10 +1,12 @@
 package ru.blackbull.eatogether.googleplacesapi
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 
 @JsonClass(generateAdapter = true)
 class OpeningHours(
-    var open_now: Boolean,
+    @Json(name = "open_now")
+    var isOpenNow: Boolean
 ) {
 }

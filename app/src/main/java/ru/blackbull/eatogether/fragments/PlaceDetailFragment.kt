@@ -1,6 +1,5 @@
 package ru.blackbull.eatogether.fragments
 
-import android.icu.number.NumberFormatter.with
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,13 +9,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -27,12 +24,13 @@ import retrofit2.Response
 import ru.blackbull.eatogether.utils.PlaceDataParser
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.CompaniesAdapter
-import ru.blackbull.eatogether.adapters.PartyListAdapter
 import ru.blackbull.eatogether.adapters.ReviewAdapter
 import ru.blackbull.eatogether.db.Party
 import ru.blackbull.eatogether.db.PartyManager
+import ru.blackbull.eatogether.googleplacesapi.OneResult
 import ru.blackbull.eatogether.googleplacesapi.PlaceDetail
 import ru.blackbull.eatogether.modules.NetworkModule
+import java.lang.RuntimeException
 
 
 private const val KEY = "place_id"
@@ -46,8 +44,13 @@ class PlaceDetailFragment : Fragment() , ChildEventListener ,
     private var partyList: ArrayList<Party>? = null
     private var adapter: CompaniesAdapter? = null
 
-    private var placeNameText: TextView? = null
-    private var placeAddressText: TextView? = null
+    private lateinit var placeNameText: TextView
+    private lateinit var placeAddressText: TextView
+    private lateinit var placePhoneNumberText: TextView
+    private lateinit var placeIsOpenText: TextView
+    private lateinit var reviewsLabel: TextView
+    private lateinit var placeImage: ImageView
+    private lateinit var rvReviews: RecyclerView
 
     private val TAG = "TagForDebug"
 
@@ -63,61 +66,51 @@ class PlaceDetailFragment : Fragment() , ChildEventListener ,
         container: ViewGroup? ,
         savedInstanceState: Bundle?
     ): View? {
-        val layout = inflater.inflate(R.layout.fragment_place_detail ,
-            container , false)
+        val layout = inflater.inflate(
+            R.layout.fragment_place_detail ,
+            container , false
+        )
         placeNameText = layout.findViewById(R.id.name)
         placeAddressText = layout.findViewById(R.id.address)
+        placePhoneNumberText = layout.findViewById(R.id.phone)
+        placeIsOpenText = layout.findViewById(R.id.open_now)
+        placeImage = layout.findViewById(R.id.image)
+        reviewsLabel = layout.findViewById(R.id.reviews_label)
+        rvReviews = layout.findViewById(R.id.rv_reviews)
 
-        val parser = PlaceDataParser()
         FirebaseApp.initializeApp(context!!)
         val partyManager = PartyManager()
-        Log.d(TAG , "onCreateView: " +
-                FirebaseAuth.getInstance().currentUser!!.uid)
         partyList = partyManager.getByPlaceId(placeId!! , this)
 
-        val partyRecyclerView: RecyclerView = layout.findViewById(R.id.party_list)
+        val partyRecyclerView: RecyclerView = layout.findViewById(R.id.rv_parties)
 
 //        adapter = PartyListAdapter(context!! , partyList!!)
-        adapter = CompaniesAdapter(context!!, partyList!!)
+        adapter = CompaniesAdapter(context!! , partyList!!)
         partyRecyclerView.adapter = adapter
-//        partyList.no
+
         layout.findViewById<Button>(R.id.create_party).setOnClickListener(this)
 
-
-        GlobalScope.launch(Dispatchers.Main) {
-            val placeData = parser.getPlaceDetail(placeId!!)
-            placeNameText!!.text = placeData.name
-            placeAddressText!!.text = placeData.formatted_address
-            layout.findViewById<TextView>(R.id.phone).text = placeData.formatted_phone_number
-            if (placeData.getIsOpen() == true) {
-                layout.findViewById<TextView>(R.id.open_now).text = "Открыто"
-            } else {
-                layout.findViewById<TextView>(R.id.open_now).text = "Закрыто"
-            }
-            if (placeData.photos != null) {
-                Picasso.with(layout.context)
-                    .load(parser.getPhotoUrl(placeData.photos!![0].photo_reference , 400 , 400))
-                    .into(layout.findViewById<ImageView>(R.id.image))
-            }
-
-            val reviewRecyclerView = layout.findViewById<RecyclerView>(R.id.review_list)
-            if (placeData.reviews != null) {
-                reviewRecyclerView.adapter = ReviewAdapter(context!! , placeData.reviews!!)
-            } else {
-                layout.findViewById<TextView>(R.id.review_hint).visibility = View.GONE
-                reviewRecyclerView.visibility = View.GONE
-            }
-        }
-
-        val placeDetailCall: Call<PlaceDetail> = theGooglePlaceApiService.getPlaceDetail(placeId!!)
-        placeDetailCall.enqueue(object : Callback<PlaceDetail> {
-            override fun onResponse(call: Call<PlaceDetail> , response: Response<PlaceDetail>) {
-                val placeDetail = response.body()
-                Log.d("RetrofitDebug" , "onFailure: $placeDetail")
+        val placeDetailCall: Call<OneResult> = theGooglePlaceApiService.getPlaceDetail(placeId!!)
+        placeDetailCall.enqueue(object : Callback<OneResult> {
+            override fun onResponse(call: Call<OneResult> , response: Response<OneResult>) {
+                val responseResult = response.body()
+                if (responseResult?.status ?: "" == "OK") {
+                    Log.d(
+                        "DebugAPI" ,
+                        "Retrofit -> onResponse: success: ${responseResult?.placeDetail}"
+                    )
+                    updatePlaceInfo(responseResult?.placeDetail!!)
+                } else {
+                    Log.d(
+                        "DebugAPI" ,
+                        "Retrofit -> onResponse: failed: ${responseResult?.errorMessage}"
+                    )
+                }
             }
 
-            override fun onFailure(call: Call<PlaceDetail> , t: Throwable) {
-                Log.d("RetrofitDebug" , "onFailure: ${t.stackTrace}")
+            override fun onFailure(call: Call<OneResult> , t: Throwable) {
+                t.printStackTrace()
+                Log.d("DebugAPI" , "Retrofit -> onFailure: ${t.message}")
             }
         })
 
@@ -166,10 +159,13 @@ class PlaceDetailFragment : Fragment() , ChildEventListener ,
         if (context is AppCompatActivity) {
             (context as AppCompatActivity).supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.layout_for_fragments,
-                    CreatePartyFragment.newInstance(placeId!!,
+                .replace(
+                    R.id.layout_for_fragments ,
+                    CreatePartyFragment.newInstance(
+                        placeId!! ,
                         placeNameText!!.text as String , placeAddressText!!.text as String
-                    ))
+                    )
+                )
                 .addToBackStack(null)
                 .commit()
         }
@@ -180,5 +176,32 @@ class PlaceDetailFragment : Fragment() , ChildEventListener ,
         Log.d(TAG , "onDestroyView: ")
         val ref: DatabaseReference = FirebaseDatabase.getInstance().reference.child(Party.DB_PREFIX)
         ref.removeEventListener(this)
+    }
+
+    private fun updatePlaceInfo(place: PlaceDetail?) {
+        if (place == null) {
+            throw RuntimeException("cannot get place information")
+        }
+        placeNameText.text = place.name
+        placeAddressText.text = place.formatted_address
+        placePhoneNumberText.text = place.formatted_phone_number
+        placeIsOpenText.text = if (place.getIsOpen() == true) {
+            "Открыто"
+        } else {
+            "Закрыто"
+        }
+        val parser = PlaceDataParser()
+        if (place.photos != null) {
+            Picasso.with(context)
+                .load(parser.getPhotoUrl(place.photos!![0].photo_reference , 400 , 400))
+                .into(placeImage)
+        }
+
+        if (place.reviews != null) {
+            rvReviews.adapter = ReviewAdapter(context!! , place.reviews!!)
+        } else {
+            reviewsLabel.visibility = View.GONE
+            rvReviews.visibility = View.GONE
+        }
     }
 }

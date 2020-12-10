@@ -17,8 +17,6 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,20 +29,23 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import ru.blackbull.eatogether.utils.PlaceDataParser
-import ru.blackbull.eatogether.InformationActivity as informationActivity1
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import ru.blackbull.eatogether.googleplacesapi.ResultList
+import ru.blackbull.eatogether.modules.NetworkModule
 
-internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
-    GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, TextWatcher, View.OnKeyListener,
+internal class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
+    GoogleMap.OnMapClickListener , GoogleMap.OnMarkerClickListener , TextWatcher ,
+    View.OnKeyListener ,
     GoogleMap.OnMapLongClickListener {
+
+    private val theGooglePlaceApiService = NetworkModule.theGooglePlaceApiService
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var searchField: EditText
-    private lateinit var bottomSheet:BottomSheetDialog
+    private lateinit var bottomSheet: BottomSheetDialog
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,27 +58,31 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         searchField = findViewById(R.id.search)
         searchField.addTextChangedListener(this)
         searchField.setOnKeyListener(this)
-        FirebaseAuth.getInstance().signInWithEmailAndPassword("hello.world@email.com", "Aa123456789").addOnSuccessListener {
-            Toast.makeText(
-                this ,
-                "Авторизация прошла" ,
-                Toast.LENGTH_SHORT
-            ).show() }.addOnFailureListener {
-            Toast.makeText(
-                this ,
-                "Неудача" ,
-                Toast.LENGTH_SHORT
-            ).show() }
+        FirebaseAuth.getInstance()
+            .signInWithEmailAndPassword("hello.world@email.com" , "Aa123456789")
+            .addOnSuccessListener {
+                Toast.makeText(
+                    this ,
+                    "Авторизация прошла" ,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }.addOnFailureListener {
+                Toast.makeText(
+                    this ,
+                    "Неудача" ,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
     }
 
     private fun checkAccessLocationPermission() {
         if (ActivityCompat.checkSelfPermission(
-                this,
+                this ,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-            ActivityCompat.requestPermissions(this, permissions, 0)
+            ActivityCompat.requestPermissions(this , permissions , 0)
         } else {
             val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
@@ -87,8 +92,25 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
 
     private fun getCurrentLocation() {
-        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-            location ->
+        if (ActivityCompat.checkSelfPermission(
+                this ,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this ,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        Log.d("DebugAPI" , "getCurrentLocation: success")
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
 //            if (location == null || location.accuracy > 100) {
 //                val mLocationCallback = object : LocationCallback() {
 //                    override fun onLocationResult(locationResult: LocationResult?) {
@@ -109,8 +131,9 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 //            } else {
 //                callback.onCallback(Status.SUCCESS, location)
 //            }
-            val latLng = LatLng(location.latitude, location.longitude)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15F));
+//            val latLng = LatLng(location.latitude , location.longitude)
+            val latLng = LatLng(59.941170, 30.302707)
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng , 15F));
         }
 
     }
@@ -119,7 +142,7 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.setOnMapClickListener(this)
-        intent = Intent(this, informationActivity1::class.java)
+        intent = Intent(this , InformationActivity::class.java)
         mMap.setOnMarkerClickListener(this)
         mMap.setOnMapLongClickListener(this)
         mMap.isMyLocationEnabled = true
@@ -128,10 +151,10 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onMapClick(location: LatLng) {
         mMap.clear()
-        createMarker(location, "user", BitmapDescriptorFactory.HUE_GREEN)
+        createMarker(location , "user" , BitmapDescriptorFactory.HUE_GREEN)
     }
 
-    private fun createMarker(location: LatLng, tag: String, color: Float) {
+    private fun createMarker(location: LatLng , tag: String , color: Float) {
         val marker = mMap.addMarker(
             MarkerOptions().position(location).icon(
                 BitmapDescriptorFactory.defaultMarker(color)
@@ -141,8 +164,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
+        requestCode: Int ,
+        permissions: Array<out String> ,
         grantResults: IntArray
     ) {
 
@@ -155,8 +178,8 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onMarkerClick(it: Marker): Boolean {
         if (it.tag == "user") {
-            intent.putExtra("lat", it.position.latitude)
-            intent.putExtra("lng", it.position.longitude)
+            intent.putExtra("lat" , it.position.latitude)
+            intent.putExtra("lng" , it.position.longitude)
             startActivity(intent)
         } else {
             bottomSheet.show()
@@ -164,10 +187,14 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         return false
     }
 
-    fun createBottomSheet(context: Context) : BottomSheetDialog{
-        val bottomSheetDialog: BottomSheetDialog = BottomSheetDialog(context,R.style.BottomSheetDialogTheme)
-        val bottomSheetView : View = LayoutInflater.from(applicationContext)
-            .inflate(R.layout.map_search_bottom_sheet, findViewById<LinearLayout>(R.id.container_bottom_sheet))
+    fun createBottomSheet(context: Context): BottomSheetDialog {
+        val bottomSheetDialog: BottomSheetDialog =
+            BottomSheetDialog(context , R.style.BottomSheetDialogTheme)
+        val bottomSheetView: View = LayoutInflater.from(applicationContext)
+            .inflate(
+                R.layout.map_search_bottom_sheet ,
+                findViewById<LinearLayout>(R.id.container_bottom_sheet)
+            )
         bottomSheetDialog.setContentView(bottomSheetView)
         return bottomSheetDialog
     }
@@ -176,17 +203,17 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    override fun beforeTextChanged(p0: CharSequence? , p1: Int , p2: Int , p3: Int) {
 
     }
 
-    override fun onTextChanged(changedText: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    override fun onTextChanged(changedText: CharSequence? , p1: Int , p2: Int , p3: Int) {
     }
 
-    override fun onKey(view: View?, keyCode: Int, event: KeyEvent?): Boolean {
+    override fun onKey(view: View? , keyCode: Int , event: KeyEvent?): Boolean {
         if (event?.action == KeyEvent.ACTION_DOWN) {
             if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) {
-                Toast.makeText(this, searchField.text.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this , searchField.text.toString() , Toast.LENGTH_SHORT).show()
                 searchPlace(searchField.text.toString())
                 return true;
             }
@@ -194,23 +221,53 @@ internal class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         return false;
     }
 
-    private fun searchPlace(query: String) {
+    private fun searchPlace(placeName: String) {
         mMap.clear()
-        GlobalScope.launch(Dispatchers.Main) {
-            val placeList = PlaceDataParser().getPlaceByName(query)
-            for (place in placeList) {
-                Log.d("search", "searchPlace: ${place.name}")
-                createMarker(
-                    LatLng(place.geometry.location.lat, place.geometry.location.lng),
-                    place.placeId,
-                    BitmapDescriptorFactory.HUE_RED
-                )
+        val responseCall = theGooglePlaceApiService.getPlacesByName(placeName)
+        responseCall.enqueue(object : Callback<ResultList> {
+            override fun onResponse(call: Call<ResultList> , response: Response<ResultList>) {
+                val responseResult = response.body()
+                if (responseResult?.status == "OK") {
+                    Log.d(
+                        "DebugAPI" ,
+                        "Retrofit -> onResponse: success: ${responseResult.placeList}"
+                    )
+                    for (place in responseResult.placeList) {
+                        createMarker(
+                            LatLng(place.geometry.location.lat , place.geometry.location.lng) ,
+                            place.placeId ,
+                            BitmapDescriptorFactory.HUE_RED
+                        )
+                    }
+                } else {
+                    Log.d(
+                        "DebugAPI" ,
+                        "Retrofit -> onResponse: failed: ${responseResult?.errorMessage}"
+                    )
+                }
             }
-        }
+
+            override fun onFailure(call: Call<ResultList> , t: Throwable) {
+                t.printStackTrace()
+                Log.d("DebugAPI" , "Retrofit -> onFailure: ${t.message}")
+            }
+        })
+
+//        GlobalScope.launch(Dispatchers.Main) {
+//            val placeList = PlaceDataParser().getPlaceByName(placeName)
+//            for (place in placeList) {
+//                Log.d("search" , "searchPlace: ${place.name}")
+//                createMarker(
+//                    LatLng(place.geometry.location.lat , place.geometry.location.lng) ,
+//                    place.placeId ,
+//                    BitmapDescriptorFactory.HUE_RED
+//                )
+//            }
+//        }
 
     }
 
     override fun onMapLongClick(p0: LatLng?) {
-        Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this , "Hello" , Toast.LENGTH_SHORT).show()
     }
 }

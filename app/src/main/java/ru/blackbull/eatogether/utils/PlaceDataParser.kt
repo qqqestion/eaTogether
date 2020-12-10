@@ -33,6 +33,7 @@ class PlaceDataParser {
                 "&language=$language" +
                 "&fields=${fields.joinToString(",")}" +
                 "&key=$apiKey"
+        Log.d("DebugAPI" , "getPlaceDetail: $url")
         val jsonResp = getJsonElement(asyncDownloadURL(url)).asJsonObject
         Log.d("RetrofitDebug" , "onFailure: $url")
         return Gson().fromJson(
@@ -43,7 +44,7 @@ class PlaceDataParser {
 
     suspend fun getPlaceByName(query: String): ArrayList<BasicLocation> {
         val fields = arrayListOf(
-            "name" , "geometry" , "place_id" ,
+            "name" , "geometry" , "place_id"
         )
         val url = baseUrl + "/place/textsearch/json?" +
                 "language=ru" +
@@ -54,6 +55,7 @@ class PlaceDataParser {
                     )
                 }" + // TODO: спросить что за предупреждение
                 "&key=$apiKey"
+        Log.d("DebugAPI" , "getPlaceByName: $url")
         val jsonResp = getJsonElement(asyncDownloadURL(url)).asJsonObject
         val basicLocationListType: Type = object : TypeToken<ArrayList<BasicLocation>?>() {}.type
         return Gson().fromJson(
@@ -80,6 +82,7 @@ class PlaceDataParser {
                 "&key=" + apiKey
         val jsonResp = getJsonElement(asyncDownloadURL(url)).asJsonObject
         val basicLocationListType: Type = object : TypeToken<ArrayList<BasicLocation>?>() {}.type
+        Log.d("DebugAPI" , "getNearByPlaces: $url")
         return Gson().fromJson(
             jsonResp.get("results").asJsonArray ,
             basicLocationListType

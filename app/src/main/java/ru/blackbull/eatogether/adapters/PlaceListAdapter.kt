@@ -17,7 +17,7 @@ import ru.blackbull.eatogether.utils.PlaceDataParser
 
 class PlaceListAdapter(
     private val context: Context ,
-    private val data: List<BasicLocation> ,
+    private val data: List<BasicLocation>
 ) : RecyclerView.Adapter<PlaceListAdapter.MyViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 

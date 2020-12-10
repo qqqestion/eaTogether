@@ -5,34 +5,28 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class PlaceDetail(
-//    @Json(name = "business_status")
-//    var business_status: String,
-//
     @Json(name = "name")
-    var name: String,
+    var name: String ,
 
     @Json(name = "photos")
-    var photos: List<Photo>?,
+    var photos: List<Photo> = listOf() ,
 
     @Json(name = "opening_hours")
-    var opening_hours: OpeningHours?,
+    var openingHours: OpeningHours? ,
 
     @Json(name = "rating")
-    var rating: Double,
-
-    @Json(name = "types")
-    var types: List<String>,
+    var rating: Double ,
 
     @Json(name = "reviews")
-    var reviews: List<Review>?,
+    var reviews: List<Review> = listOf() ,
 
     @Json(name = "formatted_address")
-    var formatted_address: String,
+    var formatted_address: String ,
 
     @Json(name = "formatted_phone_number")
     var formatted_phone_number: String
 ) {
     fun getIsOpen(): Boolean? {
-        return opening_hours?.open_now
+        return openingHours?.isOpenNow
     }
 }

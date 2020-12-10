@@ -7,7 +7,7 @@ import com.squareup.moshi.JsonClass
 class Photo(
     var photo_reference: String,
     var width: Int,
-    var height: Int,
+    var height: Int
 ) {
 
 }

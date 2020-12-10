@@ -15,8 +15,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import ru.blackbull.eatogether.utils.PlaceDataParser
 import ru.blackbull.eatogether.adapters.PlaceListAdapter
+import ru.blackbull.eatogether.googleplacesapi.ResultList
+import ru.blackbull.eatogether.modules.NetworkModule
 
 
 private const val LATITUDE = "lat"
@@ -27,6 +32,10 @@ class RecycleRestaurantsFragment : Fragment() {
     private var lat: Double? = null
     private var lng: Double? = null
 
+    private lateinit var rvPlaces: RecyclerView
+
+    private val theGooglePlaceApiService = NetworkModule.theGooglePlaceApiService
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -36,39 +45,52 @@ class RecycleRestaurantsFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater , container: ViewGroup? ,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_recycler_place, container, false)
-        val position = LatLng(lat!!, lng!!)
-        GlobalScope.launch(Dispatchers.Main) {
-            val result = getData(position)
-            createRecycleView(result, view)
-        }
-        return view
+        val layout = inflater.inflate(R.layout.fragment_recycler_place , container , false)
+        rvPlaces = layout.findViewById(R.id.rv_places)
+        val position = LatLng(lat!! , lng!!)
+        val responseCall = theGooglePlaceApiService.getNearbyPlaces("$lat,$lng")
+        responseCall.enqueue(object : Callback<ResultList> {
+            override fun onResponse(call: Call<ResultList> , response: Response<ResultList>) {
+                val responseResult = response.body()
+                if (responseResult?.status == "OK") {
+                    Log.d(
+                        "DebugAPI" ,
+                        "Retrofit -> onResponse: success: ${responseResult.placeList}"
+                    )
+                    setListForRecyclerViewAdapter(responseResult.placeList)
+                } else {
+                    Log.d(
+                        "DebugAPI" ,
+                        "Retrofit -> onResponse: failed: ${responseResult?.errorMessage}"
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<ResultList> , t: Throwable) {
+                t.printStackTrace()
+                Log.d("DebugAPI" , "Retrofit -> onFailure: ${t.message}")
+            }
+        })
+
+        return layout
     }
 
-    private fun createRecycleView(data: List<BasicLocation>, view: View) {
-        val adapter = PlaceListAdapter(view.context, data)
-        val list = view.findViewById<RecyclerView>(R.id.list)
-        list.adapter = adapter
-        list.layoutManager = LinearLayoutManager(view.context)
-    }
-
-    private suspend fun getData(latLng: LatLng): List<BasicLocation> {
-        return withContext(Dispatchers.IO) {
-            val parser = PlaceDataParser()
-            return@withContext parser.getNearByPlaces(latLng)
-        }
+    private fun setListForRecyclerViewAdapter(data: List<BasicLocation>) {
+        val adapter = PlaceListAdapter(context!! , data)
+        rvPlaces.adapter = adapter
+        rvPlaces.layoutManager = LinearLayoutManager(context)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(lat: Double, lng: Double) =
+        fun newInstance(lat: Double , lng: Double) =
             RecycleRestaurantsFragment().apply {
                 arguments = Bundle().apply {
-                    putDouble(LATITUDE, lat)
-                    putDouble(LONGITUDE, lng)
+                    putDouble(LATITUDE , lat)
+                    putDouble(LONGITUDE , lng)
                 }
             }
     }
