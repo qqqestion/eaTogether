@@ -21,20 +21,20 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="ru.blackbull.eatogether.MapsActivity"
-            android:label="@string/app_name">
+            android:name=".ui.MapsActivity"
+            android:label="@string/app_name" />
+        <activity android:name=".ui.InformationActivity" />
+        <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.LoginActivity" />
+        <activity android:name=".ui.EditProfileActivity" />
+        <activity android:name=".ui.ProfileActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="ru.blackbull.eatogether.InformationActivity" />
-        <activity android:name=".RegisterActivity" />
-        <activity android:name=".ProfileActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".EditProfileActivity" />
-        <activity android:name=".WelcomeActivity" />
+        <activity android:name=".ui.StartActivity" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

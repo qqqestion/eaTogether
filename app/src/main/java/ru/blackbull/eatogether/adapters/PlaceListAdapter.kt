@@ -8,11 +8,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import ru.blackbull.eatogether.googleplacesapi.BasicLocation
-import com.squareup.picasso.Picasso
+import coil.load
+import ru.blackbull.eatogether.models.googleplaces.BasicLocation
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.fragments.PlaceDetailFragment
-import ru.blackbull.eatogether.utils.PlaceDataParser
+import ru.blackbull.eatogether.ui.fragments.PlaceDetailFragment
+import ru.blackbull.eatogether.util.PlaceDataParser
 
 
 class PlaceListAdapter(
@@ -35,7 +35,7 @@ class PlaceListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup , viewType: Int): MyViewHolder {
-        return MyViewHolder(inflater.inflate(R.layout.place_list_item , parent , false))
+        return MyViewHolder(inflater.inflate(R.layout.item_place_preview , parent , false))
     }
 
     override fun onBindViewHolder(holder: MyViewHolder , position: Int) {
@@ -48,13 +48,12 @@ class PlaceListAdapter(
         }
         val place: BasicLocation = data[position]
         holder.bind(place)
-        val url: String?
-        if (place.photos.isNullOrEmpty()) {
-            url = place.icon
+        val url = if (place.photos.isNullOrEmpty()) {
+            place.icon
         } else {
-            url = PlaceDataParser().getPhotoUrl(place.photos!![0].photo_reference , 150 , 150)
+            PlaceDataParser().getPhotoUrl(place.photos!![0].photo_reference , 150 , 150)
         }
-        Picasso.with(context).load(url).resize(150 , 150).into(holder.photo)
+        holder.photo.load(url)
     }
 
     override fun getItemCount(): Int {

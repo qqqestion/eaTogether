@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.googleplacesapi.Review
+import ru.blackbull.eatogether.models.googleplaces.Review
 
 
 class ReviewAdapter(
-    private val context: Context,
-    private val reviewList: List<Review>,
+    private val context: Context ,
+    private val reviewList: List<Review> ,
 ) : RecyclerView.Adapter<ReviewAdapter.MyViewHolder>() {
     private val inflater: LayoutInflater = LayoutInflater.from(context)
 
@@ -29,7 +29,7 @@ class ReviewAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(inflater.inflate(R.layout.review_list_item, parent, false))
+        return MyViewHolder(inflater.inflate(R.layout.item_review_preview, parent, false))
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {

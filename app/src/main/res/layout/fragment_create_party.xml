@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dp"
-    tools:context=".fragments.CreatePartyFragment">
+    tools:context=".ui.fragments.CreatePartyFragment">
 
     <TextView
         android:id="@+id/place_name"
@@ -48,14 +48,23 @@
         app:layout_constraintTop_toBottomOf="@id/create_party_title" />
 
     <EditText
-        android:id="@+id/create_party_time"
+        android:id="@+id/pick_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Время"
-        android:inputType="datetime"
+        android:hint="Выберете дату"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/create_party_description" />
+
+    <EditText
+        android:id="@+id/pick_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Выберете время"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pick_date" />
+
 
     <Button
         android:id="@+id/confirm_creation"
@@ -63,7 +72,7 @@
         android:layout_height="wrap_content"
         android:text="Создать"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/create_party_time" />
+        app:layout_constraintTop_toBottomOf="@id/pick_time" />
 
     <Button
         android:id="@+id/cancel_creation"
@@ -71,6 +80,6 @@
         android:layout_height="wrap_content"
         android:text="Отменить"
         app:layout_constraintStart_toEndOf="@id/confirm_creation"
-        app:layout_constraintTop_toBottomOf="@id/create_party_time" />
+        app:layout_constraintTop_toBottomOf="@id/pick_time" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

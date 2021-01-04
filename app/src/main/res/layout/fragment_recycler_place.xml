@@ -5,5 +5,5 @@
     android:id="@+id/rv_places"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ru.blackbull.eatogether.InformationActivity"
-    tools:listitem="@layout/place_list_item" />
+    tools:context="ru.blackbull.eatogether.ui.InformationActivity"
+    tools:listitem="@layout/item_place_preview" />

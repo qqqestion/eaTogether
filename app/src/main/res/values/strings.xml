@@ -40,7 +40,7 @@
 
     <string name="content_description_menu_btn">Кнопка для вызова меню</string>
     <string name="week_stats">Недельная статистика</string>
-    <string name="content_description_profile_settings">Фотография насстроек</string>
+    <string name="content_description_profile_settings">Фотография настроек</string>
     <string name="profile_more">Больше</string>
     <string name="content_description_back_btn">Кнопка назад</string>
     <string name="content_description_save_btn">Кнопка сохранить</string>
