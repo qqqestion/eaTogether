@@ -129,8 +129,8 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
     private fun getCurrentLocation() {
         try {
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-//            val latLng = LatLng(location.latitude , location.longitude)
-                val latLng = LatLng(59.941170 , 30.302707)
+                val latLng = LatLng(location.latitude , location.longitude)
+//                val latLng = LatLng(59.941170 , 30.302707)
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng , 15F))
             }
             Log.d("DebugAPI" , "getCurrentLocation: success")

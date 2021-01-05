@@ -14,6 +14,7 @@ data class NewUser(
     var description: String? = null ,
     var birthday: Timestamp? = null ,
     @get:Exclude
-    var imageUri: Uri? = null
-) {
-}
+    var _imageUri: Uri? = null ,
+    // Для спокойно сериализации пользователя, потому что uri не хочет сериализироваться
+    var imageUri: String? = _imageUri.toString()
+)

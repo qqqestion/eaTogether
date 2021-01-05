@@ -45,11 +45,10 @@ class EditProfileFragment : Fragment() {
             // Костыль, чтобы изображение сбрасывалось,
             // когда выходишь из фрагмента, и сохранялось,
             // когда нажимаешь сохранить
-            if (savedUri != null && savedUri != newUser.imageUri) {
-                newUser.imageUri = savedUri
-            } else {
-                savedUri = newUser.imageUri
+            if (savedUri == null) {
+                savedUri = newUser._imageUri
             }
+            Log.d("ImageDebug" , "savedUri in user: $savedUri")
             updateUserInfo(newUser)
         })
         return inflater.inflate(R.layout.fragment_edit_profile , container , false)
@@ -60,11 +59,13 @@ class EditProfileFragment : Fragment() {
 
         edit_profile_save_btn.setOnClickListener { onClickSaveButton() }
         btn_sign_out.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK , MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            startActivityForResult(intent , PICK_IMAGE)
+            firebaseViewModel.signOut()
+            val intent = Intent(activity , StartActivity::class.java)
+            startActivity(intent)
         }
         profile_change_photo_btn.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK , MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(intent , PICK_IMAGE)
         }
         edit_profile_back_btn.setOnClickListener {
@@ -99,16 +100,12 @@ class EditProfileFragment : Fragment() {
             date = simpleDateFormat.parse(birthday_input.text.toString())
         } catch (e: ParseException) {
             birthday_input.error = "Введено неправильное значение"
-            shortToast("Дата введена неправильно")
             return
         }
         user.birthday = Timestamp(date)
-        user.imageUri = savedUri
+        user._imageUri = savedUri
         firebaseViewModel.updateUser(user)
         shortToast("Профиль успешно обновлен")
-    }
-
-    private fun onClickSignOut() {
     }
 
     private fun updateUserInfo(user: NewUser) {
@@ -121,7 +118,7 @@ class EditProfileFragment : Fragment() {
         val simpleDateFormat = SimpleDateFormat(pattern , Locale.US)
         birthday_input.setText(simpleDateFormat.format(user.birthday?.toDate()!!))
         Log.d("EditProfile" , "updateUserInfo: ${user.imageUri}")
-        profile_photo.load(user.imageUri) {
+        profile_photo.load(savedUri) {
             transformations(CircleCropTransformation())
         }
     }

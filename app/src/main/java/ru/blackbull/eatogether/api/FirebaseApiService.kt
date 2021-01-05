@@ -41,12 +41,8 @@ class FirebaseApiService {
         val user = document.toObject(NewUser::class.java)!!
         user.id = document.id
         val str = document.getString("imageUri") ?: ""
-        user.imageUri = Uri.parse(str)
-        Log.d(
-            "EditProfile" ,
-            "left: ${user.imageUri}"
-        )
-
+        user._imageUri = Uri.parse(str)
+        Log.d("ImageDebug" , "getCurrentUser: $user")
         return user
     }
 
@@ -61,6 +57,16 @@ class FirebaseApiService {
             FirebaseAuth.getInstance().updateCurrentUser(firebaseUser)
         }
         Log.d("ImageDebug" , "updateUser: $user")
+        // Чтобы не фотография из firebase не загружалась повторно в firebase
+        if (user._imageUri?.host != "firebasestorage.googleapis.com") {
+            val res = FirebaseStorage.getInstance().reference.child(firebaseUser.uid).putFile(
+                user._imageUri!!
+            ).await()
+            val imageUri = res.metadata?.reference?.downloadUrl?.await()
+
+            user._imageUri = imageUri
+            user.imageUri = user._imageUri.toString()
+        }
         usersRef.document(firebaseUser.uid).set(user)
             .addOnSuccessListener {
                 Log.d("EditProfile" , "updateUser: success")
@@ -68,20 +74,7 @@ class FirebaseApiService {
             .addOnFailureListener {
                 Log.d("EditProfile" , "updateUser: failed")
             }
-        val res = FirebaseStorage.getInstance().reference.child(firebaseUser.uid).putFile(
-            user.imageUri!!
-        ).await()
-
-        val imageUri = res.metadata?.reference?.downloadUrl?.await()
-
-        // Чтобы у firebase не было проблем с сериализацией uri, иначе есть :/
-        usersRef.document(firebaseUser.uid).update(
-            mapOf(
-                "imageUri" to imageUri.toString()
-            )
-        )
-        user.imageUri = imageUri
-
+        Log.d("EditProfile" , "uri host: ${user._imageUri?.host}")
     }
 
     fun isAuthenticated(): Boolean {

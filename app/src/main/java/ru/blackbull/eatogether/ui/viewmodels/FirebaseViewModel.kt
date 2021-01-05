@@ -38,8 +38,10 @@ class FirebaseViewModel : ViewModel() {
         firebaseRepository.signOut()
     }
 
-    fun updateUser(user: NewUser) = viewModelScope.launch{
-        firebaseRepository.updateUser(user)
+    fun updateUser(updatedUser: NewUser) = viewModelScope.launch{
+        updatedUser.imageUri = user.value?.imageUri
+        firebaseRepository.updateUser(updatedUser)
+        user.postValue(updatedUser)
     }
 
     fun isAuthenticated(): Boolean {
@@ -48,6 +50,7 @@ class FirebaseViewModel : ViewModel() {
 
     fun getCurrentUserPhotoUri() = viewModelScope.launch {
         val uri = firebaseRepository.getCurrentUserPhotoUri()
+        Log.d("ImageDebug" , "savedUri in getCurrentUserPhotoUri: $uri")
         currentUserPhoto.postValue(uri)
     }
 }
