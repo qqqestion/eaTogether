@@ -26,16 +26,14 @@
             android:label="@string/app_name" />
         <activity android:name=".ui.InformationActivity" />
         <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.ProfileActivity"></activity>
         <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".ui.EditProfileActivity" />
-        <activity android:name=".ui.ProfileActivity">
+        <activity android:name=".ui.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.StartActivity" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

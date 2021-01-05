@@ -46,18 +46,8 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mUsersRef = FirebaseDatabase.getInstance().getReference(User.DB_PREFIX);
 
-        nextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickNext(view);
-            }
-        });
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickCancel(view);
-            }
-        });
+        nextBtn.setOnClickListener(this::onClickNext);
+        backBtn.setOnClickListener(this::onClickCancel);
     }
 
     public void onClickNext(View view) {
@@ -94,26 +84,23 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
             mAuth.createUserWithEmailAndPassword(fields.get(R.id.register_email_field), fields.get(R.id.register_password_field))
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "createUserWithEmail:success");
-                                FirebaseUser user = mAuth.getCurrentUser();
-                                User userData = new User(mUsersRef.child(user.getUid()));
-                                userData.setFirstName(fields.get(R.id.register_first_name_field));
-                                userData.setLastName(fields.get(R.id.register_last_name_field));
-                                userData.setBirthday(fields.get(R.id.register_birthday_field));
-                                userData.setDescription(fields.get(R.id.register_description_field));
-                                userData.save();
-                                Intent intent = new Intent(getApplication(), ProfileActivity.class);
-                                startActivity(intent);
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.d(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(getApplication(), "Authentication failed.", Toast.LENGTH_SHORT).show();
-                            }
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG, "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            User userData = new User(mUsersRef.child(user.getUid()));
+                            userData.setFirstName(fields.get(R.id.register_first_name_field));
+                            userData.setLastName(fields.get(R.id.register_last_name_field));
+                            userData.setBirthday(fields.get(R.id.register_birthday_field));
+                            userData.setDescription(fields.get(R.id.register_description_field));
+                            userData.save();
+                            Intent intent = new Intent(getApplication(), ProfileActivity.class);
+                            startActivity(intent);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.d(TAG, "createUserWithEmail:failure", task.getException());
+                            Toast.makeText(getApplication(), "Authentication failed.", Toast.LENGTH_SHORT).show();
                         }
                     });
         }

@@ -32,6 +32,12 @@ class FirebaseApiService {
 
     fun addParty(party: NewParty) {
         partiesRef.add(party)
+            .addOnSuccessListener {
+                Log.d("PartyDebug" , "party $party added successfully")
+            }
+            .addOnFailureListener { e ->
+                Log.d("PartyDebug" , "cannot add party: $party" , e)
+            }
     }
 
     suspend fun getCurrentUser(): NewUser {
@@ -46,10 +52,6 @@ class FirebaseApiService {
         return user
     }
 
-    fun signOut() {
-        FirebaseAuth.getInstance().signOut()
-    }
-
     suspend fun updateUser(user: NewUser) {
         val firebaseUser = FirebaseAuth.getInstance().currentUser ?: return
         if (firebaseUser.email != user.email) {
@@ -57,6 +59,7 @@ class FirebaseApiService {
             FirebaseAuth.getInstance().updateCurrentUser(firebaseUser)
         }
         Log.d("ImageDebug" , "updateUser: $user")
+
         // Чтобы не фотография из firebase не загружалась повторно в firebase
         if (user._imageUri?.host != "firebasestorage.googleapis.com") {
             val res = FirebaseStorage.getInstance().reference.child(firebaseUser.uid).putFile(
@@ -67,6 +70,7 @@ class FirebaseApiService {
             user._imageUri = imageUri
             user.imageUri = user._imageUri.toString()
         }
+
         usersRef.document(firebaseUser.uid).set(user)
             .addOnSuccessListener {
                 Log.d("EditProfile" , "updateUser: success")
@@ -75,10 +79,6 @@ class FirebaseApiService {
                 Log.d("EditProfile" , "updateUser: failed")
             }
         Log.d("EditProfile" , "uri host: ${user._imageUri?.host}")
-    }
-
-    fun isAuthenticated(): Boolean {
-        return FirebaseAuth.getInstance().currentUser != null
     }
 
     suspend fun getCurrentUserPhotoUri(): Uri {

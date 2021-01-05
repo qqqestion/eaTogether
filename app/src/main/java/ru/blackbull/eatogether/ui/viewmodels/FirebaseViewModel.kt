@@ -17,6 +17,7 @@ class FirebaseViewModel : ViewModel() {
     val searchParties: MutableLiveData<List<NewParty>> = MutableLiveData()
 
     val user: MutableLiveData<NewUser> = MutableLiveData()
+    val isSignedIn: MutableLiveData<Boolean> = MutableLiveData()
     val currentUserPhoto: MutableLiveData<Uri> = MutableLiveData()
 
     fun searchPartyByPlace(partyId: String) = viewModelScope.launch {
@@ -38,7 +39,7 @@ class FirebaseViewModel : ViewModel() {
         firebaseRepository.signOut()
     }
 
-    fun updateUser(updatedUser: NewUser) = viewModelScope.launch{
+    fun updateUser(updatedUser: NewUser) = viewModelScope.launch {
         updatedUser.imageUri = user.value?.imageUri
         firebaseRepository.updateUser(updatedUser)
         user.postValue(updatedUser)
@@ -52,5 +53,10 @@ class FirebaseViewModel : ViewModel() {
         val uri = firebaseRepository.getCurrentUserPhotoUri()
         Log.d("ImageDebug" , "savedUri in getCurrentUserPhotoUri: $uri")
         currentUserPhoto.postValue(uri)
+    }
+
+    fun signIn(email: String , password: String) = viewModelScope.launch {
+        val isSignedInLocal = firebaseRepository.signIn(email , password)
+        isSignedIn.postValue(isSignedInLocal)
     }
 }
