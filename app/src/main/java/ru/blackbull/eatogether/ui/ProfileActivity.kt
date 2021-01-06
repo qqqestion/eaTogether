@@ -26,24 +26,12 @@ class ProfileActivity : AppCompatActivity() , View.OnClickListener ,
     private lateinit var titles: Array<String>
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var drawerList: ListView
-    private lateinit var mAuth: FirebaseAuth
 
     val firebaseViewModel: FirebaseViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-        mAuth = FirebaseAuth.getInstance()
-        FirebaseAuth.getInstance()
-            .signInWithEmailAndPassword("hello.world@mail.ru" , "Aa123456789")
-            .addOnFailureListener { e ->
-                Log.d("XiaomiDebug" , "auth error occurred" , e)
-                Toast.makeText(
-                    this ,
-                    "Ошибка авторизации" ,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
 
         titles = resources.getStringArray(R.array.titles)
         drawerLayout = findViewById(R.id.profile_drawer_layout)
@@ -62,8 +50,7 @@ class ProfileActivity : AppCompatActivity() , View.OnClickListener ,
 
     override fun onStart() {
         super.onStart()
-        val user = mAuth.currentUser
-        if (user == null) {
+        if (!firebaseViewModel.isAuthenticated()) {
             val intent = Intent(application , StartActivity::class.java)
             startActivity(intent)
         }

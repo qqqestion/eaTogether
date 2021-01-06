@@ -18,7 +18,7 @@ import com.google.firebase.Timestamp
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.extensions.shortToast
-import ru.blackbull.eatogether.models.firebase.NewUser
+import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.ui.ProfileActivity
 import ru.blackbull.eatogether.ui.StartActivity
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
@@ -87,7 +87,7 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun onClickSaveButton() {
-        val user = NewUser()
+        val user = User()
         user.firstName = first_name_input.text.toString()
         user.lastName = last_name_input.text.toString()
         user.description = description_input.text.toString()
@@ -108,7 +108,7 @@ class EditProfileFragment : Fragment() {
         shortToast("Профиль успешно обновлен")
     }
 
-    private fun updateUserInfo(user: NewUser) {
+    private fun updateUserInfo(user: User) {
         first_name_input.setText(user.firstName)
         last_name_input.setText(user.lastName)
         email_input.setText(user.email)

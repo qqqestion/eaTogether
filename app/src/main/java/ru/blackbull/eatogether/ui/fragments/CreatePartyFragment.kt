@@ -11,7 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_create_party.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.extensions.shortToast
-import ru.blackbull.eatogether.models.firebase.NewParty
+import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.ui.InformationActivity
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 import java.text.ParseException
@@ -81,14 +81,14 @@ class CreatePartyFragment : Fragment() , View.OnClickListener {
 
     private fun createParty() {
         val format = SimpleDateFormat("yyyy-MM-dd HH:mm" , Locale.US)
-        var date: Date?
+        val date: Date?
         try {
             date = format.parse("${pick_date.text} ${pick_time.text}")
         } catch (e: ParseException) {
             shortToast("Дата введена неправильно")
             return
         }
-        val party = NewParty(
+        val party = Party(
             title = create_party_title.text.toString() ,
             description = create_party_description!!.text.toString() ,
             time = Timestamp(date) ,

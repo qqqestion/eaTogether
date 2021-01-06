@@ -1,11 +1,9 @@
 package ru.blackbull.eatogether.adapters
 
-import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -14,17 +12,17 @@ import coil.load
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.item_party_preview.view.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.firebase.NewParty
+import ru.blackbull.eatogether.models.firebase.Party
 
 
 class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
 
-    private val differCallback = object : DiffUtil.ItemCallback<NewParty>() {
-        override fun areItemsTheSame(oldItem: NewParty , newItem: NewParty): Boolean {
+    private val differCallback = object : DiffUtil.ItemCallback<Party>() {
+        override fun areItemsTheSame(oldItem: Party , newItem: Party): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: NewParty , newItem: NewParty): Boolean {
+        override fun areContentsTheSame(oldItem: Party , newItem: Party): Boolean {
             return oldItem == newItem
         }
 

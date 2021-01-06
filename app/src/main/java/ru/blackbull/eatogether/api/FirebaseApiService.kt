@@ -2,35 +2,32 @@ package ru.blackbull.eatogether.api
 
 import android.net.Uri
 import android.util.Log
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.tasks.await
-import ru.blackbull.eatogether.models.firebase.NewParty
-import ru.blackbull.eatogether.models.firebase.NewUser
+import ru.blackbull.eatogether.models.firebase.Party
+import ru.blackbull.eatogether.models.firebase.User
 
 
 class FirebaseApiService {
     private val usersRef = Firebase.firestore.collection("users")
     private val partiesRef = Firebase.firestore.collection("parties")
 
-    suspend fun searchPartyByPlace(placeId: String): MutableList<NewParty> {
-        val parties = mutableListOf<NewParty>()
+    suspend fun searchPartyByPlace(placeId: String): MutableList<Party> {
+        val parties = mutableListOf<Party>()
 
         val documents = partiesRef.whereEqualTo("placeId" , placeId).get().await()
 
         for (document in documents) {
-            val party = document.toObject(NewParty::class.java)
-            party.id = document.id
+            val party = document.toObject(Party::class.java)
             parties.add(party)
         }
         return parties
     }
 
-    fun addParty(party: NewParty) {
+    fun addParty(party: Party) {
         partiesRef.add(party)
             .addOnSuccessListener {
                 Log.d("PartyDebug" , "party $party added successfully")
@@ -40,19 +37,18 @@ class FirebaseApiService {
             }
     }
 
-    suspend fun getCurrentUser(): NewUser {
+    suspend fun getCurrentUser(): User {
         val document = usersRef.document(
             FirebaseAuth.getInstance().currentUser?.uid!!
         ).get().await()
-        val user = document.toObject(NewUser::class.java)!!
-        user.id = document.id
+        val user = document.toObject(User::class.java)!!
         val str = document.getString("imageUri") ?: ""
         user._imageUri = Uri.parse(str)
         Log.d("ImageDebug" , "getCurrentUser: $user")
         return user
     }
 
-    suspend fun updateUser(user: NewUser) {
+    suspend fun updateUser(user: User) {
         val firebaseUser = FirebaseAuth.getInstance().currentUser ?: return
         if (firebaseUser.email != user.email) {
             firebaseUser.updateEmail(user.email!!)
@@ -84,5 +80,15 @@ class FirebaseApiService {
     suspend fun getCurrentUserPhotoUri(): Uri {
         val uid = FirebaseAuth.getInstance().currentUser?.uid!!
         return FirebaseStorage.getInstance().reference.child(uid).downloadUrl.await()
+    }
+
+    suspend fun addUser(uid: String , userInfo: User) {
+        val uriResult = FirebaseStorage.getInstance()
+            .reference
+            .child("download.jpeg")
+            .downloadUrl.await()
+        userInfo.imageUri = uriResult.toString()
+        Log.d("FirebaseAuthDebug" , "default image uri: ${userInfo.imageUri}")
+        usersRef.document(uid).set(userInfo).await()
     }
 }

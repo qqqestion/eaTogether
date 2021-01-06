@@ -3,14 +3,12 @@ package ru.blackbull.eatogether.repository
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.FirebaseException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.*
 import kotlinx.coroutines.tasks.await
 import ru.blackbull.eatogether.api.NetworkModule
-import ru.blackbull.eatogether.models.firebase.NewParty
-import ru.blackbull.eatogether.models.firebase.NewUser
+import ru.blackbull.eatogether.models.firebase.Party
+import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.eatogether.state.RegistrationState
 import java.lang.RuntimeException
 
 
@@ -19,7 +17,7 @@ class FirebaseRepository {
     suspend fun searchPartyByPlace(placeId: String) =
         NetworkModule.firebaseApiService.searchPartyByPlace(placeId)
 
-    fun addParty(party: NewParty) =
+    fun addParty(party: Party) =
         NetworkModule.firebaseApiService.addParty(party)
 
     suspend fun getCurrentUser() =
@@ -29,7 +27,7 @@ class FirebaseRepository {
         FirebaseAuth.getInstance().signOut()
     }
 
-    suspend fun updateUser(user: NewUser) {
+    suspend fun updateUser(user: User) {
         NetworkModule.firebaseApiService.updateUser(user)
     }
 
@@ -41,7 +39,7 @@ class FirebaseRepository {
         return NetworkModule.firebaseApiService.getCurrentUserPhotoUri()
     }
 
-    suspend fun signIn(email: String , password: String): Boolean? {
+    suspend fun signIn(email: String , password: String): Boolean {
         val firebaseUser: FirebaseUser?
         try {
             val result = FirebaseAuth.getInstance()
@@ -60,5 +58,23 @@ class FirebaseRepository {
             }
         }
         return firebaseUser != null
+    }
+
+    suspend fun signUpWithEmailAndPassword(
+        userInfo: User ,
+        password: String
+    ): RegistrationState {
+        val firebaseUser: FirebaseUser?
+        try {
+            val result = FirebaseAuth.getInstance()
+                .createUserWithEmailAndPassword(userInfo.email!! , password)
+                .await()
+            firebaseUser = result.user
+        } catch (e: FirebaseException) {
+            Log.d("RegistrationDebug" , "an error occurred" , e)
+            return RegistrationState.Error(e)
+        }
+        NetworkModule.firebaseApiService.addUser(firebaseUser?.uid!! , userInfo)
+        return RegistrationState.Success()
     }
 }

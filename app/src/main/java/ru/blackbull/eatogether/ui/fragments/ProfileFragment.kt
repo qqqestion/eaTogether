@@ -34,8 +34,8 @@ class ProfileFragment : Fragment() {
         menuBtn.setOnClickListener(context as View.OnClickListener?)
 
         firebaseViewModel = (activity as ProfileActivity).firebaseViewModel
-        firebaseViewModel.currentUserPhoto.observe(viewLifecycleOwner , Observer { photoUri ->
-            profile_photo.load(photoUri) {
+        firebaseViewModel.user.observe(viewLifecycleOwner , Observer { user ->
+            profile_photo.load(user._imageUri) {
                 transformations(CircleCropTransformation())
             }
         })
@@ -50,7 +50,7 @@ class ProfileFragment : Fragment() {
             val intent = Intent(context , StartActivity::class.java)
             startActivity(intent)
         }
-        firebaseViewModel.getCurrentUserPhotoUri()
+        firebaseViewModel.getCurrentUser()
     }
 }
 
