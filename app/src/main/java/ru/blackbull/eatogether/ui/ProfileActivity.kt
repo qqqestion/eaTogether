@@ -88,6 +88,9 @@ class ProfileActivity : AppCompatActivity() , View.OnClickListener ,
         if ("Карта" == titles[i]) {
             val intent = Intent(this , MapsActivity::class.java)
             startActivity(intent)
+        } else if("Мои мероприятия" == titles[i]){
+            val intent = Intent(this , MyPartiesActivity::class.java)
+            startActivity(intent)
         }
         drawerLayout.closeDrawer(drawerList)
     }

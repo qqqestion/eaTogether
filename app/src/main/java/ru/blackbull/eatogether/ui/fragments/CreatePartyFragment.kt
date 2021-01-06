@@ -23,7 +23,7 @@ private const val ARG_PLACE_ID = "placeId"
 private const val ARG_PLACE_NAME = "placeName"
 private const val ARG_PLACE_ADDRESS = "placeAddress"
 
-class CreatePartyFragment : Fragment() , View.OnClickListener {
+class CreatePartyFragment : Fragment(R.layout.fragment_create_party) , View.OnClickListener {
     private val TAG = "TagForDebug"
 
     private lateinit var firebaseViewModel: FirebaseViewModel

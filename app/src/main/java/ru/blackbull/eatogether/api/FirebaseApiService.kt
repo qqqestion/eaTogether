@@ -27,6 +27,17 @@ class FirebaseApiService {
         return parties
     }
 
+    suspend fun getPartiesByCurrentUser(): MutableList<Party> {
+        val user = getCurrentUser()
+        val parties = mutableListOf<Party>()
+        val documents = partiesRef.whereArrayContains("users",user.id!!).get().await()
+        documents.forEach { document ->
+            val party = document.toObject(Party::class.java)
+            parties.add(party)
+        }
+        return parties
+    }
+
     fun addParty(party: Party) {
         partiesRef.add(party)
             .addOnSuccessListener {
