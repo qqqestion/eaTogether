@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_maps.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.ui.viewmodels.PlaceViewModel
@@ -89,7 +88,6 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
             }
 
         })
-
     }
 
     override fun onResume() {

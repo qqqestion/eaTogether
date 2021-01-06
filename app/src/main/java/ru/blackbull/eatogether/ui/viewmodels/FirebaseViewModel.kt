@@ -17,6 +17,8 @@ class FirebaseViewModel : ViewModel() {
 
     val searchParties: MutableLiveData<List<Party>> = MutableLiveData()
 
+    val userParties: MutableLiveData<List<Party>> = MutableLiveData()
+
     val user: MutableLiveData<User> = MutableLiveData()
     val isSignedIn: MutableLiveData<Boolean> = MutableLiveData()
 
@@ -31,6 +33,11 @@ class FirebaseViewModel : ViewModel() {
 
     fun addParty(party: Party) = viewModelScope.launch {
         firebaseRepository.addParty(party)
+    }
+
+    fun getPartiesByCurrentUser() = viewModelScope.launch {
+        val parties = firebaseRepository.getPartiesByCurrentUser()
+        userParties.postValue(parties)
     }
 
     fun getCurrentUser() = viewModelScope.launch {

@@ -88,6 +88,7 @@ class ProfileActivity : AppCompatActivity() , View.OnClickListener ,
         val intent = when (titles[i]) {
             "Карта" -> Intent(this , MapsActivity::class.java)
             "Рядом" -> Intent(this , NearbyActivity::class.java)
+            "Мои мероприятия" -> Intent(this , MyPartiesActivity::class.java)
             else -> return
         }
         startActivity(intent)

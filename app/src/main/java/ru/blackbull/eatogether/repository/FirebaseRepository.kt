@@ -21,6 +21,10 @@ class FirebaseRepository {
     fun addParty(party: Party) =
         NetworkModule.firebaseApiService.addParty(party)
 
+    suspend fun getPartiesByCurrentUser() =
+        NetworkModule.firebaseApiService.getPartiesByCurrentUser()
+
+
     suspend fun getCurrentUser() =
         NetworkModule.firebaseApiService.getCurrentUser()
 
