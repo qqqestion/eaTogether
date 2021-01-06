@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.android.synthetic.main.activity_maps.*
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 import ru.blackbull.eatogether.ui.viewmodels.PlaceViewModel
 
 
@@ -38,6 +39,7 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
     View.OnClickListener {
 
     val placeViewModel: PlaceViewModel by viewModels()
+    val firebaseViewModel: FirebaseViewModel by viewModels()
 
     private val REQUEST_CODE: Int = 0
 
@@ -93,6 +95,10 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
     override fun onResume() {
         super.onResume()
         checkAccessLocationPermission()
+        if (!firebaseViewModel.isAuthenticated()) {
+            val intent = Intent(application , StartActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun checkAccessLocationPermission() {
@@ -244,12 +250,13 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
     }
 
     override fun onItemClick(adapterView: AdapterView<*>? , view: View? , i: Int , l: Long) {
-        when (titles[i]) {
-            "Профиль" -> {
-                val intent = Intent(this , ProfileActivity::class.java)
-                startActivity(intent)
-            }
+        val intent = when (titles[i]) {
+            "Профиль" -> Intent(this , ProfileActivity::class.java)
+            "Мои мероприятия" -> Intent(this , MyPartiesActivity::class.java)
+            "Рядом" -> Intent(this , NearbyActivity::class.java)
+            else -> return
         }
+        startActivity(intent)
         drawerLayout.closeDrawer(drawerList)
     }
 

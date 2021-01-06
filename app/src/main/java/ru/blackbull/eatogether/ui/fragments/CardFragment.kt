@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.fragments.nearby
+package ru.blackbull.eatogether.ui.fragments
 
 import android.os.Bundle
 import android.util.Log

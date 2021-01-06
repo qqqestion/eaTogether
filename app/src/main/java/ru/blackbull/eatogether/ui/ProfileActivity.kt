@@ -2,19 +2,16 @@ package ru.blackbull.eatogether.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.ListView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
-import com.google.firebase.auth.FirebaseAuth
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.ui.fragments.EditProfileFragment
 import ru.blackbull.eatogether.ui.fragments.ProfileFragment
@@ -43,7 +40,9 @@ class ProfileActivity : AppCompatActivity() , View.OnClickListener ,
         )
         drawerList.onItemClickListener = this
         val ft = supportFragmentManager.beginTransaction()
-        ft.replace(R.id.profile_fragment_container , ProfileFragment())
+        ft.replace(R.id.profile_fragment_container ,
+            ProfileFragment()
+        )
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
         ft.commit()
     }
@@ -60,7 +59,9 @@ class ProfileActivity : AppCompatActivity() , View.OnClickListener ,
         when (view.id) {
             R.id.profile_settings -> {
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.profile_fragment_container , EditProfileFragment())
+                    .replace(R.id.profile_fragment_container ,
+                        EditProfileFragment()
+                    )
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .addToBackStack(null)
                     .commit()

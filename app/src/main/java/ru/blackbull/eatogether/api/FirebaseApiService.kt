@@ -32,7 +32,7 @@ class FirebaseApiService {
     suspend fun getPartiesByCurrentUser(): MutableList<Party> {
         val user = getCurrentUser()
         val parties = mutableListOf<Party>()
-        val documents = partiesRef.whereArrayContains("users",user.id!!).get().await()
+        val documents = partiesRef.whereArrayContains("users" , user.id!!).get().await()
         documents.forEach { document ->
             val party = document.toObject(Party::class.java)
             parties.add(party)
@@ -104,6 +104,7 @@ class FirebaseApiService {
         var documents = if (currentUser.likedUsersId.isEmpty()) {
             usersRef.get().await()
         } else {
+            // Ищем по id документа
             usersRef.whereNotIn(
                 FieldPath.documentId() ,
                 currentUser.likedUsersId
@@ -119,6 +120,7 @@ class FirebaseApiService {
         documents = if (currentUser.dislikedUsersId.isEmpty()) {
             usersRef.get().await()
         } else {
+            // Ищем по id документа
             usersRef.whereNotIn(
                 FieldPath.documentId() ,
                 currentUser.dislikedUsersId

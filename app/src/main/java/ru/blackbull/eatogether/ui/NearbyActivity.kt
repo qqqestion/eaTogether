@@ -12,7 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.fragments.nearby.CardFragment
+import ru.blackbull.eatogether.ui.fragments.CardFragment
 import ru.blackbull.eatogether.ui.viewmodels.NearbyViewModel
 
 class NearbyActivity : AppCompatActivity() , AdapterView.OnItemClickListener {
@@ -35,7 +35,8 @@ class NearbyActivity : AppCompatActivity() , AdapterView.OnItemClickListener {
         drawerList.setOnItemClickListener(this)
 
         drawerLayout = findViewById(R.id.drawer_layout)
-        val fragment: Fragment = CardFragment()
+        val fragment: Fragment =
+            CardFragment()
         val ft: FragmentTransaction = supportFragmentManager.beginTransaction()
         ft.replace(R.id.content_frame , fragment)
         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.PlaceDetailFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="ru.blackbull.eatogether.RestaurantDetailsFragment">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/image"
@@ -21,7 +21,7 @@
             tools:src="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tvNearbyUserName"
+            android:id="@+id/tvPlaceName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -41,7 +41,7 @@
             android:text="Address"
             android:textSize="23sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvNearbyUserName" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPlaceName" />
 
         <TextView
             android:id="@+id/open_now"
@@ -66,7 +66,7 @@
             app:layout_constraintTop_toBottomOf="@+id/open_now" />
 
         <Button
-            android:id="@+id/create_party"
+            android:id="@+id/btnCreateParty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Создать компанию"
@@ -81,10 +81,10 @@
             android:text="Компании"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/create_party" />
+            app:layout_constraintTop_toBottomOf="@id/btnCreateParty" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_parties"
+            android:id="@+id/rvParties"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
@@ -101,10 +101,10 @@
             android:text="Отзывы"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rv_parties" />
+            app:layout_constraintTop_toBottomOf="@+id/rvParties" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_reviews"
+            android:id="@+id/rvReviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"

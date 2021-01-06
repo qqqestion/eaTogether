@@ -11,10 +11,8 @@ import androidx.lifecycle.Observer
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.extensions.shortToast
 import ru.blackbull.eatogether.ui.ProfileActivity
 import ru.blackbull.eatogether.ui.StartActivity
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel

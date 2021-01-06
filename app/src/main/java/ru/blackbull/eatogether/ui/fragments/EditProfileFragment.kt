@@ -71,7 +71,9 @@ class EditProfileFragment : Fragment() {
         edit_profile_back_btn.setOnClickListener {
             activity!!.supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.profile_fragment_container , ProfileFragment())
+                .replace(R.id.profile_fragment_container ,
+                    ProfileFragment()
+                )
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit()
         }
