@@ -85,10 +85,12 @@ class ProfileActivity : AppCompatActivity() , View.OnClickListener ,
         i: Int ,
         l: Long
     ) {
-        if ("Карта" == titles[i]) {
-            val intent = Intent(this , MapsActivity::class.java)
-            startActivity(intent)
+        val intent = when (titles[i]) {
+            "Карта" -> Intent(this , MapsActivity::class.java)
+            "Рядом" -> Intent(this , NearbyActivity::class.java)
+            else -> return
         }
+        startActivity(intent)
         drawerLayout.closeDrawer(drawerList)
     }
 }

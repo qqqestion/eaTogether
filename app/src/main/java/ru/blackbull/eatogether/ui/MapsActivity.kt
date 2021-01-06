@@ -90,16 +90,6 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
 
         })
 
-        FirebaseAuth.getInstance()
-            .signInWithEmailAndPassword("hello.world@mail.ru" , "Aa123456789")
-            .addOnFailureListener {
-                it.printStackTrace()
-                Toast.makeText(
-                    this ,
-                    "Ошибка авторизации" ,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
     }
 
     override fun onResume() {

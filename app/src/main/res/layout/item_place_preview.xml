@@ -17,7 +17,7 @@
 
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/tvNearbyUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -34,7 +34,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@+id/place_image"
-        app:layout_constraintTop_toBottomOf="@+id/name"
+        app:layout_constraintTop_toBottomOf="@+id/tvNearbyUserName"
         tools:text="@tools:sample/lorem" />
 
     <TextView

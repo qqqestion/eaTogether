@@ -3,6 +3,8 @@ package ru.blackbull.eatogether.api
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -38,9 +40,7 @@ class FirebaseApiService {
     }
 
     suspend fun getCurrentUser(): User {
-        val document = usersRef.document(
-            FirebaseAuth.getInstance().currentUser?.uid!!
-        ).get().await()
+        val document = getCurrentUserRef().get().await()
         val user = document.toObject(User::class.java)!!
         val str = document.getString("imageUri") ?: ""
         user._imageUri = Uri.parse(str)
@@ -67,19 +67,14 @@ class FirebaseApiService {
             user.imageUri = user._imageUri.toString()
         }
 
-        usersRef.document(firebaseUser.uid).set(user)
+        getCurrentUserRef().set(user)
             .addOnSuccessListener {
                 Log.d("EditProfile" , "updateUser: success")
             }
-            .addOnFailureListener {
-                Log.d("EditProfile" , "updateUser: failed")
+            .addOnFailureListener { e ->
+                Log.d("EditProfile" , "updateUser: failed" , e)
             }
         Log.d("EditProfile" , "uri host: ${user._imageUri?.host}")
-    }
-
-    suspend fun getCurrentUserPhotoUri(): Uri {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid!!
-        return FirebaseStorage.getInstance().reference.child(uid).downloadUrl.await()
     }
 
     suspend fun addUser(uid: String , userInfo: User) {
@@ -90,5 +85,64 @@ class FirebaseApiService {
         userInfo.imageUri = uriResult.toString()
         Log.d("FirebaseAuthDebug" , "default image uri: ${userInfo.imageUri}")
         usersRef.document(uid).set(userInfo).await()
+    }
+
+    suspend fun getNearbyUsers(): MutableList<User> {
+        val users = mutableSetOf<User>()
+        val currentUser = getCurrentUser()
+        var documents = if (currentUser.likedUsersId.isEmpty()) {
+            usersRef.get().await()
+        } else {
+            usersRef.whereNotIn(
+                FieldPath.documentId() ,
+                currentUser.likedUsersId
+            ).get().await()
+        }
+        for (document in documents) {
+            if (document.id != currentUser.id) {
+                val user = document.toObject(User::class.java)
+                user._imageUri = Uri.parse(user.imageUri)
+                users.add(user)
+            }
+        }
+        documents = if (currentUser.dislikedUsersId.isEmpty()) {
+            usersRef.get().await()
+        } else {
+            usersRef.whereNotIn(
+                FieldPath.documentId() ,
+                currentUser.dislikedUsersId
+            ).get().await()
+        }
+        for (document in documents) {
+            if (document.id != currentUser.id) {
+                val user = document.toObject(User::class.java)
+                user._imageUri = Uri.parse(user.imageUri)
+                users.add(user)
+            }
+        }
+        Log.d("NearbyDebug" , "users: ${users.toMutableList()}")
+        return users.toMutableList()
+    }
+
+    suspend fun likeUser(user: User) {
+        val documentRef = getCurrentUserRef()
+        val document = documentRef.get().await()
+        val value = document.get("likedUsers") as MutableList<String>
+        user.id?.let { value.add(it) }
+        documentRef.update("likedUsers" , value).await()
+    }
+
+    suspend fun dislikeUser(user: User) {
+        val documentRef = getCurrentUserRef()
+        val document = documentRef.get().await()
+        val value = document.get("dislikedUsers") as MutableList<String>
+        user.id?.let { value.add(it) }
+        documentRef.update("dislikedUsers" , value).await()
+    }
+
+    private fun getCurrentUserRef(): DocumentReference {
+        return usersRef.document(
+            FirebaseAuth.getInstance().currentUser?.uid!!
+        )
     }
 }

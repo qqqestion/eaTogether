@@ -23,7 +23,7 @@ class PlaceListAdapter(
 
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var photo: ImageView = itemView.findViewById(R.id.place_image)
-        private var name: TextView = itemView.findViewById(R.id.name)
+        private var name: TextView = itemView.findViewById(R.id.tvNearbyUserName)
         private var rating: TextView = itemView.findViewById(R.id.rating)
         private var vicinity: TextView = itemView.findViewById(R.id.vicinity)
 

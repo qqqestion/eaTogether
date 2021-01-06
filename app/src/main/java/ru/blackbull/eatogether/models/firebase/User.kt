@@ -4,6 +4,7 @@ import android.net.Uri
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
+import com.google.firebase.firestore.PropertyName
 
 
 data class User(
@@ -17,5 +18,11 @@ data class User(
     @get:Exclude
     var _imageUri: Uri? = null ,
     // Для спокойной сериализации пользователя, потому что uri не хочет сериализироваться
-    var imageUri: String? = _imageUri.toString()
+    var imageUri: String? = _imageUri.toString() ,
+    @get:PropertyName("likedUsers")
+    @set:PropertyName("likedUsers")
+    var likedUsersId: MutableList<String> = mutableListOf() ,
+    @get:PropertyName("dislikedUsers")
+    @set:PropertyName("dislikedUsers")
+    var dislikedUsersId: MutableList<String> = mutableListOf()
 )

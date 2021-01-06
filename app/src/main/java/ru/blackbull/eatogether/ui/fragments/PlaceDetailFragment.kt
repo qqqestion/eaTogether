@@ -96,7 +96,7 @@ class PlaceDetailFragment : Fragment() , View.OnClickListener {
                     R.id.layout_for_fragments ,
                     CreatePartyFragment.newInstance(
                         placeId ,
-                        name.text as String , address.text as String
+                        tvNearbyUserName.text as String , address.text as String
                     )
                 )
                 .addToBackStack(null)
@@ -108,7 +108,7 @@ class PlaceDetailFragment : Fragment() , View.OnClickListener {
         if (place == null) {
             throw RuntimeException("cannot get place information")
         }
-        name.text = place.name
+        tvNearbyUserName.text = place.name
         address.text = place.formatted_address
         phone.text = place.formatted_phone_number
         open_now.text = if (place.getIsOpen() == true) {

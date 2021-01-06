@@ -22,7 +22,7 @@ class FirebaseViewModel : ViewModel() {
 
     val signUpResult: MutableLiveData<RegistrationState> = MutableLiveData()
 
-    val currentUserPhoto: MutableLiveData<Uri> = MutableLiveData()
+    val nearbyUsers: MutableLiveData<List<User>> = MutableLiveData()
 
     fun searchPartyByPlace(partyId: String) = viewModelScope.launch {
         val parties = firebaseRepository.searchPartyByPlace(partyId)
@@ -51,12 +51,6 @@ class FirebaseViewModel : ViewModel() {
 
     fun isAuthenticated(): Boolean {
         return firebaseRepository.isAuthenticated()
-    }
-
-    fun getCurrentUserPhotoUri() = viewModelScope.launch {
-        val uri = firebaseRepository.getCurrentUserPhotoUri()
-        Log.d("ImageDebug" , "savedUri in getCurrentUserPhotoUri: $uri")
-        currentUserPhoto.postValue(uri)
     }
 
     fun signIn(email: String , password: String) = viewModelScope.launch {
