@@ -44,7 +44,6 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var searchField: EditText
     private lateinit var bottomSheet: BottomSheetDialog
 
     private lateinit var titles: Array<String>
@@ -230,7 +229,7 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
             if (keyCode == KeyEvent.KEYCODE_DPAD_CENTER ||
                 keyCode == KeyEvent.KEYCODE_ENTER
             ) {
-                searchPlace(searchField.text.toString())
+                searchPlace(search.text.toString())
                 return true;
             }
         }
