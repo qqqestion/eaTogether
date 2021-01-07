@@ -17,8 +17,8 @@ import ru.blackbull.eatogether.ui.viewmodels.NearbyViewModel
 
 class NearbyActivity : AppCompatActivity() , AdapterView.OnItemClickListener {
     private lateinit var titles: Array<String>
-    private lateinit var drawerList: ListView
-    private lateinit var drawerLayout: DrawerLayout
+    lateinit var drawerList: ListView
+    lateinit var drawerLayout: DrawerLayout
 
     val nearbyViewModel: NearbyViewModel by viewModels()
 
@@ -47,6 +47,7 @@ class NearbyActivity : AppCompatActivity() , AdapterView.OnItemClickListener {
         val intent = when (titles[i]) {
             "Карта" -> Intent(this , MapsActivity::class.java)
             "Профиль" -> Intent(this , ProfileActivity::class.java)
+            "Мои мероприятия" -> Intent(this , MyPartiesActivity::class.java)
             else -> return
         }
         startActivity(intent)

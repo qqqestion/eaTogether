@@ -7,16 +7,6 @@
     android:background="#80A898"
     tools:context=".ui.fragments.CardFragment">
 
-    <ImageButton
-        android:id="@+id/ibNearbyNavigation"
-        android:layout_width="40dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:background="#80A898"
-        android:src="@drawable/btn_navigation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tvNearbyTitle"
@@ -40,5 +30,16 @@
         app:layout_constraintTop_toBottomOf="@+id/tvNearbyTitle"
         tools:context=".MainActivity"
         tools:listitem="@layout/item_user_preview" />
+
+    <ImageButton
+        android:id="@+id/ibNearbyNavigation"
+        android:layout_width="40dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:background="#80A898"
+        android:src="@drawable/btn_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,28 +5,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_card.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.NearbyUserAdapter
+import ru.blackbull.eatogether.extensions.shortToast
+import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.ui.NearbyActivity
 import ru.blackbull.eatogether.ui.viewmodels.NearbyViewModel
 
-class CardFragment : Fragment() {
+class CardFragment : Fragment(R.layout.fragment_card) {
 
     private lateinit var nearbyViewModel: NearbyViewModel
     private lateinit var usersAdapter: NearbyUserAdapter
 
-    override fun onCreateView(
-        inflater: LayoutInflater , container: ViewGroup? ,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_card , container , false)
-    }
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
@@ -34,8 +32,18 @@ class CardFragment : Fragment() {
 
         setupRecyclerView()
 
+        ibNearbyNavigation.setOnClickListener {
+            (activity as NearbyActivity).drawerLayout.openDrawer(GravityCompat.START)
+        }
+
         nearbyViewModel.nearbyUsers.observe(viewLifecycleOwner , Observer { nearbyUsers ->
             usersAdapter.differ.submitList(nearbyUsers)
+        })
+        nearbyViewModel.likedUser.observe(viewLifecycleOwner , Observer { user ->
+            if (user != null) {
+//                shortToast()
+                Snackbar.make(view , "Вы лайкнули друг друга" , Snackbar.LENGTH_SHORT).show()
+            }
         })
     }
 

@@ -101,31 +101,20 @@ class FirebaseApiService {
     suspend fun getNearbyUsers(): MutableList<User> {
         val users = mutableSetOf<User>()
         val currentUser = getCurrentUser()
-        var documents = if (currentUser.likedUsersId.isEmpty()) {
-            usersRef.get().await()
-        } else {
-            // Ищем по id документа
-            usersRef.whereNotIn(
-                FieldPath.documentId() ,
-                currentUser.likedUsersId
-            ).get().await()
-        }
-        for (document in documents) {
-            if (document.id != currentUser.id) {
-                val user = document.toObject(User::class.java)
-                user._imageUri = Uri.parse(user.imageUri)
-                users.add(user)
+        val excludeUsers = currentUser.likedUsersId + currentUser.dislikedUsersId
+        val queryRef = when {
+            excludeUsers.isEmpty() -> {
+                usersRef
+            }
+            else -> {
+                // Ищем по id документа
+                usersRef.whereNotIn(
+                    FieldPath.documentId() ,
+                    excludeUsers
+                )
             }
         }
-        documents = if (currentUser.dislikedUsersId.isEmpty()) {
-            usersRef.get().await()
-        } else {
-            // Ищем по id документа
-            usersRef.whereNotIn(
-                FieldPath.documentId() ,
-                currentUser.dislikedUsersId
-            ).get().await()
-        }
+        val documents = queryRef.get().await()
         for (document in documents) {
             if (document.id != currentUser.id) {
                 val user = document.toObject(User::class.java)
@@ -138,21 +127,31 @@ class FirebaseApiService {
     }
 
     suspend fun likeUser(user: User): Boolean {
-        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid!!
-        val documentRef = usersRef.document(currentUserId)
+        val documentRef = getCurrentUserRef()
         val document = documentRef.get().await()
-        val value = document.get("likedUsers") as MutableList<String>
-        user.id?.let { value.add(it) }
-        documentRef.update("likedUsers" , value).await()
-        return user.likedUsersId.contains(currentUserId)
+        val field = document.get("likedUsers")
+        if (field != null) {
+            val value = field as MutableList<String>
+            user.id?.let { value.add(it) }
+            documentRef.update("likedUsers" , value).await()
+        } else {
+            documentRef.update("likedUsers" , mutableListOf(user.id!!)).await()
+        }
+        return user.likedUsersId.contains(document.id)
     }
 
     suspend fun dislikeUser(user: User) {
         val documentRef = getCurrentUserRef()
         val document = documentRef.get().await()
-        val value = document.get("dislikedUsers") as MutableList<String>
-        user.id?.let { value.add(it) }
-        documentRef.update("dislikedUsers" , value).await()
+        val field = document.get("dislikedUsers")
+        if (field != null) {
+            val value = field as MutableList<String>
+            user.id?.let { value.add(it) }
+            documentRef.update("dislikedUsers" , value).await()
+        } else {
+            documentRef.update("dislikedUsers" , mutableListOf(user.id!!)).await()
+        }
+
     }
 
     private fun getCurrentUserRef(): DocumentReference {
