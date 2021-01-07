@@ -53,8 +53,13 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
                 }.addOnFailureListener { e ->
                     Log.d("TagForDebug" , "error during loading first photo" , e)
                 }
+            setOnClickListener {
+                onItemViewClickListener?.let {
+                    it(party)
+                }
+            }
             btnJoin.setOnClickListener {
-                onItemClickListener?.let {
+                onJoinCLickListener?.let {
                     it(party)
                 }
             }
@@ -88,9 +93,14 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
 
     override fun getItemCount(): Int = differ.currentList.size
 
-    private var onItemClickListener: ((Party) -> Unit)? = null
+    private var onItemViewClickListener: ((Party) -> Unit)? = null
+    private var onJoinCLickListener: ((Party) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Party) -> Unit) {
-        onItemClickListener = listener
+    fun setOnItemViewClickListener(listener: (Party) -> Unit) {
+        onItemViewClickListener = listener
+    }
+
+    fun setOnJoinCLickListener(listener: (Party) -> Unit) {
+        onJoinCLickListener = listener
     }
 }

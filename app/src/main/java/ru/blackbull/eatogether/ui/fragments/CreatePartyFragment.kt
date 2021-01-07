@@ -93,7 +93,7 @@ class CreatePartyFragment : Fragment(R.layout.fragment_create_party) , View.OnCl
             description = create_party_description!!.text.toString() ,
             time = Timestamp(date) ,
             placeId = placeId ,
-            users = listOf(FirebaseAuth.getInstance().currentUser!!.uid)
+            users = mutableListOf(FirebaseAuth.getInstance().currentUser!!.uid)
         )
         firebaseViewModel.addParty(party)
         (context as AppCompatActivity).onBackPressed()

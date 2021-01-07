@@ -11,5 +11,5 @@ data class Party(
     val description: String? = null ,
     val placeId: String? = null ,
     val time: Timestamp? = null ,
-    val users: List<String> = listOf()
+    val users: MutableList<String> = mutableListOf()
 ) : Serializable

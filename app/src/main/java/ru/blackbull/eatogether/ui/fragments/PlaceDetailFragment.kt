@@ -48,10 +48,18 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) , View.OnCl
         rvParties.adapter = adapter
         btnCreateParty.setOnClickListener(this)
 
-        adapter.setOnItemClickListener { party ->
+        adapter.setOnItemViewClickListener { party ->
             (activity as AppCompatActivity).supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.layout_for_fragments , PartyDetailFragment.newInstance(party))
+                .replace(R.id.layout_for_fragments , PartyDetailFragment.newInstance(party.id!!))
+                .addToBackStack(null)
+                .commit()
+        }
+        adapter.setOnJoinCLickListener { party ->
+            firebaseViewModel.addUserToParty(party)
+            (activity as AppCompatActivity).supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.layout_for_fragments , PartyDetailFragment.newInstance(party.id!!))
                 .addToBackStack(null)
                 .commit()
         }

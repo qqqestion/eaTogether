@@ -158,4 +158,27 @@ class FirebaseApiService {
             FirebaseAuth.getInstance().currentUser?.uid!!
         )
     }
+
+    suspend fun getPartyById(id: String): Party? {
+        val document = partiesRef.document(id).get().await()
+        return document.toObject(Party::class.java)
+    }
+
+    suspend fun getPartyParticipants(party: Party): MutableList<User> {
+        val documents = usersRef.whereIn(
+            FieldPath.documentId() ,
+            party.users
+        ).get().await()
+        val users = mutableListOf<User>()
+        for (document in documents) {
+            val user = document.toObject(User::class.java)
+            user._imageUri = Uri.parse(user.imageUri)
+            users.add(user)
+        }
+        return users
+    }
+
+    suspend fun updateParty(party: Party) {
+        partiesRef.document(party.id!!).set(party).await()
+    }
 }

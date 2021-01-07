@@ -21,6 +21,10 @@ class FirebaseRepository {
     fun addParty(party: Party) =
         NetworkModule.firebaseApiService.addParty(party)
 
+    suspend fun updateParty(party: Party) {
+        NetworkModule.firebaseApiService.updateParty(party)
+    }
+
     suspend fun getPartiesByCurrentUser() =
         NetworkModule.firebaseApiService.getPartiesByCurrentUser()
 
@@ -89,5 +93,21 @@ class FirebaseRepository {
 
     suspend fun likeUser(user: User) {
         NetworkModule.firebaseApiService.likeUser(user)
+    }
+
+    suspend fun getPartyById(id: String): Party? {
+        return NetworkModule.firebaseApiService.getPartyById(id)
+    }
+
+    suspend fun getPartyParticipants(party: Party): MutableList<User> {
+        return NetworkModule.firebaseApiService.getPartyParticipants(party)
+    }
+
+    suspend fun addCurrentUserToParty(party: Party) {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid!!
+        if (!party.users.contains(uid)) {
+            party.users.add(uid)
+            updateParty(party)
+        }
     }
 }

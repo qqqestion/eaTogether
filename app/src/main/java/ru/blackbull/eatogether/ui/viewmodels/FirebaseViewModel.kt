@@ -1,6 +1,5 @@
 package ru.blackbull.eatogether.ui.viewmodels
 
-import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,7 +23,8 @@ class FirebaseViewModel : ViewModel() {
 
     val signUpResult: MutableLiveData<RegistrationState> = MutableLiveData()
 
-    val nearbyUsers: MutableLiveData<List<User>> = MutableLiveData()
+    val selectedParty: MutableLiveData<Party> = MutableLiveData()
+    val partyParticipants: MutableLiveData<List<User>> = MutableLiveData()
 
     fun searchPartyByPlace(partyId: String) = viewModelScope.launch {
         val parties = firebaseRepository.searchPartyByPlace(partyId)
@@ -33,6 +33,16 @@ class FirebaseViewModel : ViewModel() {
 
     fun addParty(party: Party) = viewModelScope.launch {
         firebaseRepository.addParty(party)
+    }
+
+    fun getPartyById(id: String) = viewModelScope.launch {
+        val party = firebaseRepository.getPartyById(id)
+        selectedParty.postValue(party)
+    }
+
+    fun getPartyParticipants(party: Party) = viewModelScope.launch {
+        val participants = firebaseRepository.getPartyParticipants(party)
+        partyParticipants.postValue(participants)
     }
 
     fun getPartiesByCurrentUser() = viewModelScope.launch {
@@ -69,5 +79,9 @@ class FirebaseViewModel : ViewModel() {
         signUpResult.postValue(RegistrationState.Loading())
         val response = firebaseRepository.signUpWithEmailAndPassword(userInfo , password)
         signUpResult.postValue(response)
+    }
+
+    fun addUserToParty(party: Party) = viewModelScope.launch {
+        firebaseRepository.addCurrentUserToParty(party)
     }
 }
