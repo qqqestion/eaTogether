@@ -137,20 +137,28 @@ class FirebaseApiService {
         return users.toMutableList()
     }
 
-    suspend fun likeUser(user: User) {
+    suspend fun likeUser(user: User) : Boolean {
         val documentRef = getCurrentUserRef()
         val document = documentRef.get().await()
-        val value = document.get("likedUsers") as MutableList<String>
-        user.id?.let { value.add(it) }
-        documentRef.update("likedUsers" , value).await()
+        val field = document.get("likedUsers")
+        field?.let{ sealed ->
+            val value = sealed as MutableList<String>
+            user.id?.let { value.add(it) }
+            documentRef.update("likedUsers" , value).await()
+        }
+        return user.likedUsersId.contains(document.id)
     }
 
     suspend fun dislikeUser(user: User) {
         val documentRef = getCurrentUserRef()
         val document = documentRef.get().await()
-        val value = document.get("dislikedUsers") as MutableList<String>
-        user.id?.let { value.add(it) }
-        documentRef.update("dislikedUsers" , value).await()
+        val field = document.get("dislikedUsers")
+        field?.let { sealed ->
+            val value = sealed as MutableList<String>
+            user.id?.let { value.add(it) }
+            documentRef.update("dislikedUsers" , value).await()
+        }
+
     }
 
     private fun getCurrentUserRef(): DocumentReference {

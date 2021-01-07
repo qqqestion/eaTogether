@@ -10,9 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_card.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.NearbyUserAdapter
+import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.ui.NearbyActivity
 import ru.blackbull.eatogether.ui.viewmodels.NearbyViewModel
 
@@ -20,6 +22,7 @@ class CardFragment : Fragment() {
 
     private lateinit var nearbyViewModel: NearbyViewModel
     private lateinit var usersAdapter: NearbyUserAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater , container: ViewGroup? ,
@@ -36,6 +39,11 @@ class CardFragment : Fragment() {
 
         nearbyViewModel.nearbyUsers.observe(viewLifecycleOwner , Observer { nearbyUsers ->
             usersAdapter.differ.submitList(nearbyUsers)
+        })
+        nearbyViewModel.likedUser.observe(viewLifecycleOwner, Observer { user->
+            if (user != null){
+                Snackbar.make(view,"Вы лайкнули друг друга",Snackbar.LENGTH_SHORT)
+            }
         })
     }
 

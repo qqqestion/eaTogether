@@ -11,6 +11,7 @@ class NearbyViewModel : ViewModel() {
     private val firebaseRepository = FirebaseRepository()
 
     val nearbyUsers: MutableLiveData<List<User>> = MutableLiveData()
+    val likedUser: MutableLiveData<User?> = MutableLiveData()
 
     init {
         getNearbyUsers()
@@ -22,7 +23,11 @@ class NearbyViewModel : ViewModel() {
     }
 
     fun likeUser(user: User) = viewModelScope.launch {
-        firebaseRepository.likeUser(user)
+        if(firebaseRepository.likeUser(user)){
+            likedUser.postValue(user)
+        } else{
+            likedUser.postValue(null)
+        }
     }
 
     fun dislikeUser(user: User) = viewModelScope.launch {

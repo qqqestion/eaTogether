@@ -91,8 +91,8 @@ class FirebaseRepository {
         NetworkModule.firebaseApiService.dislikeUser(user)
     }
 
-    suspend fun likeUser(user: User) {
-        NetworkModule.firebaseApiService.likeUser(user)
+    suspend fun likeUser(user: User): Boolean {
+        return NetworkModule.firebaseApiService.likeUser(user)
     }
 
     suspend fun getPartyById(id: String): Party? {

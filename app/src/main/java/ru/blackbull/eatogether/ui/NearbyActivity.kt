@@ -47,6 +47,7 @@ class NearbyActivity : AppCompatActivity() , AdapterView.OnItemClickListener {
         val intent = when (titles[i]) {
             "Карта" -> Intent(this , MapsActivity::class.java)
             "Профиль" -> Intent(this , ProfileActivity::class.java)
+            "Мои мероприятия" -> Intent(this, MyPartiesActivity::class.java)
             else -> return
         }
         startActivity(intent)
