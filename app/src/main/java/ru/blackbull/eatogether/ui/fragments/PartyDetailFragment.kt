@@ -12,6 +12,7 @@ import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
 import ru.blackbull.eatogether.ui.InformationActivity
+import ru.blackbull.eatogether.ui.MyPartiesActivity
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 import ru.blackbull.eatogether.ui.viewmodels.PlaceViewModel
 
@@ -28,8 +29,13 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
-        firebaseViewModel = (activity as InformationActivity).firebaseViewModel
-        placeViewModel = (activity as InformationActivity).placeViewModel
+        if (activity is MyPartiesActivity) {
+            firebaseViewModel = (activity as MyPartiesActivity).userPartiesViewModel
+            placeViewModel = (activity as MyPartiesActivity).placeViewModel
+        } else {
+            firebaseViewModel = (activity as InformationActivity).firebaseViewModel
+            placeViewModel = (activity as InformationActivity).placeViewModel
+        }
 
         arguments?.let {
             partyId = it.getString(KEY).toString()
@@ -40,6 +46,7 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
         firebaseViewModel.selectedParty.observe(viewLifecycleOwner , Observer { party ->
             updatePartyInfo(party)
             firebaseViewModel.getPartyParticipants(party)
+            placeViewModel.getPlaceDetail(party.placeId!!)
         })
         firebaseViewModel.partyParticipants.observe(viewLifecycleOwner , Observer { participants ->
             adapter.differ.submitList(participants)

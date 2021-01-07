@@ -32,7 +32,7 @@ class NearbyActivity : AppCompatActivity() , AdapterView.OnItemClickListener {
             android.R.layout.simple_list_item_1 ,
             titles
         )
-        drawerList.setOnItemClickListener(this)
+        drawerList.onItemClickListener = this
 
         drawerLayout = findViewById(R.id.drawer_layout)
         val fragment: Fragment =

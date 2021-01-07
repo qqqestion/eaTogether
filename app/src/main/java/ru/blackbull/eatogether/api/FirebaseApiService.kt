@@ -137,12 +137,14 @@ class FirebaseApiService {
         return users.toMutableList()
     }
 
-    suspend fun likeUser(user: User) {
-        val documentRef = getCurrentUserRef()
+    suspend fun likeUser(user: User): Boolean {
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid!!
+        val documentRef = usersRef.document(currentUserId)
         val document = documentRef.get().await()
         val value = document.get("likedUsers") as MutableList<String>
         user.id?.let { value.add(it) }
         documentRef.update("likedUsers" , value).await()
+        return user.likedUsersId.contains(currentUserId)
     }
 
     suspend fun dislikeUser(user: User) {

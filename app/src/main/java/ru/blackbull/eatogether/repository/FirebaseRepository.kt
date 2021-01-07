@@ -11,6 +11,7 @@ import ru.blackbull.eatogether.api.NetworkModule
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.state.RegistrationState
+import java.lang.Exception
 
 
 class FirebaseRepository {
@@ -87,12 +88,12 @@ class FirebaseRepository {
         return NetworkModule.firebaseApiService.getNearbyUsers()
     }
 
-    suspend fun dislike(user: User) {
+    suspend fun dislikeUser(user: User) {
         NetworkModule.firebaseApiService.dislikeUser(user)
     }
 
-    suspend fun likeUser(user: User) {
-        NetworkModule.firebaseApiService.likeUser(user)
+    suspend fun likeUser(user: User): Boolean {
+        return NetworkModule.firebaseApiService.likeUser(user)
     }
 
     suspend fun getPartyById(id: String): Party? {

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.repository.FirebaseRepository
+import ru.blackbull.eatogether.state.RegistrationState
 
 class NearbyViewModel : ViewModel() {
     private val firebaseRepository = FirebaseRepository()
@@ -22,10 +23,11 @@ class NearbyViewModel : ViewModel() {
     }
 
     fun likeUser(user: User) = viewModelScope.launch {
-        firebaseRepository.likeUser(user)
+        val likedUser = firebaseRepository.likeUser(user)
+        RegistrationState.Success()
     }
 
     fun dislikeUser(user: User) = viewModelScope.launch {
-        firebaseRepository.dislike(user)
+        firebaseRepository.dislikeUser(user)
     }
 }
