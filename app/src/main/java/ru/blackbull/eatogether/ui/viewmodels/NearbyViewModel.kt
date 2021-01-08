@@ -29,6 +29,8 @@ class NearbyViewModel : ViewModel() {
         } else {
             likedUser.postValue(null)
         }
+        delay(1000)
+        getNearbyUsers()
     }
 
     fun dislikeUser(user: User) = viewModelScope.launch {

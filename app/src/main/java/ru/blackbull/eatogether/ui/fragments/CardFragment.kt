@@ -16,6 +16,7 @@ import ru.blackbull.eatogether.adapters.NearbyUserAdapter
 import ru.blackbull.eatogether.ui.NearbyActivity
 import ru.blackbull.eatogether.ui.viewmodels.NearbyViewModel
 
+
 class CardFragment : Fragment(R.layout.fragment_card) {
 
     private lateinit var nearbyViewModel: NearbyViewModel
@@ -76,7 +77,6 @@ class CardFragment : Fragment(R.layout.fragment_card) {
                         Log.d("NearbyDebug" , "we got a problem")
                     }
                 }
-                nearbyViewModel.getNearbyUsers()
             }
 
         }
