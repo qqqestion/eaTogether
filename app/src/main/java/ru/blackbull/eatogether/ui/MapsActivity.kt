@@ -188,14 +188,17 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
         }
     }
 
-    override fun onMarkerClick(it: Marker): Boolean {
-        if (it.tag == "user") {
+    override fun onMarkerClick(marker: Marker): Boolean {
+        if (marker.tag == "user") {
             val intent = Intent(this , InformationActivity::class.java)
-            intent.putExtra("lat" , it.position.latitude)
-            intent.putExtra("lng" , it.position.longitude)
+            intent.putExtra("lat" , marker.position.latitude)
+            intent.putExtra("lng" , marker.position.longitude)
             startActivity(intent)
         } else {
-            bottomSheet.show()
+            val intent = Intent(this , TempActivity::class.java)
+            val s: String = marker.tag.toString()
+            intent.putExtra("placeId" , s)
+            startActivity(intent)
         }
         return false
     }

@@ -13,6 +13,7 @@ import ru.blackbull.eatogether.adapters.PartyAdapter
 import ru.blackbull.eatogether.adapters.ReviewAdapter
 import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
 import ru.blackbull.eatogether.ui.InformationActivity
+import ru.blackbull.eatogether.ui.TempActivity
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 import ru.blackbull.eatogether.ui.viewmodels.PlaceViewModel
 import ru.blackbull.eatogether.util.PlaceDataParser
@@ -34,8 +35,13 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) , View.OnCl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        placeViewModel = (activity as InformationActivity).placeViewModel
-        firebaseViewModel = (activity as InformationActivity).firebaseViewModel
+        if (activity is InformationActivity) {
+            placeViewModel = (activity as InformationActivity).placeViewModel
+            firebaseViewModel = (activity as InformationActivity).firebaseViewModel
+        } else {
+            placeViewModel = (activity as TempActivity).placeViewModel
+            firebaseViewModel = (activity as TempActivity).firebaseViewModel
+        }
 
         arguments?.let {
             placeId = it.getString(KEY).toString()
