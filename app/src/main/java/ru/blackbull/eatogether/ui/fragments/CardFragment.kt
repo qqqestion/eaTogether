@@ -72,6 +72,7 @@ class CardFragment : Fragment(R.layout.fragment_card) {
                     ItemTouchHelper.END -> {
                         Log.d("NearbyDebug" , "likeUser $user")
                         nearbyViewModel.likeUser(user)
+                        nearbyViewModel.sendLikeNotification(user)
                     }
                     else -> {
                         Log.d("NearbyDebug" , "we got a problem")
