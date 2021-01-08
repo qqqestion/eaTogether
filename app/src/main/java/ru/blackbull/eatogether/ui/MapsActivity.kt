@@ -55,7 +55,6 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
     private var userMaker: Marker? = null
     private var placeMarkers: MutableList<Marker> = mutableListOf()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
@@ -122,9 +121,11 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
     private fun getCurrentLocation() {
         try {
             fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                val latLng = LatLng(location.latitude , location.longitude)
+                if (location != null) {
+                    val latLng = LatLng(location.latitude , location.longitude)
 //                val latLng = LatLng(59.941170 , 30.302707)
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng , 15F))
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng , 15F))
+                }
             }
             Log.d("DebugAPI" , "getCurrentLocation: success")
         } catch (exp: SecurityException) {
