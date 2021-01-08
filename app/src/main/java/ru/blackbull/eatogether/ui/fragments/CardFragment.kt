@@ -2,9 +2,7 @@ package ru.blackbull.eatogether.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -15,8 +13,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_card.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.NearbyUserAdapter
-import ru.blackbull.eatogether.extensions.shortToast
-import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.ui.NearbyActivity
 import ru.blackbull.eatogether.ui.viewmodels.NearbyViewModel
 
@@ -41,7 +37,6 @@ class CardFragment : Fragment(R.layout.fragment_card) {
         })
         nearbyViewModel.likedUser.observe(viewLifecycleOwner , Observer { user ->
             if (user != null) {
-//                shortToast()
                 Snackbar.make(view , "Вы лайкнули друг друга" , Snackbar.LENGTH_SHORT).show()
             }
         })
@@ -81,6 +76,7 @@ class CardFragment : Fragment(R.layout.fragment_card) {
                         Log.d("NearbyDebug" , "we got a problem")
                     }
                 }
+                nearbyViewModel.getNearbyUsers()
             }
 
         }
