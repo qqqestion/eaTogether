@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.ui.fragments.CardFragment
+import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 import ru.blackbull.eatogether.ui.viewmodels.NearbyViewModel
 
 class NearbyActivity : AppCompatActivity() , AdapterView.OnItemClickListener {
@@ -21,6 +22,7 @@ class NearbyActivity : AppCompatActivity() , AdapterView.OnItemClickListener {
     lateinit var drawerLayout: DrawerLayout
 
     val nearbyViewModel: NearbyViewModel by viewModels()
+    val firebaseViewModel: FirebaseViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

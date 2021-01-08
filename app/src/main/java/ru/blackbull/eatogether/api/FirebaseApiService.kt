@@ -30,7 +30,7 @@ class FirebaseApiService {
     }
 
     suspend fun getPartiesByCurrentUser(): MutableList<Party> {
-        val user = getCurrentUser()
+        val user = getUser(FirebaseAuth.getInstance().currentUser?.uid!!)
         val parties = mutableListOf<Party>()
         val documents = partiesRef.whereArrayContains("users" , user.id!!).get().await()
         documents.forEach { document ->
@@ -50,8 +50,8 @@ class FirebaseApiService {
             }
     }
 
-    suspend fun getCurrentUser(): User {
-        val document = getCurrentUserRef().get().await()
+    suspend fun getUser(uid: String): User {
+        val document = usersRef.document(uid).get().await()
         val user = document.toObject(User::class.java)!!
         val str = document.getString("imageUri") ?: ""
         user._imageUri = Uri.parse(str)
@@ -100,7 +100,7 @@ class FirebaseApiService {
 
     suspend fun getNearbyUsers(): MutableList<User> {
         val users = mutableSetOf<User>()
-        val currentUser = getCurrentUser()
+        val currentUser = getUser(FirebaseAuth.getInstance().currentUser?.uid!!)
         val excludeUsers = currentUser.likedUsersId + currentUser.dislikedUsersId
         val queryRef = when {
             excludeUsers.isEmpty() -> {

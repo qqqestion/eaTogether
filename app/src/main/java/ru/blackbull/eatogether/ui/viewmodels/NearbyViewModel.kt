@@ -19,6 +19,7 @@ class NearbyViewModel : ViewModel() {
     }
 
     fun getNearbyUsers() = viewModelScope.launch {
+        delay(1000)
         val users = firebaseRepository.getNearbyUsers()
         nearbyUsers.postValue(users)
     }
@@ -29,8 +30,6 @@ class NearbyViewModel : ViewModel() {
         } else {
             likedUser.postValue(null)
         }
-        delay(1000)
-        getNearbyUsers()
     }
 
     fun dislikeUser(user: User) = viewModelScope.launch {

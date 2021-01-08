@@ -30,8 +30,15 @@ class FirebaseRepository {
         NetworkModule.firebaseApiService.getPartiesByCurrentUser()
 
 
-    suspend fun getCurrentUser() =
-        NetworkModule.firebaseApiService.getCurrentUser()
+    suspend fun getCurrentUser(): User {
+        return NetworkModule.firebaseApiService.getUser(
+            FirebaseAuth.getInstance().currentUser?.uid!!
+        )
+    }
+
+    suspend fun getUser(uid: String): User {
+        return NetworkModule.firebaseApiService.getUser(uid)
+    }
 
     fun signOut() {
         FirebaseAuth.getInstance().signOut()

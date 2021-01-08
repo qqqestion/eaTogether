@@ -38,7 +38,13 @@ class CardFragment : Fragment(R.layout.fragment_card) {
         })
         nearbyViewModel.likedUser.observe(viewLifecycleOwner , Observer { user ->
             if (user != null) {
-                Snackbar.make(view , "Вы лайкнули друг друга" , Snackbar.LENGTH_SHORT).show()
+                nearbyViewModel.likedUser.postValue(null)
+                (activity as NearbyActivity).supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame , MatchFragment.newInstance(user))
+                    .addToBackStack(null)
+                    .commit()
+//                Snackbar.make(view , "Вы лайкнули друг друга" , Snackbar.LENGTH_SHORT).show()
             }
         })
     }
@@ -77,6 +83,7 @@ class CardFragment : Fragment(R.layout.fragment_card) {
                         Log.d("NearbyDebug" , "we got a problem")
                     }
                 }
+                nearbyViewModel.getNearbyUsers()
             }
 
         }

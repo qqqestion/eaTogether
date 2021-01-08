@@ -5,6 +5,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.PropertyName
+import java.io.Serializable
 
 
 data class User(
@@ -25,4 +26,4 @@ data class User(
     @get:PropertyName("dislikedUsers")
     @set:PropertyName("dislikedUsers")
     var dislikedUsersId: MutableList<String> = mutableListOf()
-)
+) : Serializable
