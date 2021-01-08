@@ -28,6 +28,9 @@ class NearbyViewModel : ViewModel() {
         } else {
             likedUser.postValue(null)
         }
+        Thread.sleep(1000)
+        val users = firebaseRepository.getNearbyUsers()
+        nearbyUsers.postValue(users)
     }
 
     fun dislikeUser(user: User) = viewModelScope.launch {
