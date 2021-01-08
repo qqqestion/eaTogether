@@ -118,4 +118,8 @@ class FirebaseRepository {
             updateParty(party)
         }
     }
+
+    suspend fun sendLikeNotification(user: User){
+        NetworkModule.firebaseApiService.sendLikeNotification(user)
+    }
 }

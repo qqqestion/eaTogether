@@ -9,6 +9,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
+import ru.blackbull.eatogether.models.firebase.Notification
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
 
@@ -16,6 +17,7 @@ import ru.blackbull.eatogether.models.firebase.User
 class FirebaseApiService {
     private val usersRef = Firebase.firestore.collection("users")
     private val partiesRef = Firebase.firestore.collection("parties")
+    private val notificationsRef = Firebase.firestore.collection("notifications")
 
     suspend fun searchPartyByPlace(placeId: String): MutableList<Party> {
         val parties = mutableListOf<Party>()
@@ -181,5 +183,12 @@ class FirebaseApiService {
 
     suspend fun updateParty(party: Party) {
         partiesRef.document(party.id!!).set(party).await()
+    }
+
+    suspend fun sendLikeNotification(user: User){
+        val notification = Notification(userId = user.id,type = "like")
+        notificationsRef.add(notification).addOnSuccessListener {
+            Log.d("NotificationsDebug","added new notification userId: ${notification.userId} type: ${notification.type}")
+        }
     }
 }

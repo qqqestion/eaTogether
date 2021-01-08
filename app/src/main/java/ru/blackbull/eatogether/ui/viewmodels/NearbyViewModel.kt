@@ -35,4 +35,8 @@ class NearbyViewModel : ViewModel() {
     fun dislikeUser(user: User) = viewModelScope.launch {
         firebaseRepository.dislikeUser(user)
     }
+
+    fun sendLikeNotification(user: User) = viewModelScope.launch {
+        firebaseRepository.sendLikeNotification(user)
+    }
 }
