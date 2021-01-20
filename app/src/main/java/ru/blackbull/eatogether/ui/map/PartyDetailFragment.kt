@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.fragments
+package ru.blackbull.eatogether.ui.map
 
 import android.os.Bundle
 import android.text.InputType
@@ -78,7 +78,8 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
     }
 
     companion object {
-        fun newInstance(partyId: String) = PartyDetailFragment().apply {
+        fun newInstance(partyId: String) = PartyDetailFragment()
+            .apply {
             arguments = Bundle().apply {
                 putString(KEY , partyId)
             }

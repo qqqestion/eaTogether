@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.fragments
+package ru.blackbull.eatogether.ui.myparties
 
 import android.content.Intent
 import android.os.Bundle
@@ -21,6 +21,7 @@ import ru.blackbull.eatogether.adapters.PartyAdapter
 import ru.blackbull.eatogether.ui.MapsActivity
 import ru.blackbull.eatogether.ui.MyPartiesActivity
 import ru.blackbull.eatogether.ui.ProfileActivity
+import ru.blackbull.eatogether.ui.map.PartyDetailFragment
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 
 class MyPartyFragment : Fragment() {
@@ -54,7 +55,11 @@ class MyPartyFragment : Fragment() {
         partiesAdapter.setOnItemViewClickListener { party ->
             (activity as AppCompatActivity).supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.flFragment , PartyDetailFragment.newInstance(party.id!!))
+                .replace(R.id.flFragment ,
+                    PartyDetailFragment.newInstance(
+                        party.id!!
+                    )
+                )
                 .addToBackStack(null)
                 .commit()
         }
@@ -62,7 +67,11 @@ class MyPartyFragment : Fragment() {
             viewModel.addUserToParty(party)
             (activity as AppCompatActivity).supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.flFragment , PartyDetailFragment.newInstance(party.id!!))
+                .replace(R.id.flFragment ,
+                    PartyDetailFragment.newInstance(
+                        party.id!!
+                    )
+                )
                 .addToBackStack(null)
                 .commit()
         }

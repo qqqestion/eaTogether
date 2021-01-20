@@ -45,4 +45,16 @@
     <string name="content_description_back_btn">Кнопка назад</string>
     <string name="content_description_save_btn">Кнопка сохранить</string>
     <string name="content_description_profile_image">Фотография профиля</string>
+
+    <string name="errormessage_email_is_empty">Введите электронную почту</string>
+    <string name="errormessage_password_is_empty">Введите пароль</string>
+    <string name="errormessage_login_error">Почта и/или пароль введены неверно</string>
+    <string name="errormessage_user_already_exists">"Пользователь с данной электронной почтой уже существует"</string>
+    <string name="errormessage_email_malformed">Введите корректную электронную почту</string>
+    <string name="errormessage_weak_password">Данный пароль слишком слабый</string>
+    <string name="errormessage_unknown_error">Ошибка</string>
+    <string name="errormessage_passwords_mismatch">Пароли не совпадают</string>
+    <string name="errormessage_fields_must_be_filled">Заполните все поля</string>
+    <string name="errormessage_date_misformat">Введите корректное число</string>
+    <string name="requestpermission_rationale">Вы должны дать согласие на использование вашей локации</string>
 </resources>

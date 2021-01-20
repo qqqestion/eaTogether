@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.fragments
+package ru.blackbull.eatogether.ui.map
 
 import android.os.Bundle
 import android.util.Log
@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import coil.load
 import kotlinx.android.synthetic.main.fragment_place_detail.*
 import ru.blackbull.eatogether.R
@@ -19,9 +20,11 @@ import ru.blackbull.eatogether.ui.viewmodels.PlaceViewModel
 import ru.blackbull.eatogether.util.PlaceDataParser
 
 
-private const val KEY = "place_id"
+private const val ARGUMENT_KEY = "place_id"
 
 class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) , View.OnClickListener {
+
+//    val args: PlaceDetai by navArgs()
 
     private lateinit var placeViewModel: PlaceViewModel
     private lateinit var firebaseViewModel: FirebaseViewModel
@@ -44,7 +47,7 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) , View.OnCl
         }
 
         arguments?.let {
-            placeId = it.getString(KEY).toString()
+            placeId = it.getString(ARGUMENT_KEY).toString()
         }
     }
 
@@ -85,7 +88,7 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) , View.OnCl
         fun newInstance(placeID: String) =
             PlaceDetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(KEY , placeID)
+                    putString(ARGUMENT_KEY , placeID)
                 }
             }
     }

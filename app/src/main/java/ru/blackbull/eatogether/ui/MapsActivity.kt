@@ -61,7 +61,7 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
         bottomSheet = createBottomSheet(this)
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+            .findFragmentById(R.id.mapView) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         search.setOnKeyListener(this)
@@ -183,7 +183,7 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
             grantResults[0] == PackageManager.PERMISSION_GRANTED
         ) {
             val mapFragment = supportFragmentManager
-                .findFragmentById(R.id.map) as SupportMapFragment
+                .findFragmentById(R.id.mapView) as SupportMapFragment
             mapFragment.getMapAsync(this)
         }
     }
@@ -238,7 +238,7 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
         placeMarkers.forEach {
             it.remove()
         }
-        placeViewModel.searchPlaces(placeName)
+//        placeViewModel.searchPlaces(placeName)
     }
 
     override fun onMapLongClick(p0: LatLng?) {

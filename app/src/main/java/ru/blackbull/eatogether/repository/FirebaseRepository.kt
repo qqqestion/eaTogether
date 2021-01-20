@@ -10,6 +10,7 @@ import kotlinx.coroutines.tasks.await
 import ru.blackbull.eatogether.api.NetworkModule
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.state.RegistrationState
 import java.lang.Exception
 
@@ -52,7 +53,7 @@ class FirebaseRepository {
         return FirebaseAuth.getInstance().currentUser != null
     }
 
-    suspend fun signIn(email: String , password: String): Boolean {
+    suspend fun signIn(email: String , password: String): Resource<Boolean> {
         val firebaseUser: FirebaseUser?
         try {
             val result = FirebaseAuth.getInstance()
@@ -60,23 +61,15 @@ class FirebaseRepository {
                 .await()
             firebaseUser = result.user
         } catch (e: FirebaseException) {
-            when (e) {
-                is FirebaseAuthInvalidUserException ,
-                is FirebaseAuthInvalidCredentialsException -> {
-                    return false
-                }
-                else -> {
-                    throw RuntimeException(e)
-                }
-            }
+            return Resource.error(e , null, null)
         }
-        return firebaseUser != null
+        return Resource.success(firebaseUser != null)
     }
 
     suspend fun signUpWithEmailAndPassword(
         userInfo: User ,
         password: String
-    ): RegistrationState {
+    ): Resource<Unit> {
         val firebaseUser: FirebaseUser?
         try {
             val result = FirebaseAuth.getInstance()
@@ -85,10 +78,10 @@ class FirebaseRepository {
             firebaseUser = result.user
         } catch (e: FirebaseException) {
             Log.d("RegistrationDebug" , "an error occurred" , e)
-            return RegistrationState.Error(e)
+            return Resource.error(e , null, null)
         }
         NetworkModule.firebaseApiService.addUser(firebaseUser?.uid!! , userInfo)
-        return RegistrationState.Success()
+        return Resource.success(null)
     }
 
     suspend fun getNearbyUsers(): MutableList<User> {
@@ -119,7 +112,7 @@ class FirebaseRepository {
         }
     }
 
-    suspend fun sendLikeNotification(user: User){
+    suspend fun sendLikeNotification(user: User) {
         NetworkModule.firebaseApiService.sendLikeNotification(user)
     }
 }

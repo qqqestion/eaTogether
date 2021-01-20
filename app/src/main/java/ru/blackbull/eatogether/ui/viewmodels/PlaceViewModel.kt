@@ -31,26 +31,5 @@ class PlaceViewModel : ViewModel() {
         }
     }
 
-    fun searchPlaces(placeName: String) = viewModelScope.launch {
-        val response = placeRepository.getPlacesByName(placeName)
-        if (response.isSuccessful) {
-            response.body()?.let {
-                if (it.status == "OK") {
-                    searchPlaces.postValue(it.placeList)
-                }
-            }
-        }
-    }
-
-    fun getNearbyPlaces(lat: Double , lng: Double) = viewModelScope.launch {
-        val response = placeRepository.getNearbyPlaces("$lat,$lng")
-        if (response.isSuccessful) {
-            response.body()?.let {
-                if (it.status == "OK") {
-                    nearbyPlaces.postValue(it.placeList)
-                }
-            }
-        }
-    }
 
 }

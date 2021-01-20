@@ -3,10 +3,8 @@ package ru.blackbull.eatogether.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.repository.FirebaseRepository
-import ru.blackbull.eatogether.ui.fragments.MyPartyFragment
+import ru.blackbull.eatogether.ui.myparties.MyPartyFragment
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 import ru.blackbull.eatogether.ui.viewmodels.PlaceViewModel
 

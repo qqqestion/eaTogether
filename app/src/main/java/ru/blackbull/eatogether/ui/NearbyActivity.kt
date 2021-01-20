@@ -12,9 +12,9 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.fragments.CardFragment
+import ru.blackbull.eatogether.ui.nearby.CardFragment
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
-import ru.blackbull.eatogether.ui.viewmodels.NearbyViewModel
+import ru.blackbull.eatogether.ui.nearby.NearbyViewModel
 
 class NearbyActivity : AppCompatActivity() , AdapterView.OnItemClickListener {
     private lateinit var titles: Array<String>

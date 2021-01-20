@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.viewmodels
+package ru.blackbull.eatogether.ui.nearby
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

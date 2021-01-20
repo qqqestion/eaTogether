@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.fragments
+package ru.blackbull.eatogether.ui.map
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -87,7 +87,7 @@ class RegisterActivity : AppCompatActivity() {
                 register_password_confirmation_field.error = "Пароли не совпадают"
                 return
             }
-            firebaseViewModel.signUpWithEmailAndPassword(userInfo , pwd)
+//            firebaseViewModel.signUpWithEmailAndPassword(userInfo , pwd)
         }
     }
 

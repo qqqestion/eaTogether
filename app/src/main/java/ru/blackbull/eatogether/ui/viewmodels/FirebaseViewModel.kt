@@ -56,29 +56,14 @@ class FirebaseViewModel : ViewModel() {
         user.postValue(foundUser)
     }
 
-    fun signOut() = viewModelScope.launch {
-        firebaseRepository.signOut()
-    }
-
-    fun updateUser(updatedUser: User) = viewModelScope.launch {
-        updatedUser.imageUri = user.value?.imageUri
-        firebaseRepository.updateUser(updatedUser)
-        user.postValue(updatedUser)
-    }
-
     fun isAuthenticated(): Boolean {
         return firebaseRepository.isAuthenticated()
     }
 
-    fun signIn(email: String , password: String) = viewModelScope.launch {
-        val isSignedInLocal = firebaseRepository.signIn(email , password)
-        isSignedIn.postValue(isSignedInLocal)
-    }
-
     fun signUpWithEmailAndPassword(userInfo: User , password: String) = viewModelScope.launch {
-        signUpResult.postValue(RegistrationState.Loading())
-        val response = firebaseRepository.signUpWithEmailAndPassword(userInfo , password)
-        signUpResult.postValue(response)
+//        signUpResult.postValue(RegistrationState.Loading())
+//        val response = firebaseRepository.signUpWithEmailAndPassword(userInfo , password)
+//        signUpResult.postValue(response)
     }
 
     fun addUserToParty(party: Party) = viewModelScope.launch {

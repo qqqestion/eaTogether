@@ -1,13 +1,10 @@
 package ru.blackbull.eatogether.ui
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_temp.view.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
-import ru.blackbull.eatogether.ui.fragments.PlaceDetailFragment
+import ru.blackbull.eatogether.ui.map.PlaceDetailFragment
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 import ru.blackbull.eatogether.ui.viewmodels.PlaceViewModel
 

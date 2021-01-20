@@ -4,59 +4,75 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import kotlinx.android.synthetic.main.item_place_preview.view.*
 import ru.blackbull.eatogether.models.googleplaces.BasicLocation
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.fragments.PlaceDetailFragment
+import ru.blackbull.eatogether.ui.map.PlaceDetailFragment
 import ru.blackbull.eatogether.util.PlaceDataParser
 
 
-class PlaceListAdapter(
-    private val context: Context ,
-    private val data: List<BasicLocation>
-) : RecyclerView.Adapter<PlaceListAdapter.MyViewHolder>() {
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
+class PlaceListAdapter : RecyclerView.Adapter<PlaceListAdapter.MyViewHolder>() {
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var photo: ImageView = itemView.findViewById(R.id.place_image)
-        private var name: TextView = itemView.findViewById(R.id.tvNearbyUserName)
-        private var rating: TextView = itemView.findViewById(R.id.rating)
-        private var vicinity: TextView = itemView.findViewById(R.id.vicinity)
+    inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-        fun bind(basicLocation: BasicLocation) {
-            name.text = basicLocation.name
-            rating.text = basicLocation.rating.toString()
-            vicinity.text = basicLocation.vicinity
+    private val diffCallback = object : DiffUtil.ItemCallback<BasicLocation>() {
+        override fun areItemsTheSame(oldItem: BasicLocation , newItem: BasicLocation): Boolean {
+            return oldItem.placeId == newItem.placeId
         }
+
+        override fun areContentsTheSame(oldItem: BasicLocation , newItem: BasicLocation): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    private val differ = AsyncListDiffer(this , diffCallback)
+
+    var places: List<BasicLocation>
+        get() = differ.currentList
+        set(value) = differ.submitList(value)
+
+    private var onItemClickListener: ((BasicLocation) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (BasicLocation) -> Unit) {
+        onItemClickListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup , viewType: Int): MyViewHolder {
-        return MyViewHolder(inflater.inflate(R.layout.item_place_preview , parent , false))
+        return MyViewHolder(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.item_place_preview ,
+                parent ,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: MyViewHolder , position: Int) {
-        holder.itemView.setOnClickListener {
-            val fragment = PlaceDetailFragment.newInstance(data[position].placeId)
-            if (context is AppCompatActivity) {
-                context.supportFragmentManager.beginTransaction().addToBackStack(null)
-                    .replace(R.id.layout_for_fragments , fragment).commit()
+        val place = places[position]
+
+        holder.itemView.apply {
+            val url = if (place.photos.isNullOrEmpty()) {
+                place.icon
+            } else {
+                PlaceDataParser().getPhotoUrl(place.photos!![0].photo_reference , 150 , 150)
+            }
+            ivPlacePreviewImage.load(url)
+            tvPlacePreviewName.text = place.name
+            tvPlacePreviewRating.text = place.rating.toString()
+            tvPlacePreviewVicinity.text = place.vicinity
+
+            setOnClickListener {
+                onItemClickListener?.let { click ->
+                    click(place)
+                }
             }
         }
-        val place: BasicLocation = data[position]
-        holder.bind(place)
-        val url = if (place.photos.isNullOrEmpty()) {
-            place.icon
-        } else {
-            PlaceDataParser().getPhotoUrl(place.photos!![0].photo_reference , 150 , 150)
-        }
-        holder.photo.load(url)
     }
 
-    override fun getItemCount(): Int {
-        return data.size
-    }
+    override fun getItemCount(): Int = places.size
 }

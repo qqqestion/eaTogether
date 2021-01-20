@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.StartFragment"
+        android:label="StartFragment" >
+        <action
+            android:id="@+id/action_startFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.RegistrationFragment"
+        android:label="RegistrationFragment" >
+        <action
+            android:id="@+id/action_registrationFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="ru.blackbull.eatogether.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="ru.blackbull.eatogether.ui.profile.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="ru.blackbull.eatogether.ui.map.MapFragment"
+        android:label="MapFragment" >
+        <action
+            android:id="@+id/action_mapFragment_to_recycleRestaurantsFragment"
+            app:destination="@id/recycleRestaurantsFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_placeDetailFragment"
+            app:destination="@id/placeDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cardFragment"
+        android:name="ru.blackbull.eatogether.ui.nearby.CardFragment"
+        android:label="fragment_card"
+        tools:layout="@layout/fragment_card" >
+        <action
+            android:id="@+id/action_cardFragment_to_matchFragment"
+            app:destination="@id/matchFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/myPartyFragment"
+        android:name="ru.blackbull.eatogether.ui.myparties.MyPartyFragment"
+        android:label="MyPartyFragment" >
+        <action
+            android:id="@+id/action_myPartyFragment_to_partyDetailFragment"
+            app:destination="@id/partyDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createPartyFragment"
+        android:name="ru.blackbull.eatogether.ui.map.CreatePartyFragment"
+        android:label="fragment_create_party"
+        tools:layout="@layout/fragment_create_party" />
+    <fragment
+        android:id="@+id/partyDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.map.PartyDetailFragment"
+        android:label="PartyDetailFragment" />
+    <fragment
+        android:id="@+id/placeDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.map.PlaceDetailFragment"
+        android:label="fragment_place_detail"
+        tools:layout="@layout/fragment_place_detail" >
+        <action
+            android:id="@+id/action_placeDetailFragment_to_createPartyFragment"
+            app:destination="@id/createPartyFragment" />
+        <action
+            android:id="@+id/action_placeDetailFragment_to_partyDetailFragment"
+            app:destination="@id/partyDetailFragment" />
+        <argument
+            android:name="placeId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/matchFragment"
+        android:name="ru.blackbull.eatogether.ui.nearby.MatchFragment"
+        android:label="MatchFragment" />
+    <fragment
+        android:id="@+id/recycleRestaurantsFragment"
+        android:name="ru.blackbull.eatogether.ui.map.RecycleRestaurantsFragment"
+        android:label="RecycleRestaurantsFragment" >
+        <action
+            android:id="@+id/action_recycleRestaurantsFragment_to_placeDetailFragment"
+            app:destination="@id/placeDetailFragment" />
+        <argument
+            android:name="location"
+            app:argType="com.google.android.gms.maps.model.LatLng" />
+    </fragment>
+</navigation>

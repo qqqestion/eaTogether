@@ -1,31 +1,29 @@
-package ru.blackbull.eatogether.ui.fragments
+package ru.blackbull.eatogether.ui.nearby
 
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_card.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.NearbyUserAdapter
 import ru.blackbull.eatogether.ui.NearbyActivity
-import ru.blackbull.eatogether.ui.viewmodels.NearbyViewModel
 
 
 class CardFragment : Fragment(R.layout.fragment_card) {
 
-    private lateinit var nearbyViewModel: NearbyViewModel
+    private val nearbyViewModel: NearbyViewModel by viewModels()
     private lateinit var usersAdapter: NearbyUserAdapter
 
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
-        nearbyViewModel = (activity as NearbyActivity).nearbyViewModel
 
         setupRecyclerView()
 
@@ -41,7 +39,11 @@ class CardFragment : Fragment(R.layout.fragment_card) {
                 nearbyViewModel.likedUser.postValue(null)
                 (activity as NearbyActivity).supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.content_frame , MatchFragment.newInstance(user))
+                    .replace(R.id.content_frame ,
+                        MatchFragment.newInstance(
+                            user
+                        )
+                    )
                     .addToBackStack(null)
                     .commit()
 //                Snackbar.make(view , "Вы лайкнули друг друга" , Snackbar.LENGTH_SHORT).show()

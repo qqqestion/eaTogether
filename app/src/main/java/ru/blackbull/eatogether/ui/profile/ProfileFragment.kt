@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.fragments
+package ru.blackbull.eatogether.ui.profile
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,18 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.ProfileActivity
 import ru.blackbull.eatogether.ui.StartActivity
-import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 
 class ProfileFragment : Fragment() {
-    private lateinit var firebaseViewModel: FirebaseViewModel
+    private val firebaseViewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater , container: ViewGroup? ,
@@ -31,8 +30,7 @@ class ProfileFragment : Fragment() {
         val menuBtn = layout.findViewById<ImageButton>(R.id.profile_menu_btn)
         menuBtn.setOnClickListener(context as View.OnClickListener?)
 
-        firebaseViewModel = (activity as ProfileActivity).firebaseViewModel
-        firebaseViewModel.user.observe(viewLifecycleOwner , Observer { user ->
+        firebaseViewModel.currentUser.observe(viewLifecycleOwner , Observer { user ->
             profile_photo.load(user._imageUri) {
                 transformations(CircleCropTransformation())
             }

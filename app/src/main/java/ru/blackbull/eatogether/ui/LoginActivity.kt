@@ -7,15 +7,17 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_login.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.extensions.shortToast
-import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
+import ru.blackbull.eatogether.other.Status
+import ru.blackbull.eatogether.ui.auth.AuthViewModel
 
 class LoginActivity : AppCompatActivity() {
     private val TAG = "LoginActivity: "
 
-    private val firebaseViewModel: FirebaseViewModel by viewModels()
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,17 +27,17 @@ class LoginActivity : AppCompatActivity() {
         login_confirm_btn.setOnClickListener { view: View? ->
             onClickLogin(view)
         }
-        firebaseViewModel.isSignedIn.observe(this , Observer { isSignedIn ->
-            if (isSignedIn) {
-                Log.d(
-                    TAG ,
-                    "signInWithEmail:success -> email: " + login_email_field.text.toString()
-                )
-                val intent = Intent(application , ProfileActivity::class.java)
-                startActivity(intent)
-            } else {
-                Log.d(TAG , "signInWithEmail:failure")
-                shortToast("Логин и/или пароль не совпадают")
+        authViewModel.signInResult.observe(this , Observer { signInResult ->
+            when (signInResult.status) {
+                Status.SUCCESS -> {
+
+                }
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {
+
+                }
             }
         })
     }
@@ -51,6 +53,6 @@ class LoginActivity : AppCompatActivity() {
             login_password_field.error = "Введите пароль"
             return
         }
-        firebaseViewModel.signIn(email , password)
+        authViewModel.signIn(email , password)
     }
 }

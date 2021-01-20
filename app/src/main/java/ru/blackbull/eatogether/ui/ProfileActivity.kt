@@ -13,8 +13,8 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentTransaction
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.fragments.EditProfileFragment
-import ru.blackbull.eatogether.ui.fragments.ProfileFragment
+import ru.blackbull.eatogether.ui.profile.EditProfileFragment
+import ru.blackbull.eatogether.ui.profile.ProfileFragment
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 
 class ProfileActivity : AppCompatActivity() , View.OnClickListener ,

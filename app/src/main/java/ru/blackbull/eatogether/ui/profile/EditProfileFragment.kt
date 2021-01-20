@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.fragments
+package ru.blackbull.eatogether.ui.profile
 
 import android.app.Activity.RESULT_OK
 import android.content.Intent
@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -19,9 +20,7 @@ import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.extensions.shortToast
 import ru.blackbull.eatogether.models.firebase.User
-import ru.blackbull.eatogether.ui.ProfileActivity
 import ru.blackbull.eatogether.ui.StartActivity
-import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -31,7 +30,7 @@ class EditProfileFragment : Fragment() {
 
     private val PICK_IMAGE: Int = 100
 
-    private lateinit var firebaseViewModel: FirebaseViewModel
+    private val firebaseViewModel: ProfileViewModel by viewModels()
 
     private var savedUri: Uri? = null
 
@@ -39,9 +38,7 @@ class EditProfileFragment : Fragment() {
         inflater: LayoutInflater , container: ViewGroup? ,
         savedInstanceState: Bundle?
     ): View? {
-        firebaseViewModel = (activity as ProfileActivity).firebaseViewModel
-
-        firebaseViewModel.user.observe(viewLifecycleOwner , Observer { newUser ->
+        firebaseViewModel.currentUser.observe(viewLifecycleOwner , Observer { newUser ->
             // Костыль, чтобы изображение сбрасывалось,
             // когда выходишь из фрагмента, и сохранялось,
             // когда нажимаешь сохранить
@@ -69,9 +66,10 @@ class EditProfileFragment : Fragment() {
             startActivityForResult(intent , PICK_IMAGE)
         }
         edit_profile_back_btn.setOnClickListener {
-            activity!!.supportFragmentManager
+            requireActivity().supportFragmentManager
                 .beginTransaction()
-                .replace(R.id.profile_fragment_container ,
+                .replace(
+                    R.id.profile_fragment_container ,
                     ProfileFragment()
                 )
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)

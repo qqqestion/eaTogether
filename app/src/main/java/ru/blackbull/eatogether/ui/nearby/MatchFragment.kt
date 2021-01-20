@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.fragments
+package ru.blackbull.eatogether.ui.nearby
 
 import android.os.Bundle
 import android.view.View
@@ -42,7 +42,8 @@ class MatchFragment : Fragment(R.layout.fragment_match) {
     }
 
     companion object {
-        fun newInstance(matchedUser: User) = MatchFragment().apply {
+        fun newInstance(matchedUser: User) = MatchFragment()
+            .apply {
             arguments = Bundle().apply {
                 putSerializable(KEY , matchedUser)
             }
