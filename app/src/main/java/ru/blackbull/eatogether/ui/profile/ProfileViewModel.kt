@@ -12,7 +12,7 @@ class ProfileViewModel : ViewModel() {
 
     private val firebaseRepository = FirebaseRepository()
 
-    val currentUser = MutableLiveData<User>()
+    val currentUser = MutableLiveData<User?>()
 
     fun getCurrentUser() = viewModelScope.launch {
         val foundUser = firebaseRepository.getCurrentUser()

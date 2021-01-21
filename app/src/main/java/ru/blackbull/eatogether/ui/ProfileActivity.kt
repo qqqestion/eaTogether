@@ -56,20 +56,20 @@ class ProfileActivity : AppCompatActivity() , View.OnClickListener ,
     }
 
     override fun onClick(view: View) {
-        when (view.id) {
-            R.id.profile_settings -> {
-                supportFragmentManager.beginTransaction()
-                    .replace(R.id.profile_fragment_container ,
-                        EditProfileFragment()
-                    )
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .addToBackStack(null)
-                    .commit()
-            }
-            R.id.profile_menu_btn -> drawerLayout.openDrawer(GravityCompat.START)
-            else -> {
-            }
-        }
+//        when (view.id) {
+//            R.id.profile_settings -> {
+//                supportFragmentManager.beginTransaction()
+//                    .replace(R.id.profile_fragment_container ,
+//                        EditProfileFragment()
+//                    )
+//                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//                    .addToBackStack(null)
+//                    .commit()
+//            }
+//            R.id.profile_menu_btn -> drawerLayout.openDrawer(GravityCompat.START)
+//            else -> {
+//            }
+//        }
     }
 
     override fun onBackPressed() {

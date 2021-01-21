@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_profileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_startFragment"
+            app:destination="@id/startFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -59,6 +62,9 @@
         <action
             android:id="@+id/action_mapFragment_to_placeDetailFragment"
             app:destination="@id/placeDetailFragment" />
+        <action
+            android:id="@+id/action_mapFragment_to_startFragment"
+            app:destination="@id/startFragment" />
     </fragment>
     <fragment
         android:id="@+id/cardFragment"
@@ -68,6 +74,9 @@
         <action
             android:id="@+id/action_cardFragment_to_matchFragment"
             app:destination="@id/matchFragment" />
+        <action
+            android:id="@+id/action_cardFragment_to_startFragment"
+            app:destination="@id/startFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPartyFragment"

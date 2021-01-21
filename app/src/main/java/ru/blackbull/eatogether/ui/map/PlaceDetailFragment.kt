@@ -37,37 +37,29 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
         placeId = args.placeId
 
         btnPlaceDetailCreateParty.setOnClickListener {
-            val bundle = Bundle().apply {
-                putString("placeId" , placeId)
-                putString("placeName" , tvPlaceDetailName.text.toString())
-                putString("placeAddress" , tvPlaceDetailAddress.text.toString())
-            }
             findNavController().navigate(
-                R.id.action_placeDetailFragment_to_createPartyFragment ,
-                bundle
+                PlaceDetailFragmentDirections.actionPlaceDetailFragmentToCreatePartyFragment(
+                    placeId ,
+                    tvPlaceDetailName.text.toString() ,
+                    tvPlaceDetailAddress.text.toString()
+                )
             )
         }
 
         partiesAdapter.setOnItemViewClickListener { party ->
-            navigateToPartyDetailFragment(party)
+            findNavController().navigate(
+                PlaceDetailFragmentDirections.actionPlaceDetailFragmentToPartyDetailFragment(party.id!!)
+            )
         }
         partiesAdapter.setOnJoinCLickListener { party ->
             placeDetailViewModel.addUserToParty(party)
-            navigateToPartyDetailFragment(party)
+            findNavController().navigate(
+                PlaceDetailFragmentDirections.actionPlaceDetailFragmentToPartyDetailFragment(party.id!!)
+            )
         }
 
         placeDetailViewModel.getPlaceDetail(placeId)
         placeDetailViewModel.searchPartyByPlace(placeId)
-    }
-
-    private fun navigateToPartyDetailFragment(party: Party) {
-        val bundle = Bundle().apply {
-            putString("partyId" , party.id!!)
-        }
-        findNavController().navigate(
-            R.id.action_placeDetailFragment_to_partyDetailFragment ,
-            bundle
-        )
     }
 
     private fun setupRecyclerView() {

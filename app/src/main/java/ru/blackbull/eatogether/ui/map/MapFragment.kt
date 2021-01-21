@@ -51,11 +51,6 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         requestPermission()
         mapView?.onCreate(savedInstanceState)
         setupFusedLocationProviderClient()
-        Snackbar.make(
-            requireView(),
-            "Hello, World!",
-            Snackbar.LENGTH_LONG
-        ).show()
 
         var job: Job? = null
         etMapSearchPlaces.addTextChangedListener { editable ->
@@ -76,21 +71,13 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
             map = it
             map?.isMyLocationEnabled = true
             map?.setOnMapLongClickListener { location ->
-                val bundle = Bundle().apply {
-                    putParcelable("location" , location)
-                }
                 findNavController().navigate(
-                    R.id.action_mapFragment_to_recycleRestaurantsFragment ,
-                    bundle
+                    MapFragmentDirections.actionMapFragmentToRecycleRestaurantsFragment(location)
                 )
             }
             map?.setOnMarkerClickListener { marker ->
-                val bundle = Bundle().apply {
-                    putString("placeId" , marker.tag.toString())
-                }
                 findNavController().navigate(
-                    R.id.action_mapFragment_to_placeDetailFragment ,
-                    bundle
+                    MapFragmentDirections.actionMapFragmentToPlaceDetailFragment(marker.tag.toString())
                 )
                 true
             }

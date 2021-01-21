@@ -31,10 +31,11 @@ class FirebaseRepository {
         NetworkModule.firebaseApiService.getPartiesByCurrentUser()
 
 
-    suspend fun getCurrentUser(): User {
-        return NetworkModule.firebaseApiService.getUser(
-            FirebaseAuth.getInstance().currentUser?.uid!!
-        )
+    suspend fun getCurrentUser(): User? {
+        FirebaseAuth.getInstance().currentUser?.let {
+            return@getCurrentUser NetworkModule.firebaseApiService.getUser(it.uid)
+        }
+        return null
     }
 
     suspend fun getUser(uid: String): User {

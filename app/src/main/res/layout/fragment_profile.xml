@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/profile_menu_btn"
+        android:id="@+id/btnProfileMenu"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="16dp"
@@ -31,7 +31,7 @@
 
 
     <TextView
-        android:id="@+id/profile_title"
+        android:id="@+id/tvProfileTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -43,7 +43,7 @@
         app:layout_constraintTop_toTopOf="@+id/view" />
 
     <TextView
-        android:id="@+id/profile_greeting"
+        android:id="@+id/tvProfileGreeting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -51,23 +51,23 @@
         android:text="@string/hi"
         android:textColor="@color/colorWhite"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/profile_photo"
+        app:layout_constraintEnd_toStartOf="@+id/ibtnProfileImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_menu_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/btnProfileMenu" />
 
     <TextView
-        android:id="@+id/profile_question"
+        android:id="@+id/tvProfileQuesting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hi_2"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/profile_photo"
+        app:layout_constraintEnd_toStartOf="@+id/ibtnProfileImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_greeting" />
+        app:layout_constraintTop_toBottomOf="@+id/tvProfileGreeting" />
 
     <TextView
-        android:id="@+id/profile_text_statistic"
+        android:id="@+id/tvProfileStatisticLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -79,7 +79,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view" />
 
     <ImageButton
-        android:id="@+id/profile_photo"
+        android:id="@+id/ibtnProfileImage"
         android:layout_width="95dp"
         android:layout_height="95dp"
         android:layout_marginTop="18dp"
@@ -89,20 +89,18 @@
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/profile_menu_btn" />
+        app:layout_constraintTop_toTopOf="@+id/btnProfileMenu" />
 
     <ImageButton
-        android:id="@+id/profile_settings"
+        android:id="@+id/ibtnProfileSettings"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/rounded_button_pink"
-        android:contentDescription="@string/content_description_profile_settings"
-        android:src="@drawable/ic_baseline_settings_24"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_photo"
-        app:layout_constraintEnd_toEndOf="@+id/profile_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/ibtnProfileImage"
+        app:layout_constraintEnd_toEndOf="@+id/ibtnProfileImage"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/profile_photo"
-        app:layout_constraintTop_toTopOf="@+id/profile_photo"
+        app:layout_constraintStart_toStartOf="@+id/ibtnProfileImage"
+        app:layout_constraintTop_toTopOf="@+id/ibtnProfileImage"
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
@@ -124,7 +122,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_text_statistic">
+        app:layout_constraintTop_toBottomOf="@+id/tvProfileStatisticLabel">
 
         <TableRow>
 
