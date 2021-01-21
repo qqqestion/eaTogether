@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvLoginAppName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button_light_grey"
+        android:fontFamily="@font/spirax"
+        android:gravity="center"
+        android:text="@string/eatogether"
+        android:textColor="@color/colorPink"
+        android:textSize="30sp"
+        android:textStyle="italic" />
+
+
+</LinearLayout>

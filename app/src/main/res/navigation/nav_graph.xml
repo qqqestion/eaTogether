@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/startFragment"
         android:name="ru.blackbull.eatogether.ui.auth.StartFragment"
-        android:label="StartFragment" >
+        android:label="StartFragment">
         <action
             android:id="@+id/action_startFragment_to_loginFragment"
             app:destination="@id/loginFragment" />

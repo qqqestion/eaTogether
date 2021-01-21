@@ -1,16 +1,37 @@
 package ru.blackbull.eatogether.ui
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.*
+import kotlinx.android.synthetic.main.activity_main.*
 import ru.blackbull.eatogether.R
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var appBarConfiguration: AppBarConfiguration
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         Timber.plant(Timber.DebugTree())
+        setSupportActionBar(toolbar)
+
+        val navController = findNavController(R.id.navHostFragment)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.profileFragment , R.id.mapFragment , R.id.cardFragment , R.id.myPartyFragment
+            ) ,
+            rootLayout
+        )
+        setupActionBarWithNavController(navController , appBarConfiguration)
+        navView.setupWithNavController(navController)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.navHostFragment)
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }

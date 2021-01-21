@@ -50,7 +50,7 @@ class CreatePartyFragment : Fragment(R.layout.fragment_create_party) {
                 when (result.status) {
                     Status.SUCCESS -> {
                         Snackbar.make(
-                            requireActivity().flRootLayout ,
+                            requireActivity().rootLayout ,
                             getString(R.string.success_party_created) ,
                             Snackbar.LENGTH_LONG
                         ).show()

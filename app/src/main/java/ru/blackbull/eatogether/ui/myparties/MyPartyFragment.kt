@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,30 +25,18 @@ import ru.blackbull.eatogether.ui.ProfileActivity
 import ru.blackbull.eatogether.ui.map.PartyDetailFragment
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 
-class MyPartyFragment : Fragment() {
+class MyPartyFragment : Fragment(R.layout.fragment_my_parties_rv) {
 
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var drawerList: ListView
-    private lateinit var titles: Array<String>
     private lateinit var partiesAdapter: PartyAdapter
-    lateinit var viewModel: FirebaseViewModel
+    private val viewModel: FirebaseViewModel by viewModels()
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater ,
-        container: ViewGroup? ,
-        savedInstanceState: Bundle?
-    ): View? {
-        val layout: View = inflater.inflate(R.layout.fragment_my_parties_rv , container , false)
-        val rv: RecyclerView = layout.findViewById(R.id.my_parties_rv)
-        setupMenu(layout)
-        setupAdapter(rv)
-        viewModel = (activity as MyPartiesActivity).userPartiesViewModel
+    override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
+        super.onViewCreated(view , savedInstanceState)
+        setupAdapter(rvMyParties)
         viewModel.userParties.observe(viewLifecycleOwner , Observer { parties ->
             partiesAdapter.parties = parties
         })
         viewModel.getPartiesByCurrentUser()
-        return layout
     }
 
     private fun setupAdapter(rv: RecyclerView) {
@@ -81,35 +70,6 @@ class MyPartyFragment : Fragment() {
         rv.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = partiesAdapter
-        }
-    }
-
-    private fun setupMenu(layout: View) {
-        drawerLayout = layout.findViewById(R.id.my_parties_drawer_layout)
-        drawerList = layout.findViewById(R.id.my_parties_drawer)
-        titles = resources.getStringArray(R.array.titles)
-        drawerList.apply {
-            adapter = ArrayAdapter(
-                context!! ,
-                android.R.layout.simple_list_item_1 ,
-                titles
-            )
-            setOnItemClickListener { parent , view , position , id ->
-                when (titles[position]) {
-                    "Профиль" -> {
-                        val intent = Intent(context , ProfileActivity::class.java)
-                        startActivity(intent)
-                    }
-                    "Карта" -> {
-                        val intent = Intent(context , MapsActivity::class.java)
-                        startActivity(intent)
-                    }
-                }
-                drawerLayout.closeDrawer(drawerList)
-            }
-        }
-        layout.findViewById<ImageButton>(R.id.my_parties_menu_btn).setOnClickListener {
-            my_parties_drawer_layout.openDrawer(GravityCompat.START)
         }
     }
 }

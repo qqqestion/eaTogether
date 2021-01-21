@@ -7,8 +7,6 @@ apply plugin: 'kotlin-kapt'
 // GOOGLE SERVICES
 apply plugin: 'com.google.gms.google-services'
 
-apply plugin: 'kotlin-kapt'
-
 
 android {
     compileSdkVersion 30

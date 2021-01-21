@@ -17,6 +17,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -50,6 +51,11 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         requestPermission()
         mapView?.onCreate(savedInstanceState)
         setupFusedLocationProviderClient()
+        Snackbar.make(
+            requireView(),
+            "Hello, World!",
+            Snackbar.LENGTH_LONG
+        ).show()
 
         var job: Job? = null
         etMapSearchPlaces.addTextChangedListener { editable ->
