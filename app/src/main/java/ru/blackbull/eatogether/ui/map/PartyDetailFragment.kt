@@ -4,19 +4,17 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_party_detail.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
-import ru.blackbull.eatogether.ui.InformationActivity
-import ru.blackbull.eatogether.ui.MyPartiesActivity
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 import ru.blackbull.eatogether.ui.viewmodels.PlaceViewModel
-
-private const val KEY = "partyId"
 
 class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
 
@@ -24,37 +22,33 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
 
     private lateinit var adapter: PartyParticipantAdapter
 
-    private lateinit var placeViewModel: PlaceViewModel
-    private lateinit var firebaseViewModel: FirebaseViewModel
+    private val partyDetailViewModel: PartyDetailViewModel by viewModels()
+    private val args: PartyDetailFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
-        if (activity is MyPartiesActivity) {
-            firebaseViewModel = (activity as MyPartiesActivity).userPartiesViewModel
-            placeViewModel = (activity as MyPartiesActivity).placeViewModel
-        } else {
-            firebaseViewModel = (activity as InformationActivity).firebaseViewModel
-            placeViewModel = (activity as InformationActivity).placeViewModel
-        }
-
-        arguments?.let {
-            partyId = it.getString(KEY).toString()
-        }
-
         setupRecyclerView()
+        subscribeToObservers()
 
-        firebaseViewModel.selectedParty.observe(viewLifecycleOwner , Observer { party ->
+        partyId = args.partyId
+
+        partyDetailViewModel.getPartyById(partyId)
+    }
+
+    private fun subscribeToObservers() {
+        partyDetailViewModel.selectedParty.observe(viewLifecycleOwner , Observer { party ->
             updatePartyInfo(party)
-            firebaseViewModel.getPartyParticipants(party)
-//            placeViewModel.getPlaceDetail(party.placeId!!)
+            partyDetailViewModel.getPartyParticipants(party)
+            partyDetailViewModel.getPlaceDetail(party.placeId!!)
         })
-        firebaseViewModel.partyParticipants.observe(viewLifecycleOwner , Observer { participants ->
-            adapter.differ.submitList(participants)
+        partyDetailViewModel.partyParticipants.observe(
+            viewLifecycleOwner ,
+            Observer { participants ->
+                adapter.participants = participants
+            })
+        partyDetailViewModel.placeDetail.observe(viewLifecycleOwner , Observer { placeDetail ->
+            updatePlaceInfo(placeDetail)
         })
-//        placeViewModel.placeDetail.observe(viewLifecycleOwner , Observer { placeDetail ->
-//            updatePlaceInfo(placeDetail)
-//        })
-        firebaseViewModel.getPartyById(partyId)
     }
 
     private fun updatePlaceInfo(placeDetail: PlaceDetail) {
@@ -73,16 +67,7 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
 
     private fun setupRecyclerView() {
         adapter = PartyParticipantAdapter()
-        rvParticipants.adapter = adapter
-        rvParticipants.layoutManager = LinearLayoutManager(context)
-    }
-
-    companion object {
-        fun newInstance(partyId: String) = PartyDetailFragment()
-            .apply {
-            arguments = Bundle().apply {
-                putString(KEY , partyId)
-            }
-        }
+        rvPartyDetailParticipants.adapter = adapter
+        rvPartyDetailParticipants.layoutManager = LinearLayoutManager(context)
     }
 }

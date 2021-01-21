@@ -95,7 +95,11 @@
     <fragment
         android:id="@+id/partyDetailFragment"
         android:name="ru.blackbull.eatogether.ui.map.PartyDetailFragment"
-        android:label="PartyDetailFragment" />
+        android:label="PartyDetailFragment" >
+        <argument
+            android:name="partyId"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/placeDetailFragment"
         android:name="ru.blackbull.eatogether.ui.map.PlaceDetailFragment"

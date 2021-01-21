@@ -43,8 +43,8 @@ class MyPartyFragment : Fragment() {
         setupMenu(layout)
         setupAdapter(rv)
         viewModel = (activity as MyPartiesActivity).userPartiesViewModel
-        viewModel.userParties.observe(viewLifecycleOwner , Observer {
-            partiesAdapter.differ.submitList(it)
+        viewModel.userParties.observe(viewLifecycleOwner , Observer { parties ->
+            partiesAdapter.parties = parties
         })
         viewModel.getPartiesByCurrentUser()
         return layout
@@ -53,27 +53,29 @@ class MyPartyFragment : Fragment() {
     private fun setupAdapter(rv: RecyclerView) {
         partiesAdapter = PartyAdapter()
         partiesAdapter.setOnItemViewClickListener { party ->
-            (activity as AppCompatActivity).supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.flFragment ,
-                    PartyDetailFragment.newInstance(
-                        party.id!!
-                    )
-                )
-                .addToBackStack(null)
-                .commit()
+//            (activity as AppCompatActivity).supportFragmentManager
+//                .beginTransaction()
+//                .replace(
+//                    R.id.flFragment ,
+//                    PartyDetailFragment.newInstance(
+//                        party.id!!
+//                    )
+//                )
+//                .addToBackStack(null)
+//                .commit()
         }
         partiesAdapter.setOnJoinCLickListener { party ->
             viewModel.addUserToParty(party)
-            (activity as AppCompatActivity).supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.flFragment ,
-                    PartyDetailFragment.newInstance(
-                        party.id!!
-                    )
-                )
-                .addToBackStack(null)
-                .commit()
+//            (activity as AppCompatActivity).supportFragmentManager
+//                .beginTransaction()
+//                .replace(
+//                    R.id.flFragment ,
+//                    PartyDetailFragment.newInstance(
+//                        party.id!!
+//                    )
+//                )
+//                .addToBackStack(null)
+//                .commit()
         }
 
         rv.apply {

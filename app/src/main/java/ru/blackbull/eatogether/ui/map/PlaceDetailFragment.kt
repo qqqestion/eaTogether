@@ -91,7 +91,7 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
         })
         placeDetailViewModel.searchParties.observe(viewLifecycleOwner , Observer { parties ->
             Timber.d("Parties: $parties")
-            partiesAdapter.differ.submitList(parties)
+            partiesAdapter.parties = parties
         })
     }
 

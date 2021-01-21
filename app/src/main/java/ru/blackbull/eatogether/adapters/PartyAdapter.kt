@@ -9,10 +9,13 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageException
 import kotlinx.android.synthetic.main.item_party_preview.view.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.Party
+import ru.blackbull.eatogether.other.PhotoUtility.getFormattedTime
 
 
 class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
@@ -28,7 +31,11 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
 
     }
 
-    val differ = AsyncListDiffer(this , differCallback)
+    private val differ = AsyncListDiffer(this , differCallback)
+
+    var parties: List<Party>
+        get() = differ.currentList
+        set(value) = differ.submitList(value)
 
     inner class PartyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -43,55 +50,59 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: PartyViewHolder , position: Int) {
-        val party = differ.currentList[position]
+        val party = parties[position]
         holder.itemView.apply {
-            time.text = party.time?.toDate().toString()
+            party.time?.let { time ->
+                tvPartyPreviewTime.text = getFormattedTime(time.toDate())
+            }
+            // TODO: переписать этот ужас
             FirebaseStorage.getInstance()
                 .reference.child(party.users[0])
                 .downloadUrl.addOnSuccessListener { uri ->
-                    firstPhoto.load(uri)
+                    ivPartyPreviewFirstPhoto.load(uri) {
+                        transformations(CircleCropTransformation())
+                    }
                 }.addOnFailureListener { e ->
                     Log.d("TagForDebug" , "error during loading first photo" , e)
                 }
-            setOnClickListener {
-                onItemViewClickListener?.let {
-                    it(party)
-                }
-            }
-            btnJoin.setOnClickListener {
-                onJoinCLickListener?.let {
-                    it(party)
-                }
-            }
             when (party.users.size) {
                 1 -> {
-                    secondPhoto.visibility = View.GONE
+                    ivPartyPreviewSecondPhoto.visibility = View.GONE
                 }
                 2 -> {
                     FirebaseStorage.getInstance()
                         .reference.child(party.users[1])
                         .downloadUrl.addOnSuccessListener { uri ->
-                            secondPhoto.load(uri)
+                            ivPartyPreviewSecondPhoto.load(uri) {
+                                transformations(CircleCropTransformation())
+                            }
                         }.addOnFailureListener { e ->
                             Log.d("TagForDebug" , "error during loading second photo" , e)
                         }
                 }
                 else -> {
-                    secondPhoto.apply {
-                        setImageResource(R.drawable.ic_dots)
-                        setBackgroundColor(
-                            ContextCompat.getColor(
-                                context ,
-                                R.color.colorAccent
-                            )
-                        )
+                    ivPartyPreviewSecondPhoto.apply {
+                        load(R.drawable.ic_dots) {
+                            transformations(CircleCropTransformation())
+                        }
                     }
+                }
+            }
+            // TODO: значок + должен быть виден, когда пользователь еще не в компании
+            setOnClickListener {
+                onItemViewClickListener?.let {
+                    it(party)
+                }
+            }
+            btnPartyPreviewJoin.setOnClickListener {
+                onJoinCLickListener?.let {
+                    it(party)
                 }
             }
         }
     }
 
-    override fun getItemCount(): Int = differ.currentList.size
+    override fun getItemCount(): Int = parties.size
 
     private var onItemViewClickListener: ((Party) -> Unit)? = null
     private var onJoinCLickListener: ((Party) -> Unit)? = null

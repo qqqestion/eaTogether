@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/clocks_icon"
+            android:id="@+id/ivPartyPreviewClockIcon"
             android:layout_width="24dp"
             android:layout_height="48dp"
             android:layout_marginStart="8dp"
@@ -22,7 +22,7 @@
             tools:src="@drawable/ic_clock" />
 
         <TextView
-            android:id="@+id/time"
+            android:id="@+id/tvPartyPreviewTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -30,7 +30,7 @@
             android:layout_marginEnd="8dp"
             android:text="13:00"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/clocks_icon"
+            app:layout_constraintStart_toEndOf="@+id/ivPartyPreviewClockIcon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
@@ -45,15 +45,15 @@
 
 
             <ImageView
-                android:id="@+id/firstPhoto"
+                android:id="@+id/ivPartyPreviewFirstPhoto"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:scaleType="centerCrop"
                 android:layout_marginEnd="16dp"
+                android:scaleType="centerCrop"
                 tools:src="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/secondPhoto"
+                android:id="@+id/ivPartyPreviewSecondPhoto"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:scaleType="centerCrop"
@@ -62,7 +62,7 @@
         </LinearLayout>
 
         <ImageButton
-            android:id="@+id/btnJoin"
+            android:id="@+id/btnPartyPreviewJoin"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="8dp"

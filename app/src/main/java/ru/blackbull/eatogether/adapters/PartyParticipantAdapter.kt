@@ -23,7 +23,11 @@ class PartyParticipantAdapter : RecyclerView.Adapter<PartyParticipantAdapter.Vie
         }
     }
 
-    val differ = AsyncListDiffer(this , differCallback)
+    private val differ = AsyncListDiffer(this , differCallback)
+
+    var participants: List<User>
+        get() = differ.currentList
+        set(value) = differ.submitList(value)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
