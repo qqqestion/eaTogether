@@ -11,15 +11,11 @@ import ru.blackbull.eatogether.repository.FirebaseRepository
 class NearbyViewModel : ViewModel() {
     private val firebaseRepository = FirebaseRepository()
 
-    val nearbyUsers: MutableLiveData<List<User>> = MutableLiveData()
+    val nearbyUsers: MutableLiveData<MutableList<User>> = MutableLiveData()
     val likedUser: MutableLiveData<User?> = MutableLiveData()
 
-    init {
-        getNearbyUsers()
-    }
-
     fun getNearbyUsers() = viewModelScope.launch {
-        delay(1000)
+//        delay(1000)
         val users = firebaseRepository.getNearbyUsers()
         nearbyUsers.postValue(users)
     }

@@ -3,7 +3,9 @@ package ru.blackbull.eatogether.ui.nearby
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import coil.load
 import coil.transform.CircleCropTransformation
 import kotlinx.android.synthetic.main.fragment_match.*
@@ -13,22 +15,17 @@ import ru.blackbull.eatogether.ui.NearbyActivity
 import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 
 
-private const val KEY = "matchedUserId"
-
 class MatchFragment : Fragment(R.layout.fragment_match) {
 
-    private lateinit var firebaseViewModel: FirebaseViewModel
-    private lateinit var matchedUser: User
+    private val firebaseViewModel: FirebaseViewModel by viewModels()
+    private val args: MatchFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
-        firebaseViewModel = (activity as NearbyActivity).firebaseViewModel
 
-        arguments?.let {
-            matchedUser = it.getSerializable(KEY) as User
-            ivSecondUser.load(matchedUser._imageUri) {
-                transformations(CircleCropTransformation())
-            }
+        val matchedUser = args.matchedUser
+        ivSecondUser.load(matchedUser._imageUri) {
+            transformations(CircleCropTransformation())
         }
 
         firebaseViewModel.user.observe(viewLifecycleOwner , Observer { currentUser ->
@@ -39,14 +36,5 @@ class MatchFragment : Fragment(R.layout.fragment_match) {
                 "У вас взаимный лайк с ${matchedUser.firstName} ${matchedUser.lastName}"
         })
         firebaseViewModel.getCurrentUser()
-    }
-
-    companion object {
-        fun newInstance(matchedUser: User) = MatchFragment()
-            .apply {
-            arguments = Bundle().apply {
-                putSerializable(KEY , matchedUser)
-            }
-        }
     }
 }

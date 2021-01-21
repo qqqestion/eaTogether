@@ -13,6 +13,8 @@ import ru.blackbull.eatogether.models.firebase.User
 
 class NearbyUserAdapter : RecyclerView.Adapter<NearbyUserAdapter.ViewHolder>() {
 
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
     private val differCallback = object : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User , newItem: User): Boolean {
             return oldItem.id == newItem.id
@@ -23,9 +25,11 @@ class NearbyUserAdapter : RecyclerView.Adapter<NearbyUserAdapter.ViewHolder>() {
         }
     }
 
-    val differ = AsyncListDiffer(this , differCallback)
+    private val differ = AsyncListDiffer(this , differCallback)
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    var users: List<User>
+        get() = differ.currentList
+        set(value) = differ.submitList(value)
 
     override fun onCreateViewHolder(parent: ViewGroup , viewType: Int): ViewHolder {
         return ViewHolder(
@@ -37,10 +41,10 @@ class NearbyUserAdapter : RecyclerView.Adapter<NearbyUserAdapter.ViewHolder>() {
         )
     }
 
-    override fun getItemCount(): Int = differ.currentList.size
+    override fun getItemCount(): Int = users.size
 
     override fun onBindViewHolder(holder: ViewHolder , position: Int) {
-        val user = differ.currentList[position]
+        val user = users[position]
         holder.itemView.apply {
             ivNearbyUserPhoto.load(user._imageUri)
             tvNearbyUserName.text = "${user.firstName} ${user.lastName}"

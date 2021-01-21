@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Date
 
-class EditProfileFragment : Fragment() {
+class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
 
     private val PICK_IMAGE: Int = 100
 
@@ -36,10 +36,26 @@ class EditProfileFragment : Fragment() {
 
     private var savedUri: Uri? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater , container: ViewGroup? ,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
+        super.onViewCreated(view , savedInstanceState)
+        subscribeToObservers()
+
+        edit_profile_save_btn.setOnClickListener { onClickSaveButton() }
+        btnEditProfileSignOut.setOnClickListener {
+            firebaseViewModel.signOut()
+            findNavController().popBackStack()
+        }
+        btnEditProfileChangePhoto.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK , MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            intent.action = Intent.ACTION_GET_CONTENT
+            startActivityForResult(intent , PICK_IMAGE)
+        }
+        btnEditProfileBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+    }
+
+    private fun subscribeToObservers() {
         firebaseViewModel.currentUser.observe(viewLifecycleOwner , Observer { newUser ->
             if (newUser == null) {
                 findNavController().popBackStack()
@@ -53,58 +69,27 @@ class EditProfileFragment : Fragment() {
             Timber.d("savedUri in user: $savedUri")
             updateUserInfo(newUser!!)
         })
-        return inflater.inflate(R.layout.fragment_edit_profile , container , false)
-    }
-
-    override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
-        super.onViewCreated(view , savedInstanceState)
-
-        edit_profile_save_btn.setOnClickListener { onClickSaveButton() }
-        btn_sign_out.setOnClickListener {
-            firebaseViewModel.signOut()
-            val intent = Intent(activity , StartActivity::class.java)
-            startActivity(intent)
-        }
-        profile_change_photo_btn.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK , MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-            intent.action = Intent.ACTION_GET_CONTENT
-            startActivityForResult(intent , PICK_IMAGE)
-        }
-        edit_profile_back_btn.setOnClickListener {
-            requireActivity().supportFragmentManager
-                .beginTransaction()
-                .replace(
-                    R.id.profile_fragment_container ,
-                    ProfileFragment()
-                )
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit()
-        }
     }
 
     override fun onStart() {
         super.onStart()
-        if (!firebaseViewModel.isAuthenticated()) {
-            val intent = Intent(context , StartActivity::class.java)
-            startActivity(intent)
-        }
         firebaseViewModel.getCurrentUser()
     }
 
     private fun onClickSaveButton() {
         val user = User()
-        user.firstName = first_name_input.text.toString()
-        user.lastName = last_name_input.text.toString()
-        user.description = description_input.text.toString()
-        user.email = email_input.text.toString()
+        user.firstName = etEditProfileFirstName.text.toString()
+        user.lastName = etEditProfileLastName.text.toString()
+        user.description = etEditProfileDescription.text.toString()
+        user.email = etEditProfileEmail.text.toString()
 
-        val pattern = "yyyy-MM-dd"
+        val pattern = "dd.MM.yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern , Locale.US)
         val date: Date?
         try {
-            date = simpleDateFormat.parse(birthday_input.text.toString())
+            date = simpleDateFormat.parse(etEditProfileBirthday.text.toString())
         } catch (e: ParseException) {
-            birthday_input.error = "Введено неправильное значение"
+            etEditProfileBirthday.error = "Введено неправильное значение"
             return
         }
         user.birthday = Timestamp(date)
@@ -114,16 +99,15 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun updateUserInfo(user: User) {
-        first_name_input.setText(user.firstName)
-        last_name_input.setText(user.lastName)
-        email_input.setText(user.email)
-        description_input.setText(user.description)
+        etEditProfileFirstName.setText(user.firstName)
+        etEditProfileLastName.setText(user.lastName)
+        etEditProfileEmail.setText(user.email)
+        etEditProfileDescription.setText(user.description)
 
-        val pattern = "yyyy-MM-dd"
+        val pattern = "dd.MM.yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern , Locale.US)
-        birthday_input.setText(simpleDateFormat.format(user.birthday?.toDate()!!))
-        Log.d("EditProfile" , "updateUserInfo: ${user.imageUri}")
-        profile_photo.load(savedUri) {
+        etEditProfileBirthday.setText(simpleDateFormat.format(user.birthday?.toDate()!!))
+        ivEditProfileImage.load(savedUri) {
             transformations(CircleCropTransformation())
         }
     }

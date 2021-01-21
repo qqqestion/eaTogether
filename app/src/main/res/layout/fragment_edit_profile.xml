@@ -15,7 +15,7 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/edit_profile_back_btn"
+            android:id="@+id/btnEditProfileBack"
             android:layout_width="@dimen/image_button_size"
             android:layout_height="@dimen/image_button_size"
             android:layout_marginStart="16dp"
@@ -63,16 +63,16 @@
             android:padding="10dp">
 
             <ImageView
-                android:id="@+id/profile_photo"
+                android:id="@+id/ivEditProfileImage"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginBottom="20dp"
-                tools:src="@tools:sample/avatars"
                 android:contentDescription="@string/content_description_profile_image"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                tools:src="@tools:sample/avatars" />
 
             <Button
-                android:id="@+id/profile_change_photo_btn"
+                android:id="@+id/btnEditProfileChangePhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_button_pink"
@@ -89,7 +89,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/first_name_input"
+                android:id="@+id/etEditProfileFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
@@ -105,7 +105,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/last_name_input"
+                android:id="@+id/etEditProfileLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
@@ -121,7 +121,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/birthday_input"
+                android:id="@+id/etEditProfileBirthday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
@@ -137,7 +137,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/email_input"
+                android:id="@+id/etEditProfileEmail"
                 android:layout_width="match_parent"
                 android:layout_height="74dp"
                 android:drawableRight="@drawable/ic_baseline_edit_24"
@@ -153,7 +153,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/description_input"
+                android:id="@+id/etEditProfileDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableRight="@drawable/ic_baseline_edit_24"
@@ -162,7 +162,7 @@
                 android:textColor="@color/colorDark" />
 
             <Button
-                android:id="@+id/btn_sign_out"
+                android:id="@+id/btnEditProfileSignOut"
                 android:layout_width="150dp"
                 android:layout_height="45dp"
                 android:layout_marginTop="16dp"

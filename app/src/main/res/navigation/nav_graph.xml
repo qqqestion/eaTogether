@@ -127,7 +127,11 @@
     <fragment
         android:id="@+id/matchFragment"
         android:name="ru.blackbull.eatogether.ui.nearby.MatchFragment"
-        android:label="MatchFragment" />
+        android:label="MatchFragment" >
+        <argument
+            android:name="matchedUser"
+            app:argType="ru.blackbull.eatogether.models.firebase.User" />
+    </fragment>
     <fragment
         android:id="@+id/recycleRestaurantsFragment"
         android:name="ru.blackbull.eatogether.ui.map.RecycleRestaurantsFragment"
