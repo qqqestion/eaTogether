@@ -12,6 +12,7 @@ import kotlinx.coroutines.tasks.await
 import ru.blackbull.eatogether.models.firebase.Notification
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.eatogether.other.Resource
 
 
 class FirebaseApiService {
@@ -42,14 +43,13 @@ class FirebaseApiService {
         return parties
     }
 
-    fun addParty(party: Party) {
-        partiesRef.add(party)
-            .addOnSuccessListener {
-                Log.d("PartyDebug" , "party $party added successfully")
-            }
-            .addOnFailureListener { e ->
-                Log.d("PartyDebug" , "cannot add party: $party" , e)
-            }
+    suspend fun addParty(party: Party): Resource<Unit> {
+        try {
+            partiesRef.add(party).await()
+        } catch (e: Throwable) {
+            return Resource.error(e , null , null)
+        }
+        return Resource.success(null)
     }
 
     suspend fun getUser(uid: String): User {
@@ -185,10 +185,13 @@ class FirebaseApiService {
         partiesRef.document(party.id!!).set(party).await()
     }
 
-    suspend fun sendLikeNotification(user: User){
-        val notification = Notification(userId = user.id,type = "like")
+    suspend fun sendLikeNotification(user: User) {
+        val notification = Notification(userId = user.id , type = "like")
         notificationsRef.add(notification).addOnSuccessListener {
-            Log.d("NotificationsDebug","added new notification userId: ${notification.userId} type: ${notification.type}")
+            Log.d(
+                "NotificationsDebug" ,
+                "added new notification userId: ${notification.userId} type: ${notification.type}"
+            )
         }
     }
 }

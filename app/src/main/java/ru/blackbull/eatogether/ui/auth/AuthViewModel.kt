@@ -25,6 +25,8 @@ class AuthViewModel : ViewModel() {
 
     val signUpResult = MutableLiveData<Resource<Unit>>()
 
+    fun isAuthenticated(): Boolean = firebaseRepository.isAuthenticated()
+
     fun signIn(email: String , password: String) = viewModelScope.launch {
         signInResult.postValue(Resource.loading(null))
         val response = firebaseRepository.signIn(email , password)

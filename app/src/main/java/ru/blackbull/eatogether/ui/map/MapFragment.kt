@@ -80,10 +80,10 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
             }
             map?.setOnMarkerClickListener { marker ->
                 val bundle = Bundle().apply {
-                    putString("placeId", marker.tag.toString())
+                    putString("placeId" , marker.tag.toString())
                 }
                 findNavController().navigate(
-                    R.id.action_mapFragment_to_placeDetailFragment,
+                    R.id.action_mapFragment_to_placeDetailFragment ,
                     bundle
                 )
                 true
@@ -206,6 +206,8 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
     override fun onPause() {
         super.onPause()
         mapView?.onPause()
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        isFirstLocation = true
     }
 
     override fun onLowMemory() {

@@ -1,101 +1,75 @@
 package ru.blackbull.eatogether.ui.map
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_party.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.extensions.shortToast
-import ru.blackbull.eatogether.models.firebase.Party
-import ru.blackbull.eatogether.ui.InformationActivity
-import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.*
+import ru.blackbull.eatogether.other.Status
 
 
-private const val ARG_PLACE_ID = "placeId"
-private const val ARG_PLACE_NAME = "placeName"
-private const val ARG_PLACE_ADDRESS = "placeAddress"
+class CreatePartyFragment : Fragment(R.layout.fragment_create_party) {
 
-class CreatePartyFragment : Fragment(R.layout.fragment_create_party) , View.OnClickListener {
-    private val TAG = "TagForDebug"
+    private val createPartyViewModel: CreatePartyViewModel by viewModels()
+    private val args: CreatePartyFragmentArgs by navArgs()
 
-    private lateinit var firebaseViewModel: FirebaseViewModel
-
-    private var placeId: String? = null
-    private var placeName: String? = null
-    private var placeAddress: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            placeId = it.getString(ARG_PLACE_ID)
-            placeName = it.getString(ARG_PLACE_NAME)
-            placeAddress = it.getString(ARG_PLACE_ADDRESS)
-        }
-        firebaseViewModel = (activity as InformationActivity).firebaseViewModel
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater , container: ViewGroup? ,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val layout = inflater.inflate(R.layout.fragment_create_party , container , false)
-        return layout
-    }
+    private lateinit var placeId: String
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
+        subscribeToObservers()
 
-        place_name.text = placeName
-        place_address.text = placeAddress
-        confirm_creation.setOnClickListener(this)
-        cancel_creation.setOnClickListener(this)
+        placeId = args.placeId
+        tvCreatePartyPlaceName.text = args.placeName
+        tvCreatePartyPlaceAddress.text = args.placeAddress
+
+        btnCreatePartyConfirm.setOnClickListener {
+            createPartyViewModel.createParty(
+                title = etCreatePartyPlaceTitle.text.toString() ,
+                description = etCreatePartyPlaceDescription.text.toString() ,
+                date = etCreatePartyPickDate.text.toString() ,
+                time = etCreatePartyPickTime.text.toString() ,
+                placeId = placeId
+            )
+        }
+        btnCreatePartyCancel.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(placeId: String , placeName: String , placeAddress: String) =
-            CreatePartyFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PLACE_ID , placeId)
-                    putString(ARG_PLACE_NAME , placeName)
-                    putString(ARG_PLACE_ADDRESS , placeAddress)
+    private fun subscribeToObservers() {
+        createPartyViewModel.createPartyResult.observe(
+            viewLifecycleOwner ,
+            Observer { result ->
+                when (result.status) {
+                    Status.SUCCESS -> {
+                        Snackbar.make(
+                            requireActivity().flRootLayout ,
+                            getString(R.string.success_party_created) ,
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        btnCreatePartyConfirm.isEnabled = true
+                        findNavController().popBackStack()
+                    }
+                    Status.ERROR -> {
+                        val msg = result.msg ?: getString(R.string.errormessage_unknown_error)
+                        Snackbar.make(
+                            requireView(),
+                            msg ,
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        btnCreatePartyConfirm.isEnabled = true
+                    }
+                    Status.LOADING -> {
+                        btnCreatePartyConfirm.isEnabled = false
+                    }
                 }
-            }
-    }
-
-    override fun onClick(view: View?) {
-        when (view!!.id) {
-            R.id.confirm_creation -> createParty()
-            R.id.cancel_creation -> (context!! as AppCompatActivity).onBackPressed()
-        }
-    }
-
-    private fun createParty() {
-        val format = SimpleDateFormat("yyyy-MM-dd HH:mm" , Locale.US)
-        val date: Date?
-        try {
-            date = format.parse("${pick_date.text} ${pick_time.text}")
-        } catch (e: ParseException) {
-            shortToast("Дата введена неправильно")
-            return
-        }
-        val party = Party(
-            title = create_party_title.text.toString() ,
-            description = create_party_description!!.text.toString() ,
-            time = Timestamp(date) ,
-            placeId = placeId ,
-            users = mutableListOf(FirebaseAuth.getInstance().currentUser!!.uid)
-        )
-        firebaseViewModel.addParty(party)
-        (context as AppCompatActivity).onBackPressed()
+            })
     }
 }

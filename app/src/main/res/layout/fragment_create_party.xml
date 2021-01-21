@@ -8,7 +8,7 @@
     tools:context=".ui.map.CreatePartyFragment">
 
     <TextView
-        android:id="@+id/place_name"
+        android:id="@+id/tvCreatePartyPlaceName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -18,68 +18,68 @@
         tools:text="@tools:sample/lorem" />
 
     <TextView
-        android:id="@+id/place_address"
+        android:id="@+id/tvCreatePartyPlaceAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/place_name"
+        app:layout_constraintTop_toBottomOf="@id/tvCreatePartyPlaceName"
         tools:text="@tools:sample/lorem" />
 
     <EditText
-        android:id="@+id/create_party_title"
+        android:id="@+id/etCreatePartyPlaceTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Название"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/place_address" />
+        app:layout_constraintTop_toBottomOf="@id/tvCreatePartyPlaceAddress" />
 
     <EditText
-        android:id="@+id/create_party_description"
+        android:id="@+id/etCreatePartyPlaceDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Описание"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/create_party_title" />
+        app:layout_constraintTop_toBottomOf="@id/etCreatePartyPlaceTitle" />
 
     <EditText
-        android:id="@+id/pick_date"
+        android:id="@+id/etCreatePartyPickDate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Выберете дату"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/create_party_description" />
+        app:layout_constraintTop_toBottomOf="@id/etCreatePartyPlaceDescription" />
 
     <EditText
-        android:id="@+id/pick_time"
+        android:id="@+id/etCreatePartyPickTime"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Выберете время"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pick_date" />
+        app:layout_constraintTop_toBottomOf="@id/etCreatePartyPickDate" />
 
 
     <Button
-        android:id="@+id/confirm_creation"
+        android:id="@+id/btnCreatePartyConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Создать"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/pick_time" />
+        app:layout_constraintTop_toBottomOf="@id/etCreatePartyPickTime" />
 
     <Button
-        android:id="@+id/cancel_creation"
+        android:id="@+id/btnCreatePartyCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Отменить"
-        app:layout_constraintStart_toEndOf="@id/confirm_creation"
-        app:layout_constraintTop_toBottomOf="@id/pick_time" />
+        app:layout_constraintStart_toEndOf="@id/btnCreatePartyConfirm"
+        app:layout_constraintTop_toBottomOf="@id/etCreatePartyPickTime" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

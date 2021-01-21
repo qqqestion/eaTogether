@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/ivPlaceDetailImage"
             android:layout_width="0dp"
             android:layout_height="300dp"
             android:scaleType="fitXY"
@@ -21,7 +21,7 @@
             tools:src="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tvPlaceName"
+            android:id="@+id/tvPlaceDetailName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -29,11 +29,11 @@
             android:textSize="32sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image"
+            app:layout_constraintTop_toBottomOf="@+id/ivPlaceDetailImage"
             tools:text="@string/app_name" />
 
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/tvPlaceDetailAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -41,10 +41,10 @@
             android:text="Address"
             android:textSize="23sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPlaceName" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailName" />
 
         <TextView
-            android:id="@+id/open_now"
+            android:id="@+id/tvPlaceDetailOpenNow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -52,10 +52,10 @@
             android:text="status of opening"
             android:textSize="23sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailAddress" />
 
         <TextView
-            android:id="@+id/phone"
+            android:id="@+id/tvPlaceDetailPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -63,28 +63,28 @@
             android:text="Phone"
             android:textSize="23sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/open_now" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailOpenNow" />
 
         <Button
-            android:id="@+id/btnCreateParty"
+            android:id="@+id/btnPlaceDetailCreateParty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Создать компанию"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/phone" />
+            app:layout_constraintTop_toBottomOf="@id/tvPlaceDetailPhone" />
 
         <TextView
-            android:id="@+id/parties_label"
+            android:id="@+id/tvPlaceDetailPartiesLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Компании"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnCreateParty" />
+            app:layout_constraintTop_toBottomOf="@id/btnPlaceDetailCreateParty" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvParties"
+            android:id="@+id/rvPlaceDetailParties"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
@@ -92,19 +92,19 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/parties_label" />
+            app:layout_constraintTop_toBottomOf="@id/tvPlaceDetailPartiesLabel" />
 
         <TextView
-            android:id="@+id/reviews_label"
+            android:id="@+id/tvPlaceDetailReviewsLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Отзывы"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvParties" />
+            app:layout_constraintTop_toBottomOf="@+id/rvPlaceDetailParties" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvReviews"
+            android:id="@+id/rvPlaceDetailReviews"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
@@ -112,6 +112,6 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/reviews_label" />
+            app:layout_constraintTop_toBottomOf="@id/tvPlaceDetailReviewsLabel" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

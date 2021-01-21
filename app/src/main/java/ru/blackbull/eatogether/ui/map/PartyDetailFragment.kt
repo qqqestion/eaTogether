@@ -46,14 +46,14 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
         firebaseViewModel.selectedParty.observe(viewLifecycleOwner , Observer { party ->
             updatePartyInfo(party)
             firebaseViewModel.getPartyParticipants(party)
-            placeViewModel.getPlaceDetail(party.placeId!!)
+//            placeViewModel.getPlaceDetail(party.placeId!!)
         })
         firebaseViewModel.partyParticipants.observe(viewLifecycleOwner , Observer { participants ->
             adapter.differ.submitList(participants)
         })
-        placeViewModel.placeDetail.observe(viewLifecycleOwner , Observer { placeDetail ->
-            updatePlaceInfo(placeDetail)
-        })
+//        placeViewModel.placeDetail.observe(viewLifecycleOwner , Observer { placeDetail ->
+//            updatePlaceInfo(placeDetail)
+//        })
         firebaseViewModel.getPartyById(partyId)
     }
 

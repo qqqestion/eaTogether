@@ -12,24 +12,6 @@ import ru.blackbull.eatogether.repository.PlaceRepository
 
 class PlaceViewModel : ViewModel() {
 
-    private val placeRepository = PlaceRepository()
-
-    val placeDetail: MutableLiveData<PlaceDetail> = MutableLiveData()
-
-    val searchPlaces: MutableLiveData<List<BasicLocation>> = MutableLiveData()
-
-    val nearbyPlaces: MutableLiveData<List<BasicLocation>> = MutableLiveData()
-
-    fun getPlaceDetail(placeId: String) = viewModelScope.launch {
-        val response = placeRepository.getPlaceDetail(placeId)
-        if (response.isSuccessful) {
-            response.body()?.let {
-                if (it.status == "OK") {
-                    placeDetail.postValue(it.placeDetail)
-                }
-            }
-        }
-    }
 
 
 }

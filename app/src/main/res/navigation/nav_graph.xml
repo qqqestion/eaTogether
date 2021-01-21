@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_startFragment_to_registrationFragment"
             app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -78,7 +81,17 @@
         android:id="@+id/createPartyFragment"
         android:name="ru.blackbull.eatogether.ui.map.CreatePartyFragment"
         android:label="fragment_create_party"
-        tools:layout="@layout/fragment_create_party" />
+        tools:layout="@layout/fragment_create_party" >
+        <argument
+            android:name="placeId"
+            app:argType="string" />
+        <argument
+            android:name="placeName"
+            app:argType="string" />
+        <argument
+            android:name="placeAddress"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/partyDetailFragment"
         android:name="ru.blackbull.eatogether.ui.map.PartyDetailFragment"

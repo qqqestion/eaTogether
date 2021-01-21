@@ -1,10 +1,8 @@
 package ru.blackbull.eatogether.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,8 +10,7 @@ import coil.load
 import kotlinx.android.synthetic.main.item_place_preview.view.*
 import ru.blackbull.eatogether.models.googleplaces.BasicLocation
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.map.PlaceDetailFragment
-import ru.blackbull.eatogether.util.PlaceDataParser
+import ru.blackbull.eatogether.other.PhotoUtility.getPhotoUrl
 
 
 class PlaceListAdapter : RecyclerView.Adapter<PlaceListAdapter.MyViewHolder>() {
@@ -56,10 +53,10 @@ class PlaceListAdapter : RecyclerView.Adapter<PlaceListAdapter.MyViewHolder>() {
         val place = places[position]
 
         holder.itemView.apply {
-            val url = if (place.photos.isNullOrEmpty()) {
+            val url = if (place.photos.isEmpty()) {
                 place.icon
             } else {
-                PlaceDataParser().getPhotoUrl(place.photos!![0].photo_reference , 150 , 150)
+                getPhotoUrl(place.photos[0].photo_reference , 150 , 150)
             }
             ivPlacePreviewImage.load(url)
             tvPlacePreviewName.text = place.name

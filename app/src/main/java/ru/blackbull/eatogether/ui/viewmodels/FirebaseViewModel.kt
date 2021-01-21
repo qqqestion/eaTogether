@@ -14,7 +14,6 @@ import ru.blackbull.eatogether.state.RegistrationState
 class FirebaseViewModel : ViewModel() {
     private val firebaseRepository = FirebaseRepository()
 
-    val searchParties: MutableLiveData<List<Party>> = MutableLiveData()
 
     val userParties: MutableLiveData<List<Party>> = MutableLiveData()
 
@@ -25,11 +24,6 @@ class FirebaseViewModel : ViewModel() {
 
     val selectedParty: MutableLiveData<Party> = MutableLiveData()
     val partyParticipants: MutableLiveData<List<User>> = MutableLiveData()
-
-    fun searchPartyByPlace(partyId: String) = viewModelScope.launch {
-        val parties = firebaseRepository.searchPartyByPlace(partyId)
-        searchParties.postValue(parties)
-    }
 
     fun addParty(party: Party) = viewModelScope.launch {
         firebaseRepository.addParty(party)

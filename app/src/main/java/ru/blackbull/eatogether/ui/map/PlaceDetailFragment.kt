@@ -1,136 +1,122 @@
 package ru.blackbull.eatogether.ui.map
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import kotlinx.android.synthetic.main.fragment_place_detail.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyAdapter
 import ru.blackbull.eatogether.adapters.ReviewAdapter
+import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
-import ru.blackbull.eatogether.ui.InformationActivity
-import ru.blackbull.eatogether.ui.TempActivity
-import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
-import ru.blackbull.eatogether.ui.viewmodels.PlaceViewModel
-import ru.blackbull.eatogether.util.PlaceDataParser
+import ru.blackbull.eatogether.other.PhotoUtility.getPhotoUrl
+import timber.log.Timber
 
 
-private const val ARGUMENT_KEY = "place_id"
+class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
 
-class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) , View.OnClickListener {
+    private val args: PlaceDetailFragmentArgs by navArgs()
 
-//    val args: PlaceDetai by navArgs()
-
-    private lateinit var placeViewModel: PlaceViewModel
-    private lateinit var firebaseViewModel: FirebaseViewModel
+    private val placeDetailViewModel: PlaceDetailViewModel by viewModels()
 
     private lateinit var placeId: String
 
-    private lateinit var adapter: PartyAdapter
-
-    private val TAG = "TagForDebug"
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (activity is InformationActivity) {
-            placeViewModel = (activity as InformationActivity).placeViewModel
-            firebaseViewModel = (activity as InformationActivity).firebaseViewModel
-        } else {
-            placeViewModel = (activity as TempActivity).placeViewModel
-            firebaseViewModel = (activity as TempActivity).firebaseViewModel
-        }
-
-        arguments?.let {
-            placeId = it.getString(ARGUMENT_KEY).toString()
-        }
-    }
+    private lateinit var partiesAdapter: PartyAdapter
+    private lateinit var reviewsAdapter: ReviewAdapter
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
-        adapter = PartyAdapter()
-        rvParties.adapter = adapter
-        btnCreateParty.setOnClickListener(this)
+        setupRecyclerView()
+        subscribeToObservers()
+        placeId = args.placeId
 
-        adapter.setOnItemViewClickListener { party ->
-            (activity as AppCompatActivity).supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.layout_for_fragments , PartyDetailFragment.newInstance(party.id!!))
-                .addToBackStack(null)
-                .commit()
-        }
-        adapter.setOnJoinCLickListener { party ->
-            firebaseViewModel.addUserToParty(party)
-            (activity as AppCompatActivity).supportFragmentManager
-                .beginTransaction()
-                .replace(R.id.layout_for_fragments , PartyDetailFragment.newInstance(party.id!!))
-                .addToBackStack(null)
-                .commit()
+        btnPlaceDetailCreateParty.setOnClickListener {
+            val bundle = Bundle().apply {
+                putString("placeId" , placeId)
+                putString("placeName" , tvPlaceDetailName.text.toString())
+                putString("placeAddress" , tvPlaceDetailAddress.text.toString())
+            }
+            findNavController().navigate(
+                R.id.action_placeDetailFragment_to_createPartyFragment ,
+                bundle
+            )
         }
 
-        placeViewModel.placeDetail.observe(viewLifecycleOwner , Observer { placeDetail ->
+        partiesAdapter.setOnItemViewClickListener { party ->
+            navigateToPartyDetailFragment(party)
+        }
+        partiesAdapter.setOnJoinCLickListener { party ->
+            placeDetailViewModel.addUserToParty(party)
+            navigateToPartyDetailFragment(party)
+        }
+
+        placeDetailViewModel.getPlaceDetail(placeId)
+        placeDetailViewModel.searchPartyByPlace(placeId)
+    }
+
+    private fun navigateToPartyDetailFragment(party: Party) {
+        val bundle = Bundle().apply {
+            putString("partyId" , party.id!!)
+        }
+        findNavController().navigate(
+            R.id.action_placeDetailFragment_to_partyDetailFragment ,
+            bundle
+        )
+    }
+
+    private fun setupRecyclerView() {
+        partiesAdapter = PartyAdapter()
+        rvPlaceDetailParties.apply {
+            adapter = partiesAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        reviewsAdapter = ReviewAdapter()
+        rvPlaceDetailReviews.apply {
+            adapter = reviewsAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    private fun subscribeToObservers() {
+        placeDetailViewModel.placeDetail.observe(viewLifecycleOwner , Observer { placeDetail ->
+            Timber.d("PlaceDetail: $placeDetail")
             updatePlaceInfo(placeDetail)
         })
-        firebaseViewModel.searchParties.observe(viewLifecycleOwner , Observer { parties ->
-            Log.d(TAG , "parties: $parties")
-            adapter.differ.submitList(parties)
+        placeDetailViewModel.searchParties.observe(viewLifecycleOwner , Observer { parties ->
+            Timber.d("Parties: $parties")
+            partiesAdapter.differ.submitList(parties)
         })
-        placeViewModel.getPlaceDetail(placeId!!)
-        firebaseViewModel.searchPartyByPlace(placeId)
-    }
-
-    companion object {
-        fun newInstance(placeID: String) =
-            PlaceDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARGUMENT_KEY , placeID)
-                }
-            }
-    }
-
-    override fun onClick(p0: View?) {
-        if (context is AppCompatActivity) {
-            (context as AppCompatActivity).supportFragmentManager
-                .beginTransaction()
-                .replace(
-                    R.id.layout_for_fragments ,
-                    CreatePartyFragment.newInstance(
-                        placeId ,
-                        tvPlaceName.text as String , address.text as String
-                    )
-                )
-                .addToBackStack(null)
-                .commit()
-        }
     }
 
     private fun updatePlaceInfo(place: PlaceDetail?) {
         if (place == null) {
+            Timber.d("PlaceDetail is null")
             throw RuntimeException("cannot get place information")
         }
-        tvPlaceName.text = place.name
-        address.text = place.formatted_address
-        phone.text = place.formatted_phone_number
-        open_now.text = if (place.getIsOpen() == true) {
+        tvPlaceDetailName.text = place.name
+        tvPlaceDetailAddress.text = place.formatted_address
+        tvPlaceDetailPhone.text = place.formatted_phone_number
+        tvPlaceDetailOpenNow.text = if (place.isOpen() == true) {
             "Открыто"
         } else {
             "Закрыто"
         }
-        val parser = PlaceDataParser()
-        if (place.photos != null) {
-            image.load(parser.getPhotoUrl(place.photos!![0].photo_reference , 400 , 400))
+        if (place.photos.isNotEmpty()) {
+            ivPlaceDetailImage.load(getPhotoUrl(place.photos[0].photo_reference , 400 , 400))
         }
 
-        if (place.reviews != null) {
-            rvReviews.adapter = ReviewAdapter(context!! , place.reviews!!)
+        if (place.reviews.isNotEmpty()) {
+            reviewsAdapter.reviews = place.reviews
         } else {
-            reviews_label.visibility = View.GONE
-            rvReviews.visibility = View.GONE
+            tvPlaceDetailReviewsLabel.visibility = View.GONE
+            rvPlaceDetailReviews.visibility = View.GONE
         }
     }
 }

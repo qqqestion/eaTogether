@@ -10,11 +10,11 @@ data class Resource<out T>(
     companion object {
         fun <T> success(data: T?) = Resource(Status.SUCCESS , data , null , null)
 
-        fun <T> error(error: Throwable? , msg: String? , data: T?) = Resource(
+        fun <T> error(error: Throwable? , msg: String? , data: T? = null) = Resource(
             Status.ERROR , data , msg , error
         )
 
-        fun <T> loading(data: T?) = Resource(Status.LOADING , data , null , null)
+        fun <T> loading(data: T? = null) = Resource(Status.LOADING , data , null , null)
     }
 }
 

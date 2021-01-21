@@ -1,17 +1,20 @@
 package ru.blackbull.eatogether.models.googleplaces
 
+import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-class Review(
-    var author_name: String ,
-    var author_url: String ,
+data class Review(
+    @Json(name = "author_name")
+    var authorName: String ,
+    @Json(name = "author_url")
+    var authorUrl: String ,
     var language: String ,
-    var profile_photo_url: String ,
+    @Json(name = "profile_photo_url")
+    var profilePhotoUrl: String ,
     var rating: Int ,
-    var relative_time_description: String ,
+    @Json(name = "relative_time_description")
+    var relativeTimeDescription: String ,
     var text: String ,
     var time: Int ,
-) {
-
-}
+)

@@ -77,18 +77,18 @@ class MapsActivity : AppCompatActivity() , OnMapReadyCallback ,
         drawerList.onItemClickListener = this
         maps_menu_btn.setOnClickListener(this)
 
-        placeViewModel.searchPlaces.observe(this , Observer { places ->
-            places.forEach { place ->
-                placeMarkers.add(
-                    createMarker(
-                        LatLng(place.geometry.location.lat , place.geometry.location.lng) ,
-                        place.placeId ,
-                        BitmapDescriptorFactory.HUE_RED
-                    )
-                )
-            }
-
-        })
+//        placeViewModel.searchPlaces.observe(this , Observer { places ->
+//            places.forEach { place ->
+//                placeMarkers.add(
+//                    createMarker(
+//                        LatLng(place.geometry.location.lat , place.geometry.location.lng) ,
+//                        place.placeId ,
+//                        BitmapDescriptorFactory.HUE_RED
+//                    )
+//                )
+//            }
+//
+//        })
     }
 
     override fun onResume() {

@@ -5,10 +5,10 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
+import ru.blackbull.eatogether.other.Constants.BASE_GOOGLE_API_URL
 import java.util.concurrent.TimeUnit
 
 object NetworkModule {
-    private val baseUrl = "https://maps.googleapis.com/maps/api/"
 
     // Перехватывает запросы
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -24,7 +24,7 @@ object NetworkModule {
         .build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
+        .baseUrl(BASE_GOOGLE_API_URL)
         .client(httpClient)
         .addConverterFactory(MoshiConverterFactory.create())
         .build()

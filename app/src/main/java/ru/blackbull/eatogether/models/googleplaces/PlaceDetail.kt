@@ -26,7 +26,7 @@ data class PlaceDetail(
     @Json(name = "formatted_phone_number")
     var formatted_phone_number: String
 ) {
-    fun getIsOpen(): Boolean? {
+    fun isOpen(): Boolean? {
         return openingHours?.isOpenNow
     }
 }

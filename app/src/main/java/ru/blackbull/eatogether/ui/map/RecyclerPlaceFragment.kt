@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_recycler_place.*
@@ -24,6 +25,15 @@ class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
         setupRecyclerView()
         val location = args.location
         mapViewModel.getNearbyPlaces(location.latitude , location.longitude)
+        placeAdapter.setOnItemClickListener { location ->
+            val bundle = Bundle().apply {
+                putString("placeId" , location.placeId)
+            }
+            findNavController().navigate(
+                R.id.action_recycleRestaurantsFragment_to_placeDetailFragment ,
+                bundle
+            )
+        }
     }
 
     private fun subscribeToObservers() {

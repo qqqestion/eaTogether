@@ -18,12 +18,5 @@ class TempActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_temp)
-        intent.extras?.let { bundle ->
-            placeId = bundle.getString(PLACE_ID).toString()
-        }
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.temp_layout_for_fragments , PlaceDetailFragment.newInstance(placeId))
-            .commit()
     }
 }

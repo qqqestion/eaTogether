@@ -20,7 +20,7 @@ class FirebaseRepository {
     suspend fun searchPartyByPlace(placeId: String) =
         NetworkModule.firebaseApiService.searchPartyByPlace(placeId)
 
-    fun addParty(party: Party) =
+    suspend fun addParty(party: Party) =
         NetworkModule.firebaseApiService.addParty(party)
 
     suspend fun updateParty(party: Party) {
@@ -40,6 +40,8 @@ class FirebaseRepository {
     suspend fun getUser(uid: String): User {
         return NetworkModule.firebaseApiService.getUser(uid)
     }
+
+    fun getCurrentUserId(): String = FirebaseAuth.getInstance().currentUser!!.uid
 
     fun signOut() {
         FirebaseAuth.getInstance().signOut()
@@ -61,7 +63,7 @@ class FirebaseRepository {
                 .await()
             firebaseUser = result.user
         } catch (e: FirebaseException) {
-            return Resource.error(e , null, null)
+            return Resource.error(e , null , null)
         }
         return Resource.success(firebaseUser != null)
     }
@@ -78,7 +80,7 @@ class FirebaseRepository {
             firebaseUser = result.user
         } catch (e: FirebaseException) {
             Log.d("RegistrationDebug" , "an error occurred" , e)
-            return Resource.error(e , null, null)
+            return Resource.error(e , null , null)
         }
         NetworkModule.firebaseApiService.addUser(firebaseUser?.uid!! , userInfo)
         return Resource.success(null)
