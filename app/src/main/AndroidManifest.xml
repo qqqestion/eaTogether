@@ -30,7 +30,6 @@
         <activity android:name=".ui.ProfileActivity" />
         <activity android:name=".ui.TempActivity" />
         <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".ui.StartActivity" />
         <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

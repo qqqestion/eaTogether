@@ -3,7 +3,6 @@ package ru.blackbull.eatogether.ui.nearby
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -15,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_card.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.NearbyUserAdapter
-import ru.blackbull.eatogether.ui.NearbyActivity
 
 
 class CardFragment : Fragment(R.layout.fragment_card) {
@@ -71,10 +69,13 @@ class CardFragment : Fragment(R.layout.fragment_card) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder , direction: Int) {
                 val position = viewHolder.adapterPosition
                 val user = usersAdapter.users[position]
+
+                // TODO: удалить этот кринж блок
                 val users = nearbyViewModel.nearbyUsers.value!!
                 users.removeAt(0)
                 usersAdapter.notifyItemRemoved(0)
                 nearbyViewModel.nearbyUsers.value = users
+
                 when (direction) {
                     ItemTouchHelper.START -> {
                         Log.d("NearbyDebug" , "dislikeUser $user")

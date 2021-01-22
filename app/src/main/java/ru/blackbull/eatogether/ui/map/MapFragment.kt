@@ -49,6 +49,7 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         super.onViewCreated(view , savedInstanceState)
         subscribeToObservers()
         requestPermission()
+        Timber.d("mapFragment")
         mapView?.onCreate(savedInstanceState)
         setupFusedLocationProviderClient()
 

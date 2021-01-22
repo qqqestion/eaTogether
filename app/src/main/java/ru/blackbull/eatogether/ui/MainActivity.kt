@@ -1,9 +1,12 @@
 package ru.blackbull.eatogether.ui
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.*
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.blackbull.eatogether.R
@@ -28,6 +31,20 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController , appBarConfiguration)
         navView.setupWithNavController(navController)
+        navController.addOnDestinationChangedListener { controller , destination , arguments ->
+            Timber.d("listener")
+        }
+        navView.setNavigationItemSelectedListener {
+            val itId = it.itemId
+            val curId = navController.currentDestination?.id
+            if (itId != curId) {
+                navController.navigate(
+                    itId
+                )
+            }
+            rootLayout.closeDrawer(GravityCompat.START)
+            itId != curId
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

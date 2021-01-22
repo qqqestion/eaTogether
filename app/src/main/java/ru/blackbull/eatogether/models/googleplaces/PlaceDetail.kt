@@ -12,7 +12,7 @@ data class PlaceDetail(
     var photos: List<Photo> = listOf() ,
 
     @Json(name = "opening_hours")
-    var openingHours: OpeningHours? ,
+    var openingHours: OpeningHours? = null ,
 
     @Json(name = "rating")
     var rating: Double ,
@@ -21,12 +21,12 @@ data class PlaceDetail(
     var reviews: List<Review> = listOf() ,
 
     @Json(name = "formatted_address")
-    var formatted_address: String ,
+    var formatted_address: String = "" ,
 
     @Json(name = "formatted_phone_number")
-    var formatted_phone_number: String
+    var formatted_phone_number: String = ""
 ) {
-    fun isOpen(): Boolean? {
-        return openingHours?.isOpenNow
+    fun isOpen(): Boolean {
+        return openingHours?.isOpenNow ?: false
     }
 }
