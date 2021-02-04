@@ -15,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_registration.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.other.Status
 
 @AndroidEntryPoint
 class RegistrationFragment : Fragment(R.layout.fragment_registration) {

@@ -13,7 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.other.Status
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -36,7 +35,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         authViewModel.signInResult.observe(viewLifecycleOwner , Observer { signInResult ->
             when (signInResult) {
                 is Resource.Success -> {
-                    btnLoginConfirm.isEnabled = true
                     findNavController().navigate(
                         R.id.action_loginFragment_to_mapFragment
                     )
@@ -44,10 +42,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 is Resource.Error -> {
                     val msg = getString(R.string.errormessage_login_error)
                     Snackbar.make(requireView() , msg , Snackbar.LENGTH_SHORT).show()
-                    btnLoginConfirm.isEnabled = true
                 }
                 is Resource.Loading -> {
-                    btnLoginConfirm.isEnabled = false
                 }
             }
         })
