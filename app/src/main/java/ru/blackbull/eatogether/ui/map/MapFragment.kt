@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -33,14 +34,17 @@ import ru.blackbull.eatogether.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import ru.blackbull.eatogether.other.Constants.SEARCH_TIME_DELAY
 import ru.blackbull.eatogether.other.LocationUtility
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.PermissionCallbacks {
 
     private var map: GoogleMap? = null
 
     private val mapViewModel: MapViewModel by viewModels()
 
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    @Inject
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private var placeMarkers: MutableList<Marker> = mutableListOf()
 
@@ -102,8 +106,8 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
 
     @SuppressLint("MissingPermission")
     private fun setupFusedLocationProviderClient() {
-        fusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(requireActivity())
+//        fusedLocationProviderClient =
+//            LocationServices.getFusedLocationProviderClient(requireActivity())
         val request = LocationRequest().apply {
             interval = LOCATION_UPDATE_INTERVAL
             fastestInterval = FASTEST_LOCATION_INTERVAL

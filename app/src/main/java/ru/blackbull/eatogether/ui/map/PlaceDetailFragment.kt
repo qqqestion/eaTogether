@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_place_detail.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyAdapter
@@ -19,6 +20,7 @@ import ru.blackbull.eatogether.other.PhotoUtility.getPhotoUrl
 import timber.log.Timber
 
 
+@AndroidEntryPoint
 class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
 
     private val args: PlaceDetailFragmentArgs by navArgs()

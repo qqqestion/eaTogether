@@ -29,7 +29,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
                     ProfileFragmentDirections.actionProfileFragmentToStartFragment()
                 )
             }
-            ibtnProfileImage.load(user?._imageUri) {
+            ibtnProfileImage.load(user?.imageUri) {
                 transformations(CircleCropTransformation())
             }
         })

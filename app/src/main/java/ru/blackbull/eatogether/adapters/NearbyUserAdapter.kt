@@ -46,7 +46,7 @@ class NearbyUserAdapter : RecyclerView.Adapter<NearbyUserAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder , position: Int) {
         val user = users[position]
         holder.itemView.apply {
-            ivNearbyUserPhoto.load(user._imageUri)
+            ivNearbyUserPhoto.load(user.imageUri)
             tvNearbyUserName.text = "${user.firstName} ${user.lastName}"
             tvNearbyUserDescription.text = user.description
         }

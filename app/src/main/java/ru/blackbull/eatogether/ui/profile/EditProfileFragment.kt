@@ -59,7 +59,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
             // когда выходишь из фрагмента, и сохранялось,
             // когда нажимаешь сохранить
             if (savedUri == null) {
-                savedUri = newUser!!._imageUri
+                savedUri = Uri.parse(newUser!!.imageUri)
             }
             Timber.d("savedUri in user: $savedUri")
             updateUserInfo(newUser!!)
@@ -88,7 +88,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
             return
         }
         user.birthday = Timestamp(date)
-        user._imageUri = savedUri
+        user.imageUri = savedUri.toString()
         firebaseViewModel.updateUser(user)
         shortToast("Профиль успешно обновлен")
     }

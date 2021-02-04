@@ -50,12 +50,12 @@ class CardFragment : Fragment(R.layout.fragment_card) {
     private fun setupRecyclerView() {
         usersAdapter = NearbyUserAdapter()
         rvNearbyUsers.adapter = usersAdapter
-//        val layoutManager = object : LinearLayoutManager(context) {
-//            override fun canScrollVertically(): Boolean = false
-//        }
-        val layoutManager = LinearLayoutManager(context)
+        val layoutManager = object : LinearLayoutManager(context) {
+            override fun canScrollVertically(): Boolean = false
+        }
+//        val layoutManager = LinearLayoutManager(context)
         rvNearbyUsers.layoutManager = layoutManager
-//        rvNearbyUsers.isNestedScrollingEnabled = false
+        rvNearbyUsers.isNestedScrollingEnabled = false
         val callback: ItemTouchHelper.Callback = object : ItemTouchHelper.SimpleCallback(
             0 ,
             ItemTouchHelper.START or ItemTouchHelper.END
@@ -69,12 +69,13 @@ class CardFragment : Fragment(R.layout.fragment_card) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder , direction: Int) {
                 val position = viewHolder.adapterPosition
                 val user = usersAdapter.users[position]
+                usersAdapter.users -= user
 
                 // TODO: удалить этот кринж блок
-                val users = nearbyViewModel.nearbyUsers.value!!
-                users.removeAt(0)
-                usersAdapter.notifyItemRemoved(0)
-                nearbyViewModel.nearbyUsers.value = users
+//                val users = nearbyViewModel.nearbyUsers.value!!
+//                users.removeAt(0)
+//                usersAdapter.notifyItemRemoved(0)
+//                nearbyViewModel.nearbyUsers.value = users
 
                 when (direction) {
                     ItemTouchHelper.START -> {

@@ -1,13 +1,9 @@
 package ru.blackbull.eatogether.models.firebase
 
-import android.net.Uri
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
-import com.google.firebase.firestore.Exclude
-import com.google.firebase.firestore.PropertyName
-import java.io.Serializable
 
 
 data class User(
@@ -18,16 +14,9 @@ data class User(
     var lastName: String? = null ,
     var description: String? = null ,
     var birthday: Timestamp? = null ,
-    @get:Exclude
-    var _imageUri: Uri? = null ,
-    // Для спокойной сериализации пользователя, потому что uri не хочет сериализироваться
-    var imageUri: String? = _imageUri.toString() ,
-    @get:PropertyName("likedUsers")
-    @set:PropertyName("likedUsers")
-    var likedUsersId: MutableList<String> = mutableListOf() ,
-    @get:PropertyName("dislikedUsers")
-    @set:PropertyName("dislikedUsers")
-    var dislikedUsersId: MutableList<String> = mutableListOf()
+    var imageUri: String? = null ,
+    var likedUsers: MutableList<String> = mutableListOf() ,
+    var dislikedUsers: MutableList<String> = mutableListOf()
 ) : Parcelable {
     override fun writeToParcel(parcel: Parcel? , flags: Int) {
         TODO("Not yet implemented")
@@ -43,10 +32,9 @@ data class User(
                 lastName = parcel?.readString() ,
                 description = parcel?.readString() ,
                 birthday = parcel?.readParcelable(Timestamp::class.java.classLoader) ,
-                _imageUri = parcel?.readParcelable(Uri::class.java.classLoader) ,
                 imageUri = parcel?.readString() ,
-                likedUsersId = parcel?.createStringArrayList() ?: mutableListOf() ,
-                dislikedUsersId = parcel?.createStringArrayList() ?: mutableListOf()
+                likedUsers = parcel?.createStringArrayList() ?: mutableListOf() ,
+                dislikedUsers = parcel?.createStringArrayList() ?: mutableListOf()
             )
 
             override fun newArray(size: Int) = Array(size) {

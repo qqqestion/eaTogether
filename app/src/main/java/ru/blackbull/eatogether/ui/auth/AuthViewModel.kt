@@ -1,25 +1,28 @@
 package ru.blackbull.eatogether.ui.auth
 
 import android.app.Application
+import android.content.Context
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
+import ru.blackbull.eatogether.EaTogetherApplication
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.repository.FirebaseRepository
-import java.lang.Exception
+import ru.blackbull.eatogether.repositories.FirebaseRepository
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AuthViewModel : ViewModel() {
-
-    private val firebaseRepository = FirebaseRepository()
+class AuthViewModel @ViewModelInject constructor(
+    val firebaseRepository: FirebaseRepository ,
+    app: Application
+) : AndroidViewModel(app) {
 
     val signInResult = MutableLiveData<Resource<Boolean>>()
 
@@ -42,13 +45,12 @@ class AuthViewModel : ViewModel() {
         description: String
     ) = viewModelScope.launch {
         signUpResult.value = (Resource.loading(null))
-//        val app = getApplication<Application>()
+        val app = getApplication<EaTogetherApplication>()
         for (field in listOf(email , password , firstName , lastName , birthday , description)) {
             if (field.isEmpty()) {
                 signUpResult.value = Resource.error(
                     null ,
-                    "Заполните поля" ,
-//                    app.getString(R.string.errormessage_fields_must_be_filled) ,
+                    app.getString(R.string.errormessage_fields_must_be_filled) ,
                     null
                 )
                 return@launch
@@ -67,8 +69,7 @@ class AuthViewModel : ViewModel() {
         } catch (e: ParseException) {
             signUpResult.value = Resource.error(
                 null ,
-                "Введите правильную дату" ,
-//                app.getString(R.string.errormessage_date_misformat) ,
+                app.getString(R.string.errormessage_date_misformat) ,
                 null
             )
             return@launch

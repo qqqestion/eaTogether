@@ -1,21 +1,21 @@
 package ru.blackbull.eatogether.ui.map
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.models.googleplaces.BasicLocation
-import ru.blackbull.eatogether.repository.FirebaseRepository
-import ru.blackbull.eatogether.repository.PlaceRepository
+import ru.blackbull.eatogether.repositories.PlaceRepository
 
-class MapViewModel : ViewModel() {
+class MapViewModel @ViewModelInject constructor(
+    private val placeRepository: PlaceRepository
+) : ViewModel() {
 
     val searchPlaces: MutableLiveData<List<BasicLocation>> = MutableLiveData()
 
     val nearbyPlaces: MutableLiveData<List<BasicLocation>> = MutableLiveData()
 
-
-    private val placeRepository = PlaceRepository()
 
     fun searchPlaces(placeName: String) = viewModelScope.launch {
         val response = placeRepository.getPlacesByName(placeName)

@@ -96,6 +96,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:background="@drawable/rounded_button_pink"
+        android:src="@drawable/ic_baseline_settings_24"
         app:layout_constraintBottom_toBottomOf="@+id/ibtnProfileImage"
         app:layout_constraintEnd_toEndOf="@+id/ibtnProfileImage"
         app:layout_constraintHorizontal_bias="1.0"

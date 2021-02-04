@@ -1,18 +1,19 @@
 package ru.blackbull.eatogether.ui.map
 
+import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
-import ru.blackbull.eatogether.repository.FirebaseRepository
-import ru.blackbull.eatogether.repository.PlaceRepository
+import ru.blackbull.eatogether.repositories.FirebaseRepository
+import ru.blackbull.eatogether.repositories.PlaceRepository
 
-class PlaceDetailViewModel : ViewModel() {
-
-    private val firebaseRepository = FirebaseRepository()
-    private val placeRepository = PlaceRepository()
+class PlaceDetailViewModel @ViewModelInject constructor(
+    private val firebaseRepository: FirebaseRepository ,
+    private val placeRepository: PlaceRepository
+) : ViewModel() {
 
     val placeDetail: MutableLiveData<PlaceDetail> = MutableLiveData()
 

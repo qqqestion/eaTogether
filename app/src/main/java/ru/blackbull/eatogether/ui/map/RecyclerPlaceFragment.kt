@@ -8,10 +8,12 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_recycler_place.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PlaceListAdapter
 
+@AndroidEntryPoint
 class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
 
     val args: RecycleRestaurantsFragmentArgs by navArgs()

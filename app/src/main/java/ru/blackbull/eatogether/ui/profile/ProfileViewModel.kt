@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.models.firebase.User
-import ru.blackbull.eatogether.repository.FirebaseRepository
+import ru.blackbull.eatogether.repositories.FirebaseRepository
 
 class ProfileViewModel : ViewModel() {
 

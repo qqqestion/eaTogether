@@ -22,12 +22,12 @@ class MatchFragment : Fragment(R.layout.fragment_match) {
         super.onViewCreated(view , savedInstanceState)
 
         val matchedUser = args.matchedUser
-        ivSecondUser.load(matchedUser._imageUri) {
+        ivSecondUser.load(matchedUser.imageUri) {
             transformations(CircleCropTransformation())
         }
 
         firebaseViewModel.user.observe(viewLifecycleOwner , Observer { currentUser ->
-            ivFirstUser.load(currentUser._imageUri) {
+            ivFirstUser.load(currentUser.imageUri) {
                 transformations(CircleCropTransformation())
             }
             tvMatchLabel.text =

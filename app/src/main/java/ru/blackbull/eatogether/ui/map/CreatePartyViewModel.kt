@@ -4,12 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
-import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.repository.FirebaseRepository
+import ru.blackbull.eatogether.repositories.FirebaseRepository
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*

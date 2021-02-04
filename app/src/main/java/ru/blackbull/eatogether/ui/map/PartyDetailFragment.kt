@@ -8,14 +8,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_party_detail.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
-import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
-import ru.blackbull.eatogether.ui.viewmodels.PlaceViewModel
 
+
+@AndroidEntryPoint
 class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
 
     private lateinit var partyId: String

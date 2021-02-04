@@ -11,4 +11,7 @@ object Constants {
 
     const val GOOGLE_API_KEY = "AIzaSyBTkTz_lNZdylZI6vu3jvnJuGfekHxwXBA"
     const val BASE_GOOGLE_API_URL = "https://maps.googleapis.com/maps/api/"
+
+    const val DEFAULT_IMAGE_URL =
+        "https://firebasestorage.googleapis.com/v0/b/eatogether-a8490.appspot.com/o/download.jpeg?alt=media&token=6b9935b4-f29b-4720-92f2-a6f46449b16c"
 }

@@ -8,10 +8,13 @@ import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.blackbull.eatogether.R
 import timber.log.Timber
 
+
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -19,9 +22,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Timber.plant(Timber.DebugTree())
         setSupportActionBar(toolbar)
-
         val navController = findNavController(R.id.navHostFragment)
         appBarConfiguration = AppBarConfiguration(
             setOf(
@@ -31,9 +32,6 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController , appBarConfiguration)
         navView.setupWithNavController(navController)
-        navController.addOnDestinationChangedListener { controller , destination , arguments ->
-            Timber.d("listener")
-        }
         navView.setNavigationItemSelectedListener {
             val itId = it.itemId
             val curId = navController.currentDestination?.id
