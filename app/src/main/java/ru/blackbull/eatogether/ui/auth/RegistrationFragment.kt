@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_registration.*
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.other.Status
 
 @AndroidEntryPoint
@@ -44,14 +45,14 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
 
     private fun subscribeToObservers() {
         authViewModel.signUpResult.observe(viewLifecycleOwner , Observer { result ->
-            when (result.status) {
-                Status.SUCCESS -> {
+            when (result) {
+                is Resource.Success -> {
                     btnRegistrationNextAndConfirm.isEnabled = true
                     findNavController().navigate(
                         R.id.action_registrationFragment_to_mapFragment
                     )
                 }
-                Status.ERROR -> {
+                is Resource.Error -> {
                     val stringId = when (result.error) {
                         is FirebaseAuthWeakPasswordException ->
                             R.string.errormessage_weak_password
@@ -74,7 +75,7 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
                     ).show()
                     btnRegistrationNextAndConfirm.isEnabled = true
                 }
-                Status.LOADING -> {
+                is Resource.Loading -> {
                     btnRegistrationNextAndConfirm.isEnabled = false
                 }
             }

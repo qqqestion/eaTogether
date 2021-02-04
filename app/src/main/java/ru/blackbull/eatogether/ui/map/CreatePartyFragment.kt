@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_party.*
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.other.Status
 
 
@@ -47,8 +48,8 @@ class CreatePartyFragment : Fragment(R.layout.fragment_create_party) {
         createPartyViewModel.createPartyResult.observe(
             viewLifecycleOwner ,
             Observer { result ->
-                when (result.status) {
-                    Status.SUCCESS -> {
+                when (result) {
+                    is Resource.Success -> {
                         Snackbar.make(
                             requireActivity().rootLayout ,
                             getString(R.string.success_party_created) ,
@@ -57,16 +58,16 @@ class CreatePartyFragment : Fragment(R.layout.fragment_create_party) {
                         btnCreatePartyConfirm.isEnabled = true
                         findNavController().popBackStack()
                     }
-                    Status.ERROR -> {
+                    is Resource.Error -> {
                         val msg = result.msg ?: getString(R.string.errormessage_unknown_error)
                         Snackbar.make(
-                            requireView(),
+                            requireView() ,
                             msg ,
                             Snackbar.LENGTH_LONG
                         ).show()
                         btnCreatePartyConfirm.isEnabled = true
                     }
-                    Status.LOADING -> {
+                    is Resource.Loading -> {
                         btnCreatePartyConfirm.isEnabled = false
                     }
                 }

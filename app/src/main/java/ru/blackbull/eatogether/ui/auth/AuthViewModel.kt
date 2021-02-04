@@ -31,7 +31,7 @@ class AuthViewModel @ViewModelInject constructor(
     fun isAuthenticated(): Boolean = firebaseRepository.isAuthenticated()
 
     fun signIn(email: String , password: String) = viewModelScope.launch {
-        signInResult.postValue(Resource.loading(null))
+        signInResult.postValue(Resource.Loading())
         val response = firebaseRepository.signIn(email , password)
         signInResult.postValue(response)
     }
@@ -44,14 +44,12 @@ class AuthViewModel @ViewModelInject constructor(
         birthday: String ,
         description: String
     ) = viewModelScope.launch {
-        signUpResult.value = (Resource.loading(null))
+        signUpResult.value = (Resource.Loading())
         val app = getApplication<EaTogetherApplication>()
         for (field in listOf(email , password , firstName , lastName , birthday , description)) {
             if (field.isEmpty()) {
-                signUpResult.value = Resource.error(
-                    null ,
-                    app.getString(R.string.errormessage_fields_must_be_filled) ,
-                    null
+                signUpResult.value = Resource.Error(
+                    msg = app.getString(R.string.errormessage_fields_must_be_filled) ,
                 )
                 return@launch
             }
@@ -67,10 +65,8 @@ class AuthViewModel @ViewModelInject constructor(
         try {
             user.birthday = Timestamp(formatter.parse(birthday))
         } catch (e: ParseException) {
-            signUpResult.value = Resource.error(
-                null ,
-                app.getString(R.string.errormessage_date_misformat) ,
-                null
+            signUpResult.value = Resource.Error(
+                msg = app.getString(R.string.errormessage_date_misformat) ,
             )
             return@launch
         }

@@ -25,7 +25,7 @@ class CreatePartyViewModel : ViewModel() {
         time: String ,
         placeId: String
     ) = viewModelScope.launch {
-        createPartyResult.value = Resource.loading()
+        createPartyResult.value = Resource.Loading()
         val format = SimpleDateFormat(
             "dd.MM.yyyy HH:mm" , Locale.getDefault()
         )
@@ -33,9 +33,8 @@ class CreatePartyViewModel : ViewModel() {
         try {
             formattedDate = format.parse("$date $time")
         } catch (e: ParseException) {
-            createPartyResult.value = Resource.error(
-                null ,
-                "Введите корректные дату и время"
+            createPartyResult.value = Resource.Error(
+                msg = "Введите корректные дату и время"
             )
 //            createPartyResult.value = Resource.error(null, R.string.errormessage_date_misformat)
             return@launch

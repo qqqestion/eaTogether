@@ -1,23 +1,22 @@
 package ru.blackbull.eatogether.other
 
-data class Resource<out T>(
-    val status: Status ,
+sealed class Resource<out T>(
     val data: T? ,
     val msg: String? ,
     val error: Throwable?
 ) {
 
-    companion object {
-        fun <T> success(data: T?) = Resource(Status.SUCCESS , data , null , null)
+    class Success<T>(
+        data: T? = null
+    ) : Resource<T>(data = data , msg = null , error = null)
 
-        fun <T> error(error: Throwable? , msg: String? = null , data: T? = null) = Resource(
-            Status.ERROR , data , msg , error
-        )
+    class Loading<T>(
+        data: T? = null
+    ) : Resource<T>(data = data , msg = null , error = null)
 
-        fun <T> loading(data: T? = null) = Resource(Status.LOADING , data , null , null)
-    }
-}
-
-enum class Status {
-    SUCCESS , ERROR , LOADING
+    class Error<T>(
+        error: Throwable? = null ,
+        msg: String? = null ,
+        data: T? = null
+    ) : Resource<T>(data = data , msg = msg , error = error)
 }

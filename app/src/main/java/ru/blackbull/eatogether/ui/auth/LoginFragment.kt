@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.other.Status
 
 @AndroidEntryPoint
@@ -33,19 +34,19 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun subscribeToObservers() {
         authViewModel.signInResult.observe(viewLifecycleOwner , Observer { signInResult ->
-            when (signInResult.status) {
-                Status.SUCCESS -> {
+            when (signInResult) {
+                is Resource.Success -> {
                     btnLoginConfirm.isEnabled = true
                     findNavController().navigate(
                         R.id.action_loginFragment_to_mapFragment
                     )
                 }
-                Status.ERROR -> {
+                is Resource.Error -> {
                     val msg = getString(R.string.errormessage_login_error)
                     Snackbar.make(requireView() , msg , Snackbar.LENGTH_SHORT).show()
                     btnLoginConfirm.isEnabled = true
                 }
-                Status.LOADING -> {
+                is Resource.Loading -> {
                     btnLoginConfirm.isEnabled = false
                 }
             }

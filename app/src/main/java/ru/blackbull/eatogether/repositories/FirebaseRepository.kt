@@ -35,9 +35,9 @@ class FirebaseRepository {
         try {
             partiesRef.add(party).await()
         } catch (e: Throwable) {
-            return Resource.error(e)
+            return Resource.Error(e)
         }
-        return Resource.success(null)
+        return Resource.Success()
     }
 
     suspend fun updateParty(party: Party) {
@@ -107,9 +107,9 @@ class FirebaseRepository {
             firebaseUser = result.user
         } catch (e: FirebaseException) {
             Timber.d(e)
-            return Resource.error(e)
+            return Resource.Error(e)
         }
-        return Resource.success(firebaseUser != null)
+        return Resource.Success(firebaseUser != null)
     }
 
     suspend fun signUpWithEmailAndPassword(
@@ -124,11 +124,11 @@ class FirebaseRepository {
             firebaseUser = result.user
         } catch (e: FirebaseException) {
             Timber.d(e)
-            return Resource.error(e)
+            return Resource.Error(e)
         }
         userInfo.imageUri = Constants.DEFAULT_IMAGE_URL
         usersRef.document(firebaseUser!!.uid).set(userInfo).await()
-        return Resource.success(null)
+        return Resource.Success(null)
     }
 
     suspend fun getNearbyUsers(): MutableList<User> {
