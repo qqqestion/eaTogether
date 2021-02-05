@@ -1,30 +1,36 @@
 package ru.blackbull.eatogether.ui.main.nearby
 
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.eatogether.other.Event
+import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.repositories.FirebaseRepository
 
-class NearbyViewModel : ViewModel() {
-    private val firebaseRepository = FirebaseRepository()
+class NearbyViewModel @ViewModelInject constructor(
+    private val firebaseRepository: FirebaseRepository
+) : ViewModel() {
 
-    val nearbyUsers: MutableLiveData<MutableList<User>> = MutableLiveData()
-    val likedUser: MutableLiveData<User?> = MutableLiveData()
+    private val _nearbyUsers = MutableLiveData<Event<Resource<MutableList<User>>>>()
+    val nearbyUsers: LiveData<Event<Resource<MutableList<User>>>> = _nearbyUsers
+
+    private val _likedUser = MutableLiveData<Event<Resource<User?>>>()
+    val likedUser: LiveData<Event<Resource<User?>>> = _likedUser
 
     fun getNearbyUsers() = viewModelScope.launch {
-//        delay(1000)
-        val users = firebaseRepository.getNearbyUsers()
-        nearbyUsers.postValue(users)
+        _nearbyUsers.postValue(Event(Resource.Loading()))
+        val response = firebaseRepository.getNearbyUsers()
+        _nearbyUsers.postValue(Event(response))
     }
 
     fun likeUser(user: User) = viewModelScope.launch {
-        if (firebaseRepository.likeUser(user)) {
-            likedUser.postValue(user)
-        } else {
-            likedUser.postValue(null)
-        }
+        _likedUser.postValue(Event(Resource.Loading()))
+        val response = firebaseRepository.likeUser(user)
+        _likedUser.postValue(Event(response))
     }
 
     fun dislikeUser(user: User) = viewModelScope.launch {

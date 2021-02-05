@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 import kotlinx.android.synthetic.main.item_party_preview.view.*
@@ -54,6 +56,9 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
         holder.itemView.apply {
             party.time?.let { time ->
                 tvPartyPreviewTime.text = getFormattedTime(time.toDate())
+            }
+            if (FirebaseAuth.getInstance().uid in party.users) {
+                btnPartyPreviewJoin.isVisible = false
             }
             // TODO: переписать этот ужас
             FirebaseStorage.getInstance()

@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class PlaceDetail(
     @Json(name = "name")
-    var name: String ,
+    var name: String = "" ,
 
     @Json(name = "photos")
     var photos: List<Photo> = listOf() ,
@@ -15,7 +15,7 @@ data class PlaceDetail(
     var openingHours: OpeningHours? = null ,
 
     @Json(name = "rating")
-    var rating: Double ,
+    var rating: Double = 0.0 ,
 
     @Json(name = "reviews")
     var reviews: List<Review> = listOf() ,

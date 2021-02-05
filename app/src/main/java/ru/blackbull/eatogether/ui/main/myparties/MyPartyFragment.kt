@@ -8,10 +8,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_my_parties_rv.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyAdapter
+import ru.blackbull.eatogether.other.EventObserver
 
+
+@AndroidEntryPoint
 class MyPartyFragment : Fragment(R.layout.fragment_my_parties_rv) {
 
     private lateinit var partiesAdapter: PartyAdapter
@@ -20,7 +24,7 @@ class MyPartyFragment : Fragment(R.layout.fragment_my_parties_rv) {
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
         setupAdapter(rvMyParties)
-        viewModel.userParties.observe(viewLifecycleOwner , Observer { parties ->
+        viewModel.userParties.observe(viewLifecycleOwner , EventObserver { parties ->
             partiesAdapter.parties = parties
         })
         viewModel.getPartiesByCurrentUser()

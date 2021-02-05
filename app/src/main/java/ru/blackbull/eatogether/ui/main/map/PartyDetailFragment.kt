@@ -5,7 +5,6 @@ import android.text.InputType
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -14,6 +13,7 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
+import ru.blackbull.eatogether.other.EventObserver
 
 
 @AndroidEntryPoint
@@ -21,7 +21,7 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
 
     private lateinit var partyId: String
 
-    private lateinit var adapter: PartyParticipantAdapter
+    private lateinit var partyParticipantAdapter: PartyParticipantAdapter
 
     private val partyDetailViewModel: PartyDetailViewModel by viewModels()
     private val args: PartyDetailFragmentArgs by navArgs()
@@ -37,17 +37,17 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
     }
 
     private fun subscribeToObservers() {
-        partyDetailViewModel.selectedParty.observe(viewLifecycleOwner , Observer { party ->
+        partyDetailViewModel.selectedParty.observe(viewLifecycleOwner , EventObserver { party ->
             updatePartyInfo(party)
             partyDetailViewModel.getPartyParticipants(party)
             partyDetailViewModel.getPlaceDetail(party.placeId!!)
         })
         partyDetailViewModel.partyParticipants.observe(
             viewLifecycleOwner ,
-            Observer { participants ->
-                adapter.participants = participants
+            EventObserver { participants ->
+                partyParticipantAdapter.participants = participants
             })
-        partyDetailViewModel.placeDetail.observe(viewLifecycleOwner , Observer { placeDetail ->
+        partyDetailViewModel.placeDetail.observe(viewLifecycleOwner , EventObserver { placeDetail ->
             updatePlaceInfo(placeDetail)
         })
     }
@@ -66,9 +66,9 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
         etPartyDetailTime.inputType = InputType.TYPE_NULL
     }
 
-    private fun setupRecyclerView() {
-        adapter = PartyParticipantAdapter()
-        rvPartyDetailParticipants.adapter = adapter
-        rvPartyDetailParticipants.layoutManager = LinearLayoutManager(context)
+    private fun setupRecyclerView() = rvPartyDetailParticipants.apply {
+        partyParticipantAdapter = PartyParticipantAdapter()
+        adapter = partyParticipantAdapter
+        layoutManager = LinearLayoutManager(requireContext())
     }
 }

@@ -1,41 +1,38 @@
 package ru.blackbull.eatogether.ui.main.map
 
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.models.googleplaces.BasicLocation
+import ru.blackbull.eatogether.other.Event
+import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.repositories.PlaceRepository
 
 class MapViewModel @ViewModelInject constructor(
     private val placeRepository: PlaceRepository
 ) : ViewModel() {
 
-    val searchPlaces: MutableLiveData<List<BasicLocation>> = MutableLiveData()
+    private val _searchPlaces: MutableLiveData<Event<Resource<List<BasicLocation>>>> =
+        MutableLiveData()
+    val searchPlaces: LiveData<Event<Resource<List<BasicLocation>>>> = _searchPlaces
 
-    val nearbyPlaces: MutableLiveData<List<BasicLocation>> = MutableLiveData()
+    private val _nearbyPlaces: MutableLiveData<Event<Resource<List<BasicLocation>>>> =
+        MutableLiveData()
+    val nearbyPlaces: LiveData<Event<Resource<List<BasicLocation>>>> = _nearbyPlaces
 
 
     fun searchPlaces(placeName: String) = viewModelScope.launch {
+        _searchPlaces.postValue(Event(Resource.Loading()))
         val response = placeRepository.getPlacesByName(placeName)
-        if (response.isSuccessful) {
-            response.body()?.let {
-                if (it.status == "OK") {
-                    searchPlaces.postValue(it.placeList)
-                }
-            }
-        }
+        _searchPlaces.postValue(Event(response))
     }
 
     fun getNearbyPlaces(lat: Double , lng: Double) = viewModelScope.launch {
+        _nearbyPlaces.postValue(Event(Resource.Loading()))
         val response = placeRepository.getNearbyPlaces("$lat,$lng")
-        if (response.isSuccessful) {
-            response.body()?.let {
-                if (it.status == "OK") {
-                    nearbyPlaces.postValue(it.placeList)
-                }
-            }
-        }
+        _nearbyPlaces.postValue(Event(response))
     }
 }

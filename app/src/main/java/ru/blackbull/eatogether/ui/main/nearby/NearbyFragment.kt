@@ -10,13 +10,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_card.*
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_nearby.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.NearbyUserAdapter
+import ru.blackbull.eatogether.other.EventObserver
+import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.eatogether.ui.main.snackbar
+import timber.log.Timber
 
 
-class CardFragment : Fragment(R.layout.fragment_card) {
+@AndroidEntryPoint
+class NearbyFragment : Fragment(R.layout.fragment_nearby) {
 
     private val nearbyViewModel: NearbyViewModel by viewModels()
     private lateinit var usersAdapter: NearbyUserAdapter
@@ -29,20 +34,37 @@ class CardFragment : Fragment(R.layout.fragment_card) {
     }
 
     private fun subscribeToObservers() {
-        nearbyViewModel.nearbyUsers.observe(viewLifecycleOwner , Observer { nearbyUsers ->
+        nearbyViewModel.nearbyUsers.observe(viewLifecycleOwner , EventObserver(
+            onError = {
+                snackbar(it)
+            } ,
+            onLoading = {
+
+            }
+        ) { nearbyUsers ->
             usersAdapter.users = nearbyUsers
-            Snackbar.make(
-                requireView() ,
-                "${usersAdapter.users.size}" ,
-                Snackbar.LENGTH_LONG
-            ).show()
         })
-        nearbyViewModel.likedUser.observe(viewLifecycleOwner , Observer { user ->
-            if (user != null) {
-                nearbyViewModel.likedUser.postValue(null)
-                findNavController().navigate(
-                    CardFragmentDirections.actionCardFragmentToMatchFragment(user)
-                )
+        nearbyViewModel.likedUser.observe(viewLifecycleOwner , Observer { event ->
+            val content = event.getContentIfNotHandled()
+            content?.let {
+                when (it) {
+                    is Resource.Success -> {
+                        Timber.d("content data: ${it.data}")
+                        it.data?.let { user ->
+                            findNavController().navigate(
+                                NearbyFragmentDirections.actionCardFragmentToMatchFragment(user)
+                            )
+                        }
+                    }
+                    is Resource.Error -> {
+                        content.msg?.let { msg ->
+                            snackbar(msg)
+                        }
+                    }
+                    is Resource.Loading -> {
+
+                    }
+                }
             }
         })
     }

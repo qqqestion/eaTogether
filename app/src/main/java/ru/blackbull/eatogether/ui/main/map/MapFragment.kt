@@ -8,9 +8,11 @@ import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
@@ -31,7 +33,9 @@ import ru.blackbull.eatogether.other.Constants.LOCATION_UPDATE_INTERVAL
 import ru.blackbull.eatogether.other.Constants.MAP_ZOOM
 import ru.blackbull.eatogether.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import ru.blackbull.eatogether.other.Constants.SEARCH_TIME_DELAY
+import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.LocationUtility
+import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -90,13 +94,19 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
     }
 
     private fun subscribeToObservers() {
-        mapViewModel.searchPlaces.observe(viewLifecycleOwner , Observer { places ->
+        mapViewModel.searchPlaces.observe(viewLifecycleOwner , EventObserver(
+            onError = {
+                snackbar(it)
+            } ,
+            onLoading = {
+
+            }
+        ) { places ->
             places.forEach { place ->
                 placeMarkers.add(
                     createMarker(
                         LatLng(place.geometry.location.lat , place.geometry.location.lng) ,
-                        place.placeId ,
-                        BitmapDescriptorFactory.HUE_RED
+                        place.placeId
                     )
                 )
             }
@@ -119,7 +129,11 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         )
     }
 
-    private fun createMarker(latLng: LatLng , tag: String , color: Float): Marker {
+    private fun createMarker(
+        latLng: LatLng ,
+        tag: String ,
+        color: Float = BitmapDescriptorFactory.HUE_RED
+    ): Marker {
         val marker = map?.addMarker(
             MarkerOptions().position(latLng).icon(
                 BitmapDescriptorFactory.defaultMarker(color)
@@ -167,7 +181,7 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
 
     var isFirstLocation = true
 
-    val locationCallback = object : LocationCallback() {
+    private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult?) {
             super.onLocationResult(result)
             if (isFirstLocation) {

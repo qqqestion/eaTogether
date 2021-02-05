@@ -1,17 +1,19 @@
 package ru.blackbull.eatogether.repositories
 
-import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.models.firebase.Notification
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.eatogether.other.safeCall
 import timber.log.Timber
 
 
@@ -22,54 +24,57 @@ class FirebaseRepository {
     private val partiesRef = Firebase.firestore.collection("parties")
     private val notificationsRef = Firebase.firestore.collection("notifications")
 
-    suspend fun searchPartyByPlace(placeId: String): MutableList<Party> {
-        val parties = partiesRef
-            .whereEqualTo("placeId" , placeId)
-            .get()
-            .await()
-            .toObjects(Party::class.java)
-        return parties
-    }
-
-    suspend fun addParty(party: Party): Resource<Unit> {
-        try {
-            partiesRef.add(party).await()
-        } catch (e: Throwable) {
-            return Resource.Error(e)
+    suspend fun searchPartyByPlace(placeId: String) = withContext(Dispatchers.IO) {
+        safeCall {
+            Resource.Success(
+                partiesRef
+                    .whereEqualTo("placeId" , placeId)
+                    .get()
+                    .await()
+                    .toObjects(Party::class.java)
+            )
         }
-        return Resource.Success()
     }
 
-    suspend fun updateParty(party: Party) {
+    suspend fun addParty(party: Party) = withContext(Dispatchers.IO) {
+        safeCall {
+            partiesRef.add(party).await()
+            Resource.Success<Unit>()
+        }
+    }
+
+    suspend fun updateParty(party: Party) = withContext(Dispatchers.IO) {
         partiesRef.document(party.id!!).set(party).await()
     }
 
-    suspend fun getPartiesByCurrentUser(): MutableList<Party> {
-        return partiesRef
-            .whereArrayContains("users" , auth.uid!!)
-            .get()
-            .await()
-            .toObjects(Party::class.java)
+    suspend fun getPartiesByCurrentUser() = withContext(Dispatchers.IO) {
+        safeCall {
+            Resource.Success(
+                partiesRef
+                    .whereArrayContains("users" , auth.uid!!)
+                    .get()
+                    .await()
+                    .toObjects(Party::class.java)
+            )
+        }
     }
 
-    suspend fun getCurrentUser(): User? = if (auth.uid != null) {
-        getUser(auth.uid!!)
-    } else {
-        null
+    suspend fun getCurrentUser(): Resource<User> = getUser(auth.uid!!)
+
+    suspend fun getUser(uid: String): Resource<User> = withContext(Dispatchers.IO) {
+        safeCall {
+            Resource.Success(
+                usersRef
+                    .document(uid)
+                    .get()
+                    .await()
+                    .toObject(User::class.java)
+            )
+        }
     }
 
-    suspend fun getUser(uid: String): User {
-        val user = usersRef
-            .document(uid)
-            .get()
-            .await()
-            .toObject(User::class.java)!!
-        Timber.d("getUser: $user")
-        return user
-    }
 
-
-    fun getCurrentUserId(): String = FirebaseAuth.getInstance().currentUser!!.uid
+    fun getCurrentUserId(): String = auth.uid!!
 
     fun signOut() {
         FirebaseAuth.getInstance().signOut()
@@ -100,99 +105,117 @@ class FirebaseRepository {
         return auth.currentUser != null
     }
 
-    suspend fun signIn(email: String , password: String): Resource<Boolean> {
-        val firebaseUser: FirebaseUser?
-        try {
+    suspend fun signIn(email: String , password: String) = withContext(Dispatchers.IO) {
+        safeCall {
+            val firebaseUser: FirebaseUser?
             val result = auth
                 .signInWithEmailAndPassword(email , password)
                 .await()
             firebaseUser = result.user
-        } catch (e: FirebaseException) {
-            Timber.d(e)
-            return Resource.Error(e)
+            Resource.Success(firebaseUser != null)
         }
-        return Resource.Success(firebaseUser != null)
     }
 
     suspend fun signUpWithEmailAndPassword(
         userInfo: User ,
         password: String
-    ): Resource<Unit> {
-        val firebaseUser: FirebaseUser?
-        try {
+    ) = withContext(Dispatchers.IO) {
+        safeCall {
+            val firebaseUser: FirebaseUser?
             val result = FirebaseAuth.getInstance()
                 .createUserWithEmailAndPassword(userInfo.email!! , password)
                 .await()
             firebaseUser = result.user
-        } catch (e: FirebaseException) {
-            Timber.d(e)
-            return Resource.Error(e)
-        }
-        userInfo.imageUri = Constants.DEFAULT_IMAGE_URL
-        usersRef.document(firebaseUser!!.uid).set(userInfo).await()
-        return Resource.Success(null)
-    }
-
-    suspend fun getNearbyUsers(): MutableList<User> {
-        val currentUser = getUser(auth.uid!!)
-        val excludeUsers = currentUser.likedUsers +
-                currentUser.dislikedUsers +
-                currentUser.id
-        val queryRef = usersRef.whereNotIn(
-            // Ищем по ID документа
-            FieldPath.documentId() ,
-            excludeUsers
-        )
-
-        val users = queryRef.get().await().toObjects(User::class.java)
-        Timber.d("users: $users")
-        return users
-    }
-
-    suspend fun dislikeUser(user: User) {
-        if (user.id == null) {
-            return
-        }
-        val documentRef = usersRef.document(auth.uid!!)
-        val document = documentRef.get().await()
-        val field = document.get("dislikedUsers")
-        if (field != null) {
-            val value = field as MutableList<String>
-            value.add(user.id!!)
-            documentRef.update("dislikedUsers" , value).await()
-        } else {
-            documentRef.update(
-                "dislikedUsers" , mutableListOf(user.id!!)
-            ).await()
+            userInfo.imageUri = Constants.DEFAULT_IMAGE_URL
+            usersRef.document(firebaseUser!!.uid).set(userInfo).await()
+            Resource.Success<Unit>()
         }
     }
 
-    suspend fun likeUser(user: User): Boolean {
-        val documentRef = usersRef.document(auth.uid!!)
-        val document = documentRef.get().await()
-        val field = document.get("likedUsers")
-        if (field != null) {
-            val value = field as MutableList<String>
-            user.id?.let { value.add(it) }
-            documentRef.update("likedUsers" , value).await()
-        } else {
-            documentRef.update("likedUsers" , mutableListOf(user.id!!)).await()
+    suspend fun getNearbyUsers() = withContext(Dispatchers.IO) {
+        safeCall {
+            val currentUser = getUser(auth.uid!!).data!!
+            val excludeUsers = currentUser.likedUsers +
+                    currentUser.dislikedUsers +
+                    currentUser.id
+            val queryRef = usersRef.whereNotIn(
+                // Ищем по ID документа
+                FieldPath.documentId() ,
+                excludeUsers
+            )
+
+            val users = queryRef.get().await().toObjects(User::class.java)
+            Timber.d("users: $users")
+            Resource.Success(users)
         }
-        return user.likedUsers.contains(document.id)
     }
 
-    suspend fun getPartyById(id: String): Party? {
-        return partiesRef.document(id).get().await().toObject(Party::class.java)
+    suspend fun dislikeUser(user: User) = withContext(Dispatchers.IO) {
+        safeCall {
+            if (user.id == null) {
+                return@withContext
+            }
+            val documentRef = usersRef.document(auth.uid!!)
+            val document = documentRef.get().await()
+            val field = document.get("dislikedUsers")
+            if (field != null) {
+                val value = field as MutableList<String>
+                value.add(user.id!!)
+                documentRef.update("dislikedUsers" , value).await()
+            } else {
+                documentRef.update(
+                    "dislikedUsers" , mutableListOf(user.id!!)
+                ).await()
+            }
+            Resource.Success<Unit>()
+        }
     }
 
-    suspend fun getPartyParticipants(party: Party): MutableList<User> {
-        return usersRef.whereIn(
-            FieldPath.documentId() ,
-            party.users
-        ).get().await().toObjects(User::class.java)
+    suspend fun likeUser(user: User) = withContext(Dispatchers.IO) {
+        safeCall {
+            val documentRef = usersRef.document(auth.uid!!)
+            val document = documentRef.get().await()
+            val field = document.get("likedUsers")
+            if (field != null) {
+                val value = field as MutableList<String>
+                user.id?.let { value.add(it) }
+                documentRef.update("likedUsers" , value).await()
+            } else {
+                documentRef.update("likedUsers" , mutableListOf(user.id!!)).await()
+            }
+            if (user.likedUsers.contains(document.id)) {
+                Resource.Success(user)
+            } else {
+                Resource.Success(null)
+            }
+        }
     }
 
-    suspend fun addCurrentUserToParty(party: Party) {
+    suspend fun getPartyById(id: String) = withContext(Dispatchers.IO) {
+        safeCall {
+            Resource.Success(
+                partiesRef
+                    .document(id)
+                    .get()
+                    .await()
+                    .toObject(Party::class.java)
+            )
+        }
+    }
+
+    suspend fun getPartyParticipants(party: Party) = withContext(Dispatchers.IO) {
+        safeCall {
+            Resource.Success(
+                usersRef
+                    .whereIn(FieldPath.documentId() , party.users)
+                    .get()
+                    .await()
+                    .toObjects(User::class.java)
+            )
+        }
+    }
+
+    suspend fun addCurrentUserToParty(party: Party) = withContext(Dispatchers.IO) {
         val uid = FirebaseAuth.getInstance().currentUser?.uid!!
         if (!party.users.contains(uid)) {
             party.users.add(uid)

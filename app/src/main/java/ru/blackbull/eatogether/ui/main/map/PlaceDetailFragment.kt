@@ -15,7 +15,9 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyAdapter
 import ru.blackbull.eatogether.adapters.ReviewAdapter
 import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
+import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.PhotoUtility.getPhotoUrl
+import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
 
 
@@ -78,25 +80,33 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
     }
 
     private fun subscribeToObservers() {
-        placeDetailViewModel.placeDetail.observe(viewLifecycleOwner , Observer { placeDetail ->
-            Timber.d("PlaceDetail: $placeDetail")
+        placeDetailViewModel.placeDetail.observe(viewLifecycleOwner , EventObserver(
+            onError = {
+                snackbar(it)
+            } ,
+            onLoading = {
+
+            }
+        ) { placeDetail ->
             updatePlaceInfo(placeDetail)
         })
-        placeDetailViewModel.searchParties.observe(viewLifecycleOwner , Observer { parties ->
-            Timber.d("Parties: $parties")
+        placeDetailViewModel.searchParties.observe(viewLifecycleOwner , EventObserver(
+            onError = {
+                snackbar(it)
+            } ,
+            onLoading = {
+
+            }
+        ) { parties ->
             partiesAdapter.parties = parties
         })
     }
 
-    private fun updatePlaceInfo(place: PlaceDetail?) {
-        if (place == null) {
-            Timber.d("PlaceDetail is null")
-            throw RuntimeException("cannot get place information")
-        }
+    private fun updatePlaceInfo(place: PlaceDetail) {
         tvPlaceDetailName.text = place.name
         tvPlaceDetailAddress.text = place.formatted_address
         tvPlaceDetailPhone.text = place.formatted_phone_number
-        tvPlaceDetailOpenNow.text = if (place.isOpen() == true) {
+        tvPlaceDetailOpenNow.text = if (place.isOpen()) {
             "Открыто"
         } else {
             "Закрыто"

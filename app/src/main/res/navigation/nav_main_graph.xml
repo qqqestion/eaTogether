@@ -2,39 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
-    app:startDestination="@id/startFragment">
+    android:id="@+id/nav_main_graph"
+    app:startDestination="@id/mapFragment">
 
-    <fragment
-        android:id="@+id/startFragment"
-        android:name="ru.blackbull.eatogether.ui.auth.StartFragment"
-        android:label="StartFragment">
-        <action
-            android:id="@+id/action_startFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_startFragment_to_registrationFragment"
-            app:destination="@id/registrationFragment" />
-        <action
-            android:id="@+id/action_startFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="ru.blackbull.eatogether.ui.auth.LoginFragment"
-        android:label="LoginFragment" >
-        <action
-            android:id="@+id/action_loginFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/registrationFragment"
-        android:name="ru.blackbull.eatogether.ui.auth.RegistrationFragment"
-        android:label="RegistrationFragment" >
-        <action
-            android:id="@+id/action_registrationFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
-    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="ru.blackbull.eatogether.ui.main.profile.ProfileFragment"
@@ -43,9 +13,6 @@
         <action
             android:id="@+id/action_profileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
-        <action
-            android:id="@+id/action_profileFragment_to_startFragment"
-            app:destination="@id/startFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -62,21 +29,15 @@
         <action
             android:id="@+id/action_mapFragment_to_placeDetailFragment"
             app:destination="@id/placeDetailFragment" />
-        <action
-            android:id="@+id/action_mapFragment_to_startFragment"
-            app:destination="@id/startFragment" />
     </fragment>
     <fragment
         android:id="@+id/cardFragment"
-        android:name="ru.blackbull.eatogether.ui.main.nearby.CardFragment"
+        android:name="ru.blackbull.eatogether.ui.main.nearby.NearbyFragment"
         android:label="fragment_card"
-        tools:layout="@layout/fragment_card" >
+        tools:layout="@layout/fragment_nearby" >
         <action
             android:id="@+id/action_cardFragment_to_matchFragment"
             app:destination="@id/matchFragment" />
-        <action
-            android:id="@+id/action_cardFragment_to_startFragment"
-            app:destination="@id/startFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPartyFragment"

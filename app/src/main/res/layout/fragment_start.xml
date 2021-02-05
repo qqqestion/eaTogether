@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     android:foregroundTint="@color/colorLiteGrey"
-    tools:context=".ui.StartActivity">
+    tools:context=".ui.auth.AuthActivity">
 
     <TextView
         android:layout_width="@dimen/eatogether_title_width"

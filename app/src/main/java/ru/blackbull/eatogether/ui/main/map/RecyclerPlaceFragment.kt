@@ -12,12 +12,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_recycler_place.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PlaceListAdapter
+import ru.blackbull.eatogether.other.EventObserver
+import ru.blackbull.eatogether.ui.main.snackbar
 
 @AndroidEntryPoint
 class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
 
     val args: RecycleRestaurantsFragmentArgs by navArgs()
-    private val mapViewModel: MapViewModel by viewModels()
+    private val viewModel: MapViewModel by viewModels()
 
     private lateinit var placeAdapter: PlaceListAdapter
 
@@ -26,7 +28,7 @@ class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
         subscribeToObservers()
         setupRecyclerView()
         val location = args.location
-        mapViewModel.getNearbyPlaces(location.latitude , location.longitude)
+        viewModel.getNearbyPlaces(location.latitude , location.longitude)
         placeAdapter.setOnItemClickListener { location ->
             val bundle = Bundle().apply {
                 putString("placeId" , location.placeId)
@@ -39,7 +41,14 @@ class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
     }
 
     private fun subscribeToObservers() {
-        mapViewModel.nearbyPlaces.observe(viewLifecycleOwner , Observer { places ->
+        viewModel.nearbyPlaces.observe(viewLifecycleOwner , EventObserver(
+            onError = {
+                snackbar(it)
+            } ,
+            onLoading = {
+
+            }
+        ) { places ->
             placeAdapter.places = places
         })
     }

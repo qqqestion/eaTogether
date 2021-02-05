@@ -13,16 +13,21 @@ import androidx.navigation.fragment.findNavController
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.firebase.Timestamp
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.extensions.shortToast
 import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.eatogether.other.EventObserver
+import ru.blackbull.eatogether.ui.auth.AuthActivity
+import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.Date
 
+@AndroidEntryPoint
 class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
 
     private val PICK_IMAGE: Int = 100
@@ -38,7 +43,10 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         edit_profile_save_btn.setOnClickListener { onClickSaveButton() }
         btnEditProfileSignOut.setOnClickListener {
             firebaseViewModel.signOut()
-            findNavController().popBackStack()
+            Intent(requireContext(), AuthActivity::class.java).also {
+                startActivity(it)
+                requireActivity().finish()
+            }
         }
         btnEditProfileChangePhoto.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK , MediaStore.Images.Media.INTERNAL_CONTENT_URI)
@@ -51,7 +59,14 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
     }
 
     private fun subscribeToObservers() {
-        firebaseViewModel.currentUser.observe(viewLifecycleOwner , Observer { newUser ->
+        firebaseViewModel.currentUser.observe(viewLifecycleOwner , EventObserver(
+            onError = {
+                snackbar(it)
+            } ,
+            onLoading = {
+
+            }
+        ) { newUser ->
             if (newUser == null) {
                 findNavController().popBackStack()
             }

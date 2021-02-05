@@ -1,5 +1,6 @@
-package ru.blackbull.eatogether.ui.auth
+package ru.blackbull.eatogether.ui.auth.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -12,6 +13,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.eatogether.ui.auth.AuthViewModel
+import ru.blackbull.eatogether.ui.main.MainActivity
 
 @AndroidEntryPoint
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -35,9 +38,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             when (signInResult) {
                 is Resource.Success -> {
                     loginProgressBar.isVisible = false
-                    findNavController().navigate(
-                        R.id.action_loginFragment_to_mapFragment
-                    )
+                    Intent(requireContext() , MainActivity::class.java).also {
+                        startActivity(it)
+                        requireActivity().finish()
+                    }
                 }
                 is Resource.Error -> {
                     val msg = getString(R.string.errormessage_login_error)

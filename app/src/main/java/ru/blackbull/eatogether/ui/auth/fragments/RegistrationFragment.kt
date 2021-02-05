@@ -1,5 +1,6 @@
-package ru.blackbull.eatogether.ui.auth
+package ru.blackbull.eatogether.ui.auth.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -15,6 +16,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_registration.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.eatogether.ui.auth.AuthViewModel
+import ru.blackbull.eatogether.ui.main.MainActivity
 import ru.blackbull.eatogether.ui.main.snackbar
 
 @AndroidEntryPoint
@@ -48,9 +51,10 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
             when (result) {
                 is Resource.Success -> {
                     registrationProgressBar.isVisible = false
-                    findNavController().navigate(
-                        R.id.action_registrationFragment_to_mapFragment
-                    )
+                    Intent(requireContext() , MainActivity::class.java).also {
+                        startActivity(it)
+                        requireActivity().finish()
+                    }
                 }
                 is Resource.Error -> {
                     registrationProgressBar.isVisible = false
