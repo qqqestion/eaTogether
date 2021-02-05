@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="text_size">22sp</dimen>
+    <dimen name="eatogether_title_font">40sp</dimen>
+    <dimen name="eatogether_title_height">110dp</dimen>
+    <dimen name="eatogether_title_width">350dp</dimen>
+    <dimen name="eatogether_title_mangin_top">100dp</dimen>
+    <dimen name="auth_buttons_margin_bot">15dp</dimen>
+    <dimen name="image_button_size">30dp</dimen>
+</resources>

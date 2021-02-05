@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:foregroundTint="@color/colorLiteGrey"
+    tools:context=".ui.main.profile.ProfileFragment">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="180dp"
+        android:background="@drawable/rounded_panel_left_down"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnProfileMenu"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/content_description_menu_btn"
+        android:src="@drawable/btn_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvProfileTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="@string/profile"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view" />
+
+    <TextView
+        android:id="@+id/tvProfileGreeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="40dp"
+        android:text="@string/hi"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/ibtnProfileImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnProfileMenu" />
+
+    <TextView
+        android:id="@+id/tvProfileQuesting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hi_2"
+        android:textColor="@color/colorWhite"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/ibtnProfileImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvProfileGreeting" />
+
+    <TextView
+        android:id="@+id/tvProfileStatisticLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/week_stats"
+        android:textColor="@color/colorDark"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view" />
+
+    <ImageButton
+        android:id="@+id/ibtnProfileImage"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="28dp"
+        android:background="@drawable/profile_photo"
+        android:contentDescription="@string/content_description_profile_image"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnProfileMenu" />
+
+    <ImageButton
+        android:id="@+id/ibtnProfileSettings"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/rounded_button_pink"
+        android:src="@drawable/ic_baseline_settings_24"
+        app:layout_constraintBottom_toBottomOf="@+id/ibtnProfileImage"
+        app:layout_constraintEnd_toEndOf="@+id/ibtnProfileImage"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/ibtnProfileImage"
+        app:layout_constraintTop_toTopOf="@+id/ibtnProfileImage"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rounded_button_pink"
+        android:text="@string/profile_more"
+        android:textAllCaps="false"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvProfileStatisticLabel">
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/buttonTable1"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                android:background="@drawable/rounded_button_pink"
+                android:clickable="false"
+                android:textAllCaps="false" />
+
+            <Button
+                android:id="@+id/buttonTable2"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                android:background="@drawable/rounded_button_pink"
+                android:clickable="false"
+                android:textAllCaps="false" />
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/buttonTable3"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                android:background="@drawable/rounded_button_pink"
+                android:clickable="false"
+                android:textAllCaps="false" />
+
+
+            <Button
+                android:id="@+id/buttonTable4"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
+                android:background="@drawable/rounded_button_pink"
+                android:clickable="false"
+                android:textAllCaps="false" />
+        </TableRow>
+    </TableLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

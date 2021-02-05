@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_auth_graph"
+    app:startDestination="@id/startFragment">
+
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.StartFragment"
+        android:label="StartFragment">
+        <action
+            android:id="@+id/action_startFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.LoginFragment"
+        android:label="LoginFragment" />
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.RegistrationFragment"
+        android:label="RegistrationFragment" />
+</navigation>

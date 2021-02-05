@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "747876818678",
-    "firebase_url": "https://test-app-2bbb6.firebaseio.com",
-    "project_id": "test-app-2bbb6",
-    "storage_bucket": "test-app-2bbb6.appspot.com"
+    "project_number": "697487927411",
+    "firebase_url": "https://eatogether-a8490.firebaseio.com",
+    "project_id": "eatogether-a8490",
+    "storage_bucket": "eatogether-a8490.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:747876818678:android:f34989ca2538dacb6896d7",
+        "mobilesdk_app_id": "1:697487927411:android:28c5db6eb8a59a65e5a206",
         "android_client_info": {
-          "package_name": "com.emoji.eatogether"
+          "package_name": "ru.blackbull.eatogether"
         }
       },
       "oauth_client": [
         {
-          "client_id": "747876818678-k2u6u0kkvut8504l158413aq2e238gmf.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.emoji.eatogether",
-            "certificate_hash": "f93501db29e765e2a6547c68f7408de43dba0399"
-          }
-        },
-        {
-          "client_id": "747876818678-v40auv6eb44d5venaavtqos4lm89hepn.apps.googleusercontent.com",
+          "client_id": "697487927411-tf6kou6271l5cl1jl1mk5sikauieo465.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDZ4GmyiG-fZkmblC9mJ_r_DlfF1C_PpzA"
+          "current_key": "AIzaSyAWDGJalvmvDxficDxUmZmsPg2AB-FqlWk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "747876818678-v40auv6eb44d5venaavtqos4lm89hepn.apps.googleusercontent.com",
+              "client_id": "697487927411-tf6kou6271l5cl1jl1mk5sikauieo465.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

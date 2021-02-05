@@ -1,7 +1,5 @@
-*.iml
 !.gitignore
 .*
-*.properties
 /build
 /captures
 .externalNativeBuild
