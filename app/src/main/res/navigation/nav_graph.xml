@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="ru.blackbull.eatogether.ui.profile.ProfileFragment"
+        android:name="ru.blackbull.eatogether.ui.main.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" >
         <action
@@ -49,12 +49,12 @@
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="ru.blackbull.eatogether.ui.profile.EditProfileFragment"
+        android:name="ru.blackbull.eatogether.ui.main.profile.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile" />
     <fragment
         android:id="@+id/mapFragment"
-        android:name="ru.blackbull.eatogether.ui.map.MapFragment"
+        android:name="ru.blackbull.eatogether.ui.main.map.MapFragment"
         android:label="MapFragment" >
         <action
             android:id="@+id/action_mapFragment_to_recycleRestaurantsFragment"
@@ -68,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/cardFragment"
-        android:name="ru.blackbull.eatogether.ui.nearby.CardFragment"
+        android:name="ru.blackbull.eatogether.ui.main.nearby.CardFragment"
         android:label="fragment_card"
         tools:layout="@layout/fragment_card" >
         <action
@@ -80,7 +80,7 @@
     </fragment>
     <fragment
         android:id="@+id/myPartyFragment"
-        android:name="ru.blackbull.eatogether.ui.myparties.MyPartyFragment"
+        android:name="ru.blackbull.eatogether.ui.main.myparties.MyPartyFragment"
         android:label="MyPartyFragment" >
         <action
             android:id="@+id/action_myPartyFragment_to_partyDetailFragment"
@@ -88,7 +88,7 @@
     </fragment>
     <fragment
         android:id="@+id/createPartyFragment"
-        android:name="ru.blackbull.eatogether.ui.map.CreatePartyFragment"
+        android:name="ru.blackbull.eatogether.ui.main.map.CreatePartyFragment"
         android:label="fragment_create_party"
         tools:layout="@layout/fragment_create_party" >
         <argument
@@ -103,7 +103,7 @@
     </fragment>
     <fragment
         android:id="@+id/partyDetailFragment"
-        android:name="ru.blackbull.eatogether.ui.map.PartyDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.main.map.PartyDetailFragment"
         android:label="PartyDetailFragment" >
         <argument
             android:name="partyId"
@@ -111,7 +111,7 @@
     </fragment>
     <fragment
         android:id="@+id/placeDetailFragment"
-        android:name="ru.blackbull.eatogether.ui.map.PlaceDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.main.map.PlaceDetailFragment"
         android:label="fragment_place_detail"
         tools:layout="@layout/fragment_place_detail" >
         <action
@@ -126,7 +126,7 @@
     </fragment>
     <fragment
         android:id="@+id/matchFragment"
-        android:name="ru.blackbull.eatogether.ui.nearby.MatchFragment"
+        android:name="ru.blackbull.eatogether.ui.main.nearby.MatchFragment"
         android:label="MatchFragment" >
         <argument
             android:name="matchedUser"
@@ -134,7 +134,7 @@
     </fragment>
     <fragment
         android:id="@+id/recycleRestaurantsFragment"
-        android:name="ru.blackbull.eatogether.ui.map.RecycleRestaurantsFragment"
+        android:name="ru.blackbull.eatogether.ui.main.map.RecycleRestaurantsFragment"
         android:label="RecycleRestaurantsFragment" >
         <action
             android:id="@+id/action_recycleRestaurantsFragment_to_placeDetailFragment"

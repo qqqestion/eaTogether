@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.nearby
+package ru.blackbull.eatogether.ui.main.nearby
 
 import android.os.Bundle
 import android.util.Log

@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.map
+package ru.blackbull.eatogether.ui.main.map
 
 import android.os.Bundle
 import android.view.View

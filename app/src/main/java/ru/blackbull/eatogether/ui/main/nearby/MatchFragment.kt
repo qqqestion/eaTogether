@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.nearby
+package ru.blackbull.eatogether.ui.main.nearby
 
 import android.os.Bundle
 import android.view.View
@@ -10,12 +10,11 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import kotlinx.android.synthetic.main.fragment_match.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 
 
 class MatchFragment : Fragment(R.layout.fragment_match) {
 
-    private val firebaseViewModel: FirebaseViewModel by viewModels()
+    private val viewModel: MatchViewModel by viewModels()
     private val args: MatchFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
@@ -26,13 +25,13 @@ class MatchFragment : Fragment(R.layout.fragment_match) {
             transformations(CircleCropTransformation())
         }
 
-        firebaseViewModel.user.observe(viewLifecycleOwner , Observer { currentUser ->
+        viewModel.user.observe(viewLifecycleOwner , Observer { currentUser ->
             ivFirstUser.load(currentUser.imageUri) {
                 transformations(CircleCropTransformation())
             }
             tvMatchLabel.text =
                 "У вас взаимный лайк с ${matchedUser.firstName} ${matchedUser.lastName}"
         })
-        firebaseViewModel.getCurrentUser()
+        viewModel.getCurrentUser()
     }
 }

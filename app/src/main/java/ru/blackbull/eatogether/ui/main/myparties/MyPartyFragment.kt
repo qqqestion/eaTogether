@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.myparties
+package ru.blackbull.eatogether.ui.main.myparties
 
 import android.os.Bundle
 import android.view.View
@@ -11,12 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_my_parties_rv.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyAdapter
-import ru.blackbull.eatogether.ui.viewmodels.FirebaseViewModel
 
 class MyPartyFragment : Fragment(R.layout.fragment_my_parties_rv) {
 
     private lateinit var partiesAdapter: PartyAdapter
-    private val viewModel: FirebaseViewModel by viewModels()
+    private val viewModel: MyPartyViewModel by viewModels()
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)

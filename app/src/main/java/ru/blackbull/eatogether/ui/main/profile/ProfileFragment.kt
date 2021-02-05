@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.profile
+package ru.blackbull.eatogether.ui.main.profile
 
 import android.os.Bundle
 import android.view.View

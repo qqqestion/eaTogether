@@ -1,14 +1,13 @@
 package ru.blackbull.eatogether.ui.auth
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*
 import ru.blackbull.eatogether.R
@@ -35,6 +34,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         authViewModel.signInResult.observe(viewLifecycleOwner , Observer { signInResult ->
             when (signInResult) {
                 is Resource.Success -> {
+                    loginProgressBar.isVisible = false
                     findNavController().navigate(
                         R.id.action_loginFragment_to_mapFragment
                     )
@@ -42,8 +42,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 is Resource.Error -> {
                     val msg = getString(R.string.errormessage_login_error)
                     Snackbar.make(requireView() , msg , Snackbar.LENGTH_SHORT).show()
+                    loginProgressBar.isVisible = false
                 }
                 is Resource.Loading -> {
+                    loginProgressBar.isVisible = true
                 }
             }
         })

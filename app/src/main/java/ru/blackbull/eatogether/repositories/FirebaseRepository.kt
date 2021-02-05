@@ -52,8 +52,10 @@ class FirebaseRepository {
             .toObjects(Party::class.java)
     }
 
-    suspend fun getCurrentUser(): User? {
-        return getUser(auth.uid!!)
+    suspend fun getCurrentUser(): User? = if (auth.uid != null) {
+        getUser(auth.uid!!)
+    } else {
+        null
     }
 
     suspend fun getUser(uid: String): User {

@@ -3,11 +3,11 @@ package ru.blackbull.eatogether.ui.auth
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_registration.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.eatogether.ui.main.snackbar
 
 @AndroidEntryPoint
 class RegistrationFragment : Fragment(R.layout.fragment_registration) {
@@ -46,12 +47,13 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
         authViewModel.signUpResult.observe(viewLifecycleOwner , Observer { result ->
             when (result) {
                 is Resource.Success -> {
-                    btnRegistrationNextAndConfirm.isEnabled = true
+                    registrationProgressBar.isVisible = false
                     findNavController().navigate(
                         R.id.action_registrationFragment_to_mapFragment
                     )
                 }
                 is Resource.Error -> {
+                    registrationProgressBar.isVisible = false
                     val stringId = when (result.error) {
                         is FirebaseAuthWeakPasswordException ->
                             R.string.errormessage_weak_password
@@ -67,15 +69,10 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
                         getString(stringId)
                     }
 
-                    Snackbar.make(
-                        requireView() ,
-                        msg ,
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                    btnRegistrationNextAndConfirm.isEnabled = true
+                    snackbar(msg)
                 }
                 is Resource.Loading -> {
-                    btnRegistrationNextAndConfirm.isEnabled = false
+                    registrationProgressBar.isVisible = true
                 }
             }
         })
@@ -107,11 +104,7 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
     private fun onStepForward() {
         val password = etRegistrationPassword.text.toString()
         if (password != etRegistrationPasswordConfirmation.text.toString()) {
-            Snackbar.make(
-                requireView() ,
-                getString(R.string.errormessage_passwords_mismatch) ,
-                Snackbar.LENGTH_LONG
-            ).show()
+            snackbar(getString(R.string.errormessage_passwords_mismatch))
             return
         }
         llRegistrationFirstStep.visibility = View.GONE

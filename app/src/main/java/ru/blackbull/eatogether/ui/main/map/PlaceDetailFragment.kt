@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.map
+package ru.blackbull.eatogether.ui.main.map
 
 import android.os.Bundle
 import android.view.View
@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.fragment_place_detail.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyAdapter
 import ru.blackbull.eatogether.adapters.ReviewAdapter
-import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
 import ru.blackbull.eatogether.other.PhotoUtility.getPhotoUrl
 import timber.log.Timber

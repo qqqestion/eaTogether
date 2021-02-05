@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui
+package ru.blackbull.eatogether.ui.main
 
 import android.os.Bundle
 import android.view.Gravity

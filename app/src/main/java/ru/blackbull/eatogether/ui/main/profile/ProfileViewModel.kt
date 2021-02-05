@@ -1,31 +1,33 @@
-package ru.blackbull.eatogether.ui.viewmodels
+package ru.blackbull.eatogether.ui.main.profile
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.repositories.FirebaseRepository
 
-
-class FirebaseViewModel : ViewModel() {
+class ProfileViewModel : ViewModel() {
 
     private val firebaseRepository = FirebaseRepository()
 
-    val userParties: MutableLiveData<List<Party>> = MutableLiveData()
-
-    val user: MutableLiveData<User> = MutableLiveData()
-
-    fun getPartiesByCurrentUser() = viewModelScope.launch {
-        val parties = firebaseRepository.getPartiesByCurrentUser()
-        userParties.postValue(parties)
-    }
+    val currentUser = MutableLiveData<User?>()
 
     fun getCurrentUser() = viewModelScope.launch {
         val foundUser = firebaseRepository.getCurrentUser()
         Log.d("ImageDebug" , "viewModel user: $foundUser")
-        user.postValue(foundUser)
+        currentUser.postValue(foundUser)
     }
+
+    fun signOut() = firebaseRepository.signOut()
+
+    fun isAuthenticated() = firebaseRepository.isAuthenticated()
+
+    fun updateUser(updatedUser: User) = viewModelScope.launch {
+        updatedUser.imageUri = currentUser.value?.imageUri
+        firebaseRepository.updateUser(updatedUser)
+        currentUser.postValue(updatedUser)
+    }
+
 }
