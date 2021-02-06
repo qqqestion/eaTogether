@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_child_graph"
+    app:startDestination="@id/recycleRestaurantsFragment">
+
+    <fragment
+        android:id="@+id/createPartyFragment"
+        android:name="ru.blackbull.eatogether.ui.main.map.CreatePartyFragment"
+        android:label="@string/title_create_party"
+        tools:layout="@layout/fragment_create_party">
+        <argument
+            android:name="placeId"
+            app:argType="string" />
+        <argument
+            android:name="placeName"
+            app:argType="string" />
+        <argument
+            android:name="placeAddress"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/partyDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.main.map.PartyDetailFragment"
+        android:label="@string/title_party_detail"
+        tools:layout="@layout/fragment_party_detail">
+        <argument
+            android:name="partyId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/placeDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.main.map.PlaceDetailFragment"
+        android:label="@string/title_place_detail"
+        tools:layout="@layout/fragment_place_detail">
+        <action
+            android:id="@+id/action_placeDetailFragment_to_createPartyFragment"
+            app:destination="@id/createPartyFragment" />
+        <action
+            android:id="@+id/action_placeDetailFragment_to_partyDetailFragment"
+            app:destination="@id/partyDetailFragment" />
+        <argument
+            android:name="placeId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/recycleRestaurantsFragment"
+        android:name="ru.blackbull.eatogether.ui.main.map.RecycleRestaurantsFragment"
+        android:label="@string/title_place_list"
+        tools:layout="@layout/fragment_recycler_place">
+        <action
+            android:id="@+id/action_recycleRestaurantsFragment_to_placeDetailFragment"
+            app:destination="@id/placeDetailFragment" />
+        <argument
+            android:name="location"
+            app:argType="com.google.android.gms.maps.model.LatLng"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+</navigation>

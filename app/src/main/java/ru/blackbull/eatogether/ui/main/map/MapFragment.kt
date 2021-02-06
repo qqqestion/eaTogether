@@ -5,10 +5,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
+import android.widget.ScrollView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -19,7 +20,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -44,7 +47,9 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
 
     private var map: GoogleMap? = null
 
-    private val mapViewModel: MapViewModel by viewModels()
+    private lateinit var viewModel: MapViewModel
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ScrollView>
 
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -54,11 +59,16 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
     @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
         subscribeToObservers()
         requestPermission()
-        Timber.d("mapFragment")
         mapView?.onCreate(savedInstanceState)
         setupFusedLocationProviderClient()
+
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.peekHeight = 200
+        Timber.d("Height: ${bottomSheetBehavior.peekHeight}")
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         var job: Job? = null
         etMapSearchPlaces.addTextChangedListener { editable ->
@@ -70,7 +80,7 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
                         marker.remove()
                     }
 
-                    mapViewModel.searchPlaces(it.toString())
+                    viewModel.searchPlaces(it.toString())
                 }
             }
         }
@@ -79,22 +89,23 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
             map = it
             map?.isMyLocationEnabled = true
             map?.setOnMapLongClickListener { location ->
-                findNavController().navigate(
-                    MapFragmentDirections.actionMapFragmentToRecycleRestaurantsFragment(location)
-                )
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                viewModel.getNearbyPlaces(location.latitude, location.longitude)
+//                findNavController().navigate(
+//                    MapFragmentDirections.actionMapFragmentToRecycleRestaurantsFragment(location)
+//                )
             }
             map?.setOnMarkerClickListener { marker ->
-                findNavController().navigate(
-                    MapFragmentDirections.actionMapFragmentToPlaceDetailFragment(marker.tag.toString())
-                )
+//                findNavController().navigate(
+//                    MapFragmentDirections.actionMapFragmentToPlaceDetailFragment(marker.tag.toString())
+//                )
                 true
             }
-            Timber.d("getMapAsync")
         }
     }
 
     private fun subscribeToObservers() {
-        mapViewModel.searchPlaces.observe(viewLifecycleOwner , EventObserver(
+        viewModel.searchPlaces.observe(viewLifecycleOwner , EventObserver(
             onError = {
                 snackbar(it)
             } ,

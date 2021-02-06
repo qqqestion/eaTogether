@@ -1,5 +1,6 @@
 package ru.blackbull.eatogether.ui.main.profile
 
+import android.net.Uri
 import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -19,6 +20,9 @@ class ProfileViewModel @ViewModelInject constructor(
     private val _currentUser = MutableLiveData<Event<Resource<User?>>>()
     val currentUser: LiveData<Event<Resource<User?>>> = _currentUser
 
+    private val _currentPhoto = MutableLiveData<Uri>()
+    val currentPhoto: LiveData<Uri> = _currentPhoto
+
     fun getCurrentUser() = viewModelScope.launch {
         _currentUser.postValue(Event(Resource.Loading()))
         val foundUser = firebaseRepository.getCurrentUser()
@@ -28,15 +32,16 @@ class ProfileViewModel @ViewModelInject constructor(
 
     fun signOut() = firebaseRepository.signOut()
 
-    fun isAuthenticated() = firebaseRepository.isAuthenticated()
-
-    fun updateUser(updatedUser: User) = viewModelScope.launch {
+    fun updateUser(user: User , photoUri: Uri) = viewModelScope.launch {
         _currentUser.postValue(Event(Resource.Loading()))
-        currentUser.value?.let { event ->
-            updatedUser.imageUri = event.peekContent().data?.imageUri
-        }
-        firebaseRepository.updateUser(updatedUser)
-        _currentUser.postValue(Event(Resource.Success(updatedUser)))
+//        currentUser.value?.let { event ->
+//            user.imageUri = event.peekContent().data?.imageUri
+//        }
+        firebaseRepository.updateUser(user, photoUri)
+        _currentUser.postValue(Event(Resource.Success(user)))
     }
 
+    fun setPhoto(uri: Uri) {
+        _currentPhoto.postValue(uri)
+    }
 }

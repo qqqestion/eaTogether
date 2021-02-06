@@ -33,9 +33,9 @@ class MyPartyFragment : Fragment(R.layout.fragment_my_parties_rv) {
     private fun setupAdapter(rv: RecyclerView) {
         partiesAdapter = PartyAdapter()
         partiesAdapter.setOnItemViewClickListener { party ->
-            findNavController().navigate(
-                MyPartyFragmentDirections.actionMyPartyFragmentToPartyDetailFragment(party.id!!)
-            )
+//            findNavController().navigate(
+//                MyPartyFragmentDirections.actionMyPartyFragmentToPartyDetailFragment(party.id!!)
+//            )
         }
 //        partiesAdapter.setOnJoinCLickListener { party ->
 //            viewModel.addUserToParty(party)

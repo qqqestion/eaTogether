@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,16 +20,20 @@ import ru.blackbull.eatogether.ui.main.snackbar
 class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
 
     val args: RecycleRestaurantsFragmentArgs by navArgs()
-    private val viewModel: MapViewModel by viewModels()
+    private lateinit var viewModel: MapViewModel
 
     private lateinit var placeAdapter: PlaceListAdapter
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity()).get(MapViewModel::class.java)
         subscribeToObservers()
         setupRecyclerView()
         val location = args.location
-        viewModel.getNearbyPlaces(location.latitude , location.longitude)
+//        loca
+//        location?.let {
+//            viewModel.getNearbyPlaces(it.latitude , it.longitude)
+//        }
         placeAdapter.setOnItemClickListener { location ->
             val bundle = Bundle().apply {
                 putString("placeId" , location.placeId)

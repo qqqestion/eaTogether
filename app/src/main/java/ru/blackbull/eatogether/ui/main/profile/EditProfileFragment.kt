@@ -32,9 +32,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
 
     private val PICK_IMAGE: Int = 100
 
-    private val firebaseViewModel: ProfileViewModel by viewModels()
-
-    private var savedUri: Uri? = null
+    private val viewModel: ProfileViewModel by viewModels()
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
@@ -42,8 +40,8 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
 
         edit_profile_save_btn.setOnClickListener { onClickSaveButton() }
         btnEditProfileSignOut.setOnClickListener {
-            firebaseViewModel.signOut()
-            Intent(requireContext(), AuthActivity::class.java).also {
+            viewModel.signOut()
+            Intent(requireContext() , AuthActivity::class.java).also {
                 startActivity(it)
                 requireActivity().finish()
             }
@@ -56,34 +54,33 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         btnEditProfileBack.setOnClickListener {
             findNavController().popBackStack()
         }
+        viewModel.getCurrentUser()
     }
 
     private fun subscribeToObservers() {
-        firebaseViewModel.currentUser.observe(viewLifecycleOwner , EventObserver(
+        viewModel.currentUser.observe(viewLifecycleOwner , EventObserver(
             onError = {
                 snackbar(it)
             } ,
             onLoading = {
 
             }
-        ) { newUser ->
-            if (newUser == null) {
-                findNavController().popBackStack()
-            }
+        ) { user ->
             // Костыль, чтобы изображение сбрасывалось,
             // когда выходишь из фрагмента, и сохранялось,
             // когда нажимаешь сохранить
-            if (savedUri == null) {
-                savedUri = Uri.parse(newUser!!.imageUri)
+            if (viewModel.currentPhoto.value == null) {
+                viewModel.setPhoto(Uri.parse(user?.imageUri))
             }
-            Timber.d("savedUri in user: $savedUri")
-            updateUserInfo(newUser!!)
+            Timber.d("currentUser: ${viewModel.currentPhoto.value}")
+            updateUserInfo(user!!)
         })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        firebaseViewModel.getCurrentUser()
+        viewModel.currentPhoto.observe(viewLifecycleOwner , { uri ->
+            Timber.d("currentPhoto: $uri")
+            ivEditProfileImage.load(uri) {
+                transformations(CircleCropTransformation())
+            }
+        })
     }
 
     private fun onClickSaveButton() {
@@ -103,8 +100,9 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
             return
         }
         user.birthday = Timestamp(date)
-        user.imageUri = savedUri.toString()
-        firebaseViewModel.updateUser(user)
+        Timber.d(viewModel.currentPhoto.value.toString())
+        user.imageUri = viewModel.currentPhoto.value.toString()
+        viewModel.updateUser(user , viewModel.currentPhoto.value!!)
         shortToast("Профиль успешно обновлен")
     }
 
@@ -117,16 +115,16 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         val pattern = "dd.MM.yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern , Locale.US)
         etEditProfileBirthday.setText(simpleDateFormat.format(user.birthday?.toDate()!!))
-        ivEditProfileImage.load(savedUri) {
-            transformations(CircleCropTransformation())
-        }
+//        ivEditProfileImage.load(savedUri) {
+//            transformations(CircleCropTransformation())
+//        }
     }
 
     override fun onActivityResult(requestCode: Int , resultCode: Int , data: Intent?) {
         super.onActivityResult(requestCode , resultCode , data)
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
             val imageUri = data?.data ?: return
-            savedUri = imageUri
+            viewModel.setPhoto(imageUri)
         }
     }
 }

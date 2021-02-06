@@ -1,10 +1,12 @@
 package ru.blackbull.eatogether.repositories
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -80,7 +82,7 @@ class FirebaseRepository {
         FirebaseAuth.getInstance().signOut()
     }
 
-    suspend fun updateUser(user: User) {
+    suspend fun updateUser(user: User , photoUri: Uri) {
         val firebaseUser = auth.currentUser ?: return
         if (firebaseUser.email != user.email) {
             firebaseUser.updateEmail(user.email!!)
@@ -89,14 +91,13 @@ class FirebaseRepository {
 
         // Чтобы не фотография из firebase не загружалась повторно в firebase
         // TODO: добавить обновление фотографии
-//        if (user._imageUri?.host != "firebasestorage.googleapis.com") {
-//            val res = FirebaseStorage.getInstance().reference.child(firebaseUser.uid).putFile(
-//                Uri.parse(user.imageUri!!)
-//            ).await()
-//            val imageUri = res.metadata?.reference?.downloadUrl?.await()
-//
-//            user.imageUri = imageUri.toString()
-//        }
+        if (photoUri.host != "firebasestorage.googleapis.com") {
+            val res = FirebaseStorage.getInstance().reference.child(firebaseUser.uid).putFile(
+                photoUri
+            ).await()
+            val imageUri = res.metadata?.reference?.downloadUrl?.await()
+            user.imageUri = imageUri.toString()
+        }
 
         usersRef.document(auth.uid!!).set(user).await()
     }
