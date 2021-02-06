@@ -5,4 +5,5 @@
 .externalNativeBuild
 google-services.json
 gradle.properties
+*.properties
 .cxx
