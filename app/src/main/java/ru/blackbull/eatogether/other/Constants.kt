@@ -1,5 +1,7 @@
 package ru.blackbull.eatogether.other
 
+import ru.blackbull.eatogether.BuildConfig
+
 object Constants {
     const val REQUEST_CODE_LOCATION_PERMISSION = 0
 
@@ -9,7 +11,7 @@ object Constants {
 
     const val SEARCH_TIME_DELAY = 500L
 
-    const val GOOGLE_API_KEY = "AIzaSyBTkTz_lNZdylZI6vu3jvnJuGfekHxwXBA"
+    const val GOOGLE_API_KEY: String = BuildConfig.GOOGLE_API_KEY
     const val BASE_GOOGLE_API_URL = "https://maps.googleapis.com/maps/api/"
 
     const val DEFAULT_IMAGE_URL =

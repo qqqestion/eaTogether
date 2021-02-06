@@ -3,4 +3,6 @@
 /build
 /captures
 .externalNativeBuild
+google-services.json
+gradle.properties
 .cxx
