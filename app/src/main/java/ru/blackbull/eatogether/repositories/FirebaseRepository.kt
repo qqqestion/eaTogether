@@ -1,8 +1,10 @@
 package ru.blackbull.eatogether.repositories
 
+import android.location.Location
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +25,17 @@ class FirebaseRepository {
     private val usersRef = Firebase.firestore.collection("users")
     private val partiesRef = Firebase.firestore.collection("parties")
     private val notificationsRef = Firebase.firestore.collection("notifications")
+
+    suspend fun updateUserLocation(location: Location): Unit = withContext(Dispatchers.IO) {
+        val geoPoint = GeoPoint(
+            location.latitude , location.longitude
+        )
+        usersRef.document(
+            auth.uid!!
+        ).update(
+            hashMapOf<String , Any>("lastLocation" to geoPoint)
+        ).await()
+    }
 
     suspend fun searchPartyByPlace(placeId: String) = withContext(Dispatchers.IO) {
         safeCall {
@@ -224,7 +237,7 @@ class FirebaseRepository {
     }
 
     suspend fun sendLikeNotification(user: User) {
-        val notification = Notification(userId = user.id , type = "like")
-        notificationsRef.add(notification).await()
+//        val notification = Notification(userId = user.id , type = "like")
+//        notificationsRef.add(notification).await()
     }
 }

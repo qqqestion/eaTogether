@@ -16,4 +16,8 @@ object Constants {
 
     const val DEFAULT_IMAGE_URL =
         "https://firebasestorage.googleapis.com/v0/b/eatogether-a8490.appspot.com/o/download.jpeg?alt=media&token=6b9935b4-f29b-4720-92f2-a6f46449b16c"
+
+    const val START_SERVICE = "START_SERVICE"
+    const val STOP_SERVICE = "STOP_SERVICE"
+    const val TIMER_UPDATE_LOCATION_INTERVAL = 2000L
 }

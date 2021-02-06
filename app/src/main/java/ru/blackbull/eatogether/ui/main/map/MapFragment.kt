@@ -2,6 +2,7 @@ package ru.blackbull.eatogether.ui.main.map
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
@@ -33,8 +34,11 @@ import ru.blackbull.eatogether.other.Constants.LOCATION_UPDATE_INTERVAL
 import ru.blackbull.eatogether.other.Constants.MAP_ZOOM
 import ru.blackbull.eatogether.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import ru.blackbull.eatogether.other.Constants.SEARCH_TIME_DELAY
+import ru.blackbull.eatogether.other.Constants.START_SERVICE
+import ru.blackbull.eatogether.other.Constants.STOP_SERVICE
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.LocationUtility
+import ru.blackbull.eatogether.services.MainService
 import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
 import javax.inject.Inject
@@ -75,13 +79,22 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
             }
         }
 
-        mapView?.getMapAsync {
+        mapView?.getMapAsync { it ->
             map = it
             map?.isMyLocationEnabled = true
             map?.setOnMapLongClickListener { location ->
-                findNavController().navigate(
-                    MapFragmentDirections.actionMapFragmentToRecycleRestaurantsFragment(location)
-                )
+                val action = if (MainService.isWorking) {
+                    STOP_SERVICE
+                } else {
+                    START_SERVICE
+                }
+                Intent(requireContext() , MainService::class.java).also { intent ->
+                    intent.action = action
+                    requireActivity().startService(intent)
+                }
+//                findNavController().navigate(
+//                    MapFragmentDirections.actionMapFragmentToRecycleRestaurantsFragment(location)
+//                )
             }
             map?.setOnMarkerClickListener { marker ->
                 findNavController().navigate(

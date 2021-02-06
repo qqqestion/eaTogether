@@ -28,7 +28,9 @@ class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
         subscribeToObservers()
         setupRecyclerView()
         val location = args.location
-        viewModel.getNearbyPlaces(location.latitude , location.longitude)
+        location?.let {
+            viewModel.getNearbyPlaces(it.latitude , it.longitude)
+        }
         placeAdapter.setOnItemClickListener { location ->
             val bundle = Bundle().apply {
                 putString("placeId" , location.placeId)
