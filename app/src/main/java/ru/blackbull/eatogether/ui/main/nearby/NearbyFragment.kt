@@ -52,7 +52,7 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
                         Timber.d("content data: ${it.data}")
                         it.data?.let { user ->
                             findNavController().navigate(
-                                NearbyFragmentDirections.actionCardFragmentToMatchFragment(user)
+                                NearbyFragmentDirections.actionNearbyFragmentToMatchFragment(user)
                             )
                         }
                     }

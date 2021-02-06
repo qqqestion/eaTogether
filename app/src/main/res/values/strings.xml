@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">eaTogether</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">Поиск</string>
     <string name="email">Email</string>
     <string name="register">Регистация</string>
@@ -14,7 +12,7 @@
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
     <string name="birthday">День рождения</string>
-    <string name="description">Обо мне</string>
+    <string name="ethint_description">Обо мне</string>
     <string name="confirm_password">Повторить пароль</string>
     <string name="eatogether">eaTogether</string>
     <string name="profile">Профиль</string>
@@ -23,20 +21,18 @@
     <string name="log_out">Выйти</string>
     <string name="change_photo">Изменить фотографию</string>
     <string name="my_continue">Продолжить</string>
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <!--  Fragments' titles  -->
+    <string name="title_profile">Профиль</string>
+    <string name="title_edit_profile">Редактировать профиль</string>
+    <string name="title_map">Карта</string>
+    <string name="title_nearby">Люди рядом</string>
+    <string name="title_match">Совпадение</string>
+    <string name="title_party_detail">Подробно о компании</string>
+    <string name="title_place_detail">Подробно о заведении</string>
+    <string name="title_create_party">Создать компанию</string>
+    <string name="title_my_parties">Мои компании</string>
+    <string name="title_place_list">Список заведений</string>
 
     <string name="content_description_menu_btn">Кнопка для вызова меню</string>
     <string name="week_stats">Недельная статистика</string>
@@ -58,4 +54,17 @@
     <string name="errormessage_date_misformat">Введите корректное число</string>
     <string name="requestpermission_rationale">Вы должны дать согласие на использование вашей локации</string>
     <string name="success_party_created">Компания успешно создана!</string>
+    <string name="btntext_create_party">Создать</string>
+    <string name="btntext_cancel">Отменить</string>
+    <string name="ethint_choose_time">Выберете время</string>
+    <string name="ethint_choose_date">Выберете дату</string>
+    <string name="ethint_choose_description">Описание</string>
+    <string name="ethint_choose_title">Название</string>
+    <string name="btntext_change_photo">Изменить фото</string>
+    <string name="text_name">Имя</string>
+    <string name="ethint_name">Имя</string>
+    <string name="ethint_surname">Фамилия</string>
+    <string name="ethint_birthday">Дата рождения</string>
+    <string name="ethint_email">Электронная почта</string>
+    <string name="text_email">Электронная почта</string>
 </resources>

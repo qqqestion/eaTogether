@@ -77,14 +77,14 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_button_pink"
                 android:padding="10dp"
-                android:text="Изменить фото"
+                android:text="@string/btntext_change_photo"
                 android:textColor="@color/colorLiteGrey"
                 android:textSize="12sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Имя"
+                android:text="@string/text_name"
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp" />
 
@@ -93,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
-                android:hint="Имя"
+                android:hint="@string/ethint_name"
                 android:inputType="textPersonName"
                 android:textColor="@color/colorDark" />
 
@@ -109,7 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
-                android:hint="Фамилия"
+                android:hint="@string/ethint_surname"
                 android:inputType="text"
                 android:textColor="@color/colorDark" />
 
@@ -125,30 +125,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
-                android:hint="Дата рождения"
+                android:hint="@string/ethint_birthday"
                 android:inputType="date"
                 android:textColor="@color/colorDark" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Контактные данные"
+                android:text="@string/text_email"
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp" />
 
             <EditText
                 android:id="@+id/etEditProfileEmail"
                 android:layout_width="match_parent"
-                android:layout_height="74dp"
-                android:drawableRight="@drawable/ic_baseline_edit_24"
-                android:hint="Контактные данные"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/ic_baseline_edit_24"
+                android:hint="@string/ethint_email"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/colorDark" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/description"
+                android:text="@string/ethint_description"
                 android:textColor="@color/colorBlack"
                 android:textSize="20sp" />
 
@@ -156,9 +156,9 @@
                 android:id="@+id/etEditProfileDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_baseline_edit_24"
-                android:hint="@string/description"
-                android:inputType="text"
+                android:drawableEnd="@drawable/ic_baseline_edit_24"
+                android:hint="@string/ethint_description"
+                android:inputType="textMultiLine"
                 android:textColor="@color/colorDark" />
 
             <Button

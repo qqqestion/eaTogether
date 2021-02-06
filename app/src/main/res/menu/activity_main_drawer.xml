@@ -10,7 +10,7 @@
             android:id="@+id/mapFragment"
             android:title="Карта" />
         <item
-            android:id="@+id/cardFragment"
+            android:id="@+id/nearbyFragment"
             android:title="Люди рядом" />
         <item
             android:id="@+id/myPartyFragment"

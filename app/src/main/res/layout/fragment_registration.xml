@@ -131,7 +131,7 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_button_light_grey"
-            android:hint="@string/description"
+            android:hint="@string/ethint_description"
             android:inputType="text"
             android:padding="15dp"
             android:paddingLeft="10dp"

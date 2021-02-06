@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/profileFragment"
         android:name="ru.blackbull.eatogether.ui.main.profile.ProfileFragment"
-        android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile">
         <action
             android:id="@+id/action_profileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
@@ -17,12 +17,12 @@
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="ru.blackbull.eatogether.ui.main.profile.EditProfileFragment"
-        android:label="fragment_edit_profile"
+        android:label="@string/title_edit_profile"
         tools:layout="@layout/fragment_edit_profile" />
     <fragment
         android:id="@+id/mapFragment"
         android:name="ru.blackbull.eatogether.ui.main.map.MapFragment"
-        android:label="MapFragment" >
+        android:label="@string/title_map">
         <action
             android:id="@+id/action_mapFragment_to_recycleRestaurantsFragment"
             app:destination="@id/recycleRestaurantsFragment" />
@@ -31,18 +31,18 @@
             app:destination="@id/placeDetailFragment" />
     </fragment>
     <fragment
-        android:id="@+id/cardFragment"
+        android:id="@+id/nearbyFragment"
         android:name="ru.blackbull.eatogether.ui.main.nearby.NearbyFragment"
-        android:label="fragment_card"
-        tools:layout="@layout/fragment_nearby" >
+        android:label="@string/title_nearby"
+        tools:layout="@layout/fragment_nearby">
         <action
-            android:id="@+id/action_cardFragment_to_matchFragment"
+            android:id="@+id/action_nearbyFragment_to_matchFragment"
             app:destination="@id/matchFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPartyFragment"
         android:name="ru.blackbull.eatogether.ui.main.myparties.MyPartyFragment"
-        android:label="MyPartyFragment" >
+        android:label="@string/title_my_parties">
         <action
             android:id="@+id/action_myPartyFragment_to_partyDetailFragment"
             app:destination="@id/partyDetailFragment" />
@@ -50,8 +50,8 @@
     <fragment
         android:id="@+id/createPartyFragment"
         android:name="ru.blackbull.eatogether.ui.main.map.CreatePartyFragment"
-        android:label="fragment_create_party"
-        tools:layout="@layout/fragment_create_party" >
+        android:label="@string/title_create_party"
+        tools:layout="@layout/fragment_create_party">
         <argument
             android:name="placeId"
             app:argType="string" />
@@ -65,7 +65,7 @@
     <fragment
         android:id="@+id/partyDetailFragment"
         android:name="ru.blackbull.eatogether.ui.main.map.PartyDetailFragment"
-        android:label="PartyDetailFragment" >
+        android:label="@string/title_party_detail">
         <argument
             android:name="partyId"
             app:argType="string" />
@@ -73,8 +73,8 @@
     <fragment
         android:id="@+id/placeDetailFragment"
         android:name="ru.blackbull.eatogether.ui.main.map.PlaceDetailFragment"
-        android:label="fragment_place_detail"
-        tools:layout="@layout/fragment_place_detail" >
+        android:label="@string/title_place_detail"
+        tools:layout="@layout/fragment_place_detail">
         <action
             android:id="@+id/action_placeDetailFragment_to_createPartyFragment"
             app:destination="@id/createPartyFragment" />
@@ -88,7 +88,7 @@
     <fragment
         android:id="@+id/matchFragment"
         android:name="ru.blackbull.eatogether.ui.main.nearby.MatchFragment"
-        android:label="MatchFragment" >
+        android:label="@string/title_match">
         <argument
             android:name="matchedUser"
             app:argType="ru.blackbull.eatogether.models.firebase.User" />
@@ -96,7 +96,7 @@
     <fragment
         android:id="@+id/recycleRestaurantsFragment"
         android:name="ru.blackbull.eatogether.ui.main.map.RecycleRestaurantsFragment"
-        android:label="RecycleRestaurantsFragment" >
+        android:label="@string/title_place_list">
         <action
             android:id="@+id/action_recycleRestaurantsFragment_to_placeDetailFragment"
             app:destination="@id/placeDetailFragment" />

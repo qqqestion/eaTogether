@@ -1,17 +1,15 @@
 package ru.blackbull.eatogether.ui.main
 
 import android.os.Bundle
-import android.view.Gravity
-import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.nav_header_main.*
+import kotlinx.android.synthetic.main.nav_header_main.view.*
 import ru.blackbull.eatogether.R
-import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -26,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.navHostFragment)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.profileFragment , R.id.mapFragment , R.id.cardFragment , R.id.myPartyFragment
+                R.id.profileFragment , R.id.mapFragment , R.id.nearbyFragment , R.id.myPartyFragment
             ) ,
             rootLayout
         )
