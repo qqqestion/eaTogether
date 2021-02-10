@@ -1,15 +1,24 @@
 package ru.blackbull.eatogether.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
 import kotlinx.android.synthetic.main.nav_header_main.view.*
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.models.firebase.Match
+import ru.blackbull.eatogether.other.Constants.START_SERVICE
+import ru.blackbull.eatogether.other.Constants.STOP_SERVICE
+import ru.blackbull.eatogether.repositories.FirebaseRepository
+import ru.blackbull.eatogether.services.MainService
+import timber.log.Timber
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -31,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController , appBarConfiguration)
         navView.setupWithNavController(navController)
         navView.setNavigationItemSelectedListener {
+            // Фрагмент кода, который препятствует повторной загрузке
+            // фрагмента при его перевыборе в меню
             val itId = it.itemId
             val curId = navController.currentDestination?.id
             if (itId != curId) {
@@ -41,10 +52,30 @@ class MainActivity : AppCompatActivity() {
             rootLayout.closeDrawer(GravityCompat.START)
             itId != curId
         }
+        Intent(this , MainService::class.java).also { intent ->
+            intent.action = START_SERVICE
+            this.startService(intent)
+        }
+    }
+
+    override fun onBackPressed() {
+        if (rootLayout.isDrawerOpen(GravityCompat.START)) {
+            rootLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.navHostFragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Intent(this , MainService::class.java).also { intent ->
+            intent.action = STOP_SERVICE
+            this.startService(intent)
+        }
     }
 }

@@ -5,11 +5,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.repositories.FirebaseRepository
+import timber.log.Timber
 
 class NearbyViewModel @ViewModelInject constructor(
     private val firebaseRepository: FirebaseRepository
@@ -39,5 +41,13 @@ class NearbyViewModel @ViewModelInject constructor(
 
     fun sendLikeNotification(user: User) = viewModelScope.launch {
         firebaseRepository.sendLikeNotification(user)
+    }
+
+    suspend fun getUser(uid: String): User? {
+        val response = firebaseRepository.getUser(uid)
+        if (response is Resource.Error) {
+            Timber.d(response.error)
+        }
+        return response.data
     }
 }

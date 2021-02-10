@@ -19,5 +19,12 @@ object Constants {
 
     const val START_SERVICE = "START_SERVICE"
     const val STOP_SERVICE = "STOP_SERVICE"
-    const val TIMER_UPDATE_LOCATION_INTERVAL = 2000L
+
+    // Обновлять локацию раз в ЧАС
+    const val TIMER_UPDATE_LOCATION_INTERVAL = 3600000L
+//    const val TIMER_UPDATE_LOCATION_INTERVAL = 5000L
+
+    const val NOTIFICATION_ID = 1
+    const val NOTIFICATION_CHANNEL_NAME = "my_channel_name"
+    const val NOTIFICATION_CHANNEL_ID = "my_channel"
 }

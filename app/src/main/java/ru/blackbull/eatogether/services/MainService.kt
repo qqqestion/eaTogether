@@ -1,8 +1,16 @@
 package ru.blackbull.eatogether.services
 
 import android.annotation.SuppressLint
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.location.Location
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -12,9 +20,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.models.firebase.Match
+import ru.blackbull.eatogether.other.Constants.NOTIFICATION_CHANNEL_ID
+import ru.blackbull.eatogether.other.Constants.NOTIFICATION_CHANNEL_NAME
+import ru.blackbull.eatogether.other.Constants.NOTIFICATION_ID
 import ru.blackbull.eatogether.other.Constants.START_SERVICE
 import ru.blackbull.eatogether.other.Constants.STOP_SERVICE
 import ru.blackbull.eatogether.other.Constants.TIMER_UPDATE_LOCATION_INTERVAL
+import ru.blackbull.eatogether.other.Event
+import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.eatogether.other.safeCall
 import ru.blackbull.eatogether.repositories.FirebaseRepository
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,10 +44,15 @@ class MainService : LifecycleService() {
     @Inject
     lateinit var repository: FirebaseRepository
 
+    @Inject
+    lateinit var baseNotificationBuilder: NotificationCompat.Builder
+
     companion object {
         var isWorking = true
 
         val lastLocation = MutableLiveData<Location>()
+
+        val matches = MutableLiveData<Event<Resource<List<Match>>>>()
     }
 
     override fun onStartCommand(intent: Intent? , flags: Int , startId: Int): Int {
@@ -61,6 +82,38 @@ class MainService : LifecycleService() {
                 delay(TIMER_UPDATE_LOCATION_INTERVAL)
             }
         }
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(notificationManager)
+        }
+
+        repository
+            .matchesRef
+            .whereEqualTo("firstLiker" , repository.auth.uid)
+            .whereEqualTo("processed" , false)
+            .addSnapshotListener { value , error ->
+                if (error != null) {
+                    Timber.d(error , "Failed in listener")
+                    matches.postValue(Event(Resource.Error(error)))
+                    return@addSnapshotListener
+                }
+                val resource = safeCall {
+                    val matchesList = mutableListOf<Match>()
+                    value?.documents?.forEach { document ->
+                        matchesList.add(document.toObject(Match::class.java)!!)
+                    }
+                    Timber.d("matches: $matchesList")
+                    Resource.Success(matchesList)
+                }
+                matches.postValue(Event(resource))
+
+                baseNotificationBuilder.setContentText("У вас ${value?.documents?.size} уведомлений")
+                with(NotificationManagerCompat.from(this)) {
+                    notify(NOTIFICATION_ID , baseNotificationBuilder.build())
+                }
+            }
     }
 
     private fun killService() {
@@ -68,6 +121,16 @@ class MainService : LifecycleService() {
         isWorking = false
         stopForeground(true)
         stopSelf()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel(notificationManager: NotificationManager) {
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID ,
+            NOTIFICATION_CHANNEL_NAME ,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        notificationManager.createNotificationChannel(channel)
     }
 
 }

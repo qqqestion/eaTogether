@@ -10,7 +10,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import ru.blackbull.eatogether.models.firebase.Notification
+import ru.blackbull.eatogether.models.firebase.Match
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Constants
@@ -21,12 +21,14 @@ import timber.log.Timber
 
 class FirebaseRepository {
 
-    private val auth = FirebaseAuth.getInstance()
+    val auth = FirebaseAuth.getInstance()
     private val usersRef = Firebase.firestore.collection("users")
     private val partiesRef = Firebase.firestore.collection("parties")
     private val notificationsRef = Firebase.firestore.collection("notifications")
+    val matchesRef = Firebase.firestore.collection("matches")
 
     suspend fun updateUserLocation(location: Location): Unit = withContext(Dispatchers.IO) {
+        // Используется com.firebase.firestore.GeoPoint потому что в firestore его легче сериализовать
         val geoPoint = GeoPoint(
             location.latitude , location.longitude
         )
@@ -85,7 +87,6 @@ class FirebaseRepository {
             )
         }
     }
-
 
     fun getCurrentUserId(): String = auth.uid!!
 
@@ -148,6 +149,8 @@ class FirebaseRepository {
     suspend fun getNearbyUsers() = withContext(Dispatchers.IO) {
         safeCall {
             val currentUser = getUser(auth.uid!!).data!!
+            // Добавляем в "исключенных" уже лайкнутых, дислайкнутых пользователей
+            // и текущего пользователя
             val excludeUsers = currentUser.likedUsers +
                     currentUser.dislikedUsers +
                     currentUser.id
@@ -168,35 +171,25 @@ class FirebaseRepository {
             if (user.id == null) {
                 return@withContext
             }
-            val documentRef = usersRef.document(auth.uid!!)
-            val document = documentRef.get().await()
-            val field = document.get("dislikedUsers")
-            if (field != null) {
-                val value = field as MutableList<String>
-                value.add(user.id!!)
-                documentRef.update("dislikedUsers" , value).await()
-            } else {
-                documentRef.update(
-                    "dislikedUsers" , mutableListOf(user.id!!)
-                ).await()
-            }
+            val curUserRef = usersRef.document(auth.uid!!)
+            val curUser = curUserRef.get().await().toObject(User::class.java)
+            curUser!!.dislikedUsers += user.id!!
+            curUserRef.update("dislikedUsers" , curUser!!.likedUsers).await()
             Resource.Success<Unit>()
         }
     }
 
     suspend fun likeUser(user: User) = withContext(Dispatchers.IO) {
         safeCall {
-            val documentRef = usersRef.document(auth.uid!!)
-            val document = documentRef.get().await()
-            val field = document.get("likedUsers")
-            if (field != null) {
-                val value = field as MutableList<String>
-                user.id?.let { value.add(it) }
-                documentRef.update("likedUsers" , value).await()
-            } else {
-                documentRef.update("likedUsers" , mutableListOf(user.id!!)).await()
-            }
-            if (user.likedUsers.contains(document.id)) {
+            val curUserRef = usersRef.document(auth.uid!!)
+            val curUser = curUserRef.get().await().toObject(User::class.java)
+            curUser!!.likedUsers += user.id!!
+            curUserRef.update("likedUsers" , curUser!!.likedUsers).await()
+            // Если другой польватель лайкнул текущего, возвращаем true
+            val isLiked = user.likedUsers.contains(curUser.id)
+            if (isLiked) {
+                val match = Match(firstLiker = user.id , secondLiker = auth.uid)
+                matchesRef.add(match).await()
                 Resource.Success(user)
             } else {
                 Resource.Success(null)

@@ -83,15 +83,6 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
             map = it
             map?.isMyLocationEnabled = true
             map?.setOnMapLongClickListener { location ->
-                val action = if (MainService.isWorking) {
-                    STOP_SERVICE
-                } else {
-                    START_SERVICE
-                }
-                Intent(requireContext() , MainService::class.java).also { intent ->
-                    intent.action = action
-                    requireActivity().startService(intent)
-                }
 //                findNavController().navigate(
 //                    MapFragmentDirections.actionMapFragmentToRecycleRestaurantsFragment(location)
 //                )

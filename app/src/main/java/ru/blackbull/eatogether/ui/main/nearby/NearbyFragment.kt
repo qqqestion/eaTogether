@@ -5,17 +5,20 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_nearby.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.NearbyUserAdapter
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.eatogether.services.MainService
 import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
 
@@ -23,18 +26,18 @@ import timber.log.Timber
 @AndroidEntryPoint
 class NearbyFragment : Fragment(R.layout.fragment_nearby) {
 
-    private val nearbyViewModel: NearbyViewModel by viewModels()
+    private val viewModel: NearbyViewModel by viewModels()
     private lateinit var usersAdapter: NearbyUserAdapter
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
         setupRecyclerView()
         subscribeToObservers()
-        nearbyViewModel.getNearbyUsers()
+        viewModel.getNearbyUsers()
     }
 
     private fun subscribeToObservers() {
-        nearbyViewModel.nearbyUsers.observe(viewLifecycleOwner , EventObserver(
+        viewModel.nearbyUsers.observe(viewLifecycleOwner , EventObserver(
             onError = {
                 snackbar(it)
             } ,
@@ -44,7 +47,7 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
         ) { nearbyUsers ->
             usersAdapter.users = nearbyUsers
         })
-        nearbyViewModel.likedUser.observe(viewLifecycleOwner , Observer { event ->
+        viewModel.likedUser.observe(viewLifecycleOwner , { event ->
             val content = event.getContentIfNotHandled()
             content?.let {
                 when (it) {
@@ -67,6 +70,32 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
                 }
             }
         })
+
+        MainService.matches.observe(viewLifecycleOwner , { event ->
+            val content = event.getContentIfNotHandled()
+            content?.let { resource ->
+                when (resource) {
+                    is Resource.Success -> {
+                        resource.data?.forEach { match ->
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val secondLiker = viewModel.getUser(match.secondLiker!!)
+                                secondLiker?.let { user ->
+                                    findNavController().navigate(
+                                        NearbyFragmentDirections.actionNearbyFragmentToMatchFragment(
+                                            user
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
+                    is Resource.Error -> {
+                        Timber.d(resource.error)
+                        snackbar(resource.msg ?: "Unknown error")
+                    }
+                }
+            }
+        })
     }
 
     private fun setupRecyclerView() {
@@ -75,7 +104,6 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
         val layoutManager = object : LinearLayoutManager(context) {
             override fun canScrollVertically(): Boolean = false
         }
-//        val layoutManager = LinearLayoutManager(context)
         rvNearbyUsers.layoutManager = layoutManager
         rvNearbyUsers.isNestedScrollingEnabled = false
         val callback: ItemTouchHelper.Callback = object : ItemTouchHelper.SimpleCallback(
@@ -93,21 +121,15 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
                 val user = usersAdapter.users[position]
                 usersAdapter.users -= user
 
-                // TODO: удалить этот кринж блок
-//                val users = nearbyViewModel.nearbyUsers.value!!
-//                users.removeAt(0)
-//                usersAdapter.notifyItemRemoved(0)
-//                nearbyViewModel.nearbyUsers.value = users
-
                 when (direction) {
                     ItemTouchHelper.START -> {
                         Log.d("NearbyDebug" , "dislikeUser $user")
-                        nearbyViewModel.dislikeUser(user)
+                        viewModel.dislikeUser(user)
                     }
                     ItemTouchHelper.END -> {
                         Log.d("NearbyDebug" , "likeUser $user")
-                        nearbyViewModel.likeUser(user)
-                        nearbyViewModel.sendLikeNotification(user)
+                        viewModel.likeUser(user)
+                        viewModel.sendLikeNotification(user)
                     }
                     else -> {
                         Log.d("NearbyDebug" , "we got a problem")
