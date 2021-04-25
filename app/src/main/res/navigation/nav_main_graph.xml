@@ -53,7 +53,7 @@
         android:label="@string/title_create_party"
         tools:layout="@layout/fragment_create_party">
         <argument
-            android:name="placeId"
+            android:name="placeUri"
             app:argType="string" />
         <argument
             android:name="placeName"

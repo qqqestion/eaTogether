@@ -16,61 +16,165 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:textColor="@color/colorAccent"
-            android:textSize="32sp"
+            android:textSize="28sp"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/app_name" />
+            tools:text="TOKYO-CITY" />
 
         <TextView
-            android:id="@+id/tvPlaceDetailAddress"
+            android:id="@+id/tvPlaceDetailCategories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="Address"
+            android:layout_marginTop="5dp"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailName" />
+            app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailName"
+            tools:text="Fast food, Restaurant" />
+
+        <LinearLayout
+            android:id="@+id/llScores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPlaceDetailCategories">
+
+            <ImageView
+                android:id="@+id/ivScore1"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_baseline_star_rate_gold_24" />
+
+            <ImageView
+                android:id="@+id/ivScore2"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_baseline_star_rate_gold_24" />
+
+            <ImageView
+                android:id="@+id/ivScore3"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_baseline_star_rate_gold_24" />
+
+            <ImageView
+                android:id="@+id/ivScore4"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_baseline_star_rate_gold_24" />
+
+            <ImageView
+                android:id="@+id/ivScore5"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_baseline_star_rate_gray_24" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/llScores"
+            app:layout_constraintStart_toEndOf="@id/llScores"
+            app:layout_constraintTop_toTopOf="@id/llScores"
+            tools:text="1511" />
+
+        <TextView
+            android:id="@+id/tvRatings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tvScore"
+            app:layout_constraintStart_toEndOf="@id/tvScore"
+            tools:text="reviews" />
+
+        <ImageView
+            android:id="@+id/ivPlace"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="50dp"
+            android:src="@drawable/ic_baseline_place_24"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llScores" />
+
+        <TextView
+            android:id="@+id/tvAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/ivPlace"
+            app:layout_constraintTop_toTopOf="@id/ivPlace"
+            tools:text="Russia, Saint Petersburg, Nevski Prospect, 4" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/sectionBottomBarrier"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="ivPlace, tvAddress" />
+
+        <ImageView
+            android:id="@+id/ivClock"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_clock"
+            app:layout_constraintStart_toStartOf="@id/ivPlace"
+            app:layout_constraintTop_toBottomOf="@id/sectionBottomBarrier" />
+
+        <TextView
+            android:id="@+id/tvWorkingHours"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/ivClock"
+            app:layout_constraintTop_toTopOf="@id/ivClock"
+            tools:text="Open unit 00:00" />
 
         <TextView
             android:id="@+id/tvPlaceDetailWorkingHours"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="status of opening"
-            android:textSize="23sp"
+            android:layout_marginTop="5dp"
+            android:text="daily, 7:30 AM - 1:00 AM"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailAddress" />
+            app:layout_constraintTop_toBottomOf="@id/tvWorkingHours" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/tvPlaceDetailPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="Phone"
-            android:textSize="23sp"
+            android:text="+7 (921) 891-12-41"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPlaceDetailWorkingHours" />
+            app:layout_constraintTop_toTopOf="@id/tvPlaceDetailWorkingHours" />
 
         <Button
             android:id="@+id/btnPlaceDetailCreateParty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button_green"
+            android:padding="15dp"
             android:text="Создать компанию"
+            android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvPlaceDetailPhone" />
-
-        <TextView
-            android:id="@+id/tvPlaceDetailPartiesLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Компании"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnPlaceDetailCreateParty" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPlaceDetailParties"
@@ -81,26 +185,8 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvPlaceDetailPartiesLabel" />
+            app:layout_constraintTop_toBottomOf="@id/btnPlaceDetailCreateParty"
+            tools:listitem="@layout/item_party_preview" />
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/tvPlaceDetailReviewsLabel"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="Отзывы"-->
-        <!--            android:textSize="20sp"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@+id/rvPlaceDetailParties" />-->
-
-        <!--        <androidx.recyclerview.widget.RecyclerView-->
-        <!--            android:id="@+id/rvPlaceDetailReviews"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:nestedScrollingEnabled="false"-->
-        <!--            android:padding="10dp"-->
-        <!--            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/tvPlaceDetailReviewsLabel" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -21,13 +21,13 @@ class CreatePartyFragment : Fragment(R.layout.fragment_create_party) {
     private val createPartyViewModel: CreatePartyViewModel by viewModels()
     private val args: CreatePartyFragmentArgs by navArgs()
 
-    private lateinit var placeId: String
+    private lateinit var placeUri: String
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
         subscribeToObservers()
 
-        placeId = args.placeId
+        placeUri = args.placeUri
         tvCreatePartyPlaceName.text = args.placeName
         tvCreatePartyPlaceAddress.text = args.placeAddress
 
@@ -37,7 +37,7 @@ class CreatePartyFragment : Fragment(R.layout.fragment_create_party) {
                 description = etCreatePartyPlaceDescription.text.toString() ,
                 date = etCreatePartyPickDate.text.toString() ,
                 time = etCreatePartyPickTime.text.toString() ,
-                placeId = placeId
+                placeId = placeUri
             )
         }
         btnCreatePartyCancel.setOnClickListener {

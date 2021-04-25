@@ -18,7 +18,6 @@ import ru.blackbull.eatogether.adapters.PartyAdapter
 import ru.blackbull.eatogether.adapters.ReviewAdapter
 import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
 import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.other.PhotoUtility.getPhotoUrl
 import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
 
@@ -59,7 +58,7 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) , Session.S
                 PlaceDetailFragmentDirections.actionPlaceDetailFragmentToCreatePartyFragment(
                     placeUri ,
                     tvPlaceDetailName.text.toString() ,
-                    tvPlaceDetailAddress.text.toString()
+                    tvPlaceDetailCategories.text.toString()
                 )
             )
         }
@@ -119,55 +118,38 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) , Session.S
 
     private fun updatePlaceInfo(place: PlaceDetail) {
         tvPlaceDetailName.text = place.name
-        tvPlaceDetailAddress.text = place.formatted_address
+        tvPlaceDetailCategories.text = place.formatted_address
         tvPlaceDetailPhone.text = place.formatted_phone_number
         tvPlaceDetailWorkingHours.text = if (place.isOpen()) {
             "Открыто"
         } else {
             "Закрыто"
         }
-//        if (place.photos.isNotEmpty()) {
-//            ivPlaceDetailImage.load(getPhotoUrl(place.photos[0].photo_reference , 400 , 400))
-//        }
-//
-//        if (place.reviews.isNotEmpty()) {
-//            reviewsAdapter.reviews = place.reviews
-//        } else {
-//            tvPlaceDetailReviewsLabel.visibility = View.GONE
-//            rvPlaceDetailReviews.visibility = View.GONE
-//        }
     }
 
     override fun onSearchResponse(response: Response) {
         for (searchResult in response.collection.children) {
             val obj = searchResult.obj!!
             val businessMetadata = obj.metadataContainer.getItem(BusinessObjectMetadata::class.java)
-            val score =
-                obj.metadataContainer.getItem(BusinessRating1xObjectMetadata::class.java)?.score
-            val ratings =
-                obj.metadataContainer.getItem(BusinessRating1xObjectMetadata::class.java)?.ratings
-            val name = obj.metadataContainer.getItem(BusinessObjectMetadata::class.java).name
-            val address =
-                obj.metadataContainer.getItem(BusinessObjectMetadata::class.java).address.formattedAddress
-            val phones =
-                obj.metadataContainer.getItem(BusinessObjectMetadata::class.java).phones.map { it.formattedNumber }
-            val workingHours = businessMetadata.workingHours?.text
-            val foo = businessMetadata.categories.map { it.name }
+            val ratingMetadata =
+                obj.metadataContainer.getItem(BusinessRating1xObjectMetadata::class.java)
+            val score = ratingMetadata?.score
+            val ratings = ratingMetadata?.ratings
+            val name = businessMetadata.name
+            val address = businessMetadata.address.formattedAddress
+            val phones = businessMetadata.phones.map { it.formattedNumber }
+            val workingHours = businessMetadata.workingHours?.state?.text
+            val categories = businessMetadata.categories.map { it.name }
             val bar = businessMetadata.features.map { it.id to it.value }
 
             tvPlaceDetailName.text = name
-            tvPlaceDetailAddress.text = address
-            tvPlaceDetailPhone.text = phones.first()
-            tvPlaceDetailWorkingHours.text = workingHours
-            tvPlaceDetailWorkingHours.text =
-                if (businessMetadata.workingHours?.state?.isOpenNow == true) {
-                    "Открыто"
-                } else {
-                    "Закрыто"
-                }
-//            val phones = obj.metadataContainer.getItem(Discovery2xObjectMetadata::class.java).collections.first().
-//            val urls =
-//                obj.metadataContainer.getItem(BusinessObjectMetadata::class.java).workingHours?.availabilities?.first().
+            tvAddress.text = address
+            tvPlaceDetailCategories.text = categories.joinToString()
+            tvPlaceDetailPhone.text = phones.firstOrNull()
+            tvWorkingHours.text = workingHours
+            tvScore.text = score.toString()
+            // TODO: добавить работу с локализацией
+            tvRatings.text = "$ratings оценок"
 
             Timber.d("Score: ${score}")
             Timber.d("Object name: ${obj.name}")
