@@ -16,28 +16,13 @@ class MapViewModel @ViewModelInject constructor(
     private val placeRepository: PlaceRepository
 ) : ViewModel() {
 
-    private val _searchPlaces: MutableLiveData<Event<Resource<List<BasicLocation>>>> =
-        MutableLiveData()
-    val searchPlaces: LiveData<Event<Resource<List<BasicLocation>>>> = _searchPlaces
-
     private val _nearbyPlaces: MutableLiveData<Event<Resource<List<BasicLocation>>>> =
         MutableLiveData()
     val nearbyPlaces: LiveData<Event<Resource<List<BasicLocation>>>> = _nearbyPlaces
 
-
-    fun searchPlaces(placeName: String) = viewModelScope.launch {
-        if (placeName.isEmpty()) {
-            return@launch
-        }
-        _searchPlaces.postValue(Event(Resource.Loading()))
-        Timber.d("Search places: $placeName")
-        val response = placeRepository.getPlacesByName(placeName)
-        _searchPlaces.postValue(Event(response))
-    }
-
     fun getNearbyPlaces(lat: Double , lng: Double) = viewModelScope.launch {
         _nearbyPlaces.postValue(Event(Resource.Loading()))
-        val response = placeRepository.getNearbyPlaces("$lat,$lng")
-        _nearbyPlaces.postValue(Event(response))
+//        val response = placeRepository.getNearbyPlaces("$lat,$lng")
+//        _nearbyPlaces.postValue(Event(response))
     }
 }

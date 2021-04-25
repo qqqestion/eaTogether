@@ -71,9 +71,12 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    var isFirstLocation: Boolean = true
+
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
         Timber.d("onViewCreated")
+        isFirstLocation = true
         mapView = yandexMapView
         searchManager = SearchFactory.getInstance().createSearchManager(
             SearchManagerType.ONLINE
@@ -192,8 +195,6 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         }
         snackbar(errorMessage)
     }
-
-    var isFirstLocation = true
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult?) {

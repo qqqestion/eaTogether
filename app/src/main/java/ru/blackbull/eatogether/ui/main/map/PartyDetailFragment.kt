@@ -11,8 +11,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_party_detail.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
+import ru.blackbull.eatogether.models.PlaceDetail
 import ru.blackbull.eatogether.models.firebase.Party
-import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
 import ru.blackbull.eatogether.other.EventObserver
 
 
@@ -54,7 +54,7 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
 
     private fun updatePlaceInfo(placeDetail: PlaceDetail) {
         tvPartyDetailPlaceName.text = placeDetail.name
-        tvPartyDetailPlaceAddress.text = placeDetail.formatted_address
+        tvPartyDetailPlaceAddress.text = placeDetail.address
     }
 
     private fun updatePartyInfo(party: Party) {

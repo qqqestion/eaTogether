@@ -6,9 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.blackbull.eatogether.models.PlaceDetail
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
-import ru.blackbull.eatogether.models.googleplaces.PlaceDetail
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.repositories.FirebaseRepository
@@ -25,8 +25,7 @@ class PartyDetailViewModel @ViewModelInject constructor(
     private val _partyParticipants: MutableLiveData<Event<Resource<List<User>>>> = MutableLiveData()
     val partyParticipants: LiveData<Event<Resource<List<User>>>> = _partyParticipants
 
-    private val _placeDetail: MutableLiveData<Event<Resource<PlaceDetail>>> = MutableLiveData()
-    val placeDetail: LiveData<Event<Resource<PlaceDetail>>> = _placeDetail
+    val placeDetail: LiveData<Event<Resource<PlaceDetail>>> = placeRepository.placeDetail
 
     fun getPartyParticipants(party: Party) = viewModelScope.launch {
         _partyParticipants.postValue(Event(Resource.Loading()))
@@ -41,8 +40,6 @@ class PartyDetailViewModel @ViewModelInject constructor(
     }
 
     fun getPlaceDetail(placeId: String) = viewModelScope.launch {
-        _placeDetail.postValue(Event(Resource.Loading()))
-        val response = placeRepository.getPlaceDetail(placeId)
-        _placeDetail.postValue(Event(response))
+        placeRepository.getPlaceDetail(placeId)
     }
 }

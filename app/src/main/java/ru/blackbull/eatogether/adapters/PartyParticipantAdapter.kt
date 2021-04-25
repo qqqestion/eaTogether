@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import coil.transform.CircleCropTransformation
 import kotlinx.android.synthetic.main.item_user_in_party_preview.view.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.User
@@ -46,7 +47,9 @@ class PartyParticipantAdapter : RecyclerView.Adapter<PartyParticipantAdapter.Vie
     override fun onBindViewHolder(holder: ViewHolder , position: Int) {
         val user = differ.currentList[position]
         holder.itemView.apply {
-            ivPartyParticipantPhoto.load(user.imageUri)
+            ivPartyParticipantPhoto.load(user.imageUri) {
+                transformations(CircleCropTransformation())
+            }
             tvPartyParticipantName.text = "${user.firstName} ${user.lastName}"
         }
     }

@@ -2,6 +2,9 @@ package ru.blackbull.eatogether.di
 
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.yandex.mapkit.search.SearchFactory
+import com.yandex.mapkit.search.SearchManager
+import com.yandex.mapkit.search.SearchManagerType
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,8 +30,8 @@ object AppModule {
     @Singleton
     @Provides
     fun providePlaceRepository(
-        googlePlaceApiService: GooglePlaceApiService
-    ) = PlaceRepository(googlePlaceApiService)
+        searchManager: SearchManager
+    ) = PlaceRepository(searchManager)
 
     @Singleton
     @Provides
@@ -73,4 +76,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideFirebaseApi() = FirebaseApi() as BaseFirebaseApi
+
+    @Singleton
+    @Provides
+    fun provideSearchManager() = SearchFactory.getInstance().createSearchManager(
+        SearchManagerType.ONLINE
+    )
 }

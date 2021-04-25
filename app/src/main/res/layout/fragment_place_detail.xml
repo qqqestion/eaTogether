@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tvPlaceDetailName"
@@ -140,29 +140,14 @@
             tools:text="Open unit 00:00" />
 
         <TextView
-            android:id="@+id/tvPlaceDetailWorkingHours"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="daily, 7:30 AM - 1:00 AM"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvWorkingHours" />
-
-        <androidx.constraintlayout.helper.widget.Flow
-            android:id="@+id/flow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
             android:id="@+id/tvPlaceDetailPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="+7 (921) 891-12-41"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvPlaceDetailWorkingHours" />
+            app:layout_constraintTop_toBottomOf="@id/tvWorkingHours"
+            tools:text="+7 (921) 891-12-41" />
 
         <Button
             android:id="@+id/btnPlaceDetailCreateParty"
@@ -182,6 +167,7 @@
             android:layout_height="wrap_content"
             android:nestedScrollingEnabled="false"
             android:padding="10dp"
+            tools:itemCount="3"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
