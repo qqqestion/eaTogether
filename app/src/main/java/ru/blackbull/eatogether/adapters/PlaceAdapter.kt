@@ -6,36 +6,34 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import kotlinx.android.synthetic.main.item_place_preview.view.*
-import ru.blackbull.eatogether.models.googleplaces.BasicLocation
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.other.PhotoUtility.getPhotoUrl
+import ru.blackbull.eatogether.models.PlaceDetail
 
 
 class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    private val diffCallback = object : DiffUtil.ItemCallback<BasicLocation>() {
-        override fun areItemsTheSame(oldItem: BasicLocation , newItem: BasicLocation): Boolean {
-            return oldItem.placeId == newItem.placeId
+    private val diffCallback = object : DiffUtil.ItemCallback<PlaceDetail>() {
+        override fun areItemsTheSame(oldItem: PlaceDetail , newItem: PlaceDetail): Boolean {
+            return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: BasicLocation , newItem: BasicLocation): Boolean {
+        override fun areContentsTheSame(oldItem: PlaceDetail , newItem: PlaceDetail): Boolean {
             return oldItem == newItem
         }
     }
 
     private val differ = AsyncListDiffer(this , diffCallback)
 
-    var places: List<BasicLocation>
+    var places: List<PlaceDetail>
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
-    private var onItemClickListener: ((BasicLocation) -> Unit)? = null
+    private var onItemClickListener: ((PlaceDetail) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (BasicLocation) -> Unit) {
+    fun setOnItemClickListener(listener: (PlaceDetail) -> Unit) {
         onItemClickListener = listener
     }
 
@@ -53,15 +51,15 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.MyViewHolder>() {
         val place = places[position]
 
         holder.itemView.apply {
-            val url = if (place.photos.isEmpty()) {
-                place.icon
-            } else {
-                getPhotoUrl(place.photos[0].photo_reference , 150 , 150)
-            }
-            ivPlacePreviewImage.load(url)
+//            val url = if (place.photos.isEmpty()) {
+//                place.icon
+//            } else {
+//                getPhotoUrl(place.photos[0].photo_reference , 150 , 150)
+//            }
+//            ivPlacePreviewImage.load(url)
             tvPlacePreviewName.text = place.name
-            tvPlacePreviewRating.text = place.rating.toString()
-            tvPlacePreviewVicinity.text = place.vicinity
+            tvPlacePreviewRating.text = place.score.toString()
+            tvPlacePreviewAddress.text = place.address
 
             setOnClickListener {
                 onItemClickListener?.let { click ->

@@ -16,9 +16,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import ru.blackbull.eatogether.api.BaseFirebaseApi
 import ru.blackbull.eatogether.api.FirebaseApi
-import ru.blackbull.eatogether.api.GooglePlaceApiService
 import ru.blackbull.eatogether.other.Constants
-import ru.blackbull.eatogether.repositories.FirebaseRepository
 import ru.blackbull.eatogether.repositories.PlaceRepository
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -38,40 +36,40 @@ object AppModule {
     fun provideFusedLocationProviderClient(
         @ApplicationContext app: Context
     ) = FusedLocationProviderClient(app)
-
-    @Singleton
-    @Provides
-    fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.NONE
-    }
-
-    @Singleton
-    @Provides
-    fun provideHttpClient(
-        loggingInterceptor: HttpLoggingInterceptor
-    ) = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .addNetworkInterceptor(loggingInterceptor)
-        .connectTimeout(10 , TimeUnit.SECONDS)
-        .writeTimeout(30 , TimeUnit.SECONDS)
-        .readTimeout(30 , TimeUnit.SECONDS)
-        .build()
-
-    @Singleton
-    @Provides
-    fun provideRetrofitInstance(
-        httpClient: OkHttpClient
-    ): Retrofit = Retrofit.Builder()
-        .baseUrl(Constants.BASE_GOOGLE_API_URL)
-        .client(httpClient)
-        .addConverterFactory(MoshiConverterFactory.create())
-        .build()
-
-    @Singleton
-    @Provides
-    fun provideGooglePlaceApiService(
-        retrofit: Retrofit
-    ): GooglePlaceApiService = retrofit.create(GooglePlaceApiService::class.java)
+//
+//    @Singleton
+//    @Provides
+//    fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
+//        level = HttpLoggingInterceptor.Level.NONE
+//    }
+//
+//    @Singleton
+//    @Provides
+//    fun provideHttpClient(
+//        loggingInterceptor: HttpLoggingInterceptor
+//    ) = OkHttpClient.Builder()
+//        .addInterceptor(loggingInterceptor)
+//        .addNetworkInterceptor(loggingInterceptor)
+//        .connectTimeout(10 , TimeUnit.SECONDS)
+//        .writeTimeout(30 , TimeUnit.SECONDS)
+//        .readTimeout(30 , TimeUnit.SECONDS)
+//        .build()
+//
+//    @Singleton
+//    @Provides
+//    fun provideRetrofitInstance(
+//        httpClient: OkHttpClient
+//    ): Retrofit = Retrofit.Builder()
+//        .baseUrl(Constants.BASE_GOOGLE_API_URL)
+//        .client(httpClient)
+//        .addConverterFactory(MoshiConverterFactory.create())
+//        .build()
+//
+//    @Singleton
+//    @Provides
+//    fun provideGooglePlaceApiService(
+//        retrofit: Retrofit
+//    ): GooglePlaceApiService = retrofit.create(GooglePlaceApiService::class.java)
 
     @Singleton
     @Provides

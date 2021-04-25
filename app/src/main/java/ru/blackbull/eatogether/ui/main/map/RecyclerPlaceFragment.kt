@@ -28,11 +28,13 @@ class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
         setupRecyclerView()
         val location = args.location
         location?.let {
-            viewModel.getNearbyPlaces(it.latitude , it.longitude)
+            // TODO: сделать поиск ближайших мест
+//            viewModel.getNearbyPlaces(it.latitude , it.longitude)
         }
         placeAdapter.setOnItemClickListener { location ->
             val bundle = Bundle().apply {
-                putString("placeId" , location.placeId)
+                // TODO: возможно будут проблемы с id места
+                putString("placeId" , location.id)
             }
             findNavController().navigate(
                 R.id.action_recycleRestaurantsFragment_to_placeDetailFragment ,
@@ -42,16 +44,16 @@ class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
     }
 
     private fun subscribeToObservers() {
-        viewModel.nearbyPlaces.observe(viewLifecycleOwner , EventObserver(
-            onError = {
-                snackbar(it)
-            } ,
-            onLoading = {
-
-            }
-        ) { places ->
-            placeAdapter.places = places
-        })
+//        viewModel.nearbyPlaces.observe(viewLifecycleOwner , EventObserver(
+//            onError = {
+//                snackbar(it)
+//            } ,
+//            onLoading = {
+//
+//            }
+//        ) { places ->
+//            placeAdapter.places = places
+//        })
     }
 
     private fun setupRecyclerView() {
