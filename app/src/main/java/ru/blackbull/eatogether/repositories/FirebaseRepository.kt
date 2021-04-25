@@ -1,10 +1,13 @@
 package ru.blackbull.eatogether.repositories
 
 import android.location.Location
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -21,6 +24,10 @@ class FirebaseRepository @Inject constructor(
     private val firebaseApi: BaseFirebaseApi
 ) {
 
+    private val auth = FirebaseAuth.getInstance()
+    private val usersRef = Firebase.firestore.collection("users")
+    private val partiesRef = Firebase.firestore.collection("parties")
+    private val notificationsRef = Firebase.firestore.collection("notifications")
     val matchesRef = Firebase.firestore.collection("matches")
 
     /**
@@ -59,11 +66,6 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    /**
-     * Updates party
-     *
-     * @param party changed party
-     */
     suspend fun updateParty(party: Party) = withContext(Dispatchers.IO) {
         firebaseApi.updateParty(party)
     }
@@ -108,13 +110,24 @@ class FirebaseRepository @Inject constructor(
         firebaseApi.signOut()
     }
 
-    /**
-     * Updates current user
-     *
-     * @param user
-     */
-    suspend fun updateUser(user: User) {
-        firebaseApi.updateUser(user)
+    suspend fun updateUser(user: User , photoUri: Uri) {
+        val firebaseUser = auth.currentUser ?: return
+        if (firebaseUser.email != user.email) {
+            firebaseUser.updateEmail(user.email!!)
+            auth.updateCurrentUser(firebaseUser)
+        }
+
+        // Чтобы не фотография из firebase не загружалась повторно в firebase
+        // TODO: добавить обновление фотографии
+        if (photoUri.host != "firebasestorage.googleapis.com") {
+            val res = FirebaseStorage.getInstance().reference.child(firebaseUser.uid).putFile(
+                photoUri
+            ).await()
+            val imageUri = res.metadata?.reference?.downloadUrl?.await()
+            user.imageUri = imageUri.toString()
+        }
+
+        usersRef.document(auth.uid!!).set(user).await()
     }
 
     fun isAuthenticated(): Boolean {
