@@ -79,13 +79,13 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
                         resource.data?.forEach { match ->
                             CoroutineScope(Dispatchers.Main).launch {
                                 val secondLiker = viewModel.getUser(match.secondLiker!!)
-                                secondLiker?.let { user ->
-                                    findNavController().navigate(
-                                        NearbyFragmentDirections.actionNearbyFragmentToMatchFragment(
-                                            user
-                                        )
-                                    )
-                                }
+//                                secondLiker?.let { user ->
+//                                    findNavController().navigate(
+//                                        NearbyFragmentDirections.actionNearbyFragmentToMatchFragment(
+//                                            user
+//                                        )
+//                                    )
+//                                }
                             }
                         }
                     }

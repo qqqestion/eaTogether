@@ -4,6 +4,13 @@ import timber.log.Timber
 import java.lang.Exception
 
 
+/**
+ * Tries to perform action and returns its Resource, if error occurs returns Resource.Error
+ *
+ * @param T the type of Resource
+ * @param action action to perform to get Resource
+ * @return Resource
+ */
 inline fun <T> safeCall(action: () -> Resource<T>): Resource<T> {
     return try {
         action()

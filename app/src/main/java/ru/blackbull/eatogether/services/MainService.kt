@@ -77,8 +77,10 @@ class MainService : LifecycleService() {
             while (isWorking) {
                 val location = fusedLocationProviderClient.lastLocation.await()
                 Timber.d("Location: $location")
-                lastLocation.postValue(location)
-                repository.updateUserLocation(location)
+                location?.let { notNullLocation ->
+                    lastLocation.postValue(notNullLocation)
+                    repository.updateUserLocation(notNullLocation)
+                }
                 delay(TIMER_UPDATE_LOCATION_INTERVAL)
             }
         }
@@ -89,9 +91,10 @@ class MainService : LifecycleService() {
             createNotificationChannel(notificationManager)
         }
 
+        // TODO: Переписать на lambda, без firebase импортов
         repository
             .matchesRef
-            .whereEqualTo("firstLiker" , repository.auth.uid)
+            .whereEqualTo("firstLiker" , repository.getCurrentUserId())
             .whereEqualTo("processed" , false)
             .addSnapshotListener { value , error ->
                 if (error != null) {

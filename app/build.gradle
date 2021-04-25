@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: 'dagger.hilt.android.plugin'
 
 // GOOGLE SERVICES
@@ -40,6 +40,12 @@ android {
     }
 }
 
+repositories {
+    maven {
+        url "http://maven.google.com/"
+    }
+}
+
 dependencies {
     def lifecycle_version = "2.2.0"
 
@@ -53,9 +59,12 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.libraries.places:places:2.4.0'
 
+    // Yandex MapKit
+    implementation 'com.yandex.android:maps.mobile:4.0.0-full'
+
     // Google Maps Location Services
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
-    implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
 
     // Kotlin coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'

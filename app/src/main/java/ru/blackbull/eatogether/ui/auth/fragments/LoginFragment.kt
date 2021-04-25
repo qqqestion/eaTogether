@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.ui.auth.AuthViewModel
 import ru.blackbull.eatogether.ui.main.MainActivity
@@ -34,26 +35,22 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun subscribeToObservers() {
-        authViewModel.signInResult.observe(viewLifecycleOwner , Observer { signInResult ->
-            when (signInResult) {
-                is Resource.Success -> {
-                    loginProgressBar.isVisible = false
-                    Intent(requireContext() , MainActivity::class.java).also {
-                        startActivity(it)
-                        requireActivity().finish()
-                    }
-                }
-                is Resource.Error -> {
-                    val msg = getString(R.string.errormessage_login_error)
-                    Snackbar.make(requireView() , msg , Snackbar.LENGTH_SHORT).show()
-                    loginProgressBar.isVisible = false
-                }
-                is Resource.Loading -> {
-                    loginProgressBar.isVisible = true
-                }
+        authViewModel.signInResult.observe(viewLifecycleOwner , EventObserver(
+            onError = {
+                val msg = getString(R.string.errormessage_login_error)
+                Snackbar.make(requireView() , msg , Snackbar.LENGTH_SHORT).show()
+                loginProgressBar.isVisible = false
+            } ,
+            onLoading = {
+                loginProgressBar.isVisible = true
+            }
+        ) {
+            loginProgressBar.isVisible = false
+            Intent(requireContext() , MainActivity::class.java).also {
+                startActivity(it)
+                requireActivity().finish()
             }
         })
-
     }
 
     private fun onClickLogin() {

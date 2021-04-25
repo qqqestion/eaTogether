@@ -10,6 +10,5 @@ class EaTogetherApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
-        Timber.d("Hello from EaTogetherApp")
     }
 }

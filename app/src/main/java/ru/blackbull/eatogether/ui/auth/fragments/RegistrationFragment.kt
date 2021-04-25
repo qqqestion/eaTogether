@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_registration.*
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.ui.auth.AuthViewModel
 import ru.blackbull.eatogether.ui.main.MainActivity
@@ -47,37 +48,19 @@ class RegistrationFragment : Fragment(R.layout.fragment_registration) {
     }
 
     private fun subscribeToObservers() {
-        authViewModel.signUpResult.observe(viewLifecycleOwner , Observer { result ->
-            when (result) {
-                is Resource.Success -> {
-                    registrationProgressBar.isVisible = false
-                    Intent(requireContext() , MainActivity::class.java).also {
-                        startActivity(it)
-                        requireActivity().finish()
-                    }
-                }
-                is Resource.Error -> {
-                    registrationProgressBar.isVisible = false
-                    val stringId = when (result.error) {
-                        is FirebaseAuthWeakPasswordException ->
-                            R.string.errormessage_weak_password
-                        is FirebaseAuthInvalidCredentialsException ->
-                            R.string.errormessage_email_malformed
-                        is FirebaseAuthUserCollisionException ->
-                            R.string.errormessage_user_already_exists
-                        else -> null
-                    }
-                    val msg = if (stringId == null) {
-                        result?.msg ?: getString(R.string.errormessage_unknown_error)
-                    } else {
-                        getString(stringId)
-                    }
-
-                    snackbar(msg)
-                }
-                is Resource.Loading -> {
-                    registrationProgressBar.isVisible = true
-                }
+        authViewModel.signUpResult.observe(viewLifecycleOwner , EventObserver(
+            onError = {
+                registrationProgressBar.isVisible = false
+                snackbar(it)
+            } ,
+            onLoading = {
+                registrationProgressBar.isVisible = true
+            }
+        ) {
+            registrationProgressBar.isVisible = false
+            Intent(requireContext() , MainActivity::class.java).also {
+                startActivity(it)
+                requireActivity().finish()
             }
         })
     }

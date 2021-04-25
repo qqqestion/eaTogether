@@ -11,6 +11,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import ru.blackbull.eatogether.api.BaseFirebaseApi
+import ru.blackbull.eatogether.api.FirebaseApi
 import ru.blackbull.eatogether.api.GooglePlaceApiService
 import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.repositories.FirebaseRepository
@@ -21,10 +23,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(ApplicationComponent::class)
 object AppModule {
-
-    @Singleton
-    @Provides
-    fun provideFirebaseRepository() = FirebaseRepository()
 
     @Singleton
     @Provides
@@ -41,7 +39,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        level = HttpLoggingInterceptor.Level.NONE
     }
 
     @Singleton
@@ -60,7 +58,7 @@ object AppModule {
     @Provides
     fun provideRetrofitInstance(
         httpClient: OkHttpClient
-    ) = Retrofit.Builder()
+    ): Retrofit = Retrofit.Builder()
         .baseUrl(Constants.BASE_GOOGLE_API_URL)
         .client(httpClient)
         .addConverterFactory(MoshiConverterFactory.create())
@@ -70,5 +68,9 @@ object AppModule {
     @Provides
     fun provideGooglePlaceApiService(
         retrofit: Retrofit
-    ) = retrofit.create(GooglePlaceApiService::class.java)
+    ): GooglePlaceApiService = retrofit.create(GooglePlaceApiService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideFirebaseApi() = FirebaseApi() as BaseFirebaseApi
 }

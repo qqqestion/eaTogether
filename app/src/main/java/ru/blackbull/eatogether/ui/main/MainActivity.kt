@@ -7,6 +7,8 @@ import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
 import com.google.android.material.snackbar.Snackbar
+import com.yandex.mapkit.MapKitFactory
+import com.yandex.mapkit.search.SearchFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.nav_header_main.*
@@ -28,6 +30,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MapKitFactory.setApiKey("3f863532-8f11-409b-9f01-410fec3a2c9b")
+        MapKitFactory.initialize(this)
+        SearchFactory.initialize(this)
+//
+//        Intent(this , MapActivity::class.java).also {
+//            startActivity(it)
+//            finish()
+//        }
+
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
         val navController = findNavController(R.id.navHostFragment)
@@ -52,10 +63,10 @@ class MainActivity : AppCompatActivity() {
             rootLayout.closeDrawer(GravityCompat.START)
             itId != curId
         }
-        Intent(this , MainService::class.java).also { intent ->
-            intent.action = START_SERVICE
-            this.startService(intent)
-        }
+//        Intent(this , MainService::class.java).also { intent ->
+//            intent.action = START_SERVICE
+//            this.startService(intent)
+//        }
     }
 
     override fun onBackPressed() {
@@ -69,13 +80,5 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.navHostFragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Intent(this , MainService::class.java).also { intent ->
-            intent.action = STOP_SERVICE
-            this.startService(intent)
-        }
     }
 }

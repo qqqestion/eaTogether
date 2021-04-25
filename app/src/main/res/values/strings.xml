@@ -24,7 +24,7 @@
 
     <!--  Fragments' titles  -->
     <string name="title_profile">Профиль</string>
-    <string name="title_edit_profile">Редактировать профиль</string>
+    <string name="title_edit_profile">Редактирование профиль</string>
     <string name="title_map">Карта</string>
     <string name="title_nearby">Люди рядом</string>
     <string name="title_match">Совпадение</string>

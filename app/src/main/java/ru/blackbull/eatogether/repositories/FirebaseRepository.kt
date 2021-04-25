@@ -2,231 +2,177 @@ package ru.blackbull.eatogether.repositories
 
 import android.location.Location
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import ru.blackbull.eatogether.models.firebase.Match
+import ru.blackbull.eatogether.api.BaseFirebaseApi
+import ru.blackbull.eatogether.api.FirebaseApi
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
-import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.other.safeCall
-import timber.log.Timber
+import javax.inject.Inject
 
 
-class FirebaseRepository {
+class FirebaseRepository @Inject constructor(
+    private val firebaseApi: BaseFirebaseApi
+) {
 
-    val auth = FirebaseAuth.getInstance()
-    private val usersRef = Firebase.firestore.collection("users")
-    private val partiesRef = Firebase.firestore.collection("parties")
-    private val notificationsRef = Firebase.firestore.collection("notifications")
     val matchesRef = Firebase.firestore.collection("matches")
 
+    /**
+     * Updates last location user's field with given location
+     *
+     * @param location
+     */
     suspend fun updateUserLocation(location: Location): Unit = withContext(Dispatchers.IO) {
-        // Используется com.firebase.firestore.GeoPoint потому что в firestore его легче сериализовать
-        val geoPoint = GeoPoint(
-            location.latitude , location.longitude
-        )
-        usersRef.document(
-            auth.uid!!
-        ).update(
-            hashMapOf<String , Any>("lastLocation" to geoPoint)
-        ).await()
+        firebaseApi.updateUserLocation(location)
     }
 
-    suspend fun searchPartyByPlace(placeId: String) = withContext(Dispatchers.IO) {
+    /**
+     * Calls FirebaseApi.searchPartyByPlace method and returns Success. If error occurs return Error
+     *
+     * @param placeId place id in Google Places API
+     * @return Resource
+     */
+    suspend fun searchPartyByPlace(
+        placeId: String
+    ): Resource<List<Party>> = withContext(Dispatchers.IO) {
         safeCall {
-            Resource.Success(
-                partiesRef
-                    .whereEqualTo("placeId" , placeId)
-                    .get()
-                    .await()
-                    .toObjects(Party::class.java)
-            )
+            Resource.Success(firebaseApi.searchPartyByPlace(placeId))
         }
     }
 
-    suspend fun addParty(party: Party) = withContext(Dispatchers.IO) {
+    /**
+     * Creates party in collection and returns Success. If error occurs return Error
+     *
+     * @param party created party
+     * @return Resource
+     */
+    suspend fun addParty(party: Party): Resource<Unit> = withContext(Dispatchers.IO) {
         safeCall {
-            partiesRef.add(party).await()
-            Resource.Success<Unit>()
+            firebaseApi.addParty(party)
+            Resource.Success()
         }
     }
 
+    /**
+     * Updates party
+     *
+     * @param party changed party
+     */
     suspend fun updateParty(party: Party) = withContext(Dispatchers.IO) {
-        partiesRef.document(party.id!!).set(party).await()
+        firebaseApi.updateParty(party)
     }
 
-    suspend fun getPartiesByCurrentUser() = withContext(Dispatchers.IO) {
+    /**
+     * Gets party in which current user is member
+     *
+     * @return
+     */
+    suspend fun getPartiesByCurrentUser(): Resource<List<Party>> = withContext(Dispatchers.IO) {
         safeCall {
-            Resource.Success(
-                partiesRef
-                    .whereArrayContains("users" , auth.uid!!)
-                    .get()
-                    .await()
-                    .toObjects(Party::class.java)
-            )
+            Resource.Success(firebaseApi.getPartiesByCurrentUser())
         }
     }
 
-    suspend fun getCurrentUser(): Resource<User> = getUser(auth.uid!!)
+    /**
+     * Gets current user by his id
+     *
+     * @return
+     */
+    suspend fun getCurrentUser(): Resource<User> = getUser(getCurrentUserId())
 
+    /**
+     * Gets user with given id
+     *
+     * @param uid
+     * @return
+     */
     suspend fun getUser(uid: String): Resource<User> = withContext(Dispatchers.IO) {
         safeCall {
-            Resource.Success(
-                usersRef
-                    .document(uid)
-                    .get()
-                    .await()
-                    .toObject(User::class.java)
-            )
+            Resource.Success(firebaseApi.getUser(uid))
         }
     }
 
-    fun getCurrentUserId(): String = auth.uid!!
+    fun getCurrentUserId(): String = firebaseApi.getCurrentUserId()
 
+    /**
+     * Signs out
+     *
+     */
     fun signOut() {
-        FirebaseAuth.getInstance().signOut()
+        firebaseApi.signOut()
     }
 
+    /**
+     * Updates current user
+     *
+     * @param user
+     */
     suspend fun updateUser(user: User) {
-        val firebaseUser = auth.currentUser ?: return
-        if (firebaseUser.email != user.email) {
-            firebaseUser.updateEmail(user.email!!)
-            auth.updateCurrentUser(firebaseUser)
-        }
-
-        // Чтобы не фотография из firebase не загружалась повторно в firebase
-        // TODO: добавить обновление фотографии
-//        if (user._imageUri?.host != "firebasestorage.googleapis.com") {
-//            val res = FirebaseStorage.getInstance().reference.child(firebaseUser.uid).putFile(
-//                Uri.parse(user.imageUri!!)
-//            ).await()
-//            val imageUri = res.metadata?.reference?.downloadUrl?.await()
-//
-//            user.imageUri = imageUri.toString()
-//        }
-
-        usersRef.document(auth.uid!!).set(user).await()
+        firebaseApi.updateUser(user)
     }
 
     fun isAuthenticated(): Boolean {
-        return auth.currentUser != null
+        return firebaseApi.isAuthenticated()
     }
 
     suspend fun signIn(email: String , password: String) = withContext(Dispatchers.IO) {
         safeCall {
-            val firebaseUser: FirebaseUser?
-            val result = auth
-                .signInWithEmailAndPassword(email , password)
-                .await()
-            firebaseUser = result.user
-            Resource.Success(firebaseUser != null)
+            firebaseApi.signIn(email , password)
+            Resource.Success(Unit)
         }
     }
 
     suspend fun signUpWithEmailAndPassword(
-        userInfo: User ,
+        user: User ,
         password: String
     ) = withContext(Dispatchers.IO) {
         safeCall {
-            val firebaseUser: FirebaseUser?
-            val result = FirebaseAuth.getInstance()
-                .createUserWithEmailAndPassword(userInfo.email!! , password)
-                .await()
-            firebaseUser = result.user
-            userInfo.imageUri = Constants.DEFAULT_IMAGE_URL
-            usersRef.document(firebaseUser!!.uid).set(userInfo).await()
+            firebaseApi.signUpWithEmailAndPassword(user , password)
             Resource.Success<Unit>()
         }
     }
 
-    suspend fun getNearbyUsers() = withContext(Dispatchers.IO) {
+    suspend fun getNearbyUsers(): Resource<MutableList<User>> = withContext(Dispatchers.IO) {
         safeCall {
-            val currentUser = getUser(auth.uid!!).data!!
-            // Добавляем в "исключенных" уже лайкнутых, дислайкнутых пользователей
-            // и текущего пользователя
-            val excludeUsers = currentUser.likedUsers +
-                    currentUser.dislikedUsers +
-                    currentUser.id
-            val queryRef = usersRef.whereNotIn(
-                // Ищем по ID документа
-                FieldPath.documentId() ,
-                excludeUsers
-            )
-
-            val users = queryRef.get().await().toObjects(User::class.java)
-            Timber.d("users: $users")
-            Resource.Success(users)
+            Resource.Success(firebaseApi.getNearbyUsers().toMutableList())
         }
     }
 
     suspend fun dislikeUser(user: User) = withContext(Dispatchers.IO) {
         safeCall {
-            if (user.id == null) {
-                return@withContext
-            }
-            val curUserRef = usersRef.document(auth.uid!!)
-            val curUser = curUserRef.get().await().toObject(User::class.java)
-            curUser!!.dislikedUsers += user.id!!
-            curUserRef.update("dislikedUsers" , curUser!!.likedUsers).await()
+            firebaseApi.dislikeUser(user)
             Resource.Success<Unit>()
         }
     }
 
     suspend fun likeUser(user: User) = withContext(Dispatchers.IO) {
         safeCall {
-            val curUserRef = usersRef.document(auth.uid!!)
-            val curUser = curUserRef.get().await().toObject(User::class.java)
-            curUser!!.likedUsers += user.id!!
-            curUserRef.update("likedUsers" , curUser!!.likedUsers).await()
-            // Если другой польватель лайкнул текущего, возвращаем true
-            val isLiked = user.likedUsers.contains(curUser.id)
-            if (isLiked) {
-                val match = Match(firstLiker = user.id , secondLiker = auth.uid)
-                matchesRef.add(match).await()
-                Resource.Success(user)
-            } else {
-                Resource.Success(null)
-            }
+            Resource.Success(firebaseApi.likeUser(user))
         }
     }
 
-    suspend fun getPartyById(id: String) = withContext(Dispatchers.IO) {
+    suspend fun getPartyById(partyId: String): Resource<Party> = withContext(Dispatchers.IO) {
         safeCall {
-            Resource.Success(
-                partiesRef
-                    .document(id)
-                    .get()
-                    .await()
-                    .toObject(Party::class.java)
-            )
+            Resource.Success(firebaseApi.getPartyById(partyId))
         }
     }
 
-    suspend fun getPartyParticipants(party: Party) = withContext(Dispatchers.IO) {
+    suspend fun getPartyParticipants(
+        party: Party
+    ): Resource<List<User>> = withContext(Dispatchers.IO) {
         safeCall {
-            Resource.Success(
-                usersRef
-                    .whereIn(FieldPath.documentId() , party.users)
-                    .get()
-                    .await()
-                    .toObjects(User::class.java)
-            )
+            Resource.Success(firebaseApi.getPartyParticipants(party))
         }
     }
 
     suspend fun addCurrentUserToParty(party: Party) = withContext(Dispatchers.IO) {
-        val uid = FirebaseAuth.getInstance().currentUser?.uid!!
-        if (!party.users.contains(uid)) {
-            party.users.add(uid)
-            updateParty(party)
-        }
+        firebaseApi.addCurrentUserToParty(party)
     }
 
     suspend fun sendLikeNotification(user: User) {

@@ -82,7 +82,7 @@
             android:id="@+id/action_placeDetailFragment_to_partyDetailFragment"
             app:destination="@id/partyDetailFragment" />
         <argument
-            android:name="placeId"
+            android:name="placeUri"
             app:argType="string" />
     </fragment>
     <fragment

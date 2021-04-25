@@ -13,7 +13,7 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.PhotoUtility.getPhotoUrl
 
 
-class PlaceListAdapter : RecyclerView.Adapter<PlaceListAdapter.MyViewHolder>() {
+class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 

@@ -10,6 +10,7 @@ import ru.blackbull.eatogether.models.googleplaces.BasicLocation
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.repositories.PlaceRepository
+import timber.log.Timber
 
 class MapViewModel @ViewModelInject constructor(
     private val placeRepository: PlaceRepository
@@ -25,7 +26,11 @@ class MapViewModel @ViewModelInject constructor(
 
 
     fun searchPlaces(placeName: String) = viewModelScope.launch {
+        if (placeName.isEmpty()) {
+            return@launch
+        }
         _searchPlaces.postValue(Event(Resource.Loading()))
+        Timber.d("Search places: $placeName")
         val response = placeRepository.getPlacesByName(placeName)
         _searchPlaces.postValue(Event(response))
     }

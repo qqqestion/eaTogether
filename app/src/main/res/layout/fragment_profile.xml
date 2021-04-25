@@ -17,31 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/btnProfileMenu"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/content_description_menu_btn"
-        android:src="@drawable/btn_navigation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <TextView
-        android:id="@+id/tvProfileTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="@string/profile"
-        android:textColor="@color/colorWhite"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/view" />
-
     <TextView
         android:id="@+id/tvProfileGreeting"
         android:layout_width="wrap_content"
@@ -53,7 +28,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/ibtnProfileImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnProfileMenu" />
+        app:layout_constraintTop_toTopOf="@id/ibtnProfileImage" />
 
     <TextView
         android:id="@+id/tvProfileQuesting"
@@ -62,8 +37,7 @@
         android:text="@string/hi_2"
         android:textColor="@color/colorWhite"
         android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/ibtnProfileImage"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvProfileGreeting"
         app:layout_constraintTop_toBottomOf="@+id/tvProfileGreeting" />
 
     <TextView
@@ -89,7 +63,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnProfileMenu" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/ibtnProfileSettings"
@@ -129,17 +103,19 @@
 
             <Button
                 android:id="@+id/buttonTable1"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
-                android:background="@drawable/rounded_button_pink"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_button_for_table_pink"
                 android:clickable="false"
                 android:textAllCaps="false" />
 
             <Button
                 android:id="@+id/buttonTable2"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
-                android:background="@drawable/rounded_button_pink"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/rounded_button_for_table_pink"
                 android:clickable="false"
                 android:textAllCaps="false" />
         </TableRow>
@@ -148,18 +124,19 @@
 
             <Button
                 android:id="@+id/buttonTable3"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
-                android:background="@drawable/rounded_button_pink"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_button_for_table_pink"
                 android:clickable="false"
                 android:textAllCaps="false" />
 
-
             <Button
                 android:id="@+id/buttonTable4"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
-                android:background="@drawable/rounded_button_pink"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:background="@drawable/rounded_button_for_table_pink"
                 android:clickable="false"
                 android:textAllCaps="false" />
         </TableRow>

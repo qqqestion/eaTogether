@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_recycler_place.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.adapters.PlaceListAdapter
+import ru.blackbull.eatogether.adapters.PlaceAdapter
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.main.snackbar
 
@@ -21,7 +20,7 @@ class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
     val args: RecycleRestaurantsFragmentArgs by navArgs()
     private val viewModel: MapViewModel by viewModels()
 
-    private lateinit var placeAdapter: PlaceListAdapter
+    private lateinit var placeAdapter: PlaceAdapter
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
@@ -56,7 +55,7 @@ class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
     }
 
     private fun setupRecyclerView() {
-        placeAdapter = PlaceListAdapter()
+        placeAdapter = PlaceAdapter()
         rvNearbyPlaces.apply {
             adapter = placeAdapter
             layoutManager = LinearLayoutManager(requireContext())

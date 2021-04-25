@@ -13,5 +13,4 @@ data class OneResult(
 
     @Json(name = "error_message")
     val errorMessage: String = ""
-) {
-}
+)

@@ -5,10 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import coil.load
 import coil.transform.CircleCropTransformation
@@ -16,7 +18,6 @@ import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.extensions.shortToast
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.auth.AuthActivity
@@ -24,8 +25,7 @@ import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.Date
+import java.util.*
 
 @AndroidEntryPoint
 class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
@@ -38,12 +38,12 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
+        setHasOptionsMenu(true)
         subscribeToObservers()
 
-        edit_profile_save_btn.setOnClickListener { onClickSaveButton() }
         btnEditProfileSignOut.setOnClickListener {
             firebaseViewModel.signOut()
-            Intent(requireContext(), AuthActivity::class.java).also {
+            Intent(requireContext() , AuthActivity::class.java).also {
                 startActivity(it)
                 requireActivity().finish()
             }
@@ -52,9 +52,6 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
             val intent = Intent(Intent.ACTION_PICK , MediaStore.Images.Media.INTERNAL_CONTENT_URI)
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(intent , PICK_IMAGE)
-        }
-        btnEditProfileBack.setOnClickListener {
-            findNavController().popBackStack()
         }
     }
 
@@ -81,6 +78,15 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu , inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_profile , menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        onClickSaveButton()
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onStart() {
         super.onStart()
         firebaseViewModel.getCurrentUser()
@@ -105,7 +111,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         user.birthday = Timestamp(date)
         user.imageUri = savedUri.toString()
         firebaseViewModel.updateUser(user)
-        shortToast("Профиль успешно обновлен")
+        snackbar("Профиль успешно обновлен")
     }
 
     private fun updateUserInfo(user: User) {

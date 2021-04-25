@@ -2,7 +2,7 @@ package ru.blackbull.eatogether.other
 
 sealed class Resource<out T>(
     val data: T? ,
-    val msg: String? ,
+    var msg: String? ,
     val error: Throwable?
 ) {
 

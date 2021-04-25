@@ -11,7 +11,5 @@ data class ResultList(
     val placeList: List<BasicLocation> ,
     @Json(name = "error_message")
     val errorMessage: String = ""
-) {
-
-}
+)
 
