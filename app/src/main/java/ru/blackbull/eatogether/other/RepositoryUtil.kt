@@ -1,7 +1,6 @@
 package ru.blackbull.eatogether.other
 
 import timber.log.Timber
-import java.lang.Exception
 
 
 /**

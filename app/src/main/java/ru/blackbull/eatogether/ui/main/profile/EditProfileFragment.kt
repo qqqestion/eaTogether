@@ -11,7 +11,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.firebase.Timestamp
@@ -125,7 +124,7 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
         val pattern = "dd.MM.yyyy"
         val simpleDateFormat = SimpleDateFormat(pattern , Locale.US)
         etEditProfileBirthday.setText(simpleDateFormat.format(user.birthday?.toDate()!!))
-        ivEditProfileImage.load(viewModel.currentPhoto) {
+        ivEditProfileImage.load(viewModel.currentPhoto.value) {
             transformations(CircleCropTransformation())
         }
     }

@@ -1,9 +1,7 @@
 package ru.blackbull.eatogether.models.firebase
 
-import android.location.Location
 import android.os.Parcel
 import android.os.Parcelable
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.GeoPoint

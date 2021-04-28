@@ -1,10 +1,8 @@
 package ru.blackbull.eatogether.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -13,11 +11,11 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageException
 import kotlinx.android.synthetic.main.item_party_preview.view.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.other.PhotoUtility.getFormattedTime
+import timber.log.Timber
 
 
 class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
@@ -68,21 +66,31 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
                         transformations(CircleCropTransformation())
                     }
                 }.addOnFailureListener { e ->
-                    Log.d("TagForDebug" , "error during loading first photo" , e)
+                    Timber.d(e)
                 }
+
+            /**
+             * Depends on users size we manage ui.
+             * users size
+             * 1 -> make second photo invisible
+             * 2 -> load second user photo
+             * more than 2 -> replace second user photo with ellipsis
+             */
             when (party.users.size) {
                 1 -> {
-                    ivPartyPreviewSecondPhoto.visibility = View.GONE
+                    ivPartyPreviewSecondPhoto.isVisible = false
                 }
                 2 -> {
                     FirebaseStorage.getInstance()
                         .reference.child(party.users[1])
-                        .downloadUrl.addOnSuccessListener { uri ->
+                        .downloadUrl
+                        .addOnSuccessListener { uri ->
                             ivPartyPreviewSecondPhoto.load(uri) {
                                 transformations(CircleCropTransformation())
                             }
-                        }.addOnFailureListener { e ->
-                            Log.d("TagForDebug" , "error during loading second photo" , e)
+                        }
+                        .addOnFailureListener { e ->
+                            Timber.d(e)
                         }
                 }
                 else -> {

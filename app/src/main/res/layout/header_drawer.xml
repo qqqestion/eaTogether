@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rounded_button_light_grey"
+    android:fitsSystemWindows="true"
     android:fontFamily="@font/spirax"
     android:gravity="center"
     android:text="@string/eatogether"

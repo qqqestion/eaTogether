@@ -30,7 +30,7 @@
 
 
         <fragment
-            android:id="@+id/navHostFragment"
+            android:id="@+id/mainNavFragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -39,17 +39,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/nav_main_graph" />
+            app:navGraph="@navigation/main_graph" />
     </LinearLayout>
 
-    <!-- TODO: уточнить почему header layout съезжает с экрана -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:paddingTop="20dp"
-        app:headerLayout="@layout/nav_header_main"
+        app:headerLayout="@layout/header_drawer"
         app:menu="@menu/activity_main_drawer" />
 </androidx.drawerlayout.widget.DrawerLayout>

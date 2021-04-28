@@ -9,7 +9,6 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.nav_header_main.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.main.snackbar

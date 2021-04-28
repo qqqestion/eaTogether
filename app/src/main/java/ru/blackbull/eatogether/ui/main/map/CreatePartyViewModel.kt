@@ -1,12 +1,12 @@
 package ru.blackbull.eatogether.ui.main.map
 
 import android.app.Application
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Timestamp
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.Party
@@ -15,8 +15,10 @@ import ru.blackbull.eatogether.repositories.FirebaseRepository
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class CreatePartyViewModel @ViewModelInject constructor(
+@HiltViewModel
+class CreatePartyViewModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository ,
     private val app: Application
 ) : ViewModel() {

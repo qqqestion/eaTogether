@@ -14,7 +14,6 @@ import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
 import timber.log.Timber
-import javax.inject.Inject
 
 class FirebaseApi : BaseFirebaseApi {
 

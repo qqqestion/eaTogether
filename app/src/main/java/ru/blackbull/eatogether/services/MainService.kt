@@ -1,7 +1,6 @@
 package ru.blackbull.eatogether.services
 
 import android.annotation.SuppressLint
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -20,7 +19,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.Match
 import ru.blackbull.eatogether.other.Constants.NOTIFICATION_CHANNEL_ID
 import ru.blackbull.eatogether.other.Constants.NOTIFICATION_CHANNEL_NAME

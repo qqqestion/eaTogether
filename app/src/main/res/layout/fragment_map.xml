@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -22,6 +24,8 @@
         android:ems="12"
         android:hint="@string/search"
         android:inputType="text"
+        app:layout_anchor="@id/yandexMapView"
+        app:layout_anchorGravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,10 +35,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:src="@drawable/ic_baseline_filter_list_24"
-        app:layout_constraintBottom_toBottomOf="@id/yandexMapView"
-        app:layout_constraintEnd_toEndOf="@id/yandexMapView" />
+        app:layout_anchor="@id/bottomSheet"
+        app:layout_anchorGravity="top|end" />
 
     <include layout="@layout/bottom_sheet" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

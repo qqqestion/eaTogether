@@ -14,6 +14,7 @@ import ru.blackbull.eatogether.adapters.PartyAdapter
 import ru.blackbull.eatogether.models.PlaceDetail
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.main.snackbar
+import timber.log.Timber
 
 
 @AndroidEntryPoint
@@ -29,18 +30,25 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
+
         setupRecyclerView()
         subscribeToObservers()
         placeUri = args.placeUri
 
         btnPlaceDetailCreateParty.setOnClickListener {
-            findNavController().navigate(
-                PlaceDetailFragmentDirections.actionPlaceDetailFragmentToCreatePartyFragment(
-                    placeUri ,
-                    tvPlaceDetailName.text.toString() ,
-                    tvPlaceDetailCategories.text.toString()
+            val navController = findNavController()
+            Timber.d("Current destination: ${navController.currentDestination}")
+            if (findNavController().currentDestination != null) {
+                findNavController().navigate(
+                    PlaceDetailFragmentDirections.actionPlaceDetailFragmentToCreatePartyFragment(
+                        placeUri ,
+                        tvPlaceDetailName.text.toString() ,
+                        tvPlaceDetailCategories.text.toString()
+                    )
                 )
-            )
+            } else {
+                snackbar("Current destination is null :/")
+            }
         }
 
         partiesAdapter.setOnItemViewClickListener { party ->
@@ -71,9 +79,6 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
         placeDetailViewModel.placeDetail.observe(viewLifecycleOwner , EventObserver(
             onError = {
                 snackbar(it)
-            } ,
-            onLoading = {
-
             }
         ) { placeDetail ->
             updatePlaceInfo(placeDetail)
@@ -81,9 +86,6 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
         placeDetailViewModel.searchParties.observe(viewLifecycleOwner , EventObserver(
             onError = {
                 snackbar(it)
-            } ,
-            onLoading = {
-
             }
         ) { parties ->
             partiesAdapter.parties = parties

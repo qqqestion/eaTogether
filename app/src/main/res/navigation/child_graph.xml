@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_child_graph"
-    app:startDestination="@id/recycleRestaurantsFragment">
+    app:startDestination="@id/placeDetailFragment">
 
     <fragment
         android:id="@+id/createPartyFragment"
@@ -11,7 +11,7 @@
         android:label="@string/title_create_party"
         tools:layout="@layout/fragment_create_party">
         <argument
-            android:name="placeId"
+            android:name="placeUri"
             app:argType="string" />
         <argument
             android:name="placeName"
@@ -41,21 +41,22 @@
             android:id="@+id/action_placeDetailFragment_to_partyDetailFragment"
             app:destination="@id/partyDetailFragment" />
         <argument
-            android:name="placeId"
-            app:argType="string" />
+            android:name="placeUri"
+            app:argType="string"
+            android:defaultValue="no_value" />
     </fragment>
     <fragment
         android:id="@+id/recycleRestaurantsFragment"
         android:name="ru.blackbull.eatogether.ui.main.map.RecycleRestaurantsFragment"
         android:label="@string/title_place_list"
         tools:layout="@layout/fragment_recycler_place">
-        <action
-            android:id="@+id/action_recycleRestaurantsFragment_to_placeDetailFragment"
-            app:destination="@id/placeDetailFragment" />
         <argument
             android:name="location"
             app:argType="com.google.android.gms.maps.model.LatLng"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_recycleRestaurantsFragment_to_placeDetailFragment2"
+            app:destination="@id/placeDetailFragment" />
     </fragment>
 </navigation>

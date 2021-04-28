@@ -10,15 +10,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import ru.blackbull.eatogether.api.BaseFirebaseApi
 import ru.blackbull.eatogether.api.FirebaseApi
-import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.repositories.PlaceRepository
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module

@@ -1,14 +1,5 @@
 package ru.blackbull.eatogether.adapters
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.AsyncListDiffer
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_review_preview.view.*
-import ru.blackbull.eatogether.R
-
 
 //class ReviewAdapter : RecyclerView.Adapter<ReviewAdapter.MyViewHolder>() {
 //

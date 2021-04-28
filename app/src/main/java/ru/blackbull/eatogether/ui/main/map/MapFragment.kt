@@ -2,41 +2,35 @@ package ru.blackbull.eatogether.ui.main.map
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.PointF
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
+import android.widget.ScrollView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
-import com.yandex.mapkit.layers.ObjectEvent
 import com.yandex.mapkit.logo.Alignment
 import com.yandex.mapkit.logo.HorizontalAlignment
 import com.yandex.mapkit.logo.VerticalAlignment
 import com.yandex.mapkit.map.*
 import com.yandex.mapkit.mapview.MapView
-import com.yandex.mapkit.map.Map as YandexMap
-import com.yandex.mapkit.search.*
-import com.yandex.mapkit.uri.Uri
 import com.yandex.mapkit.uri.UriObjectMetadata
 import com.yandex.mapkit.user_location.UserLocationLayer
-import com.yandex.mapkit.user_location.UserLocationObjectListener
-import com.yandex.mapkit.user_location.UserLocationView
 import com.yandex.runtime.image.ImageProvider
-import com.yandex.runtime.network.NetworkError
-import com.yandex.runtime.network.RemoteError
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -49,42 +43,47 @@ import ru.blackbull.eatogether.other.Constants.FASTEST_LOCATION_INTERVAL
 import ru.blackbull.eatogether.other.Constants.LOCATION_UPDATE_INTERVAL
 import ru.blackbull.eatogether.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import ru.blackbull.eatogether.other.Constants.SEARCH_TIME_DELAY
+import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.LocationUtility
 import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
 import javax.inject.Inject
-import com.yandex.runtime.Error as YandexRuntimeError
+import com.yandex.mapkit.map.Map as YandexMap
 
 
 @AndroidEntryPoint
 class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.PermissionCallbacks ,
-    CameraListener , Session.SearchListener , MapObjectTapListener {
-
-    private lateinit var searchManager: SearchManager
-    private lateinit var searchSession: Session
+    CameraListener , MapObjectTapListener {
 
     private lateinit var userLocationLayer: UserLocationLayer
     private lateinit var mapView: MapView
 
-    private lateinit var pointCollection: MapObjectCollection
+    private val viewModel: MapViewModel by viewModels()
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ScrollView>
 
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     var isFirstLocation: Boolean = true
 
+    private val place = "kfc"
+
+    private lateinit var localController: NavController
+
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
+
+        val localNavHost =
+            childFragmentManager.findFragmentById(R.id.childNavFragment) as NavHostFragment
+        localController = localNavHost.navController
+
         Timber.d("onViewCreated")
         isFirstLocation = true
         mapView = yandexMapView
-        searchManager = SearchFactory.getInstance().createSearchManager(
-            SearchManagerType.ONLINE
-        )
-        pointCollection = mapView.map.mapObjects.addCollection()
-        pointCollection.addTapListener(this)
         // TODO: поработать с разрешениями. Приложение падает при первом запуске на устройстве
         requestPermission()
+        subscribeToObservers()
 
         setupFusedLocationProviderClient()
         mapView.map?.addCameraListener(this)
@@ -93,9 +92,9 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         userLocationLayer = mapKit.createUserLocationLayer(mapView.mapWindow)
         userLocationLayer.isVisible = true
         userLocationLayer.isHeadingEnabled = true
-        submitQuery("kfc")
 
-        etMapSearchPlaces.setText("kfc")
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
         var job: Job? = null
         etMapSearchPlaces.addTextChangedListener { editable ->
@@ -113,8 +112,63 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
                 "Clicked" ,
                 Snackbar.LENGTH_LONG
             ).show()
-            submitQuery("kfc")
+            submitQuery(place)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                } else {
+                    /**
+                     * .popBackStack возвращает true, если был произведен переход, иначе false, но при имении только одного фрагмента в backstack
+                     * .popBackStack его удаляет и делает невозможным дальнейшее использование (был баг с открытием нижнего меню два раза и
+                     * IllegalStateException при повторном использовании)
+                     * MapFragment -> select item on map -> *opens bottom sheet menu* -> press back
+                     * -> select item on map again -> click create party -> IllegalStateException
+                     */
+                    if (localNavHost.navController.currentDestination?.id == R.id.placeDetailFragment) {
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    } else {
+                        localNavHost.navController.popBackStack()
+                    }
+                }
+            }
+        })
+
+        submitQuery(place)
+        etMapSearchPlaces.setText(place)
+    }
+
+    private fun subscribeToObservers() {
+        viewModel.searchResult.observe(viewLifecycleOwner , EventObserver(
+            onError = {
+                snackbar(it)
+            }
+        ) { results ->
+            val mapObjects: MapObjectCollection = mapView.map.mapObjects
+            mapObjects.clear()
+            for (searchResult in results) {
+                val obj = searchResult.obj!!
+                val resultLocation = obj.geometry[0].point
+                if (resultLocation != null) {
+                    Timber.d("Place ${obj.name} with address ${resultLocation.latitude}, ${resultLocation.longitude}")
+                    val placemark = mapObjects.addPlacemark(
+                        resultLocation ,
+                        ImageProvider.fromResource(
+                            requireContext() ,
+                            R.drawable.search_result
+                        )
+                    )
+                    val uri =
+                        obj.metadataContainer.getItem(UriObjectMetadata::class.java).uris.firstOrNull()?.value
+                    Timber.d("Put uri: $uri")
+                    placemark.userData = uri
+                    placemark.addTapListener(this)
+                }
+            }
+        })
     }
 
     private fun submitQuery(query: String) {
@@ -123,77 +177,20 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         if (query.isEmpty()) {
             return
         }
-        searchSession = searchManager.submit(
-            query ,
-            VisibleRegionUtils.toPolygon(mapView.map.visibleRegion) ,
-            SearchOptions().apply {
-                snippets = Snippet.BUSINESS_IMAGES.value
-            } ,
-            this
-        )
-    }
-
-    private fun filters(response: Response): String? {
-        fun enumValues(filter: BusinessFilter) = filter
-            .values
-            .enums
-            ?.joinToString(prefix = " -> ") { e -> e.value.id }
-            ?: ""
-
-        return response
-            .metadata
-            .businessResultMetadata
-            ?.businessFilters
-            ?.joinToString(separator = "\n") { f -> "${f.id}${enumValues(f)}" }
-    }
-
-    override fun onSearchResponse(response: Response) {
-        Timber.d("Filters: ${filters(response)}")
-        Timber.d("Just filters: ${response.metadata.businessResultMetadata?.businessFilters?.map { it.id }}}")
-        val mapObjects: MapObjectCollection = mapView.map.mapObjects
-        mapObjects.clear()
-
-        for (searchResult in response.collection.children) {
-            val obj = searchResult.obj!!
-            val resultLocation = obj.geometry[0].point
-            if (resultLocation != null) {
-                Timber.d("Place ${obj.name} with address ${resultLocation.latitude}, ${resultLocation.longitude}")
-                val placemark = mapObjects.addPlacemark(
-                    resultLocation ,
-                    ImageProvider.fromResource(
-                        requireContext() ,
-                        R.drawable.search_result
-                    )
-                )
-                val uri =
-                    obj.metadataContainer.getItem(UriObjectMetadata::class.java).uris.firstOrNull()?.value
-                Timber.d("Put uri: $uri")
-                placemark.userData = uri
-                placemark.addTapListener(this)
-            }
-        }
+        viewModel.search(query , VisibleRegionUtils.toPolygon(mapView.map.visibleRegion))
     }
 
     override fun onMapObjectTap(mapObject: MapObject , point: Point): Boolean {
-        snackbar("Point clicked")
         val uri = mapObject.userData as String
-        findNavController().navigate(
-            MapFragmentDirections.actionMapFragmentToPlaceDetailFragment(
-                uri
-            )
-        )
+//        findNavController().navigate(
+//            MapFragmentDirections.actionMapFragmentToPlaceDetailFragment(
+//                uri
+//            )
+//        )
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         Timber.d("Get uri: $uri")
+//        navHostChildFragment.findNavController()
         return true
-    }
-
-    override fun onSearchError(error: YandexRuntimeError) {
-        Timber.d("Yandex search error: $error")
-        val errorMessage = when (error) {
-            is RemoteError -> "Remote error"
-            is NetworkError -> "Network error"
-            else -> "Unknown error"
-        }
-        snackbar(errorMessage)
     }
 
     private val locationCallback = object : LocationCallback() {
@@ -257,7 +254,10 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         )
     }
 
-    override fun onPermissionsDenied(requestCode: Int , perms: MutableList<String>) {
+    override fun onPermissionsDenied(
+        requestCode: Int ,
+        perms: MutableList<String>
+    ) {
         if (EasyPermissions.somePermissionPermanentlyDenied(this , perms)) {
             AppSettingsDialog.Builder(this).build().show()
         } else {
@@ -265,7 +265,10 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         }
     }
 
-    override fun onPermissionsGranted(requestCode: Int , perms: MutableList<String>) {
+    override fun onPermissionsGranted(
+        requestCode: Int ,
+        perms: MutableList<String>
+    ) {
         setupFusedLocationProviderClient()
     }
 

@@ -4,15 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_recycler_place.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PlaceAdapter
-import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.ui.main.snackbar
 
 @AndroidEntryPoint
 class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
@@ -36,10 +33,10 @@ class RecycleRestaurantsFragment : Fragment(R.layout.fragment_recycler_place) {
                 // TODO: возможно будут проблемы с id места
                 putString("placeId" , location.id)
             }
-            findNavController().navigate(
-                R.id.action_recycleRestaurantsFragment_to_placeDetailFragment ,
-                bundle
-            )
+//            findNavController().navigate(
+//                R.id.action_recycleRestaurantsFragment_to_placeDetailFragment ,
+//                bundle
+//            )
         }
     }
 

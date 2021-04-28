@@ -1,10 +1,10 @@
 package ru.blackbull.eatogether.ui.main.map
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.models.PlaceDetail
 import ru.blackbull.eatogether.models.firebase.Party
@@ -12,8 +12,10 @@ import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.repositories.FirebaseRepository
 import ru.blackbull.eatogether.repositories.PlaceRepository
+import javax.inject.Inject
 
-class PlaceDetailViewModel @ViewModelInject constructor(
+@HiltViewModel
+class PlaceDetailViewModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository ,
     private val placeRepository: PlaceRepository
 ) : ViewModel() {

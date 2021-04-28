@@ -1,15 +1,12 @@
 package ru.blackbull.eatogether.ui.auth
 
 import android.app.Application
-import android.content.Context
-import android.widget.ImageView
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.EaTogetherApplication
 import ru.blackbull.eatogether.R
@@ -17,9 +14,6 @@ import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.repositories.FirebaseRepository
-import ru.blackbull.eatogether.ui.main.snackbar
-import java.lang.Exception
-import java.sql.SQLClientInfoException
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
