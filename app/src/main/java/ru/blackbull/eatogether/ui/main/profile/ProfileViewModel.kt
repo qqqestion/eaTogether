@@ -7,13 +7,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.repositories.FirebaseRepository
+import javax.inject.Inject
 
-class ProfileViewModel @ViewModelInject constructor(
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository
 ) : ViewModel() {
 
@@ -37,7 +40,7 @@ class ProfileViewModel @ViewModelInject constructor(
 //        currentUser.value?.let { event ->
 //            user.imageUri = event.peekContent().data?.imageUri
 //        }
-        firebaseRepository.updateUser(user, photoUri)
+        firebaseRepository.updateUser(user , photoUri)
         _currentUser.postValue(Event(Resource.Success(user)))
     }
 
