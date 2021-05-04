@@ -24,6 +24,7 @@
         android:ems="12"
         android:hint="@string/search"
         android:inputType="text"
+        android:imeOptions="actionSearch"
         app:layout_anchor="@id/yandexMapView"
         app:layout_anchorGravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"

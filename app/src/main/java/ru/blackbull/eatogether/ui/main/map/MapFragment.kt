@@ -2,12 +2,16 @@ package ru.blackbull.eatogether.ui.main.map
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import android.widget.LinearLayout
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView.OnEditorActionListener
 import androidx.activity.OnBackPressedCallback
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.core.widget.addTextChangedListener
@@ -99,15 +103,19 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-        var job: Job? = null
-        etMapSearchPlaces.addTextChangedListener { editable ->
-            job?.cancel()
-            job = MainScope().launch {
-                delay(SEARCH_TIME_DELAY)
-                editable?.let {
-                    submitQuery(it.toString())
-                }
+        /**
+         * По нажатию на кнопку поиска происходит запрос
+         * После клавиатура закрывается
+         */
+        etMapSearchPlaces.setOnEditorActionListener { _ , actionId , _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                submitQuery(etMapSearchPlaces.text.toString())
+                val imm =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+                imm?.hideSoftInputFromWindow(view.windowToken , 0)
+                return@setOnEditorActionListener true
             }
+            false
         }
         fab.setOnClickListener {
             Snackbar.make(
@@ -161,8 +169,6 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
                 handlePressBack()
             }
         })
-        submitQuery(place)
-        etMapSearchPlaces.setText(place)
     }
 
     private fun handlePressBack() {
@@ -205,8 +211,7 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
                             R.drawable.search_result
                         )
                     )
-                    val id = obj.metadataContainer.getItem(BusinessObjectMetadata::class.java).oid
-
+                    val id = obj.metadataContainer.getItem(BusinessObjectMetadata::class.java)?.oid
                     placemark.userData = obj.name to id
                     placemark.addTapListener(this)
                 }
