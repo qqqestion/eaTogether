@@ -9,7 +9,7 @@ object Constants {
     const val LOCATION_UPDATE_INTERVAL = 5000L
     const val FASTEST_LOCATION_INTERVAL = 2000L
 
-    const val SEARCH_TIME_DELAY = 500L
+    const val SEARCH_TIME_DELAY = 1500L
 
     const val GOOGLE_API_KEY: String = BuildConfig.GOOGLE_API_KEY
     const val BASE_GOOGLE_API_URL = "https://maps.googleapis.com/maps/api/"
@@ -27,4 +27,6 @@ object Constants {
     const val NOTIFICATION_ID = 1
     const val NOTIFICATION_CHANNEL_NAME = "my_channel_name"
     const val NOTIFICATION_CHANNEL_ID = "my_channel"
+
+    val CATEGORIES = listOf("restaurants", "cafe", "fast food", "bars", "confectionary")
 }

@@ -4,11 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.yandex.mapkit.GeoObjectCollection
 import com.yandex.mapkit.geometry.Geometry
+import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.search.*
 import com.yandex.runtime.Error
 import com.yandex.runtime.network.NetworkError
 import com.yandex.runtime.network.RemoteError
 import ru.blackbull.eatogether.models.PlaceDetail
+import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.Resource
 import timber.log.Timber
@@ -61,7 +63,49 @@ class PlaceRepository @Inject constructor(
 
     private var searchSession: Session? = null
 
+    init {
+        val point = Geometry.fromPoint(Point(59.95 , 30.32))
+        searchSession = searchManager.submit(
+            "" ,
+            point ,
+            SearchOptions() ,
+            object : Session.SearchListener {
+                override fun onSearchResponse(response: Response) {
+                    Timber.d("Init: ${filters(response)}")
+                }
+
+                override fun onSearchError(error: Error) {
+                    val errorMessage = when (error) {
+                        is RemoteError -> "Remote error"
+                        is NetworkError -> "Network error"
+                        else -> "Unknown error"
+                    }
+                    Timber.d("Error during map sdk request: $errorMessage")
+                }
+            }
+        )
+    }
+
     fun search(query: String , geometry: Geometry) {
+//        val enumFilter = BusinessFilter(
+//            "type_cuisine" ,
+//            "" ,
+//            false ,
+//            false ,
+//            BusinessFilter.Values.fromEnums(
+//                listOf(
+//                    BusinessFilter.EnumValue(
+//                        Feature.FeatureEnumValue(
+//                            /* id= */ "italian_cuisine" ,
+//                            /* name= */ "" ,
+//                            /* imageUrlTemplate= */ ""
+//                        ) ,
+//                        true ,
+//                        true
+//                    )
+//                )
+//            )
+//        )
         searchSession = searchManager.submit(
             query ,
             geometry ,
@@ -70,7 +114,19 @@ class PlaceRepository @Inject constructor(
             } ,
             object : Session.SearchListener {
                 override fun onSearchResponse(response: Response) {
-                    _searchPlaces.postValue(Event(Resource.Success(response.collection.children)))
+                    Timber.d("Search: ${filters(response)}")
+                    _searchPlaces.postValue(Event(Resource.Success(
+                        response.collection.children.filter { item ->
+                            val name =
+                                item.obj!!.metadataContainer.getItem(BusinessObjectMetadata::class.java).name
+                            item.obj!!.metadataContainer.getItem(BusinessObjectMetadata::class.java).categories.forEach {
+                                Timber.d("Place $name, category: name - ${it.name}, category class - ${it.categoryClass}, tags - ${it.tags}")
+                            }
+                            item.obj!!.metadataContainer.getItem(BusinessObjectMetadata::class.java).categories.find {
+                                it.categoryClass in Constants.CATEGORIES
+                            } != null
+                        }
+                    )))
                 }
 
                 override fun onSearchError(error: Error) {
@@ -85,6 +141,20 @@ class PlaceRepository @Inject constructor(
         )
     }
 
+    private fun filters(response: Response): String? {
+        fun enumValues(filter: BusinessFilter) = filter
+            .values
+            .enums
+            ?.joinToString(prefix = " -> ") { e -> e.value.name }
+            ?: ""
+
+        return response
+            .metadata
+            .businessResultMetadata
+            ?.businessFilters
+            ?.joinToString(separator = "\n") { f -> "${f.id}${enumValues(f)}" }
+    }
+
     private val baseUri = "ymapsbm1://org?oid=%s"
 
     fun getPlaceDetail(placeId: String) {
@@ -96,6 +166,7 @@ class PlaceRepository @Inject constructor(
             } ,
             object : Session.SearchListener {
                 override fun onSearchResponse(response: Response) {
+                    Timber.d("Place detail: ${filters(response)}")
                     for (searchResult in response.collection.children) {
                         val obj = searchResult.obj!!
                         val businessMetadata =
@@ -111,6 +182,7 @@ class PlaceRepository @Inject constructor(
                         val workingHours = businessMetadata.workingHours?.state?.text
                         val categories = businessMetadata.categories.map { it.name }
                         val features = businessMetadata.features.map { it.id to it.value }
+                        val links = businessMetadata.links
                         _placeDetail.postValue(
                             Event(
                                 Resource.Success(
