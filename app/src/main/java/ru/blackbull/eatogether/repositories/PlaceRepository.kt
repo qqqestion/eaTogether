@@ -85,10 +85,12 @@ class PlaceRepository @Inject constructor(
         )
     }
 
+    private val baseUri = "ymapsbm1://org?oid=%s"
+
     fun getPlaceDetail(placeId: String) {
         _placeDetail.postValue(Event(Resource.Loading()))
         searchSession = searchManager.resolveURI(
-            placeId ,
+            baseUri.format(placeId) ,
             SearchOptions().apply {
                 snippets = Snippet.BUSINESS_RATING1X.value
             } ,

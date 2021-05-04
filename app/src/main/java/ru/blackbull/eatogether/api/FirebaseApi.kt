@@ -1,6 +1,7 @@
 package ru.blackbull.eatogether.api
 
 import android.location.Location
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldPath
@@ -14,6 +15,7 @@ import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
 import timber.log.Timber
+import java.util.*
 
 class FirebaseApi : BaseFirebaseApi {
 
@@ -48,8 +50,21 @@ class FirebaseApi : BaseFirebaseApi {
     override suspend fun searchPartyByPlace(
         placeId: String
     ): List<Party> {
+        val calendar = Calendar.getInstance()
+        val startYear = calendar.get(Calendar.YEAR)
+        val startMonth = calendar.get(Calendar.MONTH)
+        val startDay = calendar.get(Calendar.DAY_OF_MONTH)
+        calendar.set(startYear , startMonth , startDay , 0 , 0 , 0)
+        val dayStart = calendar.time
+        calendar.set(startYear , startMonth , startDay , 23 , 59 , 59)
+        val dayEnd = calendar.time
+        Timber.d("Day start: $dayStart")
+        Timber.d("Day end: $dayEnd")
+
         return partiesRef
             .whereEqualTo("placeId" , placeId)
+            .whereGreaterThanOrEqualTo("time" , Timestamp(dayStart))
+            .whereLessThanOrEqualTo("time" , Timestamp(dayEnd))
             .get()
             .await()
             .toObjects(Party::class.java)

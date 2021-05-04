@@ -40,10 +40,6 @@
         <action
             android:id="@+id/action_placeDetailFragment_to_partyDetailFragment"
             app:destination="@id/partyDetailFragment" />
-        <argument
-            android:name="placeUri"
-            app:argType="string"
-            android:defaultValue="no_value" />
     </fragment>
     <fragment
         android:id="@+id/recycleRestaurantsFragment"
@@ -52,9 +48,9 @@
         tools:layout="@layout/fragment_recycler_place">
         <argument
             android:name="location"
+            android:defaultValue="@null"
             app:argType="com.google.android.gms.maps.model.LatLng"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <action
             android:id="@+id/action_recycleRestaurantsFragment_to_placeDetailFragment2"
             app:destination="@id/placeDetailFragment" />

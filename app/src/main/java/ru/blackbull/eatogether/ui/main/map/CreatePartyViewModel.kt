@@ -29,8 +29,7 @@ class CreatePartyViewModel @Inject constructor(
     fun createParty(
         title: String ,
         description: String ,
-        date: String ,
-        time: String ,
+        datetime: Date ,
         placeId: String
     ) = viewModelScope.launch {
         _createPartyResult.value?.let {
@@ -43,17 +42,17 @@ class CreatePartyViewModel @Inject constructor(
             "dd.MM.yyyy HH:mm" , Locale.getDefault()
         )
         val formattedDate: Date?
-        try {
-            formattedDate = format.parse("$date $time")
-        } catch (e: ParseException) {
-            _createPartyResult.value =
-                Resource.Error(msg = app.getString(R.string.errormessage_date_misformat))
-            return@launch
-        }
+//        try {
+//            formattedDate = format.parse("$date $time")
+//        } catch (e: ParseException) {
+//            _createPartyResult.value =
+//                Resource.Error(msg = app.getString(R.string.errormessage_date_misformat))
+//            return@launch
+//        }
         val party = Party(
             title = title ,
             description = description ,
-            time = Timestamp(formattedDate) ,
+            time = Timestamp(datetime) ,
             placeId = placeId ,
             users = mutableListOf(firebaseRepository.getCurrentUserId())
         )

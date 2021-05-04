@@ -5,11 +5,14 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
-import android.widget.ScrollView
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
+import android.widget.LinearLayout
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
+import androidx.core.widget.NestedScrollView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -26,7 +29,7 @@ import com.yandex.mapkit.logo.HorizontalAlignment
 import com.yandex.mapkit.logo.VerticalAlignment
 import com.yandex.mapkit.map.*
 import com.yandex.mapkit.mapview.MapView
-import com.yandex.mapkit.uri.UriObjectMetadata
+import com.yandex.mapkit.search.BusinessObjectMetadata
 import com.yandex.mapkit.user_location.UserLocationLayer
 import com.yandex.runtime.image.ImageProvider
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,9 +61,9 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
     private lateinit var userLocationLayer: UserLocationLayer
     private lateinit var mapView: MapView
 
-    private val viewModel: MapViewModel by viewModels()
+    private val viewModel: MapViewModel by activityViewModels()
 
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<ScrollView>
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<NestedScrollView>
 
     @Inject
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -69,16 +72,16 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
 
     private val place = "kfc"
 
+    private lateinit var localNavHost: NavHostFragment
     private lateinit var localController: NavController
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
 
-        val localNavHost =
+        localNavHost =
             childFragmentManager.findFragmentById(R.id.childNavFragment) as NavHostFragment
         localController = localNavHost.navController
 
-        Timber.d("onViewCreated")
         isFirstLocation = true
         mapView = yandexMapView
         // TODO: поработать с разрешениями. Приложение падает при первом запуске на устройстве
@@ -112,33 +115,75 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
                 "Clicked" ,
                 Snackbar.LENGTH_LONG
             ).show()
-            submitQuery(place)
         }
+        ivCancel.setOnClickListener {
+            handlePressBack()
+        }
+        bottomSheetBehavior.isFitToContents = false
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View , newState: Int) {
+            }
+
+            override fun onSlide(bottomSheet: View , slideOffset: Float) {
+                /**
+                 * Делает fab невидимым, чтобы при открытом полностью bottom sheet fab не было видно
+                 * TODO: поискать решение получше
+                 */
+                fab.isVisible = slideOffset < 0.5
+            }
+        })
+        clBottomSheet.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                clBottomSheet.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                val index = 3
+                val hidden = clBottomSheet.getChildAt(index)
+                bottomSheetBehavior.peekHeight = hidden.top
+                val viewName = when (hidden.id) {
+                    R.id.tvBottomSheetTitle -> "tvBottomSheetTitle"
+                    R.id.dragHelper -> "dragHelper"
+                    R.id.ivCancel -> "ivCancel"
+                    R.id.bottomSheet -> "bottomSheet"
+                    R.id.flBottomSheet -> "flBottomSheet"
+                    R.id.childNavFragment -> "childNavFragment"
+                    else -> "something else"
+                }
+                Timber.d("View at $index is $viewName")
+                Timber.d("Peek height: ${bottomSheetBehavior.peekHeight}")
+            }
+        })
 
         requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
                     isEnabled = false
-                    requireActivity().onBackPressed()
-                } else {
-                    /**
-                     * .popBackStack возвращает true, если был произведен переход, иначе false, но при имении только одного фрагмента в backstack
-                     * .popBackStack его удаляет и делает невозможным дальнейшее использование (был баг с открытием нижнего меню два раза и
-                     * IllegalStateException при повторном использовании)
-                     * MapFragment -> select item on map -> *opens bottom sheet menu* -> press back
-                     * -> select item on map again -> click create party -> IllegalStateException
-                     */
-                    if (localNavHost.navController.currentDestination?.id == R.id.placeDetailFragment) {
-                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-                    } else {
-                        localNavHost.navController.popBackStack()
-                    }
                 }
+                handlePressBack()
             }
         })
-
         submitQuery(place)
         etMapSearchPlaces.setText(place)
+    }
+
+    private fun handlePressBack() {
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+            requireActivity().onBackPressed()
+        } else {
+            /**
+             * .popBackStack возвращает true, если был произведен переход, иначе false, но при имении только одного фрагмента в backstack
+             * .popBackStack его удаляет и делает невозможным дальнейшее использование (был баг с открытием нижнего меню два раза и
+             * IllegalStateException при повторном использовании)
+             * MapFragment -> select item on map -> *opens bottom sheet menu* -> press back
+             * -> select item on map again -> click create party -> IllegalStateException because there is no current destination
+             * in nested navcontrolle (mBackStack is empty)
+             */
+            if (localNavHost.navController.currentDestination?.id == R.id.placeDetailFragment) {
+                bottomSheetBehavior.isHideable = true
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            } else {
+                localNavHost.navController.popBackStack()
+            }
+        }
     }
 
     private fun subscribeToObservers() {
@@ -153,7 +198,6 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
                 val obj = searchResult.obj!!
                 val resultLocation = obj.geometry[0].point
                 if (resultLocation != null) {
-                    Timber.d("Place ${obj.name} with address ${resultLocation.latitude}, ${resultLocation.longitude}")
                     val placemark = mapObjects.addPlacemark(
                         resultLocation ,
                         ImageProvider.fromResource(
@@ -161,10 +205,9 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
                             R.drawable.search_result
                         )
                     )
-                    val uri =
-                        obj.metadataContainer.getItem(UriObjectMetadata::class.java).uris.firstOrNull()?.value
-                    Timber.d("Put uri: $uri")
-                    placemark.userData = uri
+                    val id = obj.metadataContainer.getItem(BusinessObjectMetadata::class.java).oid
+
+                    placemark.userData = obj.name to id
                     placemark.addTapListener(this)
                 }
             }
@@ -181,15 +224,15 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
     }
 
     override fun onMapObjectTap(mapObject: MapObject , point: Point): Boolean {
-        val uri = mapObject.userData as String
-//        findNavController().navigate(
-//            MapFragmentDirections.actionMapFragmentToPlaceDetailFragment(
-//                uri
-//            )
-//        )
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-        Timber.d("Get uri: $uri")
-//        navHostChildFragment.findNavController()
+        val userData = mapObject.userData as Pair<String , String>
+        val name = userData.first
+        val id = userData.second
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        tvBottomSheetTitle.text = name
+        Timber.d("Get id: $id")
+        viewModel.getPlaceDetail(id)
+        viewModel.searchPartyByPlace(id)
+        bottomSheetBehavior.isHideable = false
         return true
     }
 

@@ -1,8 +1,10 @@
 package ru.blackbull.eatogether.ui.main.map
 
 import android.os.Bundle
+import android.text.format.DateUtils
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -20,11 +22,9 @@ import timber.log.Timber
 @AndroidEntryPoint
 class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
 
-    private val args: PlaceDetailFragmentArgs by navArgs()
+    private val viewModel: MapViewModel by activityViewModels()
 
-    private val placeDetailViewModel: PlaceDetailViewModel by viewModels()
-
-    private lateinit var placeUri: String
+    private var place: PlaceDetail? = null
 
     private lateinit var partiesAdapter: PartyAdapter
 
@@ -33,21 +33,20 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
 
         setupRecyclerView()
         subscribeToObservers()
-        placeUri = args.placeUri
 
         btnPlaceDetailCreateParty.setOnClickListener {
             val navController = findNavController()
             Timber.d("Current destination: ${navController.currentDestination}")
-            if (findNavController().currentDestination != null) {
+            if (findNavController().currentDestination != null && place != null) {
                 findNavController().navigate(
                     PlaceDetailFragmentDirections.actionPlaceDetailFragmentToCreatePartyFragment(
-                        placeUri ,
-                        tvPlaceDetailName.text.toString() ,
-                        tvPlaceDetailCategories.text.toString()
+                        place?.id!! ,
+                        place?.name!! ,
+                        place?.address!!
                     )
                 )
             } else {
-                snackbar("Current destination is null :/")
+                snackbar("Current destination or place is null :/")
             }
         }
 
@@ -57,14 +56,11 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
             )
         }
         partiesAdapter.setOnJoinCLickListener { party ->
-            placeDetailViewModel.addUserToParty(party)
+            viewModel.addUserToParty(party)
             findNavController().navigate(
                 PlaceDetailFragmentDirections.actionPlaceDetailFragmentToPartyDetailFragment(party.id!!)
             )
         }
-
-        placeDetailViewModel.getPlaceDetail(placeUri)
-        placeDetailViewModel.searchPartyByPlace(placeUri)
     }
 
     private fun setupRecyclerView() {
@@ -76,14 +72,15 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
     }
 
     private fun subscribeToObservers() {
-        placeDetailViewModel.placeDetail.observe(viewLifecycleOwner , EventObserver(
+        viewModel.placeDetail.observe(viewLifecycleOwner , EventObserver(
             onError = {
                 snackbar(it)
             }
         ) { placeDetail ->
-            updatePlaceInfo(placeDetail)
+            place = placeDetail
+            updatePlaceInfo()
         })
-        placeDetailViewModel.searchParties.observe(viewLifecycleOwner , EventObserver(
+        viewModel.searchParties.observe(viewLifecycleOwner , EventObserver(
             onError = {
                 snackbar(it)
             }
@@ -92,14 +89,16 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
         })
     }
 
-    private fun updatePlaceInfo(place: PlaceDetail) {
-        tvPlaceDetailName.text = place.name
-        tvAddress.text = place.address
-        tvPlaceDetailCategories.text = place.categories.joinToString()
-        tvPlaceDetailPhone.text = place.phone
-        tvWorkingHours.text = place.workingState
-        tvScore.text = place.score.toString()
-        // TODO: добавить работу с локализацией
-        tvRatings.text = "${place.ratings} оценок"
+    private fun updatePlaceInfo() {
+        place?.let { nnplace ->
+            Timber.d("$nnplace")
+            tvAddress.text = nnplace.address
+            tvPlaceDetailCategories.text = nnplace.categories.joinToString()
+            tvPlaceDetailPhone.text = nnplace.phone
+            tvWorkingHours.text = nnplace.workingState
+            tvScore.text = nnplace.score.toString()
+            // TODO: добавить работу с локализацией
+            tvRatings.text = "${nnplace.ratings} оценок"
+        }
     }
 }

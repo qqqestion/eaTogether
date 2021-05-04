@@ -4,66 +4,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     tools:context=".ui.main.map.CreatePartyFragment">
 
-    <TextView
-        android:id="@+id/tvCreatePartyPlaceName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
+    <!--    <TextView-->
+    <!--        android:id="@+id/tvCreatePartyPlaceAddress"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:textSize="15sp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@id/tvCreatePartyPlaceName"-->
+    <!--        tools:text="Коменноостровский пр., 38, 190000" />-->
+
+    <ImageView
+        android:id="@+id/ivPlace"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="50dp"
+        android:src="@drawable/ic_baseline_place_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvCreatePartyPlaceAddress"
-        android:layout_width="match_parent"
+        android:id="@+id/tvAddress"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="15sp"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCreatePartyPlaceName"
-        tools:text="@tools:sample/lorem" />
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/ivPlace"
+        app:layout_constraintTop_toTopOf="@id/ivPlace"
+        tools:text="Каменноостровский пр., 39, 190000" />
 
-    <EditText
-        android:id="@+id/etCreatePartyPlaceTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/ethint_choose_title"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvCreatePartyPlaceAddress" />
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/placeBarrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="ivPlace, tvAddress" />
 
-    <EditText
-        android:id="@+id/etCreatePartyPlaceDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/ethint_choose_description"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etCreatePartyPlaceTitle" />
+    <ImageView
+        android:id="@+id/ivClock"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_clock"
+        app:layout_constraintStart_toStartOf="@id/ivPlace"
+        app:layout_constraintTop_toBottomOf="@id/placeBarrier" />
 
-    <EditText
-        android:id="@+id/etCreatePartyPickDate"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tvChooseDate"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/ethint_choose_date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etCreatePartyPlaceDescription" />
+        android:text="Выберите время:"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/ivClock"
+        app:layout_constraintTop_toTopOf="@id/ivClock" />
 
-    <EditText
-        android:id="@+id/etCreatePartyPickTime"
-        android:layout_width="match_parent"
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/clockBarrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="ivClock, tvChooseDate" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/ethint_choose_time"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etCreatePartyPickDate" />
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="@id/clockBarrier"
+        app:layout_constraintTop_toTopOf="@id/ivClock"
+        app:layout_goneMarginStart="0dp"
+        tools:text="15:00" />
 
 
     <Button
@@ -72,7 +87,7 @@
         android:layout_height="wrap_content"
         android:text="@string/btntext_create_party"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etCreatePartyPickTime" />
+        app:layout_constraintTop_toBottomOf="@id/ivClock" />
 
     <Button
         android:id="@+id/btnCreatePartyCancel"
@@ -80,6 +95,6 @@
         android:layout_height="wrap_content"
         android:text="@string/btntext_cancel"
         app:layout_constraintStart_toEndOf="@id/btnCreatePartyConfirm"
-        app:layout_constraintTop_toBottomOf="@id/etCreatePartyPickTime" />
+        app:layout_constraintTop_toBottomOf="@id/ivClock" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
