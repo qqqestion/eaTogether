@@ -6,7 +6,20 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.GeoPoint
 
-
+/**
+ * Класс, описывающий пользователя
+ *
+ * @property id
+ * @property email
+ * @property firstName
+ * @property lastName
+ * @property description
+ * @property birthday
+ * @property imageUri
+ * @property likedUsers
+ * @property dislikedUsers
+ * @property lastLocation
+ */
 data class User(
     @DocumentId
     var id: String? = null ,

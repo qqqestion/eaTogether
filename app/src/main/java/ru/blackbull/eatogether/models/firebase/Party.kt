@@ -4,6 +4,16 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import java.io.Serializable
 
+/**
+ * Класс, описывающий компанию
+ *
+ * @property id идентификатор компании
+ * @property title название
+ * @property description описания
+ * @property placeId идентификатор заведения
+ * @property time время
+ * @property users пользователи в компании
+ */
 data class Party(
     @DocumentId
     var id: String? = null ,

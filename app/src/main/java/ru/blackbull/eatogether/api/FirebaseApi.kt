@@ -1,6 +1,7 @@
 package ru.blackbull.eatogether.api
 
 import android.location.Location
+import android.net.Uri
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -8,6 +9,7 @@ import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import ru.blackbull.eatogether.models.firebase.Match
 import ru.blackbull.eatogether.models.firebase.Party
@@ -17,6 +19,10 @@ import ru.blackbull.eatogether.other.Resource
 import timber.log.Timber
 import java.util.*
 
+/**
+ * Класс, работающий с Firebase
+ *
+ */
 class FirebaseApi : BaseFirebaseApi {
 
     val auth = FirebaseAuth.getInstance()
@@ -26,7 +32,7 @@ class FirebaseApi : BaseFirebaseApi {
     val matchesRef = Firebase.firestore.collection("matches")
 
     /**
-     * Updates user last location
+     * Обновляет поле пользователя "lastLocation" в Firestore
      *
      * @param location
      */
@@ -42,9 +48,9 @@ class FirebaseApi : BaseFirebaseApi {
     }
 
     /**
-     * Searching in all parties and filtering only those that have placeId field the same as given
+     * Ищет компании по id места, выдает только те, которые проходят сегодня
      *
-     * @param placeId place id in Google Places API
+     * @param placeId id места из Yandex MapKit
      * @return List<Party>
      */
     override suspend fun searchPartyByPlace(
@@ -71,7 +77,7 @@ class FirebaseApi : BaseFirebaseApi {
     }
 
     /**
-     * Creates party
+     * Создает компанию
      *
      * @param party
      */
@@ -80,7 +86,7 @@ class FirebaseApi : BaseFirebaseApi {
     }
 
     /**
-     * Gets party in which current user is member
+     * Возвращает компании для текущего пользователя
      *
      * @return
      */
@@ -123,7 +129,7 @@ class FirebaseApi : BaseFirebaseApi {
         FirebaseAuth.getInstance().signOut()
     }
 
-    override suspend fun updateUser(user: User) {
+    override suspend fun updateUser(user: User , photoUri: Uri) {
         val firebaseUser = auth.currentUser ?: return
         if (firebaseUser.email != user.email) {
             firebaseUser.updateEmail(user.email!!)
@@ -132,14 +138,13 @@ class FirebaseApi : BaseFirebaseApi {
 
         // Чтобы не фотография из firebase не загружалась повторно в firebase
         // TODO: добавить обновление фотографии
-//        if (user._imageUri?.host != "firebasestorage.googleapis.com") {
-//            val res = FirebaseStorage.getInstance().reference.child(firebaseUser.uid).putFile(
-//                Uri.parse(user.imageUri!!)
-//            ).await()
-//            val imageUri = res.metadata?.reference?.downloadUrl?.await()
-//
-//            user.imageUri = imageUri.toString()
-//        }
+        if (photoUri.host != "firebasestorage.googleapis.com") {
+            val res = FirebaseStorage.getInstance().reference.child(firebaseUser.uid).putFile(
+                photoUri
+            ).await()
+            val imageUri = res.metadata?.reference?.downloadUrl?.await()
+            user.imageUri = imageUri.toString()
+        }
 
         usersRef.document(auth.uid!!).set(user).await()
     }

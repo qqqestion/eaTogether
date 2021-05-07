@@ -1,6 +1,5 @@
 package ru.blackbull.eatogether.ui.main.myparties
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

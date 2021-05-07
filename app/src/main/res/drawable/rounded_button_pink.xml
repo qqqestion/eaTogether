@@ -5,8 +5,8 @@
             <shape
                 android:shape="rectangle"
                 android:tint="#E9AD95">
-                <corners android:radius="35dp" />
-                <solid android:color="#80A898" />
+                <corners android:radius="13dp" />
+                <solid android:color="@color/colorPink" />
             </shape>
         </item>
     </ripple>

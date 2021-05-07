@@ -2,7 +2,6 @@ package ru.blackbull.eatogether.ui.main.profile
 
 import android.net.Uri
 import android.util.Log
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

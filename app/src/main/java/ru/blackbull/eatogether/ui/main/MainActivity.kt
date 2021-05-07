@@ -23,12 +23,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         /**
-         * Yandex MapKit init
-         * Setup api key before initialization
+         * Сначала ставим api ключ, потом инициализируем MapKit
+         * Если активити пересоздается из-за изменения конфигураций,
+         * то повторно инициализировать не надо (приложение падает :/)
          */
-        MapKitFactory.setApiKey("3f863532-8f11-409b-9f01-410fec3a2c9b")
-        MapKitFactory.initialize(this)
-        SearchFactory.initialize(this)
+        if (savedInstanceState == null) {
+            MapKitFactory.setApiKey("3f863532-8f11-409b-9f01-410fec3a2c9b")
+            MapKitFactory.initialize(this)
+            SearchFactory.initialize(this)
+        }
 
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
@@ -59,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         /**
-         * Start service
+         * Запускаем сервис
          */
 //        Intent(this , MainService::class.java).also { intent ->
 //            intent.action = START_SERVICE
@@ -68,7 +71,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * If drawer menu open, close it, if not, super.onBackPressed()
+     * Если боковое меню открыто, то закрываем его
+     * Если не закрыто, то по стандарту super.onBackPressed()
      */
     override fun onBackPressed() {
         if (rootLayout.isDrawerOpen(GravityCompat.START)) {

@@ -4,9 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    android:foregroundTint="@color/colorLiteGrey"
     tools:context=".ui.auth.AuthActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="@dimen/eatogether_title_width"
@@ -27,7 +35,7 @@
         android:id="@+id/btnStartLogin"
         android:layout_width="130dp"
         android:layout_height="55dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="7dp"
         android:background="@drawable/rounded_button_green"
         android:text="@string/login"
         android:textColor="@color/colorLiteGrey"
@@ -37,7 +45,7 @@
 
     <Button
         android:id="@+id/btnStartRegistration"
-        android:layout_width="150dp"
+        android:layout_width="130dp"
         android:layout_height="55dp"
         android:layout_marginBottom="@dimen/auth_buttons_margin_bot"
         android:background="@drawable/rounded_button_green"

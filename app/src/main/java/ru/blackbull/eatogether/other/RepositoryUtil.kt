@@ -2,12 +2,13 @@ package ru.blackbull.eatogether.other
 
 import timber.log.Timber
 
-
 /**
  * Tries to perform action and returns its Resource, if error occurs returns Resource.Error
+ * Пробует выполнить переданную функцию, если любая ОШИБКА ВЫСКАКИВАЕТ, то возвращает Resource.Error
+ * с этой ошибкой, если все ОКЕЙ, то возвращает результат функции
  *
- * @param T the type of Resource
- * @param action action to perform to get Resource
+ * @param T параметр вложенных данных
+ * @param action функция
  * @return Resource
  */
 inline fun <T> safeCall(action: () -> Resource<T>): Resource<T> {

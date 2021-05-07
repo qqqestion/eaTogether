@@ -1,6 +1,5 @@
 package ru.blackbull.eatogether.ui.main.map
 
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.format.DateUtils

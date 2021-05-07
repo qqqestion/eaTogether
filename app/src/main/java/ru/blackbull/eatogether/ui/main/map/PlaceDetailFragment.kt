@@ -1,13 +1,10 @@
 package ru.blackbull.eatogether.ui.main.map
 
 import android.os.Bundle
-import android.text.format.DateUtils
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_place_detail.*
@@ -94,11 +91,12 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
             Timber.d("$nnplace")
             tvAddress.text = nnplace.address
             tvPlaceDetailCategories.text = nnplace.categories.joinToString()
-            tvPlaceDetailPhone.text = nnplace.phone
             tvWorkingHours.text = nnplace.workingState
             tvScore.text = nnplace.score.toString()
             // TODO: добавить работу с локализацией
             tvRatings.text = "${nnplace.ratings} оценок"
+            tvCuisine.text = nnplace.cuisine.joinToString()
+            Timber.d("$nnplace")
         }
     }
 }

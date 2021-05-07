@@ -9,7 +9,9 @@ import com.yandex.mapkit.search.*
 import com.yandex.runtime.Error
 import com.yandex.runtime.network.NetworkError
 import com.yandex.runtime.network.RemoteError
+import ru.blackbull.eatogether.models.CuisineType
 import ru.blackbull.eatogether.models.PlaceDetail
+import ru.blackbull.eatogether.models.mappers.PlaceDetailMapper
 import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.Resource
@@ -19,29 +21,8 @@ import javax.inject.Inject
 
 class PlaceRepository @Inject constructor(
     private val searchManager: SearchManager ,
+    private val placeDetailMapper: PlaceDetailMapper
 ) {
-//
-//    suspend fun getPlaceDetail(
-//        placeId: String
-//    ): Resource<PlaceDetail> = withContext(Dispatchers.IO) {
-//        val response = googlePlaceApiService.getPlaceDetail(placeId)
-//        return@withContext if (response.status == "OK") {
-//            Resource.Success(response.placeDetail)
-//        } else {
-//            Resource.Error(msg = response.errorMessage)
-//        }
-//    }
-//
-//    suspend fun getPlacesByName(
-//        placeName: String
-//    ): Resource<List<BasicLocation>> = withContext(Dispatchers.IO) {
-//        val response = googlePlaceApiService.getPlacesByName(placeName)
-//        return@withContext if (response.status == "OK") {
-//            Resource.Success(response.placeList)
-//        } else {
-//            Resource.Error(msg = response.errorMessage)
-//        }
-//    }
 //
 //    suspend fun getNearbyPlaces(
 //        location: String
@@ -57,21 +38,37 @@ class PlaceRepository @Inject constructor(
     private val _placeDetail: MutableLiveData<Event<Resource<PlaceDetail>>> = MutableLiveData()
     val placeDetail: LiveData<Event<Resource<PlaceDetail>>> = _placeDetail
 
-    private val _searchPlaces: MutableLiveData<Event<Resource<List<GeoObjectCollection.Item>>>> =
-        MutableLiveData()
-    val searchPlaces: LiveData<Event<Resource<List<GeoObjectCollection.Item>>>> = _searchPlaces
+    val cuisine: MutableLiveData<Event<Resource<List<CuisineType>>>> = MutableLiveData()
 
-    private var searchSession: Session? = null
+    private var filterSession: Session? = null
 
-    init {
+    /**
+     * Делаем запрос объектов "кафе", находим в бизнес фильтрах тип кухни и вытаскиваем значения
+     * "кафе" - как оптимальный запрос (хотя можно и "ресторан" или что-то такое)
+     * point - просто точка
+     * Если типы кухонь уже имеются, то еще раз запрос не происходит
+     *
+     */
+    fun getCuisineList() {
+        if (cuisine.value != null) {
+            return
+        }
         val point = Geometry.fromPoint(Point(59.95 , 30.32))
-        searchSession = searchManager.submit(
-            "" ,
+
+        filterSession = searchManager.submit(
+            "cafe" ,
             point ,
             SearchOptions() ,
             object : Session.SearchListener {
                 override fun onSearchResponse(response: Response) {
-                    Timber.d("Init: ${filters(response)}")
+                    val cuisineList = response.metadata.businessResultMetadata?.businessFilters
+                        ?.find { it.id == "type_cuisine" }
+                        ?.values
+                        ?.enums
+                        ?.map { CuisineType(it.value.id , it.value.name) }
+                        ?.sortedBy { it.name }
+                        ?: listOf()
+                    cuisine.postValue(Event(Resource.Success(cuisineList)))
                 }
 
                 override fun onSearchError(error: Error) {
@@ -81,31 +78,19 @@ class PlaceRepository @Inject constructor(
                         else -> "Unknown error"
                     }
                     Timber.d("Error during map sdk request: $errorMessage")
+                    cuisine.postValue(Event(Resource.Error(null , errorMessage)))
                 }
             }
         )
     }
 
+    private val _searchPlaces: MutableLiveData<Event<Resource<List<GeoObjectCollection.Item>>>> =
+        MutableLiveData()
+    val searchPlaces: LiveData<Event<Resource<List<GeoObjectCollection.Item>>>> = _searchPlaces
+
+    private var searchSession: Session? = null
+
     fun search(query: String , geometry: Geometry) {
-//        val enumFilter = BusinessFilter(
-//            "type_cuisine" ,
-//            "" ,
-//            false ,
-//            false ,
-//            BusinessFilter.Values.fromEnums(
-//                listOf(
-//                    BusinessFilter.EnumValue(
-//                        Feature.FeatureEnumValue(
-//                            /* id= */ "italian_cuisine" ,
-//                            /* name= */ "" ,
-//                            /* imageUrlTemplate= */ ""
-//                        ) ,
-//                        true ,
-//                        true
-//                    )
-//                )
-//            )
-//        )
         searchSession = searchManager.submit(
             query ,
             geometry ,
@@ -114,33 +99,97 @@ class PlaceRepository @Inject constructor(
             } ,
             object : Session.SearchListener {
                 override fun onSearchResponse(response: Response) {
-                    Timber.d("Search: ${filters(response)}")
-                    _searchPlaces.postValue(Event(Resource.Success(
-                        response.collection.children.filter { item ->
-                            val name =
-                                item.obj!!.metadataContainer.getItem(BusinessObjectMetadata::class.java).name
-                            item.obj!!.metadataContainer.getItem(BusinessObjectMetadata::class.java).categories.forEach {
-                                Timber.d("Place $name, category: name - ${it.name}, category class - ${it.categoryClass}, tags - ${it.tags}")
-                            }
-                            item.obj!!.metadataContainer.getItem(BusinessObjectMetadata::class.java).categories.find {
-                                it.categoryClass in Constants.CATEGORIES
-                            } != null
-                        }
-                    )))
+                    handleSearchResponse(response)
                 }
 
                 override fun onSearchError(error: Error) {
-                    val errorMessage = when (error) {
-                        is RemoteError -> "Remote error"
-                        is NetworkError -> "Network error"
-                        else -> "Unknown error"
-                    }
-                    _searchPlaces.postValue(Event(Resource.Error(null , errorMessage)))
+                    handleSearchError(error)
                 }
             }
         )
+        if (cuisine.value != null) {
+            /**
+             * Берем значение из LiveData (если оно там есть)
+             * Отбираем выбранные виды кухни
+             * Создаем BusinessFilter.EnumValue()
+             */
+            val featureList = cuisine.value!!.peekContent().data
+                ?.filter {
+                    it.isChecked
+                }
+                ?.map {
+                    Timber.d("Cuisine: ${it.name}")
+                    BusinessFilter.EnumValue(
+                        Feature.FeatureEnumValue(
+                            it.id ,
+                            "" ,
+                            ""
+                        ) ,
+                        true ,
+                        true
+                    )
+                }
+                ?: listOf()
+            val cuisineTypeEnumFilter = BusinessFilter(
+                "type_cuisine" ,
+                "" ,
+                false ,
+                false ,
+                BusinessFilter.Values.fromEnums(
+                    featureList
+                )
+            )
+            searchSession?.setFilters(listOf(cuisineTypeEnumFilter))
+            /**
+             * Так как нельзя сразу поставить фильтры, сначала делаем обычный запрос по параметру поиска (query)
+             * Потом ставим фильтры и делаем перезапрос
+             */
+            searchSession?.resubmit(
+                object : Session.SearchListener {
+                    override fun onSearchResponse(response: Response) {
+                        handleSearchResponse(response)
+                    }
+
+                    override fun onSearchError(error: Error) {
+                        handleSearchError(error)
+                    }
+                }
+            )
+        }
     }
 
+    /**
+     * Обрабатывает ответ с яндекс карт.
+     * Оставляет только те объекты, категория которых подходит под общественное питание
+     *
+     * @param response
+     */
+    private fun handleSearchResponse(response: Response) {
+        Timber.d("Search: ${filters(response)}")
+        _searchPlaces.postValue(Event(Resource.Success(
+            response.collection.children.filter { item ->
+                item.obj!!.metadataContainer.getItem(BusinessObjectMetadata::class.java).categories.find {
+                    it.categoryClass in Constants.FOOD_CATEGORIES
+                } != null
+            }
+        )))
+    }
+
+    private fun handleSearchError(error: Error) {
+        val errorMessage = when (error) {
+            is RemoteError -> "Remote error"
+            is NetworkError -> "Network error"
+            else -> "Unknown error"
+        }
+        _searchPlaces.postValue(Event(Resource.Error(null , errorMessage)))
+    }
+
+    /**
+     * Просмотр всех возможных фильтров мест
+     *
+     * @param response
+     * @return
+     */
     private fun filters(response: Response): String? {
         fun enumValues(filter: BusinessFilter) = filter
             .values
@@ -162,40 +211,19 @@ class PlaceRepository @Inject constructor(
         searchSession = searchManager.resolveURI(
             baseUri.format(placeId) ,
             SearchOptions().apply {
+                /**
+                 * Дополнительная информация о местах
+                 */
                 snippets = Snippet.BUSINESS_RATING1X.value
             } ,
             object : Session.SearchListener {
                 override fun onSearchResponse(response: Response) {
                     Timber.d("Place detail: ${filters(response)}")
                     for (searchResult in response.collection.children) {
-                        val obj = searchResult.obj!!
-                        val businessMetadata =
-                            obj.metadataContainer.getItem(BusinessObjectMetadata::class.java)
-                        val ratingMetadata =
-                            obj.metadataContainer.getItem(BusinessRating1xObjectMetadata::class.java)
-                        val id = businessMetadata.oid
-                        val score = ratingMetadata?.score
-                        val ratings = ratingMetadata?.ratings
-                        val name = businessMetadata.name
-                        val address = businessMetadata.address.formattedAddress
-                        val phones = businessMetadata.phones.map { it.formattedNumber }
-                        val workingHours = businessMetadata.workingHours?.state?.text
-                        val categories = businessMetadata.categories.map { it.name }
-                        val features = businessMetadata.features.map { it.id to it.value }
-                        val links = businessMetadata.links
                         _placeDetail.postValue(
                             Event(
                                 Resource.Success(
-                                    PlaceDetail(
-                                        id ,
-                                        name ,
-                                        address ,
-                                        phones.firstOrNull() ,
-                                        workingHours ,
-                                        score ,
-                                        ratings ,
-                                        categories
-                                    )
+                                    placeDetailMapper.toPlaceDetail(searchResult.obj!!)
                                 )
                             )
                         )

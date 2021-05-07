@@ -8,22 +8,23 @@ import com.yandex.mapkit.search.SearchManagerType
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import ru.blackbull.eatogether.api.BaseFirebaseApi
 import ru.blackbull.eatogether.api.FirebaseApi
+import ru.blackbull.eatogether.models.mappers.PlaceDetailMapper
 import ru.blackbull.eatogether.repositories.PlaceRepository
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object AppModule {
 
     @Singleton
     @Provides
     fun providePlaceRepository(
         searchManager: SearchManager
-    ) = PlaceRepository(searchManager)
+    ) = PlaceRepository(searchManager, PlaceDetailMapper())
 
     @Singleton
     @Provides

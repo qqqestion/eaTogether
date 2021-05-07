@@ -1,12 +1,12 @@
 package ru.blackbull.eatogether.ui.auth
 
 import android.app.Application
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.EaTogetherApplication
 import ru.blackbull.eatogether.R
@@ -17,8 +17,10 @@ import ru.blackbull.eatogether.repositories.FirebaseRepository
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
-class AuthViewModel @ViewModelInject constructor(
+@HiltViewModel
+class AuthViewModel @Inject constructor(
     val firebaseRepository: FirebaseRepository ,
     app: Application
 ) : AndroidViewModel(app) {

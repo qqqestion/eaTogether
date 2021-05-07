@@ -3,6 +3,14 @@ package ru.blackbull.eatogether.other
 import androidx.lifecycle.Observer
 import timber.log.Timber
 
+/**
+ * Класс для обработки событий с внутренним состоянием данных
+ *
+ * @param T
+ * @property onError что делать при ошибке
+ * @property onLoading что делать при загрузке
+ * @property onSuccess что делать при успешном выполнении
+ */
 class EventObserver<T>(
     private inline val onError: ((String) -> Unit)? = null ,
     private inline val onLoading: (() -> Unit)? = null ,

@@ -35,19 +35,6 @@ class MyPartyFragment : Fragment(R.layout.fragment_my_parties_rv) {
 //                MyPartyFragmentDirections.actionMyPartyFragmentToPartyDetailFragment(party.id!!)
 //            )
         }
-//        partiesAdapter.setOnJoinCLickListener { party ->
-//            viewModel.addUserToParty(party)
-//            (activity as AppCompatActivity).supportFragmentManager
-//                .beginTransaction()
-//                .replace(
-//                    R.id.flFragment ,
-//                    PartyDetailFragment.newInstance(
-//                        party.id!!
-//                    )
-//                )
-//                .addToBackStack(null)
-//                .commit()
-//        }
 
         rv.apply {
             layoutManager = LinearLayoutManager(context)

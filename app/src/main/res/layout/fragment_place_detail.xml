@@ -93,7 +93,7 @@
         tools:text="Russia, Saint Petersburg, Nevski Prospect, 4" />
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/sectionBottomBarrier"
+        android:id="@+id/addressBarrier"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -106,7 +106,7 @@
         android:layout_height="25dp"
         android:src="@drawable/ic_clock"
         app:layout_constraintStart_toStartOf="@id/ivPlace"
-        app:layout_constraintTop_toBottomOf="@id/sectionBottomBarrier" />
+        app:layout_constraintTop_toBottomOf="@id/addressBarrier" />
 
     <TextView
         android:id="@+id/tvWorkingHours"
@@ -119,27 +119,45 @@
         app:layout_constraintTop_toTopOf="@id/ivClock"
         tools:text="Open unit 00:00" />
 
+    <ImageView
+        android:id="@+id/ivCuisine"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_baseline_local_dining_24"
+        app:layout_constraintStart_toStartOf="@id/ivClock"
+        app:layout_constraintTop_toBottomOf="@id/ivClock" />
+
     <TextView
-        android:id="@+id/tvPlaceDetailPhone"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvCuisine"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvWorkingHours"
-        tools:text="+7 (921) 891-12-41" />
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/ivCuisine"
+        app:layout_constraintTop_toTopOf="@id/ivCuisine"
+        tools:text="Russian, American" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/cuisineBarrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="ivCuisine, tvCuisine" />
 
     <Button
         android:id="@+id/btnPlaceDetailCreateParty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:background="@drawable/rounded_button_green"
         android:padding="15dp"
         android:text="Создать компанию"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvPlaceDetailPhone" />
+        app:layout_constraintTop_toBottomOf="@id/cuisineBarrier" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPlaceDetailParties"

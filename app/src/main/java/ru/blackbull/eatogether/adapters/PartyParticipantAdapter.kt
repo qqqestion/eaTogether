@@ -12,6 +12,10 @@ import kotlinx.android.synthetic.main.item_user_in_party_preview.view.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.User
 
+/**
+ * Адаптер для отображения участников компаний
+ *
+ */
 class PartyParticipantAdapter : RecyclerView.Adapter<PartyParticipantAdapter.ViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<User>() {

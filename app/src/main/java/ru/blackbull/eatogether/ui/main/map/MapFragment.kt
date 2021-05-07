@@ -9,12 +9,9 @@ import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView.OnEditorActionListener
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
@@ -25,7 +22,6 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.snackbar.Snackbar
 import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.logo.Alignment
@@ -39,19 +35,15 @@ import com.yandex.runtime.image.ImageProvider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import kotlinx.android.synthetic.main.fragment_map.*
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.Constants.FASTEST_LOCATION_INTERVAL
 import ru.blackbull.eatogether.other.Constants.LOCATION_UPDATE_INTERVAL
 import ru.blackbull.eatogether.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
-import ru.blackbull.eatogether.other.Constants.SEARCH_TIME_DELAY
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.LocationUtility
+import ru.blackbull.eatogether.ui.main.dialogs.CuisineChoiceDialogFragment
 import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
 import javax.inject.Inject
@@ -74,8 +66,6 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
 
     var isFirstLocation: Boolean = true
 
-    private val place = "kfc"
-
     private lateinit var localNavHost: NavHostFragment
     private lateinit var localController: NavController
 
@@ -86,7 +76,6 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
             childFragmentManager.findFragmentById(R.id.childNavFragment) as NavHostFragment
         localController = localNavHost.navController
 
-        isFirstLocation = true
         mapView = yandexMapView
         // TODO: поработать с разрешениями. Приложение падает при первом запуске на устройстве
         requestPermission()
@@ -118,11 +107,13 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
             false
         }
         fab.setOnClickListener {
-            Snackbar.make(
-                requireView() ,
-                "Clicked" ,
-                Snackbar.LENGTH_LONG
-            ).show()
+            if (childFragmentManager.findFragmentByTag(CuisineChoiceDialogFragment.TAG) == null) {
+                CuisineChoiceDialogFragment().show(
+                    childFragmentManager ,
+                    CuisineChoiceDialogFragment.TAG
+                )
+            }
+
         }
         ivCancel.setOnClickListener {
             handlePressBack()
@@ -169,6 +160,14 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
                 handlePressBack()
             }
         })
+        viewModel.cuisine.observe(viewLifecycleOwner , EventObserver(
+            onError = {
+                snackbar(it)
+            }
+        ) {
+            Timber.d("${it.filter { cuisineType -> cuisineType.isChecked }}")
+        })
+
     }
 
     private fun handlePressBack() {
@@ -333,6 +332,7 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
 
     override fun onStart() {
         super.onStart()
+        isFirstLocation = true
         MapKitFactory.getInstance().onStart()
         mapView.onStart()
     }
@@ -340,6 +340,7 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
     override fun onStop() {
         super.onStop()
         MapKitFactory.getInstance().onStop()
+        mapView.map.removeCameraListener(this)
         mapView.onStop()
     }
 

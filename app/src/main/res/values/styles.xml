@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/colorGreen</item>
         <item name="colorPrimaryDark">@color/colorDark</item>
         <item name="colorAccent">@color/colorPink</item>
+        <item name="colorSurface">@android:color/white</item>
     </style>
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">

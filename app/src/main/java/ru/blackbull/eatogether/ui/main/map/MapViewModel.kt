@@ -27,6 +27,12 @@ class MapViewModel @Inject constructor(
         placeRepository.search(query , geometry)
     }
 
+    val cuisine = placeRepository.cuisine
+
+    fun getCuisineList() {
+        placeRepository.getCuisineList()
+    }
+
     val placeDetail: LiveData<Event<Resource<PlaceDetail>>> = placeRepository.placeDetail
 
     fun getPlaceDetail(placeId: String) = viewModelScope.launch {

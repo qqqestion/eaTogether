@@ -11,6 +11,10 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.PlaceDetail
 
 
+/**
+ * Адаптер для отображения заведений
+ *
+ */
 class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

@@ -18,6 +18,10 @@ import ru.blackbull.eatogether.other.PhotoUtility.getFormattedTime
 import timber.log.Timber
 
 
+/**
+ * Адаптер для отображения компаний
+ *
+ */
 class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
 
     private val differCallback = object : DiffUtil.ItemCallback<Party>() {

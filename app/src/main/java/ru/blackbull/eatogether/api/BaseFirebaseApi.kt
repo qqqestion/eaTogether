@@ -1,6 +1,7 @@
 package ru.blackbull.eatogether.api
 
 import android.location.Location
+import android.net.Uri
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
 
@@ -57,7 +58,7 @@ interface BaseFirebaseApi {
      */
     fun signOut()
 
-    suspend fun updateUser(user: User)
+    suspend fun updateUser(user: User , photoUri: Uri)
 
     suspend fun signIn(email: String , password: String)
 

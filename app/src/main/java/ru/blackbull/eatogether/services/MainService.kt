@@ -50,6 +50,9 @@ class MainService : LifecycleService() {
 
         val lastLocation = MutableLiveData<Location>()
 
+        /**
+         * Используем для отслеживая совпадения пользователей
+         */
         val matches = MutableLiveData<Event<Resource<List<Match>>>>()
     }
 

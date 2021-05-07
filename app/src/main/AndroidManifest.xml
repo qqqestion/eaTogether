@@ -29,7 +29,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.main.MainActivity" />
-        <activity android:name=".ui.main.MapActivity" />
 
         <service android:name=".services.MainService" />
 

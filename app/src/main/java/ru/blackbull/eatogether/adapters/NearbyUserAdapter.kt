@@ -11,6 +11,10 @@ import kotlinx.android.synthetic.main.item_user_preview.view.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.User
 
+/**
+ * Адаптер для отображения пользователей рядом (карточка тиндера)
+ *
+ */
 class NearbyUserAdapter : RecyclerView.Adapter<NearbyUserAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
