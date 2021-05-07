@@ -1,9 +1,11 @@
 package ru.blackbull.eatogether.models.mappers
 
 import com.yandex.mapkit.GeoObject
+import com.yandex.mapkit.search.BusinessImagesObjectMetadata
 import com.yandex.mapkit.search.BusinessObjectMetadata
+import com.yandex.mapkit.search.BusinessPhotoObjectMetadata
 import com.yandex.mapkit.search.BusinessRating1xObjectMetadata
-import com.yandex.runtime.any.Collection
+import ru.blackbull.eatogether.models.Location
 import ru.blackbull.eatogether.models.PlaceDetail
 import javax.inject.Inject
 
@@ -34,6 +36,12 @@ class PlaceDetailMapper @Inject constructor() {
             ?.map { it.name }
             ?: listOf()
         val links = businessMetadata.links
+        val geometry = geoObject.geometry.firstOrNull()?.point
+        val location = if (geometry != null) {
+            Location(geometry.latitude , geometry.longitude)
+        } else {
+            null
+        }
         return PlaceDetail(
             id ,
             name ,
@@ -43,7 +51,8 @@ class PlaceDetailMapper @Inject constructor() {
             score ,
             ratings ,
             categories ,
-            cuisine
+            cuisine ,
+            location
         )
     }
 }

@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_place_detail.*
@@ -21,12 +22,21 @@ class PlaceDetailFragment : Fragment(R.layout.fragment_place_detail) {
 
     private val viewModel: MapViewModel by activityViewModels()
 
+    private val args: PlaceDetailFragmentArgs by navArgs()
+
     private var place: PlaceDetail? = null
 
     private lateinit var partiesAdapter: PartyAdapter
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
+
+        place = args.placeDetail
+        updatePlaceInfo()
+
+        place?.let {
+            viewModel.searchPartyByPlace(it.id!!)
+        }
 
         setupRecyclerView()
         subscribeToObservers()

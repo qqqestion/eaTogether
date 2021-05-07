@@ -1,5 +1,7 @@
 package ru.blackbull.eatogether.models
 
+import java.io.Serializable
+
 /**
  * Класс, описывающий заведение
  *
@@ -22,5 +24,6 @@ data class PlaceDetail(
     val score: Float? = 0F ,
     val ratings: Int? = 0 ,
     val categories: List<String> = listOf() ,
-    val cuisine: List<String> = listOf()
-)
+    val cuisine: List<String> = listOf() ,
+    val location: Location? = null
+) : Serializable

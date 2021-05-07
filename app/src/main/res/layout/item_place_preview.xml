@@ -1,50 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="12dp">
 
-    <ImageView
-        android:id="@+id/ivPlacePreviewImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/avatars" />
-
-    <TextView
-        android:id="@+id/tvPlacePreviewName"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:textSize="20sp"
-        app:layout_constraintStart_toEndOf="@+id/ivPlacePreviewImage"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/lorem" />
+        android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tvPlacePreviewRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/ivPlacePreviewImage"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlacePreviewName"
-        tools:text="@tools:sample/lorem" />
+        <TextView
+            android:id="@+id/tvPlaceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="McDonald's" />
 
-    <TextView
-        android:id="@+id/tvPlacePreviewAddress"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toEndOf="@+id/ivPlacePreviewImage"
-        app:layout_constraintTop_toBottomOf="@+id/tvPlacePreviewRating"
-        tools:text="@tools:sample/lorem" />
+        <TextView
+            android:id="@+id/tvPlaceCategories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPlaceName"
+            tools:text="Fast food, Restaurant" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/llScores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPlaceCategories">
+
+            <ImageView
+                android:id="@+id/ivScore1"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_baseline_star_rate_gray_24" />
+
+            <ImageView
+                android:id="@+id/ivScore2"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_baseline_star_rate_gray_24" />
+
+            <ImageView
+                android:id="@+id/ivScore3"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_baseline_star_rate_gray_24" />
+
+            <ImageView
+                android:id="@+id/ivScore4"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_baseline_star_rate_gray_24" />
+
+            <ImageView
+                android:id="@+id/ivScore5"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_baseline_star_rate_gray_24" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvPlaceScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/llScores"
+            app:layout_constraintStart_toEndOf="@id/llScores"
+            app:layout_constraintTop_toTopOf="@id/llScores"
+            tools:text="1511" />
+
+        <TextView
+            android:id="@+id/tvPlaceRatings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tvPlaceScore"
+            app:layout_constraintStart_toEndOf="@id/tvPlaceScore"
+            tools:text="reviews" />
+
+        <TextView
+            android:id="@+id/tvPlaceWorkingState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/llScores"
+            tools:text="Opens until 12:00" />
+
+        <TextView
+            android:id="@+id/tvPlaceAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvPlaceWorkingState"
+            tools:text="Russia, Saint Petersburg, Nevski Prospect, 4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

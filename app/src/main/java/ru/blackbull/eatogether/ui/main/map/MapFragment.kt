@@ -29,7 +29,6 @@ import com.yandex.mapkit.logo.HorizontalAlignment
 import com.yandex.mapkit.logo.VerticalAlignment
 import com.yandex.mapkit.map.*
 import com.yandex.mapkit.mapview.MapView
-import com.yandex.mapkit.search.BusinessObjectMetadata
 import com.yandex.mapkit.user_location.UserLocationLayer
 import com.yandex.runtime.image.ImageProvider
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +37,7 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.models.PlaceDetail
 import ru.blackbull.eatogether.other.Constants.FASTEST_LOCATION_INTERVAL
 import ru.blackbull.eatogether.other.Constants.LOCATION_UPDATE_INTERVAL
 import ru.blackbull.eatogether.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
@@ -180,11 +180,13 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
              * IllegalStateException при повторном использовании)
              * MapFragment -> select item on map -> *opens bottom sheet menu* -> press back
              * -> select item on map again -> click create party -> IllegalStateException because there is no current destination
-             * in nested navcontrolle (mBackStack is empty)
+             * in nested nav controller (mBackStack is empty)
              */
-            if (localNavHost.navController.currentDestination?.id == R.id.placeDetailFragment) {
+            if (localNavHost.navController.currentDestination?.id == R.id.searchResultFragment) {
                 bottomSheetBehavior.isHideable = true
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                mapView.map.mapObjects.clear()
+                etMapSearchPlaces.setText("")
             } else {
                 localNavHost.navController.popBackStack()
             }
@@ -199,19 +201,22 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
         ) { results ->
             val mapObjects: MapObjectCollection = mapView.map.mapObjects
             mapObjects.clear()
-            for (searchResult in results) {
-                val obj = searchResult.obj!!
-                val resultLocation = obj.geometry[0].point
-                if (resultLocation != null) {
+            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+                tvBottomSheetTitle.text = "Результаты поиска"
+                bottomSheetBehavior.isHideable = false
+            }
+            for (place in results) {
+                if (place.location != null) {
+                    val point = Point(place.location.latitude , place.location.longitude)
                     val placemark = mapObjects.addPlacemark(
-                        resultLocation ,
+                        point ,
                         ImageProvider.fromResource(
                             requireContext() ,
                             R.drawable.search_result
                         )
                     )
-                    val id = obj.metadataContainer.getItem(BusinessObjectMetadata::class.java)?.oid
-                    placemark.userData = obj.name to id
+                    placemark.userData = place
                     placemark.addTapListener(this)
                 }
             }
@@ -228,15 +233,22 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
     }
 
     override fun onMapObjectTap(mapObject: MapObject , point: Point): Boolean {
-        val userData = mapObject.userData as Pair<String , String>
-        val name = userData.first
-        val id = userData.second
+        val placeDetail = mapObject.userData as PlaceDetail
+        tvBottomSheetTitle.text = placeDetail.name
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-        tvBottomSheetTitle.text = name
-        Timber.d("Get id: $id")
-        viewModel.getPlaceDetail(id)
-        viewModel.searchPartyByPlace(id)
-        bottomSheetBehavior.isHideable = false
+        /**
+         * Возвращаемся на экран результатов поиска, потом переходим на выбранное заведение
+         */
+        if (localController.currentDestination?.id != R.id.searchResultFragment) {
+            while (localController.currentDestination?.id != R.id.searchResultFragment) {
+                localController.popBackStack()
+            }
+        }
+        localController.navigate(
+            SearchResultFragmentDirections.actionSearchResultToPlaceDetailFragment(placeDetail)
+        )
+        Timber.d("Get id: ${placeDetail.id}")
+//        viewModel.getPlaceDetail(id)
         return true
     }
 

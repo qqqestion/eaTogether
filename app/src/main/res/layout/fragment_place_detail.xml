@@ -26,25 +26,25 @@
             android:id="@+id/ivScore1"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@drawable/ic_baseline_star_rate_gold_24" />
+            android:src="@drawable/ic_baseline_star_rate_gray_24" />
 
         <ImageView
             android:id="@+id/ivScore2"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@drawable/ic_baseline_star_rate_gold_24" />
+            android:src="@drawable/ic_baseline_star_rate_gray_24" />
 
         <ImageView
             android:id="@+id/ivScore3"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@drawable/ic_baseline_star_rate_gold_24" />
+            android:src="@drawable/ic_baseline_star_rate_gray_24" />
 
         <ImageView
             android:id="@+id/ivScore4"
             android:layout_width="15dp"
             android:layout_height="15dp"
-            android:src="@drawable/ic_baseline_star_rate_gold_24" />
+            android:src="@drawable/ic_baseline_star_rate_gray_24" />
 
         <ImageView
             android:id="@+id/ivScore5"

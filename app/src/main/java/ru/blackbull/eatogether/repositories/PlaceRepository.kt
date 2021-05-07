@@ -2,7 +2,6 @@ package ru.blackbull.eatogether.repositories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.yandex.mapkit.GeoObjectCollection
 import com.yandex.mapkit.geometry.Geometry
 import com.yandex.mapkit.geometry.Point
 import com.yandex.mapkit.search.*
@@ -84,9 +83,9 @@ class PlaceRepository @Inject constructor(
         )
     }
 
-    private val _searchPlaces: MutableLiveData<Event<Resource<List<GeoObjectCollection.Item>>>> =
+    private val _searchPlaces: MutableLiveData<Event<Resource<List<PlaceDetail>>>> =
         MutableLiveData()
-    val searchPlaces: LiveData<Event<Resource<List<GeoObjectCollection.Item>>>> = _searchPlaces
+    val searchPlaces: LiveData<Event<Resource<List<PlaceDetail>>>> = _searchPlaces
 
     private var searchSession: Session? = null
 
@@ -95,7 +94,10 @@ class PlaceRepository @Inject constructor(
             query ,
             geometry ,
             SearchOptions().apply {
-                snippets = Snippet.BUSINESS_IMAGES.value
+                /**
+                 * Соединять сниппеты можно через ИЛИ
+                 */
+                snippets = Snippet.BUSINESS_RATING1X.value
             } ,
             object : Session.SearchListener {
                 override fun onSearchResponse(response: Response) {
@@ -171,6 +173,8 @@ class PlaceRepository @Inject constructor(
                 item.obj!!.metadataContainer.getItem(BusinessObjectMetadata::class.java).categories.find {
                     it.categoryClass in Constants.FOOD_CATEGORIES
                 } != null
+            }.map {
+                placeDetailMapper.toPlaceDetail(it.obj!!)
             }
         )))
     }

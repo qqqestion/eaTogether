@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_child_graph"
-    app:startDestination="@id/placeDetailFragment">
+    app:startDestination="@id/searchResultFragment">
 
     <fragment
         android:id="@+id/createPartyFragment"
@@ -40,19 +40,18 @@
         <action
             android:id="@+id/action_placeDetailFragment_to_partyDetailFragment"
             app:destination="@id/partyDetailFragment" />
+        <argument
+            android:name="placeDetail"
+            app:argType="ru.blackbull.eatogether.models.PlaceDetail" />
     </fragment>
     <fragment
-        android:id="@+id/recycleRestaurantsFragment"
-        android:name="ru.blackbull.eatogether.ui.main.map.RecycleRestaurantsFragment"
+        android:id="@+id/searchResultFragment"
+        android:name="ru.blackbull.eatogether.ui.main.map.SearchResultFragment"
         android:label="@string/title_place_list"
-        tools:layout="@layout/fragment_recycler_place">
-        <argument
-            android:name="location"
-            android:defaultValue="@null"
-            app:argType="com.google.android.gms.maps.model.LatLng"
-            app:nullable="true" />
+        tools:layout="@layout/fragment_search_result">
         <action
-            android:id="@+id/action_recycleRestaurantsFragment_to_placeDetailFragment2"
+            android:id="@+id/action_searchResult_to_placeDetailFragment"
             app:destination="@id/placeDetailFragment" />
     </fragment>
+
 </navigation>

@@ -55,15 +55,12 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.MyViewHolder>() {
         val place = places[position]
 
         holder.itemView.apply {
-//            val url = if (place.photos.isEmpty()) {
-//                place.icon
-//            } else {
-//                getPhotoUrl(place.photos[0].photo_reference , 150 , 150)
-//            }
-//            ivPlacePreviewImage.load(url)
-            tvPlacePreviewName.text = place.name
-            tvPlacePreviewRating.text = place.score.toString()
-            tvPlacePreviewAddress.text = place.address
+            tvPlaceName.text = place.name
+            tvPlaceScore.text = place.score.toString()
+            tvPlaceCategories.text = place.categories.joinToString()
+            tvPlaceRatings.text = "${place.ratings.toString()} оценок"
+            tvPlaceAddress.text = place.address
+            tvPlaceWorkingState.text = place.workingState
 
             setOnClickListener {
                 onItemClickListener?.let { click ->
