@@ -10,7 +10,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.blackbull.eatogether.api.BaseFirebaseApi
 import ru.blackbull.eatogether.api.FirebaseApi
 import ru.blackbull.eatogether.models.mappers.PlaceDetailMapper
 import ru.blackbull.eatogether.repositories.PlaceRepository
@@ -24,7 +23,7 @@ object AppModule {
     @Provides
     fun providePlaceRepository(
         searchManager: SearchManager
-    ) = PlaceRepository(searchManager, PlaceDetailMapper())
+    ) = PlaceRepository(searchManager , PlaceDetailMapper())
 
     @Singleton
     @Provides
@@ -68,7 +67,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideFirebaseApi() = FirebaseApi() as BaseFirebaseApi
+    fun provideFirebaseApi() = FirebaseApi()
 
     @Singleton
     @Provides

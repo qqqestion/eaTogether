@@ -6,7 +6,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import ru.blackbull.eatogether.api.BaseFirebaseApi
+import ru.blackbull.eatogether.api.FirebaseApi
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Resource
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 
 class FirebaseRepository @Inject constructor(
-    private val firebaseApi: BaseFirebaseApi
+    private val firebaseApi: FirebaseApi
 ) {
 
     val matchesRef = Firebase.firestore.collection("matches")
@@ -35,7 +35,7 @@ class FirebaseRepository @Inject constructor(
     suspend fun addParty(party: Party): Resource<Unit> = withContext(Dispatchers.IO) {
         safeCall {
             firebaseApi.addParty(party)
-            Resource.Success()
+            Resource.Success(Unit)
         }
     }
 
@@ -84,7 +84,7 @@ class FirebaseRepository @Inject constructor(
     ) = withContext(Dispatchers.IO) {
         safeCall {
             firebaseApi.signUpWithEmailAndPassword(user , password)
-            Resource.Success<Unit>()
+            Resource.Success(Unit)
         }
     }
 
@@ -97,7 +97,7 @@ class FirebaseRepository @Inject constructor(
     suspend fun dislikeUser(user: User) = withContext(Dispatchers.IO) {
         safeCall {
             firebaseApi.dislikeUser(user)
-            Resource.Success<Unit>()
+            Resource.Success(Unit)
         }
     }
 

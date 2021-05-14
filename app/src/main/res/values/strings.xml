@@ -52,6 +52,7 @@
     <string name="errormessage_passwords_mismatch">Пароли не совпадают</string>
     <string name="errormessage_fields_must_be_filled">Заполните все поля</string>
     <string name="errormessage_date_misformat">Введите корректное число</string>
+    <string name="errormessage_network_error">Ошибка подключения к интернету</string>
 
     <string name="requestpermission_rationale">Вы должны дать согласие на использование вашей локации</string>
     <string name="success_party_created">Компания успешно создана!</string>

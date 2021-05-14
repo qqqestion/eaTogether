@@ -55,7 +55,7 @@
                 style="@style/MyTextInputEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textEmailAddress"
+                android:inputType="textPersonName"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 />
@@ -79,7 +79,7 @@
                 style="@style/MyTextInputEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
+                android:inputType="textPersonName"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 />

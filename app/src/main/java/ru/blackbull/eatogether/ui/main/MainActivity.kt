@@ -28,9 +28,17 @@ class MainActivity : AppCompatActivity() {
          * то повторно инициализировать не надо (приложение падает :/)
          */
         if (savedInstanceState == null) {
-            MapKitFactory.setApiKey("3f863532-8f11-409b-9f01-410fec3a2c9b")
-            MapKitFactory.initialize(this)
-            SearchFactory.initialize(this)
+            try {
+                MapKitFactory.setApiKey("3f863532-8f11-409b-9f01-410fec3a2c9b")
+                MapKitFactory.initialize(this)
+                SearchFactory.initialize(this)
+            } catch (exc: AssertionError) {
+                /**
+                 * При повторном запуске активити, приложение тоже падает :/
+                 * Например, при создании сначала MainActivity,
+                 * потом выходе в AuthActivity, и повторном создании MainActivity
+                 */
+            }
         }
 
         setContentView(R.layout.activity_main)

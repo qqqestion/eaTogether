@@ -2,6 +2,7 @@ package ru.blackbull.eatogether.ui.auth
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
@@ -14,6 +15,7 @@ import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.repositories.FirebaseRepository
+import timber.log.Timber
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -79,7 +81,7 @@ class AuthViewModel @Inject constructor(
                 return@launch
             }
         }
-        _signUpResult.value = Event(Resource.Loading())
+        _signUpResult.postValue(Event(Resource.Loading()))
         val app = getApplication<EaTogetherApplication>()
         val user: User
         try {
@@ -92,14 +94,20 @@ class AuthViewModel @Inject constructor(
                 description
             )
         } catch (e: Exception) {
-            _signUpResult.value = Event(
-                Resource.Error(msg = app.getString(R.string.errormessage_fields_must_be_filled))
+            Timber.d("Validation error: field(s) is empty")
+            _signUpResult.postValue(
+                Event(
+                    Resource.Error(msg = app.getString(R.string.errormessage_fields_must_be_filled))
+                )
             )
             return@launch
         }
+        Timber.d("Validation complete")
         val response = firebaseRepository.signUpWithEmailAndPassword(user , password)
         if (response is Resource.Error) {
             val stringId = when (response.error) {
+                is FirebaseNetworkException ->
+                    R.string.errormessage_network_error
                 is FirebaseAuthWeakPasswordException ->
                     R.string.errormessage_weak_password
                 is FirebaseAuthInvalidCredentialsException ->
@@ -113,8 +121,10 @@ class AuthViewModel @Inject constructor(
             } else {
                 app.getString(stringId)
             }
+            Timber.d("Error: $msg")
             response.msg = msg
         }
+        Timber.d("Response: $response")
         _signUpResult.postValue(Event(response))
     }
 }

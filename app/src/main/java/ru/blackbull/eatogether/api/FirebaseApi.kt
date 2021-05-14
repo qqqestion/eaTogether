@@ -23,7 +23,7 @@ import java.util.*
  * Класс, работающий с Firebase
  *
  */
-class FirebaseApi : BaseFirebaseApi {
+class FirebaseApi {
 
     val auth = FirebaseAuth.getInstance()
     private val usersRef = Firebase.firestore.collection("users")
@@ -36,7 +36,7 @@ class FirebaseApi : BaseFirebaseApi {
      *
      * @param location
      */
-    override suspend fun updateUserLocation(location: Location) {
+    suspend fun updateUserLocation(location: Location) {
         val geoPoint = GeoPoint(
             location.latitude , location.longitude
         )
@@ -53,7 +53,7 @@ class FirebaseApi : BaseFirebaseApi {
      * @param placeId id места из Yandex MapKit
      * @return List<Party>
      */
-    override suspend fun searchPartyByPlace(
+    suspend fun searchPartyByPlace(
         placeId: String
     ): List<Party> {
         val calendar = Calendar.getInstance()
@@ -81,7 +81,7 @@ class FirebaseApi : BaseFirebaseApi {
      *
      * @param party
      */
-    override suspend fun addParty(party: Party) {
+    suspend fun addParty(party: Party) {
         partiesRef.add(party).await()
     }
 
@@ -90,7 +90,7 @@ class FirebaseApi : BaseFirebaseApi {
      *
      * @return
      */
-    override suspend fun getPartiesByCurrentUser(): List<Party> {
+    suspend fun getPartiesByCurrentUser(): List<Party> {
         return partiesRef
             .whereArrayContains("users" , auth.uid!!)
             .get()
@@ -104,7 +104,7 @@ class FirebaseApi : BaseFirebaseApi {
      * @param uid
      * @return
      */
-    override suspend fun getUser(uid: String): User {
+    suspend fun getUser(uid: String): User {
         return usersRef
             .document(uid)
             .get()
@@ -117,7 +117,7 @@ class FirebaseApi : BaseFirebaseApi {
      *
      * @param party
      */
-    override suspend fun updateParty(party: Party) {
+    suspend fun updateParty(party: Party) {
         partiesRef.document(party.id!!).set(party).await()
     }
 
@@ -125,11 +125,11 @@ class FirebaseApi : BaseFirebaseApi {
      * Signs out
      *
      */
-    override fun signOut() {
+    fun signOut() {
         FirebaseAuth.getInstance().signOut()
     }
 
-    override suspend fun updateUser(user: User , photoUri: Uri) {
+    suspend fun updateUser(user: User , photoUri: Uri) {
         val firebaseUser = auth.currentUser ?: return
         if (firebaseUser.email != user.email) {
             firebaseUser.updateEmail(user.email!!)
@@ -149,7 +149,7 @@ class FirebaseApi : BaseFirebaseApi {
         usersRef.document(auth.uid!!).set(user).await()
     }
 
-    override suspend fun signIn(email: String , password: String) {
+    suspend fun signIn(email: String , password: String) {
         auth
             .signInWithEmailAndPassword(email , password)
             .await()
@@ -162,7 +162,7 @@ class FirebaseApi : BaseFirebaseApi {
      * @param user where all user info stores, except for password
      * @param password
      */
-    override suspend fun signUpWithEmailAndPassword(
+    suspend fun signUpWithEmailAndPassword(
         user: User ,
         password: String
     ) {
@@ -171,6 +171,7 @@ class FirebaseApi : BaseFirebaseApi {
             .createUserWithEmailAndPassword(user.email!! , password)
             .await()
         firebaseUser = result.user
+        firebaseUser?.sendEmailVerification()?.await()
         user.imageUri = Constants.DEFAULT_IMAGE_URL
         usersRef.document(firebaseUser!!.uid).set(user).await()
     }
@@ -181,7 +182,7 @@ class FirebaseApi : BaseFirebaseApi {
      *
      * @return
      */
-    override suspend fun getNearbyUsers(): List<User> {
+    suspend fun getNearbyUsers(): List<User> {
         val currentUser = getUser(auth.uid!!)
 
         /**
@@ -203,7 +204,7 @@ class FirebaseApi : BaseFirebaseApi {
         return users
     }
 
-    override suspend fun dislikeUser(user: User) {
+    suspend fun dislikeUser(user: User) {
         val curUserRef = usersRef.document(auth.uid!!)
         val curUser = curUserRef.get().await().toObject(User::class.java)
         curUser!!.dislikedUsers += user.id!!
@@ -216,7 +217,7 @@ class FirebaseApi : BaseFirebaseApi {
      * @param user
      * @return
      */
-    override suspend fun likeUser(user: User): User? {
+    suspend fun likeUser(user: User): User? {
         val curUserRef = usersRef.document(auth.uid!!)
         val curUser = curUserRef.get().await().toObject(User::class.java)
 
@@ -233,7 +234,7 @@ class FirebaseApi : BaseFirebaseApi {
         }
     }
 
-    override suspend fun getPartyById(partyId: String): Party {
+    suspend fun getPartyById(partyId: String): Party {
         return partiesRef
             .document(partyId)
             .get()
@@ -241,7 +242,7 @@ class FirebaseApi : BaseFirebaseApi {
             .toObject(Party::class.java) ?: throw Exception("No party with given id: $partyId")
     }
 
-    override suspend fun getPartyParticipants(party: Party): List<User> {
+    suspend fun getPartyParticipants(party: Party): List<User> {
         return usersRef
             .whereIn(FieldPath.documentId() , party.users)
             .get()
@@ -249,7 +250,7 @@ class FirebaseApi : BaseFirebaseApi {
             .toObjects(User::class.java)
     }
 
-    override suspend fun addCurrentUserToParty(party: Party) {
+    suspend fun addCurrentUserToParty(party: Party) {
         val uid = auth.currentUser?.uid!!
         if (!party.users.contains(uid)) {
             party.users.add(uid)
@@ -257,9 +258,9 @@ class FirebaseApi : BaseFirebaseApi {
         }
     }
 
-    override fun getCurrentUserId(): String = auth.uid!!
+    fun getCurrentUserId(): String = auth.uid!!
 
-    override fun isAuthenticated(): Boolean {
+    fun isAuthenticated(): Boolean {
         return auth.currentUser != null
     }
 }
