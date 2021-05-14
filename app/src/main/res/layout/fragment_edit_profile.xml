@@ -1,139 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorGreen"
-    android:orientation="vertical"
-    tools:context=".ui.main.profile.EditProfileFragment">
+    android:background="@color/colorGreen">
 
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="15dp"
-        android:layout_weight="2"
-        android:background="@drawable/rounded_panel_down">
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_panel_down"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:padding="10dp">
 
-        <LinearLayout
+        <ImageView
+            android:id="@+id/ivEditProfileImage"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/content_description_profile_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <Button
+            android:id="@+id/btnEditProfileChangePhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_button_pink"
+            android:padding="10dp"
+            android:text="@string/btntext_change_photo"
+            android:textColor="@color/colorLiteGrey"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ivEditProfileImage" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:hint="@string/ethint_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnEditProfileChangePhoto">
 
-            <ImageView
-                android:id="@+id/ivEditProfileImage"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:layout_marginBottom="20dp"
-                android:contentDescription="@string/content_description_profile_image"
-                android:scaleType="centerCrop"
-                tools:src="@tools:sample/avatars" />
-
-            <Button
-                android:id="@+id/btnEditProfileChangePhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_button_pink"
-                android:padding="10dp"
-                android:text="@string/btntext_change_photo"
-                android:textColor="@color/colorLiteGrey"
-                android:textSize="12sp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/text_name"
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp" />
-
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEditProfileFirstName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorDark"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
-                android:hint="@string/ethint_name"
                 android:inputType="textPersonName"
                 android:textColor="@color/colorDark" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Фамилия"
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ethint_surname"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilFirstName">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEditProfileLastName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorDark"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
-                android:hint="@string/ethint_surname"
-                android:inputType="text"
+                android:inputType="textPersonName"
                 android:textColor="@color/colorDark" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Дата рождения"
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilBirthday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ethint_birthday"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilLastName">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEditProfileBirthday"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorDark"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
-                android:hint="@string/ethint_birthday"
                 android:inputType="date"
                 android:textColor="@color/colorDark" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/text_email"
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ethint_email"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilBirthday">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEditProfileEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorDark"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
-                android:hint="@string/ethint_email"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/colorDark" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/ethint_description"
-                android:textColor="@color/colorBlack"
-                android:textSize="20sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ethint_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilEmail">
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEditProfileDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/colorDark"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
-                android:hint="@string/ethint_description"
                 android:inputType="textMultiLine"
+                android:lines="3"
                 android:textColor="@color/colorDark" />
 
-            <Button
-                android:id="@+id/btnEditProfileSignOut"
-                android:layout_width="150dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/rounded_button_pink"
-                android:text="@string/log_out"
-                android:textColor="@color/colorWhite" />
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    </ScrollView>
+        <Button
+            android:id="@+id/btnEditProfileSignOut"
+            android:layout_width="150dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/rounded_button_pink"
+            android:text="@string/log_out"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilDescription" />
 
-</LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

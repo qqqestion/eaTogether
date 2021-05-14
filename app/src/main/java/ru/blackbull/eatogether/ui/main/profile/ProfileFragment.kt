@@ -11,10 +11,11 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.ui.main.snackbar
+import ru.blackbull.eatogether.ui.BaseFragment
+import ru.blackbull.eatogether.ui.main.dialogs.ErrorDialog
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment(R.layout.fragment_profile) {
+class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
 
     private val viewModel: ProfileViewModel by viewModels()
 
@@ -26,12 +27,10 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
             )
         }
 
+        // TODO: когда будет статистика, добавить отображение загрузки
         viewModel.currentUser.observe(viewLifecycleOwner , EventObserver(
             onError = {
-                snackbar(it)
-            } ,
-            onLoading = {
-
+//                showErrorDialog(it)
             }
         ) { user ->
             ibtnProfileImage.load(user?.imageUri) {

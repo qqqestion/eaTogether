@@ -83,7 +83,9 @@ class EditProfileFragment : Fragment(R.layout.fragment_edit_profile) {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        onClickSaveButton()
+        if (item.itemId == R.id.actionSave) {
+            onClickSaveButton()
+        }
         return super.onOptionsItemSelected(item)
     }
 
