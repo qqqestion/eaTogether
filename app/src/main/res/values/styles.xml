@@ -5,7 +5,17 @@
         <item name="colorPrimary">@color/colorGreen</item>
         <item name="colorPrimaryDark">@color/colorDark</item>
         <item name="colorAccent">@color/colorPink</item>
-        <item name="colorSurface">@android:color/white</item>
+        <item name="colorSurface">@color/colorWhite</item>
+    </style>
+
+    <style name="AppTheme.WhiteText" parent="AppTheme">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorGreen</item>
+        <item name="colorPrimaryDark">@color/colorDark</item>
+        <item name="colorAccent">@color/colorPink</item>
+        <item name="colorSurface">@color/colorWhite</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
+        <item name="android:textColorPrimary">@color/colorWhite</item>
     </style>
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
@@ -14,5 +24,40 @@
 
     <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="ProgressBar">
+        <item name="android:indeterminateTint">@color/colorGreen</item>
+        <item name="android:progress">0</item>
+    </style>
+
+    <style name="MainProgressBar" parent="ProgressBar">
+        <item name="android:layout_centerInParent">true</item>
+    </style>
+
+    <style name="MyTextInputLayout">
+        <item name="android:background">@drawable/rounded_button_light_grey</item>
+        <item name="android:padding">7dp</item>
+    </style>
+
+    <style name="MyTextInputEditText">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:ems">13</item>
+        <item name="android:textColor">@color/colorDark</item>
+    </style>
+
+    <style name="TestDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColorPrimary">@color/colorBlack</item>
+    </style>
+
+    <style name="TestCalendar" parent="ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:textColorPrimary">@color/colorBlack</item>
+    </style>
+
+    <style name="TestDrawerLayoutTheme">
+        <item name="colorControlNormal">@color/colorBlack</item>
+        <item name="android:textColorPrimary">@color/colorBlack</item>
     </style>
 </resources>

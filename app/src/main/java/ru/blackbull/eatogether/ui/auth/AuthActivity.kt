@@ -11,11 +11,10 @@ import ru.blackbull.eatogether.ui.main.MainActivity
 import timber.log.Timber
 
 @AndroidEntryPoint
-class AuthActivity : AppCompatActivity() {
+class AuthActivity : AppCompatActivity(R.layout.activity_auth) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auth)
         setSupportActionBar(toolbar)
         Timber.d("Hello from AuthActivity")
 

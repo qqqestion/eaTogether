@@ -47,10 +47,10 @@ class AuthViewModel @Inject constructor(
         password: String ,
         firstName: String ,
         lastName: String ,
-        birthday: String ,
+        birthday: Date ,
         description: String
     ): User {
-        for (field in listOf(email , password , firstName , lastName , birthday , description)) {
+        for (field in listOf(email , password , firstName , lastName , description)) {
             if (field.isEmpty()) {
                 throw Exception()
             }
@@ -61,9 +61,8 @@ class AuthViewModel @Inject constructor(
         user.firstName = firstName
         user.lastName = lastName
         user.description = description
-        val formatter = SimpleDateFormat("dd.MM.yyyy" , Locale.getDefault())
-        val date = formatter.parse(birthday)
-        user.birthday = Timestamp(date!!)
+        // TODO: сделать валидацию даты рождения
+        user.birthday = Timestamp(birthday)
         return user
     }
 
@@ -72,7 +71,7 @@ class AuthViewModel @Inject constructor(
         password: String ,
         firstName: String ,
         lastName: String ,
-        birthday: String ,
+        birthday: Date ,
         description: String
     ) = viewModelScope.launch {
         _signUpResult.value?.let {
@@ -92,11 +91,6 @@ class AuthViewModel @Inject constructor(
                 birthday ,
                 description
             )
-        } catch (e: ParseException) {
-            _signUpResult.value = Event(
-                Resource.Error(msg = app.getString(R.string.errormessage_date_misformat))
-            )
-            return@launch
         } catch (e: Exception) {
             _signUpResult.value = Event(
                 Resource.Error(msg = app.getString(R.string.errormessage_fields_must_be_filled))

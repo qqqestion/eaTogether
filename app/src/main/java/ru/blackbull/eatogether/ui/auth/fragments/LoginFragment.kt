@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
@@ -12,11 +11,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.EventObserver
+import ru.blackbull.eatogether.ui.BaseFragment
 import ru.blackbull.eatogether.ui.auth.AuthViewModel
 import ru.blackbull.eatogether.ui.main.MainActivity
+import timber.log.Timber
 
 @AndroidEntryPoint
-class LoginFragment : Fragment(R.layout.fragment_login) {
+class LoginFragment : BaseFragment(R.layout.fragment_login) {
 
     private val authViewModel: AuthViewModel by viewModels()
 
@@ -24,26 +25,24 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         super.onViewCreated(view , savedInstanceState)
         subscribeToObservers()
 
-        btnLoginCancel.setOnClickListener {
-            findNavController().popBackStack()
-        }
+        Timber.d("View created")
 
         btnLoginConfirm.setOnClickListener { onClickLogin() }
-
     }
 
     private fun subscribeToObservers() {
         authViewModel.signInResult.observe(viewLifecycleOwner , EventObserver(
             onError = {
                 val msg = getString(R.string.errormessage_login_error)
-                Snackbar.make(requireView() , msg , Snackbar.LENGTH_SHORT).show()
-                loginProgressBar.isVisible = false
+//                showErrorDialog(msg)
+                hideLoadingBar()
+                snackbar(it)
             } ,
             onLoading = {
-                loginProgressBar.isVisible = true
+                showLoadingBar()
             }
         ) {
-            loginProgressBar.isVisible = false
+            hideLoadingBar()
             Intent(requireContext() , MainActivity::class.java).also {
                 startActivity(it)
                 requireActivity().finish()

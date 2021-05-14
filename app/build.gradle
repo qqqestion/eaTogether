@@ -59,6 +59,9 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.libraries.places:places:2.4.0'
 
+    // Loading (https://github.com/yankai-victor/Loading)
+    implementation 'com.victor:lib:1.0.4'
+
     // Yandex MapKit
     implementation 'com.yandex.android:maps.mobile:4.0.0-full'
 
