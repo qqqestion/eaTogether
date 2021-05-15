@@ -19,12 +19,7 @@ class StartFragment : BaseFragment(R.layout.fragment_start) {
         super.onViewCreated(view , savedInstanceState)
         Timber.d("StartFragment")
 
-        btnStartLogin.setOnClickListener {
-            findNavController().navigate(
-                StartFragmentDirections.actionStartFragmentToLoginFragment()
-            )
-        }
-        btnStartRegistration.setOnClickListener {
+        btnStart.setOnClickListener {
             findNavController().navigate(
                 StartFragmentDirections.actionStartFragmentToRegistrationPhoneNumberFragment()
             )

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.AuthActivity">
+    tools:context=".ui.auth.AuthActivity"
+    >
 
     <ImageView
         android:layout_width="match_parent"
@@ -14,7 +15,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:layout_width="@dimen/eatogether_title_width"
@@ -29,30 +31,20 @@
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <Button
-        android:id="@+id/btnStartLogin"
-        android:layout_width="130dp"
-        android:layout_height="55dp"
-        android:layout_marginBottom="7dp"
-        android:background="@drawable/rounded_button_green"
-        android:text="@string/login"
-        android:textColor="@color/colorLiteGrey"
-        app:layout_constraintBottom_toTopOf="@+id/btnStartRegistration"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnStartRegistration"
+        android:id="@+id/btnStart"
         android:layout_width="130dp"
         android:layout_height="55dp"
         android:layout_marginBottom="@dimen/auth_buttons_margin_bot"
         android:background="@drawable/rounded_button_green"
-        android:text="@string/register"
+        android:text="@string/start"
         android:textColor="@color/colorLiteGrey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

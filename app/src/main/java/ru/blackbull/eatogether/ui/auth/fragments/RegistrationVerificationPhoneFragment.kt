@@ -10,6 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_registration_verification_phone.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.ui.BaseFragment
@@ -17,6 +18,7 @@ import ru.blackbull.eatogether.ui.auth.AuthViewModel
 import ru.blackbull.eatogether.ui.main.MainActivity
 import timber.log.Timber
 
+@AndroidEntryPoint
 class RegistrationVerificationPhoneFragment :
     BaseFragment(R.layout.fragment_registration_verification_phone) {
 
