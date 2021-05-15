@@ -33,6 +33,17 @@ class AuthViewModel @Inject constructor(
     private val _signUpResult = MutableLiveData<Event<Resource<Unit>>>()
     val signUpResult: LiveData<Event<Resource<Unit>>> = _signUpResult
 
+    val isRegistrationComplete = MutableLiveData<Boolean>()
+
+    fun checkIsRegistrationComplete() = viewModelScope.launch {
+        val user = firebaseRepository.getCurrentUser().data
+        if (user != null) {
+            isRegistrationComplete.postValue(user.isRegistrationComplete)
+        } else {
+            isRegistrationComplete.postValue(false)
+        }
+    }
+
     fun signIn(email: String , password: String) = viewModelScope.launch {
         _signInResult.value?.let {
             if (it.peekContent() is Resource.Loading) {
@@ -45,21 +56,18 @@ class AuthViewModel @Inject constructor(
     }
 
     private fun validateUser(
-        email: String ,
-        password: String ,
         firstName: String ,
         lastName: String ,
         birthday: Date ,
         description: String
     ): User {
-        for (field in listOf(email , password , firstName , lastName , description)) {
+        for (field in listOf(firstName , lastName , description)) {
             if (field.isEmpty()) {
                 throw Exception()
             }
         }
 
         val user = User()
-        user.email = email
         user.firstName = firstName
         user.lastName = lastName
         user.description = description
@@ -69,8 +77,6 @@ class AuthViewModel @Inject constructor(
     }
 
     fun signUp(
-        email: String ,
-        password: String ,
         firstName: String ,
         lastName: String ,
         birthday: Date ,
@@ -86,8 +92,6 @@ class AuthViewModel @Inject constructor(
         val user: User
         try {
             user = validateUser(
-                email ,
-                password ,
                 firstName ,
                 lastName ,
                 birthday ,
@@ -103,7 +107,7 @@ class AuthViewModel @Inject constructor(
             return@launch
         }
         Timber.d("Validation complete")
-        val response = firebaseRepository.signUpWithEmailAndPassword(user , password)
+        val response = firebaseRepository.signUpWithEmailAndPassword(user)
         if (response is Resource.Error) {
             val stringId = when (response.error) {
                 is FirebaseNetworkException ->

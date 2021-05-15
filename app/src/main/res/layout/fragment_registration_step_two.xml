@@ -55,7 +55,7 @@
                 style="@style/MyTextInputEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:inputType="textPersonName|textCapWords"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 />
@@ -79,7 +79,7 @@
                 style="@style/MyTextInputEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:inputType="textPersonName|textCapWords"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 />
@@ -134,14 +134,13 @@
                     style="@style/MyTextInputEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"
+                    android:inputType="textCapSentences"
                     android:maxLength="100"
                     android:overScrollMode="always"
                     android:paddingStart="10dp"
                     android:paddingEnd="10dp"
                     android:scrollbarStyle="insideInset"
                     android:scrollbars="vertical"
-                    android:text="В философии под алогизмом понимают не только логическую ошибку, но и отрицание логического"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>

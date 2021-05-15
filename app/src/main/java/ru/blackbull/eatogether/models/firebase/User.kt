@@ -28,6 +28,8 @@ data class User(
     var lastName: String? = null ,
     var description: String? = null ,
     var birthday: Timestamp? = null ,
+    @field:JvmField
+    var isRegistrationComplete: Boolean = false ,
     var imageUri: String? = null ,
     var likedUsers: List<String> = mutableListOf() ,
     var dislikedUsers: List<String> = mutableListOf() ,
@@ -40,6 +42,7 @@ data class User(
         parcel.readString() ,
         parcel.readString() ,
         parcel.readParcelable(Timestamp::class.java.classLoader) ,
+        parcel.readInt() != 0 ,
         parcel.readString() ,
         parcel.createStringArrayList() ?: listOf() ,
         parcel.createStringArrayList() ?: listOf()
@@ -57,6 +60,7 @@ data class User(
             it.writeString(lastName)
             it.writeString(description)
             it.writeParcelable(birthday , flags)
+            it.writeInt(if (isRegistrationComplete) 1 else 0)
             it.writeString(imageUri)
             it.writeList(likedUsers)
             it.writeList(dislikedUsers)

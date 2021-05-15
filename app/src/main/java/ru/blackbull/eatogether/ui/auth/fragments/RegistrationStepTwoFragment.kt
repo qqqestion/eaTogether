@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_registration_step_two.*
 import ru.blackbull.eatogether.R
@@ -19,8 +19,6 @@ import java.util.*
 
 @AndroidEntryPoint
 class RegistrationStepTwoFragment : BaseFragment(R.layout.fragment_registration_step_two) {
-
-    private val args: RegistrationStepTwoFragmentArgs by navArgs()
 
     private val viewModel: AuthViewModel by viewModels()
 
@@ -39,8 +37,6 @@ class RegistrationStepTwoFragment : BaseFragment(R.layout.fragment_registration_
 
         btnRegistrationConfirm.setOnClickListener {
             viewModel.signUp(
-                args.email ,
-                args.password ,
                 etRegistrationFirstName.text.toString() ,
                 etRegistrationLastName.text.toString() ,
                 selectedDate.time ,

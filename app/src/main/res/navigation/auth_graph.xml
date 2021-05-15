@@ -15,37 +15,11 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
-        <action
-            android:id="@+id/action_startFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/fade_out" />
-    </fragment>
-    <fragment
-        android:id="@+id/loginFragment"
-        android:name="ru.blackbull.eatogether.ui.auth.fragments.LoginFragment"
-        android:label="LoginFragment" />
-    <fragment
-        android:id="@+id/registrationStepOneFragment"
-        android:name="ru.blackbull.eatogether.ui.auth.fragments.RegistrationFragmentStepOne"
-        android:label="RegistrationFragment">
-        <action
-            android:id="@+id/action_registrationStepOneFragment_to_registrationStepTwoFragment"
-            app:destination="@id/registrationStepTwoFragment" />
     </fragment>
     <fragment
         android:id="@+id/registrationStepTwoFragment"
         android:name="ru.blackbull.eatogether.ui.auth.fragments.RegistrationStepTwoFragment"
-        android:label="RegistrationStepTwoFragment">
-        <argument
-            android:name="email"
-            app:argType="string" />
-        <argument
-            android:name="password"
-            app:argType="string" />
-    </fragment>
+        android:label="RegistrationStepTwoFragment"/>
     <fragment
         android:id="@+id/registrationPhoneNumberFragment"
         android:name="ru.blackbull.eatogether.ui.auth.fragments.RegistrationPhoneNumberFragment"
@@ -61,5 +35,8 @@
         <argument
             android:name="verificationId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_registrationVerificationPhoneFragment_to_registrationStepTwoFragment"
+            app:destination="@id/registrationStepTwoFragment" />
     </fragment>
 </navigation>

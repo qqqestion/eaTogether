@@ -79,11 +79,10 @@ class FirebaseRepository @Inject constructor(
     }
 
     suspend fun signUpWithEmailAndPassword(
-        user: User ,
-        password: String
+        user: User
     ) = withContext(Dispatchers.IO) {
         safeCall {
-            firebaseApi.signUpWithEmailAndPassword(user , password)
+            firebaseApi.signUpWithEmailAndPassword(user)
             Resource.Success(Unit)
         }
     }

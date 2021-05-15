@@ -163,16 +163,11 @@ class FirebaseApi {
      * @param password
      */
     suspend fun signUpWithEmailAndPassword(
-        user: User ,
-        password: String
+        user: User
     ) {
-        val firebaseUser: FirebaseUser?
-        val result = FirebaseAuth.getInstance()
-            .createUserWithEmailAndPassword(user.email!! , password)
-            .await()
-        firebaseUser = result.user
-        firebaseUser?.sendEmailVerification()?.await()
+        val firebaseUser: FirebaseUser? = auth.currentUser
         user.imageUri = Constants.DEFAULT_IMAGE_URL
+        user.isRegistrationComplete = true
         usersRef.document(firebaseUser!!.uid).set(user).await()
     }
 
