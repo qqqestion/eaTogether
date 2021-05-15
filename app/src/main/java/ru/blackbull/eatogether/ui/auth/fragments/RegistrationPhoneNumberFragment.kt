@@ -11,6 +11,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.fragment_registration_phone_number.*
+import ru.blackbull.eatogether.BuildConfig
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.ui.BaseFragment
 import timber.log.Timber
@@ -30,7 +31,7 @@ class RegistrationPhoneNumberFragment : BaseFragment(R.layout.fragment_registrat
             val phone = etRegistrationPhoneNumber.text.toString()
             Timber.d("Phone number: $phone")
             val response = SafetyNet.getClient(requireActivity())
-                .verifyWithRecaptcha("6LcbK9UaAAAAAKDRnjJhNE8HbpHkZkpiGSnyn9W8")
+                .verifyWithRecaptcha(BuildConfig.RECAPTCHA_API_KEY)
                 .addOnSuccessListener(requireActivity()) { response ->
                     // Indicates communication with reCAPTCHA service was
                     // successful.

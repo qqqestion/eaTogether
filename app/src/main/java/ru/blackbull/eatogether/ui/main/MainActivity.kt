@@ -12,6 +12,7 @@ import com.yandex.mapkit.MapKitFactory
 import com.yandex.mapkit.search.SearchFactory
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.blackbull.eatogether.BuildConfig
 import ru.blackbull.eatogether.R
 
 
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
          */
         if (savedInstanceState == null) {
             try {
-                MapKitFactory.setApiKey("3f863532-8f11-409b-9f01-410fec3a2c9b")
+                MapKitFactory.setApiKey(BuildConfig.YANDEX_MAPKIT_API_KEY)
                 MapKitFactory.initialize(this)
                 SearchFactory.initialize(this)
             } catch (exc: AssertionError) {

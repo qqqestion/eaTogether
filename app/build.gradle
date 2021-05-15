@@ -20,6 +20,8 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField("String", "GOOGLE_API_KEY", GOOGLE_API_KEY)
+        buildConfigField("String", "YANDEX_MAPKIT_API_KEY", YANDEX_MAPKIT_API_KEY)
+        buildConfigField("String", "RECAPTCHA_API_KEY", RECAPTCHA_API_KEY)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
