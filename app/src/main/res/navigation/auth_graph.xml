@@ -9,8 +9,8 @@
         android:name="ru.blackbull.eatogether.ui.auth.fragments.StartFragment"
         android:label="StartFragment">
         <action
-            android:id="@+id/action_startFragment_to_registrationStepOneFragment"
-            app:destination="@id/registrationStepOneFragment"
+            android:id="@+id/action_startFragment_to_registrationPhoneNumberFragment"
+            app:destination="@id/registrationPhoneNumberFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
@@ -30,7 +30,7 @@
     <fragment
         android:id="@+id/registrationStepOneFragment"
         android:name="ru.blackbull.eatogether.ui.auth.fragments.RegistrationFragmentStepOne"
-        android:label="RegistrationFragment" >
+        android:label="RegistrationFragment">
         <action
             android:id="@+id/action_registrationStepOneFragment_to_registrationStepTwoFragment"
             app:destination="@id/registrationStepTwoFragment" />
@@ -38,12 +38,28 @@
     <fragment
         android:id="@+id/registrationStepTwoFragment"
         android:name="ru.blackbull.eatogether.ui.auth.fragments.RegistrationStepTwoFragment"
-        android:label="RegistrationStepTwoFragment" >
+        android:label="RegistrationStepTwoFragment">
         <argument
             android:name="email"
             app:argType="string" />
         <argument
             android:name="password"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationPhoneNumberFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.RegistrationPhoneNumberFragment"
+        android:label="RegistrationPhoneNumberFragment">
+        <action
+            android:id="@+id/action_registrationPhoneNumberFragment_to_registrationVerificationPhoneFragment"
+            app:destination="@id/registrationVerificationPhoneFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationVerificationPhoneFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.RegistrationVerificationPhoneFragment"
+        android:label="RegistrationVerificationPhoneFragment">
+        <argument
+            android:name="verificationId"
             app:argType="string" />
     </fragment>
 </navigation>

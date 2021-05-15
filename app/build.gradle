@@ -55,12 +55,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.google.android.libraries.places:places:2.4.0'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
 
-    // Loading (https://github.com/yankai-victor/Loading)
-    implementation 'com.victor:lib:1.0.4'
+    // PinView
+    implementation 'io.github.chaosleung:pinview:1.4.4'
 
     // Yandex MapKit
     implementation 'com.yandex.android:maps.mobile:4.0.0-full'
@@ -68,6 +66,7 @@ dependencies {
     // Google Maps Location Services
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
+    implementation 'com.google.android.gms:play-services-safetynet:17.0.0'
 
     // Kotlin coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
@@ -77,17 +76,16 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:18.0.3'
+    implementation 'com.google.firebase:firebase-core:19.0.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.3'
-    implementation 'com.google.firebase:firebase-firestore-ktx:22.1.2'
+    implementation 'com.google.firebase:firebase-firestore-ktx:23.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
-    implementation 'com.google.firebase:firebase-auth:20.0.4'
-    implementation 'com.google.firebase:firebase-storage:19.2.2'
-    implementation 'com.firebaseui:firebase-ui-auth:6.2.0'
+    implementation 'com.google.firebase:firebase-auth:21.0.1'
+    implementation 'com.google.firebase:firebase-storage:20.0.0'
 
     // OkHttp
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.2'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
 
     // Moshi
     implementation 'com.squareup.moshi:moshi-kotlin:1.11.0'
@@ -98,16 +96,16 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
 
     //Material
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.3.0'
 
     // Architectural Components
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
 
     // Activity KTX for viewModels()
-    implementation "androidx.activity:activity-ktx:1.1.0"
+    implementation "androidx.activity:activity-ktx:1.2.3"
 
     // COIL
     implementation "io.coil-kt:coil:1.1.1"
@@ -123,7 +121,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
 
     // Coroutine Lifecycle Scopes
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
 
     implementation 'android.arch.lifecycle:extensions:1.1.1'
 
@@ -134,11 +132,11 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.1'
 
     // Dagger Core
-    implementation "com.google.dagger:dagger:2.31.2"
+    implementation "com.google.dagger:dagger:2.35.1"
     kapt "com.google.dagger:dagger-compiler:2.31.2"
 
     // Dagger Android
-    api 'com.google.dagger:dagger-android:2.28.1'
+    api 'com.google.dagger:dagger-android:2.35.1'
     api 'com.google.dagger:dagger-android-support:2.28.1'
     kapt 'com.google.dagger:dagger-android-processor:2.23.2'
 
@@ -147,5 +145,5 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:2.31.2-alpha"
 
     implementation "androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03"
-    kapt "androidx.hilt:hilt-compiler:1.0.0-beta01"
+    kapt "androidx.hilt:hilt-compiler:1.0.0"
 }

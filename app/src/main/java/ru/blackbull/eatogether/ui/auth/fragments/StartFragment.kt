@@ -26,7 +26,7 @@ class StartFragment : BaseFragment(R.layout.fragment_start) {
         }
         btnStartRegistration.setOnClickListener {
             findNavController().navigate(
-                StartFragmentDirections.actionStartFragmentToRegistrationStepOneFragment()
+                StartFragmentDirections.actionStartFragmentToRegistrationPhoneNumberFragment()
             )
         }
     }

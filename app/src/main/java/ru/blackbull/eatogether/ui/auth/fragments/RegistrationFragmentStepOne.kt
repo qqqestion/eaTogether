@@ -7,16 +7,31 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.safetynet.SafetyNet
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_registration_step_one.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.EventObserver
+import ru.blackbull.eatogether.ui.BaseFragment
 import ru.blackbull.eatogether.ui.auth.AuthViewModel
 import ru.blackbull.eatogether.ui.main.MainActivity
 import ru.blackbull.eatogether.ui.main.snackbar
+import timber.log.Timber
+import java.util.concurrent.Executor
+import java.util.concurrent.TimeUnit
 
 @AndroidEntryPoint
-class RegistrationFragmentStepOne : Fragment(R.layout.fragment_registration_step_one) {
+class RegistrationFragmentStepOne : BaseFragment(R.layout.fragment_registration_step_one) {
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
