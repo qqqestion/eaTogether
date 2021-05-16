@@ -25,6 +25,9 @@ class ProfileViewModel @Inject constructor(
     private val _currentPhoto = MutableLiveData<Uri>()
     val currentPhoto: LiveData<Uri> = _currentPhoto
 
+    private val _deleteStatus = MutableLiveData<Event<Resource<User>>>()
+    val deleteStatus: LiveData<Event<Resource<User>>> = _deleteStatus
+
     fun getCurrentUser() = viewModelScope.launch {
         _currentUser.postValue(Event(Resource.Loading()))
         val foundUser = firebaseRepository.getCurrentUser()
@@ -34,16 +37,26 @@ class ProfileViewModel @Inject constructor(
 
     fun signOut() = firebaseRepository.signOut()
 
-    fun updateUser(user: User , photoUri: Uri) = viewModelScope.launch {
+    fun updateUser(user: User) = viewModelScope.launch {
         _currentUser.postValue(Event(Resource.Loading()))
 //        currentUser.value?.let { event ->
 //            user.imageUri = event.peekContent().data?.imageUri
 //        }
-        firebaseRepository.updateUser(user , photoUri)
-        _currentUser.postValue(Event(Resource.Success(user)))
+        val response = firebaseRepository.updateUser(user)
+        _currentUser.postValue(Event(response))
     }
 
     fun setPhoto(uri: Uri) {
         _currentPhoto.postValue(uri)
+    }
+
+    fun deleteImage(uri: Uri) = viewModelScope.launch {
+        _deleteStatus.postValue(Event(Resource.Loading()))
+        val response = firebaseRepository.deleteImage(uri)
+        _deleteStatus.postValue(Event(response))
+    }
+
+    fun makeImageMain(uri: Uri) = viewModelScope.launch {
+        firebaseRepository.makeImageMain(uri)
     }
 }

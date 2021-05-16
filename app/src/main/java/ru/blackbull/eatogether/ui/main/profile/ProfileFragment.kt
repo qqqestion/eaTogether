@@ -2,7 +2,6 @@ package ru.blackbull.eatogether.ui.main.profile
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
@@ -12,7 +11,6 @@ import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.BaseFragment
-import ru.blackbull.eatogether.ui.main.dialogs.ErrorDialog
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
@@ -33,7 +31,7 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
 //                showErrorDialog(it)
             }
         ) { user ->
-            ibtnProfileImage.load(user?.imageUri) {
+            ibtnProfileImage.load(user?.mainImageUri) {
                 transformations(CircleCropTransformation())
             }
         })

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorGreen">
+    android:background="@color/colorGreen"
+    android:fillViewport="true"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -12,41 +14,44 @@
         android:background="@drawable/rounded_panel_down"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:paddingBottom="10dp"
+        >
 
-        <ImageView
-            android:id="@+id/ivEditProfileImage"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginBottom="20dp"
-            android:contentDescription="@string/content_description_profile_image"
-            android:scaleType="centerCrop"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="10dp"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars" />
+            />
 
-        <Button
-            android:id="@+id/btnEditProfileChangePhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/rounded_button_pink"
-            android:padding="10dp"
-            android:text="@string/btntext_change_photo"
-            android:textColor="@color/colorLiteGrey"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivEditProfileImage" />
+        <!--        <ImageView-->
+        <!--            android:id="@+id/ivEditProfileImage"-->
+        <!--            android:layout_width="150dp"-->
+        <!--            android:layout_height="150dp"-->
+        <!--            android:layout_marginBottom="20dp"-->
+        <!--            android:contentDescription="@string/content_description_profile_image"-->
+        <!--            android:scaleType="centerCrop"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent"-->
+        <!--            tools:src="@tools:sample/avatars"-->
+        <!--            />-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:hint="@string/ethint_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnEditProfileChangePhoto">
+            app:layout_constraintTop_toBottomOf="@id/viewPager"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEditProfileFirstName"
@@ -55,7 +60,8 @@
                 android:backgroundTint="@color/colorDark"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
                 android:inputType="textPersonName"
-                android:textColor="@color/colorDark" />
+                android:textColor="@color/colorDark"
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -67,7 +73,8 @@
             android:hint="@string/ethint_surname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilFirstName">
+            app:layout_constraintTop_toBottomOf="@id/tilFirstName"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEditProfileLastName"
@@ -76,7 +83,8 @@
                 android:backgroundTint="@color/colorDark"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
                 android:inputType="textPersonName"
-                android:textColor="@color/colorDark" />
+                android:textColor="@color/colorDark"
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -87,7 +95,8 @@
             android:hint="@string/ethint_birthday"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilLastName">
+            app:layout_constraintTop_toBottomOf="@id/tilLastName"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEditProfileBirthday"
@@ -95,30 +104,34 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorDark"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
+                android:focusable="false"
                 android:inputType="date"
-                android:textColor="@color/colorDark" />
+                android:textColor="@color/colorDark"
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/ethint_email"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilBirthday">
+        <!--        <com.google.android.material.textfield.TextInputLayout-->
+        <!--            android:id="@+id/tilPhone"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:hint="@string/ethint_email"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/tilBirthday"-->
+        <!--            >-->
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEditProfileEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorDark"
-                android:drawableEnd="@drawable/ic_baseline_edit_24"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/colorDark" />
+        <!--            <com.google.android.material.textfield.TextInputEditText-->
+        <!--                android:id="@+id/etEditProfilePhoneNumber"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:backgroundTint="@color/colorDark"-->
+        <!--                android:drawableEnd="@drawable/ic_baseline_edit_24"-->
+        <!--                android:inputType="textEmailAddress"-->
+        <!--                android:textColor="@color/colorDark"-->
+        <!--                />-->
 
-        </com.google.android.material.textfield.TextInputLayout>
+        <!--        </com.google.android.material.textfield.TextInputLayout>-->
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDescription"
@@ -127,7 +140,8 @@
             android:hint="@string/ethint_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilEmail">
+            app:layout_constraintTop_toBottomOf="@id/tilBirthday"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEditProfileDescription"
@@ -136,8 +150,8 @@
                 android:backgroundTint="@color/colorDark"
                 android:drawableEnd="@drawable/ic_baseline_edit_24"
                 android:inputType="textMultiLine"
-                android:lines="3"
-                android:textColor="@color/colorDark" />
+                android:textColor="@color/colorDark"
+                />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -152,7 +166,8 @@
             android:textColor="@color/colorWhite"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilDescription" />
+            app:layout_constraintTop_toBottomOf="@id/tilDescription"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

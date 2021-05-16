@@ -51,7 +51,7 @@ class PartyParticipantAdapter : RecyclerView.Adapter<PartyParticipantAdapter.Vie
     override fun onBindViewHolder(holder: ViewHolder , position: Int) {
         val user = differ.currentList[position]
         holder.itemView.apply {
-            ivPartyParticipantPhoto.load(user.imageUri) {
+            ivPartyParticipantPhoto.load(user.mainImageUri) {
                 transformations(CircleCropTransformation())
             }
             tvPartyParticipantName.text = "${user.firstName} ${user.lastName}"

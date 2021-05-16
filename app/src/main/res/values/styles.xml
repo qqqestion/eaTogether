@@ -6,6 +6,7 @@
         <item name="colorPrimaryDark">@color/colorDark</item>
         <item name="colorAccent">@color/colorPink</item>
         <item name="colorSurface">@color/colorWhite</item>
+        <item name="android:itemBackground">@color/colorGreen</item>
     </style>
 
     <style name="AppTheme.WhiteText" parent="AppTheme">

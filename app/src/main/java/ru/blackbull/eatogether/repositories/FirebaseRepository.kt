@@ -2,15 +2,19 @@ package ru.blackbull.eatogether.repositories
 
 import android.location.Location
 import android.net.Uri
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.api.FirebaseApi
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.other.safeCall
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -21,7 +25,10 @@ class FirebaseRepository @Inject constructor(
     val matchesRef = Firebase.firestore.collection("matches")
 
     suspend fun updateUserLocation(location: Location): Unit = withContext(Dispatchers.IO) {
-        firebaseApi.updateUserLocation(location)
+        val geoPoint = GeoPoint(
+            location.latitude , location.longitude
+        )
+        firebaseApi.updateUserLocation(geoPoint)
     }
 
     suspend fun searchPartyByPlace(
@@ -63,8 +70,36 @@ class FirebaseRepository @Inject constructor(
         firebaseApi.signOut()
     }
 
-    suspend fun updateUser(user: User , photoUri: Uri) {
-        firebaseApi.updateUser(user , photoUri)
+    suspend fun updateUser(user: User) = withContext(Dispatchers.IO) {
+        safeCall {
+            // Чтобы не фотография из firebase не загружалась повторно в firebase
+            // TODO: добавить обновление фотографии
+            val imageUris = mutableListOf<String>()
+            Timber.d("Local uris: ${user.images}")
+
+            for (image in user.images) {
+                val imageUri = Uri.parse(image)
+                if (imageUri.host != "firebasestorage.googleapis.com") {
+                    val remoteImageUri = firebaseApi.uploadImage(imageUri).toString()
+                    if (image == user.mainImageUri) {
+                        user.mainImageUri = remoteImageUri
+                    }
+                    imageUris.add(remoteImageUri)
+                } else {
+                    imageUris.add(image)
+                }
+            }
+            if (Constants.DEFAULT_IMAGE_URL in imageUris && imageUris.size > 1) {
+                imageUris -= Constants.DEFAULT_IMAGE_URL
+                if (user.mainImageUri == Constants.DEFAULT_IMAGE_URL) {
+                    user.mainImageUri = imageUris.first()
+                }
+            }
+            user.images = imageUris
+            Timber.d("Firebase uris: $imageUris")
+            firebaseApi.updateUser(user)
+            Resource.Success(user)
+        }
     }
 
     fun isAuthenticated(): Boolean {
@@ -95,7 +130,9 @@ class FirebaseRepository @Inject constructor(
 
     suspend fun dislikeUser(user: User) = withContext(Dispatchers.IO) {
         safeCall {
-            firebaseApi.dislikeUser(user)
+            val curUser = firebaseApi.getUser(getCurrentUserId())
+            curUser.dislikedUsers += user.id!!
+            firebaseApi.updateUser(curUser)
             Resource.Success(Unit)
         }
     }
@@ -121,11 +158,46 @@ class FirebaseRepository @Inject constructor(
     }
 
     suspend fun addCurrentUserToParty(party: Party) = withContext(Dispatchers.IO) {
-        firebaseApi.addCurrentUserToParty(party)
+        val uid = getCurrentUserId()
+        if (!party.users.contains(uid)) {
+            party.users.add(uid)
+            firebaseApi.updateParty(party)
+        }
     }
 
     suspend fun sendLikeNotification(user: User) {
 //        val notification = Notification(userId = user.id , type = "like")
 //        notificationsRef.add(notification).await()
+    }
+
+    suspend fun deleteImage(uri: Uri): Resource<User> = withContext(Dispatchers.IO) {
+        safeCall {
+            val user = firebaseApi.getUser(firebaseApi.getCurrentUserId())
+            val uriStr = uri.toString()
+            user.images -= uriStr
+            if (user.images.isEmpty()) {
+                user.images += Constants.DEFAULT_IMAGE_URL
+            }
+            if (user.mainImageUri == uriStr) {
+                user.mainImageUri = user.images.first()
+            }
+            if (uriStr != Constants.DEFAULT_IMAGE_URL) {
+                firebaseApi.deleteImage(uri)
+            }
+            firebaseApi.updateUser(user)
+            Resource.Success(user)
+        }
+    }
+
+    suspend fun makeImageMain(uri: Uri): Resource<User> = withContext(Dispatchers.IO) {
+        safeCall {
+            val user = firebaseApi.getUser(firebaseApi.getCurrentUserId())
+            user.mainImageUri = uri.toString()
+            if (!user.images.contains(uri.toString())) {
+                Timber.d("User image array does not contain main image")
+            }
+            firebaseApi.updateUser(user)
+            Resource.Success(user)
+        }
     }
 }

@@ -8,7 +8,7 @@ object Constants {
     const val FASTEST_LOCATION_INTERVAL = 2000L
 
     const val DEFAULT_IMAGE_URL =
-        "https://firebasestorage.googleapis.com/v0/b/eatogether-a8490.appspot.com/o/download.jpeg?alt=media&token=6b9935b4-f29b-4720-92f2-a6f46449b16c"
+        "https://firebasestorage.googleapis.com/v0/b/eatogether-a8490.appspot.com/o/default-avatar.jpeg?alt=media&token=1675c956-67f3-4a67-9061-cf9d3d453e17"
 
     const val START_SERVICE = "START_SERVICE"
     const val STOP_SERVICE = "STOP_SERVICE"

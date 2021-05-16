@@ -34,16 +34,13 @@ class FirebaseApi {
     /**
      * Обновляет поле пользователя "lastLocation" в Firestore
      *
-     * @param location
+     * @param point
      */
-    suspend fun updateUserLocation(location: Location) {
-        val geoPoint = GeoPoint(
-            location.latitude , location.longitude
-        )
+    suspend fun updateUserLocation(point: GeoPoint) {
         usersRef.document(
             auth.uid!!
         ).update(
-            "lastLocation" , geoPoint
+            "lastLocation" , point
         ).await()
     }
 
@@ -129,24 +126,17 @@ class FirebaseApi {
         FirebaseAuth.getInstance().signOut()
     }
 
-    suspend fun updateUser(user: User , photoUri: Uri) {
-        val firebaseUser = auth.currentUser ?: return
-        if (firebaseUser.email != user.email) {
-            firebaseUser.updateEmail(user.email!!)
-            auth.updateCurrentUser(firebaseUser)
-        }
+    suspend fun uploadImage(localImageUri: Uri): Uri? {
+        val res = FirebaseStorage.getInstance()
+            .reference
+            .child(UUID.randomUUID().toString())
+            .putFile(localImageUri)
+            .await()
+        return res.metadata?.reference?.downloadUrl?.await()
+    }
 
-        // Чтобы не фотография из firebase не загружалась повторно в firebase
-        // TODO: добавить обновление фотографии
-        if (photoUri.host != "firebasestorage.googleapis.com") {
-            val res = FirebaseStorage.getInstance().reference.child(firebaseUser.uid).putFile(
-                photoUri
-            ).await()
-            val imageUri = res.metadata?.reference?.downloadUrl?.await()
-            user.imageUri = imageUri.toString()
-        }
-
-        usersRef.document(auth.uid!!).set(user).await()
+    suspend fun updateUser(user: User) {
+        usersRef.document(user.id!!).set(user).await()
     }
 
     suspend fun signIn(email: String , password: String) {
@@ -166,7 +156,7 @@ class FirebaseApi {
         user: User
     ) {
         val firebaseUser: FirebaseUser? = auth.currentUser
-        user.imageUri = Constants.DEFAULT_IMAGE_URL
+        user.mainImageUri = Constants.DEFAULT_IMAGE_URL
         user.isRegistrationComplete = true
         usersRef.document(firebaseUser!!.uid).set(user).await()
     }
@@ -245,17 +235,23 @@ class FirebaseApi {
             .toObjects(User::class.java)
     }
 
-    suspend fun addCurrentUserToParty(party: Party) {
-        val uid = auth.currentUser?.uid!!
-        if (!party.users.contains(uid)) {
-            party.users.add(uid)
-            updateParty(party)
-        }
-    }
-
     fun getCurrentUserId(): String = auth.uid!!
 
     fun isAuthenticated(): Boolean {
         return auth.currentUser != null
+    }
+
+    suspend fun deleteImage(uri: Uri) {
+        FirebaseStorage.getInstance().getReferenceFromUrl(uri.toString()).delete().await()
+    }
+
+    suspend fun makeImageMain(uri: Uri): User {
+        val user = getUser(getCurrentUserId())
+        user.mainImageUri = uri.toString()
+        if (!user.images.contains(uri.toString())) {
+            Timber.d("User image array does not contain main image")
+        }
+        updateUser(user)
+        return user
     }
 }

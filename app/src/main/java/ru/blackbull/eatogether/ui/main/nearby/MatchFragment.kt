@@ -24,7 +24,7 @@ class MatchFragment : Fragment(R.layout.fragment_match) {
         super.onViewCreated(view , savedInstanceState)
 
         val matchedUser = args.matchedUser
-        ivSecondUser.load(matchedUser.imageUri) {
+        ivSecondUser.load(matchedUser.mainImageUri) {
             transformations(CircleCropTransformation())
         }
 
@@ -36,7 +36,7 @@ class MatchFragment : Fragment(R.layout.fragment_match) {
 
             }
         ) { currentUser ->
-            ivFirstUser.load(currentUser.imageUri) {
+            ivFirstUser.load(currentUser.mainImageUri) {
                 transformations(CircleCropTransformation())
             }
             tvMatchLabel.text =

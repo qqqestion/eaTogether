@@ -62,6 +62,9 @@ dependencies {
     // PinView
     implementation 'io.github.chaosleung:pinview:1.4.4'
 
+    // ViewPager2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
     // Yandex MapKit
     implementation 'com.yandex.android:maps.mobile:4.0.0-full'
 

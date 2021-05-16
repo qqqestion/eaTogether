@@ -19,6 +19,7 @@ import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.ui.main.map.MapViewModel
 import ru.blackbull.eatogether.ui.main.snackbar
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -46,6 +47,7 @@ class CuisineChoiceDialogFragment : DialogFragment() {
             R.layout.fragment_cuisine_choice ,
             null
         )
+        Timber.d("onCreateDialog")
 
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle("Выбор кухни")
@@ -61,12 +63,14 @@ class CuisineChoiceDialogFragment : DialogFragment() {
         container: ViewGroup? ,
         savedInstanceState: Bundle?
     ): View {
+        Timber.d("onCreateView")
         return dialogView
     }
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
         setupRecyclerView()
+        Timber.d("onViewCreated")
         subscribeToObservers()
         viewModel.getCuisineList()
     }
@@ -80,9 +84,11 @@ class CuisineChoiceDialogFragment : DialogFragment() {
         viewModel.cuisine.observe(viewLifecycleOwner , EventObserver(
             onError = {
                 snackbar(it)
+                Timber.d(it)
             }
         ) {
             cuisineAdapter.cuisines = it
+            Timber.d("Cuisine list: ${it.map { cuisine -> cuisine.name }}")
         })
     }
 

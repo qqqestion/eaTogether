@@ -6,4 +6,22 @@
         android:icon="@drawable/ic_baseline_check_24"
         android:title="Сохранить"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/actionAddNew"
+        android:icon="@drawable/ic_baseline_edit_24"
+        android:title="Добавить новую"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/actionMakeMain"
+        android:icon="@drawable/ic_baseline_edit_24"
+        android:title="Сделать основным"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/actionDelete"
+        android:icon="@drawable/ic_baseline_remove_24"
+        android:title="Удалить"
+        app:showAsAction="never" />
 </menu>

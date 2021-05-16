@@ -67,6 +67,7 @@ class PlaceRepository @Inject constructor(
                         ?.map { CuisineType(it.value.id , it.value.name) }
                         ?.sortedBy { it.name }
                         ?: listOf()
+                    Timber.d("Cuisine list: $cuisineList")
                     cuisine.postValue(Event(Resource.Success(cuisineList)))
                 }
 
@@ -185,6 +186,7 @@ class PlaceRepository @Inject constructor(
             is NetworkError -> "Network error"
             else -> "Unknown error"
         }
+        Timber.d("Search error: $errorMessage")
         _searchPlaces.postValue(Event(Resource.Error(null , errorMessage)))
     }
 
@@ -224,6 +226,7 @@ class PlaceRepository @Inject constructor(
                 override fun onSearchResponse(response: Response) {
                     Timber.d("Place detail: ${filters(response)}")
                     for (searchResult in response.collection.children) {
+                        Timber.d("Place detail success: ${placeDetailMapper.toPlaceDetail(searchResult.obj!!)}")
                         _placeDetail.postValue(
                             Event(
                                 Resource.Success(
@@ -240,7 +243,7 @@ class PlaceRepository @Inject constructor(
                         is NetworkError -> "Network error"
                         else -> "Unknown error"
                     }
-                    Timber.d("Yandex search error: $errorMessage")
+                    Timber.d("Place detail error: $errorMessage")
                     _placeDetail.postValue(Event(Resource.Error(null , errorMessage)))
                 }
             }
