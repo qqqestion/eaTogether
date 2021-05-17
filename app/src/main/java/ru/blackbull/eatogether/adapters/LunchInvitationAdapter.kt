@@ -6,6 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
+import kotlinx.android.synthetic.main.item_lunch_invitation.view.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.LunchInvitationWithUser
 import javax.inject.Inject
@@ -42,8 +45,26 @@ class LunchInvitationAdapter @Inject constructor() :
         )
     }
 
+    private var onViewPartyClickListener: ((String) -> Unit)? = null
+
+    fun setOnViewPartyClickListener(listener: (String) -> Unit) {
+        onViewPartyClickListener = listener
+    }
+
     override fun onBindViewHolder(holder: ViewHolder , position: Int) {
         val invitation = invitations[position]
+
+        holder.itemView.apply {
+            ivUserImage.load(invitation.inviter?.mainImageUri) {
+                transformations(CircleCropTransformation())
+            }
+            tvUserName.text = invitation.inviter?.fullName()
+            btnPartyJoin.setOnClickListener {
+                onViewPartyClickListener?.let { click ->
+                    click(invitation.partyId!!)
+                }
+            }
+        }
     }
 
     override fun getItemCount(): Int {

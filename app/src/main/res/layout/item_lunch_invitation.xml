@@ -10,8 +10,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:padding="15dp"
         android:layout_height="match_parent"
+        android:padding="15dp"
         >
 
         <TextView
@@ -21,7 +21,7 @@
             android:layout_gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Вас пригласили"
+            android:text="Вас пригласили"
             />
 
 
@@ -40,6 +40,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@+id/tvUserName"
             app:layout_constraintBottom_toBottomOf="@id/ivUserImage"
             app:layout_constraintStart_toEndOf="@id/ivUserImage"
             app:layout_constraintTop_toTopOf="@id/ivUserImage"
@@ -48,7 +49,7 @@
 
 
         <Button
-            android:id="@+id/btnPartyPreviewJoin"
+            android:id="@+id/btnPartyJoin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/rounded_button_green"

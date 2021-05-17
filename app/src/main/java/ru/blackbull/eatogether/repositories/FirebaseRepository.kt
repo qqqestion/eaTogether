@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.api.FirebaseApi
 import ru.blackbull.eatogether.models.InvitationWithUser
+import ru.blackbull.eatogether.models.LunchInvitationWithUser
 import ru.blackbull.eatogether.models.firebase.*
 import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
@@ -304,6 +305,25 @@ class FirebaseRepository @Inject constructor(
                 )
                 firebaseApi.addLunchInvitation(invitation)
                 Resource.Success(Unit)
+            }
+        }
+
+    suspend fun getLunchInvitations(): Resource<List<LunchInvitationWithUser>> =
+        withContext(Dispatchers.IO) {
+            safeCall {
+                val currentUser = firebaseApi.getUser(getCurrentUserId())
+                val lunchInvitations = firebaseApi
+                    .getLunchInvitationsForUser(getCurrentUserId())
+                    .map {
+                        val inviter = firebaseApi.getUser(it.inviter!!)
+                        LunchInvitationWithUser(
+                            it.id ,
+                            inviter ,
+                            currentUser ,
+                            it.partyId
+                        )
+                    }
+                Resource.Success(lunchInvitations)
             }
         }
 }
