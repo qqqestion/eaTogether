@@ -1,9 +1,7 @@
 package ru.blackbull.eatogether.models.mappers
 
 import com.yandex.mapkit.GeoObject
-import com.yandex.mapkit.search.BusinessImagesObjectMetadata
 import com.yandex.mapkit.search.BusinessObjectMetadata
-import com.yandex.mapkit.search.BusinessPhotoObjectMetadata
 import com.yandex.mapkit.search.BusinessRating1xObjectMetadata
 import ru.blackbull.eatogether.models.Location
 import ru.blackbull.eatogether.models.PlaceDetail

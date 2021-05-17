@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.repositories.FirebaseRepository
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 

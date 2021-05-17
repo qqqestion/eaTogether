@@ -10,7 +10,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.ui.auth.AuthActivity
 import ru.blackbull.eatogether.ui.main.MainActivity
-import ru.blackbull.eatogether.ui.main.dialogs.ErrorDialog
 import timber.log.Timber
 
 open class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {

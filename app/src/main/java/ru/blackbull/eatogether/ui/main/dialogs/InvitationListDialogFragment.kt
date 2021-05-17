@@ -7,14 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import ru.blackbull.eatogether.adapters.InvitationAdapter
 import ru.blackbull.eatogether.models.InvitationWithUser
-import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.main.friends.FriendsViewModel
 import timber.log.Timber

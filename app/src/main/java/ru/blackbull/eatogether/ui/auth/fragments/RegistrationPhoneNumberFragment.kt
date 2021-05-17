@@ -1,7 +1,6 @@
 package ru.blackbull.eatogether.ui.auth.fragments
 
 import android.os.Bundle
-import android.util.Patterns
 import android.view.View
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.common.api.ApiException
@@ -15,7 +14,6 @@ import ru.blackbull.eatogether.BuildConfig
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.ui.BaseFragment
 import timber.log.Timber
-import java.util.concurrent.Executor
 import java.util.concurrent.TimeUnit
 
 class RegistrationPhoneNumberFragment : BaseFragment(R.layout.fragment_registration_phone_number) {

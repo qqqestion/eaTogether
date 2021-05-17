@@ -11,7 +11,6 @@ import coil.transform.CircleCropTransformation
 import kotlinx.android.synthetic.main.item_invitation.view.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.InvitationWithUser
-import ru.blackbull.eatogether.models.firebase.User
 import javax.inject.Inject
 
 class InvitationAdapter @Inject constructor() :

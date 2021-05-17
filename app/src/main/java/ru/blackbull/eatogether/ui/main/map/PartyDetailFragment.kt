@@ -12,10 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_create_party.*
 import kotlinx.android.synthetic.main.fragment_party_detail.*
-import kotlinx.android.synthetic.main.fragment_party_detail.tvAddress
-import kotlinx.android.synthetic.main.fragment_party_detail.tvTime
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
 import ru.blackbull.eatogether.models.PlaceDetail
