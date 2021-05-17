@@ -71,4 +71,7 @@
     <string name="text_email">Электронная почта</string>
     <string name="confirm">Подтвердить</string>
     <string name="start">Начать</string>
+
+    <string name="drawer_open">Открыть</string>
+    <string name="drawer_close">Закрыть</string>
 </resources>
