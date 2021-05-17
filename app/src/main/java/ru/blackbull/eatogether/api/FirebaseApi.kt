@@ -11,10 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
-import ru.blackbull.eatogether.models.firebase.Invitation
-import ru.blackbull.eatogether.models.firebase.Match
-import ru.blackbull.eatogether.models.firebase.Party
-import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.eatogether.models.firebase.*
 import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
 import timber.log.Timber
@@ -32,6 +29,7 @@ class FirebaseApi {
     private val partiesRef = Firebase.firestore.collection("parties")
     private val notificationsRef = Firebase.firestore.collection("notifications")
     private val invitationsRef = Firebase.firestore.collection("invitations")
+    private val lunchInvitationsRef = Firebase.firestore.collection("lunchInvitations")
     val matchesRef = Firebase.firestore.collection("matches")
 
     /**
@@ -307,5 +305,17 @@ class FirebaseApi {
             .get()
             .await()
             .toObjects(Invitation::class.java)
+    }
+
+    suspend fun addLunchInvitation(invitation: LunchInvitation) {
+        lunchInvitationsRef.add(invitation).await()
+    }
+
+    suspend fun getLunchInvitationsForUser(invitee: String): List<LunchInvitation> {
+        return lunchInvitationsRef
+            .whereEqualTo("invitee" , invitee)
+            .get()
+            .await()
+            .toObjects(LunchInvitation::class.java)
     }
 }

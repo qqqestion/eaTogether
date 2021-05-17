@@ -46,10 +46,10 @@ class InviteUserForLunchAdapter @Inject constructor() :
 
     override fun getItemCount(): Int = users.size
 
-    private var onCardClickListener: ((User) -> Unit)? = null
+    private var onUserClickListener: ((User) -> Unit)? = null
 
-    fun setOnCardClickListener(listener: (User) -> Unit) {
-        onCardClickListener = listener
+    fun setOnUserClickListener(listener: (User) -> Unit) {
+        onUserClickListener = listener
     }
 
     override fun onBindViewHolder(holder: ViewHolder , position: Int) {
@@ -59,11 +59,10 @@ class InviteUserForLunchAdapter @Inject constructor() :
                 transformations(CircleCropTransformation())
             }
             tvName.text = user.fullName()
-            setOnLongClickListener {
-                onCardClickListener?.let { click ->
+            btnInviteUser.setOnClickListener {
+                onUserClickListener?.let { click ->
                     click(user)
                 }
-                return@setOnLongClickListener true
             }
         }
     }

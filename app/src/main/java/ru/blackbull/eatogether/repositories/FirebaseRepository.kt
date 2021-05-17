@@ -8,10 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.api.FirebaseApi
 import ru.blackbull.eatogether.models.InvitationWithUser
-import ru.blackbull.eatogether.models.firebase.FriendState
-import ru.blackbull.eatogether.models.firebase.Invitation
-import ru.blackbull.eatogether.models.firebase.Party
-import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.eatogether.models.firebase.*
 import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.other.safeCall
@@ -257,6 +254,31 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
+    /**
+     * Возвращает только тех пользователей, которых:
+     * а) не содержит компания, в которую приглашают;
+     * б) уже не пригласили в данную компанию текущий пользователь.
+     * Два данных условия выражаются в двух фильтрах.
+     *
+     * @param partyId идентификатор компании
+     * @return
+     */
+    suspend fun getFriendListForParty(partyId: String): Resource<List<User>> =
+        withContext(Dispatchers.IO) {
+            safeCall {
+                val party = firebaseApi.getPartyById(partyId)
+                val currentUser = firebaseApi.getUser(getCurrentUserId())
+                val friendList = firebaseApi.getFriendList(currentUser).filter {
+                    !party.users.contains(it.id)
+                }.filter { user ->
+                    val invitations = firebaseApi.getLunchInvitationsForUser(user.id!!)
+                        .filter { lunchInvitation -> lunchInvitation.partyId == partyId && lunchInvitation.inviter == getCurrentUserId() }
+                    invitations.isEmpty()
+                }
+                Resource.Success(friendList)
+            }
+        }
+
     suspend fun getInvitationList(): Resource<List<InvitationWithUser>> =
         withContext(Dispatchers.IO) {
             safeCall {
@@ -269,6 +291,19 @@ class FirebaseRepository @Inject constructor(
                     }
                 Timber.d("Invitations: $invitations")
                 Resource.Success(invitations)
+            }
+        }
+
+    suspend fun sendLunchInvitation(partyId: String , user: User): Resource<Unit> =
+        withContext(Dispatchers.IO) {
+            safeCall {
+                val invitation = LunchInvitation(
+                    inviter = getCurrentUserId() ,
+                    invitee = user.id ,
+                    partyId = partyId
+                )
+                firebaseApi.addLunchInvitation(invitation)
+                Resource.Success(Unit)
             }
         }
 }
