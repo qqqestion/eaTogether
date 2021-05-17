@@ -47,12 +47,24 @@ class NearbyUserAdapter : RecyclerView.Adapter<NearbyUserAdapter.ViewHolder>() {
 
     override fun getItemCount(): Int = users.size
 
+    private var onCardClickListener: ((User) -> Unit)? = null
+
+    fun setOnCardClickListener(listener: (User) -> Unit) {
+        onCardClickListener = listener
+    }
+
     override fun onBindViewHolder(holder: ViewHolder , position: Int) {
         val user = users[position]
         holder.itemView.apply {
             ivNearbyUserPhoto.load(user.mainImageUri)
             tvNearbyUserName.text = "${user.firstName} ${user.lastName}"
             tvNearbyUserDescription.text = user.description
+            setOnLongClickListener {
+                onCardClickListener?.let { click ->
+                    click(user)
+                }
+                return@setOnLongClickListener true
+            }
         }
     }
 }

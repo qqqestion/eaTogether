@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="50dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="30dp">
+    app:cardCornerRadius="13dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp"
+        >
 
         <ImageView
             android:id="@+id/ivNearbyUserPhoto"
@@ -21,15 +20,16 @@
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_weight="1"
             android:layout_marginEnd="8dp"
+            android:layout_weight="1"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="8dp"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@tools:sample/avatars"
+            />
 
         <TextView
             android:id="@+id/tvNearbyUserName"
@@ -41,7 +41,8 @@
             android:textSize="32sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivNearbyUserPhoto"
-            tools:text="@tools:sample/full_names" />
+            tools:text="@tools:sample/full_names"
+            />
 
         <TextView
             android:id="@+id/tvNearbyUserDescription"
@@ -51,7 +52,8 @@
             android:layout_marginEnd="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvNearbyUserName"
-            tools:text="@tools:sample/lorem" />
+            tools:text="@tools:sample/lorem"
+            />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

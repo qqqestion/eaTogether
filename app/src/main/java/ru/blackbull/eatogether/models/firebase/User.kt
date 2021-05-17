@@ -11,7 +11,7 @@ import com.google.firebase.firestore.GeoPoint
  * Класс, описывающий пользователя
  *
  * @property id
- * @property email
+ * @property phone
  * @property firstName
  * @property lastName
  * @property description
@@ -36,8 +36,10 @@ data class User(
     var images: List<String> = listOf() ,
     var likedUsers: List<String> = mutableListOf() ,
     var dislikedUsers: List<String> = mutableListOf() ,
+    var friendList: List<String> = mutableListOf() ,
     var lastLocation: GeoPoint? = null
 ) : Parcelable {
+
     constructor(parcel: Parcel) : this(
         parcel.readString() ,
         parcel.readString() ,
@@ -49,11 +51,16 @@ data class User(
         parcel.readString() ,
         parcel.createStringArrayList() ?: listOf() ,
         parcel.createStringArrayList() ?: listOf() ,
+        parcel.createStringArrayList() ?: listOf() ,
         parcel.createStringArrayList() ?: listOf()
     ) {
         val latitude = parcel.readDouble()
         val longitude = parcel.readDouble()
         lastLocation = GeoPoint(latitude , longitude)
+    }
+
+    fun fullName(): String {
+        return "$firstName $lastName"
     }
 
     override fun writeToParcel(parcel: Parcel? , flags: Int) {
@@ -69,6 +76,7 @@ data class User(
             it.writeList(images)
             it.writeList(likedUsers)
             it.writeList(dislikedUsers)
+            it.writeList(friendList)
             it.writeDouble(lastLocation!!.latitude)
             it.writeDouble(lastLocation!!.longitude)
         }
@@ -85,4 +93,11 @@ data class User(
             return arrayOfNulls(size)
         }
     }
+}
+
+enum class FriendState {
+    UNFRIEND ,
+    INVITATION_SENT ,
+    FRIEND,
+    ITSELF
 }

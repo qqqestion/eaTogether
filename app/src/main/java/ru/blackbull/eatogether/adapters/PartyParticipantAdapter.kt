@@ -48,6 +48,12 @@ class PartyParticipantAdapter : RecyclerView.Adapter<PartyParticipantAdapter.Vie
 
     override fun getItemCount(): Int = differ.currentList.size
 
+    private var onUserClickListener: ((User) -> Unit)? = null
+
+    fun setOnUserClickListener(listener: (User) -> Unit) {
+        onUserClickListener = listener
+    }
+
     override fun onBindViewHolder(holder: ViewHolder , position: Int) {
         val user = differ.currentList[position]
         holder.itemView.apply {
@@ -55,6 +61,11 @@ class PartyParticipantAdapter : RecyclerView.Adapter<PartyParticipantAdapter.Vie
                 transformations(CircleCropTransformation())
             }
             tvPartyParticipantName.text = "${user.firstName} ${user.lastName}"
+            setOnClickListener {
+                onUserClickListener?.let { click ->
+                    click(user)
+                }
+            }
         }
     }
 }

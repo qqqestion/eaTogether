@@ -34,6 +34,7 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
         setupRecyclerView()
         subscribeToObservers()
         viewModel.getNearbyUsers()
+
     }
 
     private fun subscribeToObservers() {
@@ -100,6 +101,11 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
 
     private fun setupRecyclerView() {
         usersAdapter = NearbyUserAdapter()
+        usersAdapter.setOnCardClickListener {
+            findNavController().navigate(
+                NearbyFragmentDirections.actionNearbyFragmentToUserInfoFragment(it)
+            )
+        }
         rvNearbyUsers.adapter = usersAdapter
         val layoutManager = object : LinearLayoutManager(context) {
             override fun canScrollVertically(): Boolean = false

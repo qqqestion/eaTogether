@@ -5,6 +5,7 @@ import android.text.InputType
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +25,7 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
     private lateinit var partyParticipantAdapter: PartyParticipantAdapter
 
     private val partyDetailViewModel: PartyDetailViewModel by viewModels()
+
     private val args: PartyDetailFragmentArgs by navArgs()
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
@@ -58,10 +60,6 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
     }
 
     private fun updatePartyInfo(party: Party) {
-        etPartyDetailTitle.setText(party.title)
-        etPartyDetailTitle.inputType = InputType.TYPE_NULL
-        etPartyDetailDescription.setText(party.description)
-        etPartyDetailDescription.inputType = InputType.TYPE_NULL
         etPartyDetailTime.setText(party.time?.toDate().toString())
         etPartyDetailTime.inputType = InputType.TYPE_NULL
     }
@@ -70,5 +68,11 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
         partyParticipantAdapter = PartyParticipantAdapter()
         adapter = partyParticipantAdapter
         layoutManager = LinearLayoutManager(requireContext())
+
+        partyParticipantAdapter.setOnUserClickListener {
+            findNavController().navigate(
+                PartyDetailFragmentDirections.actionPartyDetailFragmentToUserInfoFragment(it)
+            )
+        }
     }
 }

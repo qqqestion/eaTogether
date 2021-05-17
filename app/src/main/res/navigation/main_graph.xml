@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_nearbyFragment_to_matchFragment"
             app:destination="@id/matchFragment" />
+        <action
+            android:id="@+id/action_nearbyFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/myPartyFragment"
@@ -69,6 +72,9 @@
         <argument
             android:name="partyId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_partyDetailFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
     </fragment>
     <!--    <fragment-->
     <!--        android:id="@+id/placeDetailFragment"-->
@@ -91,6 +97,14 @@
         android:label="@string/title_match">
         <argument
             android:name="matchedUser"
+            app:argType="ru.blackbull.eatogether.models.firebase.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="ru.blackbull.eatogether.ui.main.nearby.UserInfoFragment"
+        android:label="UserInfoFragment" >
+        <argument
+            android:name="user"
             app:argType="ru.blackbull.eatogether.models.firebase.User" />
     </fragment>
     <!--    <fragment-->

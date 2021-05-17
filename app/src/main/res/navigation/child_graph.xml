@@ -28,6 +28,9 @@
         <argument
             android:name="partyId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_partyDetailFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
     </fragment>
     <fragment
         android:id="@+id/placeDetailFragment"
@@ -52,6 +55,14 @@
         <action
             android:id="@+id/action_searchResult_to_placeDetailFragment"
             app:destination="@id/placeDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userInfoFragment"
+        android:name="ru.blackbull.eatogether.ui.main.nearby.UserInfoFragment"
+        android:label="UserInfoFragment">
+        <argument
+            android:name="user"
+            app:argType="ru.blackbull.eatogether.models.firebase.User" />
     </fragment>
 
 </navigation>

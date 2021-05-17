@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="15dp">
+    android:padding="15dp"
+    >
 
     <TextView
         android:id="@+id/tvPartyDetailPlaceName"
@@ -14,7 +15,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="@tools:sample/cities" />
+        tools:text="@tools:sample/cities"
+        />
 
     <TextView
         android:id="@+id/tvPartyDetailPlaceAddress"
@@ -24,29 +26,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvPartyDetailPlaceName"
-        tools:text="@tools:sample/cities" />
-
-    <EditText
-        android:id="@+id/etPartyDetailTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="Название компании"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvPartyDetailPlaceAddress" />
-
-    <EditText
-        android:id="@+id/etPartyDetailDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:hint="Описание компании"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPartyDetailTitle" />
+        tools:text="@tools:sample/cities"
+        />
 
     <EditText
         android:id="@+id/etPartyDetailTime"
@@ -57,7 +38,8 @@
         android:inputType="datetime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etPartyDetailDescription" />
+        app:layout_constraintTop_toBottomOf="@id/tvPartyDetailPlaceAddress"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvPartyDetailParticipants"
@@ -67,6 +49,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etPartyDetailTime"
-        tools:listitem="@layout/item_user_in_party_preview" />
+        tools:listitem="@layout/item_user_in_party_preview"
+        />
 
 </LinearLayout>

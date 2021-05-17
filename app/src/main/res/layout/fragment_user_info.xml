@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    >
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tvFullName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/colorBlack"
+        android:textSize="32sp"
+        app:layout_constraintEnd_toStartOf="@id/btnAddToFriendList"
+        app:layout_constraintStart_toStartOf="@id/viewPager"
+        app:layout_constraintTop_toBottomOf="@+id/viewPager"
+        tools:text="Wee Poo"
+        />
+
+    <Button
+        android:id="@+id/btnAddToFriendList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_button_pink"
+        android:padding="3dp"
+        android:text="Добавить в друзья"
+        android:textColor="@color/colorWhite"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/viewPager"
+        app:layout_constraintTop_toBottomOf="@id/viewPager"
+        />
+
+    <Button
+        android:id="@+id/btnInvitationSent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_button_light_grey"
+        android:enabled="false"
+        android:padding="3dp"
+        android:text="Заявка отправлена"
+        android:textColor="@color/colorDark"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/viewPager"
+        app:layout_constraintTop_toBottomOf="@id/viewPager"
+        />
+
+    <Button
+        android:id="@+id/btnAlreadyFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded_button_light_grey"
+        android:enabled="false"
+        android:padding="3dp"
+        android:text="У вас в друзьях"
+        android:textColor="@color/colorDark"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/viewPager"
+        app:layout_constraintTop_toBottomOf="@id/viewPager"
+        />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="btnAddToFriendList,tvFullName,btnInvitationSent"
+        />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvFullName"
+        app:layout_constraintTop_toBottomOf="@id/barrier"
+        tools:text="Hello :) I'm Wee Poo, chinese student, learning math at free time"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

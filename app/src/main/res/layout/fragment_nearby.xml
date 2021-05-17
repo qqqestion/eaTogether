@@ -5,20 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#80A898"
-    tools:context=".ui.main.nearby.NearbyFragment">
-
-
-    <TextView
-        android:id="@+id/tvNearbyTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Рядом"
-        android:textColor="#EEEEEE"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    tools:context=".ui.main.nearby.NearbyFragment"
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvNearbyUsers"
@@ -27,8 +15,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvNearbyTitle"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".MainActivity"
-        tools:listitem="@layout/item_user_preview" />
+        tools:listitem="@layout/item_user_preview"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
