@@ -11,6 +11,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
+import ru.blackbull.eatogether.models.firebase.Invitation
 import ru.blackbull.eatogether.models.firebase.Match
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
@@ -26,9 +27,11 @@ import java.util.*
 class FirebaseApi {
 
     val auth = FirebaseAuth.getInstance()
+
     private val usersRef = Firebase.firestore.collection("users")
     private val partiesRef = Firebase.firestore.collection("parties")
     private val notificationsRef = Firebase.firestore.collection("notifications")
+    private val invitationsRef = Firebase.firestore.collection("invitations")
     val matchesRef = Firebase.firestore.collection("matches")
 
     /**
@@ -36,11 +39,14 @@ class FirebaseApi {
      *
      * @param point
      */
-    suspend fun updateUserLocation(point: GeoPoint) {
+    suspend fun updateUserLocation(location: Location) {
+        val geoPoint = GeoPoint(
+            location.latitude , location.longitude
+        )
         usersRef.document(
             auth.uid!!
         ).update(
-            "lastLocation" , point
+            "lastLocation" , geoPoint
         ).await()
     }
 
@@ -253,5 +259,17 @@ class FirebaseApi {
         }
         updateUser(user)
         return user
+    }
+
+    suspend fun addInvitation(invitation: Invitation) {
+        invitationsRef.add(invitation).await()
+    }
+
+    suspend fun getInvitationByUser(userId: String): List<Invitation> {
+        return invitationsRef
+            .whereEqualTo("inviter" , userId)
+            .get()
+            .await()
+            .toObjects(Invitation::class.java)
     }
 }

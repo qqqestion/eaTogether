@@ -2,13 +2,14 @@ package ru.blackbull.eatogether.repositories
 
 import android.location.Location
 import android.net.Uri
-import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.api.FirebaseApi
+import ru.blackbull.eatogether.models.firebase.FriendState
+import ru.blackbull.eatogether.models.firebase.Invitation
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Constants
@@ -25,10 +26,7 @@ class FirebaseRepository @Inject constructor(
     val matchesRef = Firebase.firestore.collection("matches")
 
     suspend fun updateUserLocation(location: Location): Unit = withContext(Dispatchers.IO) {
-        val geoPoint = GeoPoint(
-            location.latitude , location.longitude
-        )
-        firebaseApi.updateUserLocation(geoPoint)
+        firebaseApi.updateUserLocation(location)
     }
 
     suspend fun searchPartyByPlace(
@@ -200,4 +198,32 @@ class FirebaseRepository @Inject constructor(
             Resource.Success(user)
         }
     }
+
+    suspend fun addToFriendList(user: User): Resource<Unit> = withContext(Dispatchers.IO) {
+        safeCall {
+            val invitation = Invitation(inviter = getCurrentUserId() , invitee = user.id)
+            firebaseApi.addInvitation(invitation)
+            Resource.Success(Unit)
+        }
+    }
+
+    suspend fun checkUserStatus(user: User): Resource<FriendState> =
+        withContext(Dispatchers.IO) {
+            safeCall {
+                if (user.id == getCurrentUserId()) {
+                    Resource.Success(FriendState.ITSELF)
+                } else if (!user.friendList.contains(getCurrentUserId())) {
+                    val invitations = firebaseApi.getInvitationByUser(getCurrentUserId())
+                    val isInvitationSent = invitations.find { it.invitee == user.id } != null
+
+                    if (isInvitationSent) {
+                        Resource.Success(FriendState.INVITATION_SENT)
+                    } else {
+                        Resource.Success(FriendState.UNFRIEND)
+                    }
+                } else {
+                    Resource.Success(FriendState.FRIEND)
+                }
+            }
+        }
 }
