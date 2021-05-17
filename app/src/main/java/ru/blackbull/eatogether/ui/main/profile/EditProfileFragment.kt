@@ -118,12 +118,8 @@ class EditProfileFragment : BaseFragment(R.layout.fragment_edit_profile) {
             hideLoadingBar()
             this.user = user
             Timber.d("User triggered $user")
-            if (viewModel.currentPhoto.value == null) {
-                viewModel.setPhoto(Uri.parse(user?.mainImageUri))
-            }
             imageAdapter.images = user!!.images.map { Uri.parse(it) }
             viewPager.currentItem = user.images.indexOf(user.mainImageUri)
-            Timber.d("currentUser: ${viewModel.currentPhoto.value}")
             updateUserInfo(user!!)
         })
         viewModel.deleteStatus.observe(viewLifecycleOwner , EventObserver(
@@ -139,12 +135,6 @@ class EditProfileFragment : BaseFragment(R.layout.fragment_edit_profile) {
             imageAdapter.images = user.images.map { Uri.parse(it) }
             this.user = user
             Timber.d("Delete status success: $user")
-        })
-        viewModel.currentPhoto.observe(viewLifecycleOwner , { uri ->
-            Timber.d("currentPhoto: $uri")
-//            ivEditProfileImage.load(uri) {
-//                transformations(CircleCropTransformation())
-//            }
         })
     }
 
@@ -173,10 +163,8 @@ class EditProfileFragment : BaseFragment(R.layout.fragment_edit_profile) {
         user?.firstName = etEditProfileFirstName.text.toString()
         user?.lastName = etEditProfileLastName.text.toString()
         user?.description = etEditProfileDescription.text.toString()
-//        user.phone = etEditProfilePhoneNumber.text.toString()
 
         user?.birthday = Timestamp(selectedDate.time)
-        user?.mainImageUri = viewModel.currentPhoto.value.toString()
         Timber.d("Adapter: ${imageAdapter.images}")
         Timber.d("User images: ${user?.images}")
         viewModel.updateUser(user!!)
@@ -186,12 +174,8 @@ class EditProfileFragment : BaseFragment(R.layout.fragment_edit_profile) {
     private fun updateUserInfo(user: User) {
         etEditProfileFirstName.setText(user.firstName)
         etEditProfileLastName.setText(user.lastName)
-//        etEditProfilePhoneNumber.setText(user.phone)
         etEditProfileDescription.setText(user.description)
 
-//        val pattern = "dd.MM.yyyy"
-//        val simpleDateFormat = SimpleDateFormat(pattern , Locale.US)
-//        etEditProfileBirthday.setText(simpleDateFormat.format(user.birthday?.toDate()!!))
         etEditProfileBirthday.setText(
             DateUtils.formatDateTime(
                 requireContext() ,
@@ -199,21 +183,15 @@ class EditProfileFragment : BaseFragment(R.layout.fragment_edit_profile) {
                 DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_YEAR
             )
         )
-//        ivEditProfileImage.load(viewModel.currentPhoto.value) {
-//            transformations(CircleCropTransformation())
-//        }
     }
 
     override fun onActivityResult(requestCode: Int , resultCode: Int , data: Intent?) {
         super.onActivityResult(requestCode , resultCode , data)
         if (resultCode == RESULT_OK && requestCode == PICK_IMAGE) {
             val imageUri = data?.data ?: return
-//            user!!.images -= Constants.DEFAULT_IMAGE_URL
-//            imageAdapter.images -= Uri.parse(Constants.DEFAULT_IMAGE_URL)
             user!!.images += imageUri.toString()
             imageAdapter.images += imageUri
             viewModel.updateUser(user!!)
-//            viewModel.setPhoto(imageUri)
         }
     }
 }
