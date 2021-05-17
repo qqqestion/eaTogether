@@ -47,10 +47,17 @@ class UserInfoFragment : BaseFragment(R.layout.fragment_user_info) {
             onLoading = {
                 showLoadingBar()
             }
-        ) {
+        ) { friendState ->
             hideLoadingBar()
             btnAddToFriendList.isVisible = false
-            btnInvitationSent.isVisible = true
+            btnInvitationSent.isVisible = false
+            btnAlreadyFriend.isVisible = false
+            when (friendState) {
+                FriendState.INVITATION_SENT -> btnInvitationSent.isVisible = true
+                FriendState.UNFRIEND -> btnAddToFriendList.isVisible = true
+                FriendState.FRIEND -> btnAlreadyFriend.isVisible = true
+                FriendState.ITSELF -> Unit
+            }
         })
         viewModel.userStatus.observe(viewLifecycleOwner , EventObserver(
             onError = {

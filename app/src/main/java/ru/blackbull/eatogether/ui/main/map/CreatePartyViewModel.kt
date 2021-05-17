@@ -25,8 +25,6 @@ class CreatePartyViewModel @Inject constructor(
     val createPartyResult: LiveData<Resource<Unit>> = _createPartyResult
 
     fun createParty(
-        title: String ,
-        description: String ,
         datetime: Date ,
         placeId: String
     ) = viewModelScope.launch {
@@ -36,20 +34,7 @@ class CreatePartyViewModel @Inject constructor(
             }
         }
         _createPartyResult.value = Resource.Loading()
-        val format = SimpleDateFormat(
-            "dd.MM.yyyy HH:mm" , Locale.getDefault()
-        )
-        val formattedDate: Date?
-//        try {
-//            formattedDate = format.parse("$date $time")
-//        } catch (e: ParseException) {
-//            _createPartyResult.value =
-//                Resource.Error(msg = app.getString(R.string.errormessage_date_misformat))
-//            return@launch
-//        }
         val party = Party(
-            title = title ,
-            description = description ,
             time = Timestamp(datetime) ,
             placeId = placeId ,
             users = mutableListOf(firebaseRepository.getCurrentUserId())

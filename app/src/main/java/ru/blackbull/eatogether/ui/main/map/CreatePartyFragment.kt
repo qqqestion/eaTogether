@@ -42,8 +42,6 @@ class CreatePartyFragment : Fragment(R.layout.fragment_create_party) {
 
         btnCreatePartyConfirm.setOnClickListener {
             createPartyViewModel.createParty(
-                title = "" ,
-                description = "" ,
                 datetime = selectedDate.time ,
                 placeId = placeId
             )

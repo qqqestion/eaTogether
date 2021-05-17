@@ -35,6 +35,10 @@ class PartyDetailViewModel @Inject constructor(
         _partyParticipants.postValue(Event(response))
     }
 
+    fun updateParty(party: Party) = viewModelScope.launch {
+        firebaseRepository.updateParty(party)
+    }
+
     fun getPartyById(id: String) = viewModelScope.launch {
         _selectedParty.postValue(Event(Resource.Loading()))
         val response = firebaseRepository.getPartyById(id)
@@ -44,4 +48,14 @@ class PartyDetailViewModel @Inject constructor(
     fun getPlaceDetail(placeId: String) = viewModelScope.launch {
         placeRepository.getPlaceDetail(placeId)
     }
+
+    private val _leavePartyStatus = MutableLiveData<Event<Resource<Unit>>>()
+    val leavePartyStatus: LiveData<Event<Resource<Unit>>> = _leavePartyStatus
+
+    fun leaveParty(party: Party) = viewModelScope.launch {
+        _leavePartyStatus.postValue(Event(Resource.Loading()))
+        val response = firebaseRepository.leaveParty(party)
+        _leavePartyStatus.postValue(Event(response))
+    }
+
 }

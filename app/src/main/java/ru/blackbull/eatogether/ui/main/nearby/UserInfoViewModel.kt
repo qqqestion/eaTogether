@@ -18,8 +18,8 @@ class UserInfoViewModel @Inject constructor(
     private val firebaseRepository: FirebaseRepository
 ) : ViewModel() {
 
-    private val _addToFriendListStatus = MutableLiveData<Event<Resource<Unit>>>()
-    val addToFriendListStatus: LiveData<Event<Resource<Unit>>> = _addToFriendListStatus
+    private val _addToFriendListStatus = MutableLiveData<Event<Resource<FriendState>>>()
+    val addToFriendListStatus: LiveData<Event<Resource<FriendState>>> = _addToFriendListStatus
 
     private val _userStatus = MutableLiveData<Event<Resource<FriendState>>>()
     val userStatus: LiveData<Event<Resource<FriendState>>> = _userStatus

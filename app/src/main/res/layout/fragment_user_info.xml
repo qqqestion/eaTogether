@@ -24,10 +24,10 @@
         android:layout_marginTop="8dp"
         android:textColor="@color/colorBlack"
         android:textSize="32sp"
-        app:layout_constraintEnd_toStartOf="@id/btnAddToFriendList"
+        app:layout_constraintEnd_toStartOf="@id/barrierVertical"
         app:layout_constraintStart_toStartOf="@id/viewPager"
         app:layout_constraintTop_toBottomOf="@+id/viewPager"
-        tools:text="Wee Poo"
+        tools:text="Wee Poo Ohuhhuhhubk"
         />
 
     <Button
@@ -69,13 +69,21 @@
         android:padding="3dp"
         android:text="У вас в друзьях"
         android:textColor="@color/colorDark"
-        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/viewPager"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/viewPager"
         />
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier"
+        android:id="@+id/barrierVertical"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="btnInvitationSent,btnAddToFriendList,btnAlreadyFriend"
+        />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrierHorizontal"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:barrierDirection="bottom"
@@ -88,7 +96,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/tvFullName"
-        app:layout_constraintTop_toBottomOf="@id/barrier"
+        app:layout_constraintTop_toBottomOf="@id/barrierHorizontal"
         tools:text="Hello :) I'm Wee Poo, chinese student, learning math at free time"
         />
 
