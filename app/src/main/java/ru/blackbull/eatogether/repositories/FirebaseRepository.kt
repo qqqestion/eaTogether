@@ -5,7 +5,6 @@ import android.net.Uri
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.api.FirebaseApi
 import ru.blackbull.eatogether.models.firebase.FriendState
@@ -199,11 +198,23 @@ class FirebaseRepository @Inject constructor(
         }
     }
 
-    suspend fun addToFriendList(user: User): Resource<Unit> = withContext(Dispatchers.IO) {
+    suspend fun addToFriendList(user: User): Resource<FriendState> = withContext(Dispatchers.IO) {
         safeCall {
-            val invitation = Invitation(inviter = getCurrentUserId() , invitee = user.id)
-            firebaseApi.addInvitation(invitation)
-            Resource.Success(Unit)
+            val invitationFromAnotherUser =
+                firebaseApi.getInvitationWithInviterAndInvitee(user.id!! , getCurrentUserId())
+            if (invitationFromAnotherUser == null) {
+                val invitation = Invitation(inviter = getCurrentUserId() , invitee = user.id)
+                firebaseApi.addInvitation(invitation)
+                Resource.Success(FriendState.INVITATION_SENT)
+            } else {
+                firebaseApi.deleteInvitation(invitationFromAnotherUser)
+                val currentUser = firebaseApi.getUser(getCurrentUserId())
+                currentUser.friendList += user.id!!
+                firebaseApi.updateUser(currentUser)
+                user.friendList += currentUser.id!!
+                firebaseApi.updateUser(user)
+                Resource.Success(FriendState.FRIEND)
+            }
         }
     }
 
@@ -226,4 +237,12 @@ class FirebaseRepository @Inject constructor(
                 }
             }
         }
+
+    suspend fun leaveParty(party: Party): Resource<Unit> = withContext(Dispatchers.IO) {
+        safeCall {
+            party.users -= getCurrentUserId()
+            firebaseApi.updateParty(party)
+            Resource.Success(Unit)
+        }
+    }
 }

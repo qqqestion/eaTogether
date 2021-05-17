@@ -272,4 +272,21 @@ class FirebaseApi {
             .await()
             .toObjects(Invitation::class.java)
     }
+
+    suspend fun getInvitationWithInviterAndInvitee(inviter: String , invitee: String): Invitation? {
+        return invitationsRef
+            .whereEqualTo("inviter" , inviter)
+            .whereEqualTo("invitee" , invitee)
+            .get()
+            .await()
+            .toObjects(Invitation::class.java)
+            .firstOrNull()
+    }
+
+    suspend fun deleteInvitation(invitation: Invitation) {
+        invitationsRef
+            .document(invitation.id!!)
+            .delete()
+            .await()
+    }
 }
