@@ -11,24 +11,18 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
-import kotlinx.android.synthetic.main.fragment_registration_step_two.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.ImageAdapter
 import ru.blackbull.eatogether.models.firebase.User
-import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.BaseFragment
 import ru.blackbull.eatogether.ui.auth.AuthActivity
-import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
-import java.text.ParseException
-import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -79,12 +73,12 @@ class EditProfileFragment : BaseFragment(R.layout.fragment_edit_profile) {
     }
 
     private fun displayDatePickerDialog() {
-        val currentDateTime = Calendar.getInstance()
-        currentDateTime.timeInMillis = user!!.birthday!!.toDate().time
+        val userBirthday = Calendar.getInstance()
+        userBirthday.timeInMillis = user!!.birthday!!.toDate().time
 
-        val startYear = currentDateTime.get(Calendar.YEAR)
-        val startMonth = currentDateTime.get(Calendar.MONTH)
-        val startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
+        val startYear = userBirthday.get(Calendar.YEAR)
+        val startMonth = userBirthday.get(Calendar.MONTH)
+        val startDay = userBirthday.get(Calendar.DAY_OF_MONTH)
 
         DatePickerDialog(
             requireContext() ,
