@@ -58,4 +58,12 @@ class PartyDetailViewModel @Inject constructor(
         _leavePartyStatus.postValue(Event(response))
     }
 
+    private val _addUserStatus = MutableLiveData<Event<Resource<User>>>()
+    val addUserStatus: LiveData<Event<Resource<User>>> = _addUserStatus
+
+    fun addUserToParty(party: Party) = viewModelScope.launch {
+        firebaseRepository.addCurrentUserToParty(party)
+        val response = firebaseRepository.getCurrentUser()
+        _addUserStatus.postValue(Event(response))
+    }
 }

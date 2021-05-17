@@ -8,17 +8,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import kotlinx.android.synthetic.main.item_user_in_party_preview.view.*
+import kotlinx.android.synthetic.main.item_invite_user_for_lunch.view.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.User
 import javax.inject.Inject
 
-/**
- * Адаптер для отображения участников компаний
- *
- */
-class PartyParticipantAdapter @Inject constructor() :
-    RecyclerView.Adapter<PartyParticipantAdapter.ViewHolder>() {
+class InviteUserForLunchAdapter @Inject constructor() :
+    RecyclerView.Adapter<InviteUserForLunchAdapter.ViewHolder>() {
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     private val differCallback = object : DiffUtil.ItemCallback<User>() {
         override fun areItemsTheSame(oldItem: User , newItem: User): Boolean {
@@ -32,41 +30,40 @@ class PartyParticipantAdapter @Inject constructor() :
 
     private val differ = AsyncListDiffer(this , differCallback)
 
-    var participants: List<User>
+    var users: List<User>
         get() = differ.currentList
         set(value) = differ.submitList(value)
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup , viewType: Int): ViewHolder {
         return ViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.item_user_in_party_preview ,
+                R.layout.item_invite_user_for_lunch ,
                 parent ,
                 false
             )
         )
     }
 
-    override fun getItemCount(): Int = differ.currentList.size
+    override fun getItemCount(): Int = users.size
 
-    private var onUserClickListener: ((User) -> Unit)? = null
+    private var onCardClickListener: ((User) -> Unit)? = null
 
-    fun setOnUserClickListener(listener: (User) -> Unit) {
-        onUserClickListener = listener
+    fun setOnCardClickListener(listener: (User) -> Unit) {
+        onCardClickListener = listener
     }
 
     override fun onBindViewHolder(holder: ViewHolder , position: Int) {
-        val user = differ.currentList[position]
+        val user = users[position]
         holder.itemView.apply {
-            ivPartyParticipantPhoto.load(user.mainImageUri) {
+            ivPhoto.load(user.mainImageUri) {
                 transformations(CircleCropTransformation())
             }
-            tvPartyParticipantName.text = "${user.firstName} ${user.lastName}"
-            setOnClickListener {
-                onUserClickListener?.let { click ->
+            tvName.text = user.fullName()
+            setOnLongClickListener {
+                onCardClickListener?.let { click ->
                     click(user)
                 }
+                return@setOnLongClickListener true
             }
         }
     }

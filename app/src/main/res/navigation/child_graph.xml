@@ -59,10 +59,15 @@
     <fragment
         android:id="@+id/userInfoFragment"
         android:name="ru.blackbull.eatogether.ui.main.nearby.UserInfoFragment"
-        android:label="UserInfoFragment">
+        android:label="UserInfoFragment"
+        tools:layout="@layout/fragment_user_info">
         <argument
             android:name="user"
             app:argType="ru.blackbull.eatogether.models.firebase.User" />
     </fragment>
+
+    <action
+        android:id="@+id/action_global_party_detail_fragment"
+        app:destination="@id/partyDetailFragment" />
 
 </navigation>

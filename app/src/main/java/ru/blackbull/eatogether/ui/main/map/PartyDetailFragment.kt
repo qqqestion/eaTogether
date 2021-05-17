@@ -4,6 +4,7 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,6 +21,7 @@ import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
 import ru.blackbull.eatogether.models.PlaceDetail
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.other.EventObserver
+import ru.blackbull.eatogether.ui.main.dialogs.InviteForLunchDialogFragment
 import java.util.*
 
 
@@ -51,6 +53,12 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
         btnLeaveParty.setOnClickListener {
             viewModel.leaveParty(party)
         }
+        btnInviteFriends.setOnClickListener {
+            InviteForLunchDialogFragment(partyId).show(childFragmentManager , null)
+        }
+        btnJoinParty.setOnClickListener {
+            viewModel.addUserToParty(party)
+        }
     }
 
     private fun pickDateTime() {
@@ -79,6 +87,12 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
     }
 
     private fun subscribeToObservers() {
+        viewModel.addUserStatus.observe(viewLifecycleOwner , EventObserver { user ->
+            partyParticipantAdapter.participants += user
+            btnJoinParty.isVisible = false
+            btnInviteFriends.isVisible = true
+            btnLeaveParty.isVisible = true
+        })
         viewModel.selectedParty.observe(viewLifecycleOwner , EventObserver { party ->
             this.party = party
             updatePartyInfo(party)
@@ -111,6 +125,15 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
             party.time?.toDate()!!.time ,
             DateUtils.FORMAT_SHOW_TIME
         )
+        if (party.isCurrentUserInParty) {
+            btnJoinParty.isVisible = false
+            btnInviteFriends.isVisible = true
+            btnLeaveParty.isVisible = true
+        } else {
+            btnJoinParty.isVisible = true
+            btnInviteFriends.isVisible = false
+            btnLeaveParty.isVisible = false
+        }
     }
 
     private fun setupRecyclerView() = rvPartyDetailParticipants.apply {

@@ -52,7 +52,12 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.mainNavFragment)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.profileFragment , R.id.mapFragment , R.id.nearbyFragment , R.id.myPartyFragment
+                R.id.profileFragment ,
+                R.id.friendsFragment ,
+                R.id.mapFragment ,
+                R.id.nearbyFragment ,
+                R.id.myPartyFragment ,
+                R.id.lunchInvitationsFragment
             ) ,
             rootLayout
         )

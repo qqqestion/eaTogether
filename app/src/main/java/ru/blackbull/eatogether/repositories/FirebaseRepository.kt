@@ -7,6 +7,7 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.api.FirebaseApi
+import ru.blackbull.eatogether.models.InvitationWithUser
 import ru.blackbull.eatogether.models.firebase.FriendState
 import ru.blackbull.eatogether.models.firebase.Invitation
 import ru.blackbull.eatogether.models.firebase.Party
@@ -142,7 +143,9 @@ class FirebaseRepository @Inject constructor(
 
     suspend fun getPartyById(partyId: String): Resource<Party> = withContext(Dispatchers.IO) {
         safeCall {
-            Resource.Success(firebaseApi.getPartyById(partyId))
+            val party = firebaseApi.getPartyById(partyId)
+            party.isCurrentUserInParty = getCurrentUserId() in party.users
+            Resource.Success(party)
         }
     }
 
@@ -224,7 +227,7 @@ class FirebaseRepository @Inject constructor(
                 if (user.id == getCurrentUserId()) {
                     Resource.Success(FriendState.ITSELF)
                 } else if (!user.friendList.contains(getCurrentUserId())) {
-                    val invitations = firebaseApi.getInvitationByUser(getCurrentUserId())
+                    val invitations = firebaseApi.getInvitationsByUser(getCurrentUserId())
                     val isInvitationSent = invitations.find { it.invitee == user.id } != null
 
                     if (isInvitationSent) {
@@ -245,4 +248,27 @@ class FirebaseRepository @Inject constructor(
             Resource.Success(Unit)
         }
     }
+
+    suspend fun getFriendList(): Resource<List<User>> = withContext(Dispatchers.IO) {
+        safeCall {
+            val currentUser = firebaseApi.getUser(getCurrentUserId())
+            val friendList = firebaseApi.getFriendList(currentUser)
+            Resource.Success(friendList)
+        }
+    }
+
+    suspend fun getInvitationList(): Resource<List<InvitationWithUser>> =
+        withContext(Dispatchers.IO) {
+            safeCall {
+                val currentUser = firebaseApi.getUser(getCurrentUserId())
+                val invitations = firebaseApi
+                    .getInvitationsForUser(getCurrentUserId())
+                    .map {
+                        val inviter = firebaseApi.getUser(it.inviter!!)
+                        InvitationWithUser(it.id , inviter , currentUser)
+                    }
+                Timber.d("Invitations: $invitations")
+                Resource.Success(invitations)
+            }
+        }
 }

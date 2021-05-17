@@ -24,7 +24,7 @@ import com.google.firebase.firestore.GeoPoint
 data class User(
     @DocumentId
     var id: String? = null ,
-    @Exclude
+    @get:Exclude
     var phone: String? = null ,
     var firstName: String? = null ,
     var lastName: String? = null ,
@@ -98,6 +98,6 @@ data class User(
 enum class FriendState {
     UNFRIEND ,
     INVITATION_SENT ,
-    FRIEND,
+    FRIEND ,
     ITSELF
 }

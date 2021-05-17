@@ -265,7 +265,7 @@ class FirebaseApi {
         invitationsRef.add(invitation).await()
     }
 
-    suspend fun getInvitationByUser(userId: String): List<Invitation> {
+    suspend fun getInvitationsByUser(userId: String): List<Invitation> {
         return invitationsRef
             .whereEqualTo("inviter" , userId)
             .get()
@@ -288,5 +288,24 @@ class FirebaseApi {
             .document(invitation.id!!)
             .delete()
             .await()
+    }
+
+    suspend fun getFriendList(user: User): List<User> {
+        return usersRef
+            .whereIn(
+                FieldPath.documentId() ,
+                user.friendList
+            )
+            .get()
+            .await()
+            .toObjects(User::class.java)
+    }
+
+    suspend fun getInvitationsForUser(invitee: String): List<Invitation> {
+        return invitationsRef
+            .whereEqualTo("invitee" , invitee)
+            .get()
+            .await()
+            .toObjects(Invitation::class.java)
     }
 }

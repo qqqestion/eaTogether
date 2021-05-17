@@ -26,7 +26,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CuisineChoiceDialogFragment : DialogFragment() {
 
-    private lateinit var dialogView: View
+    private var dialogView: View? = null
 
     private val viewModel: MapViewModel by activityViewModels()
 
@@ -62,7 +62,7 @@ class CuisineChoiceDialogFragment : DialogFragment() {
         inflater: LayoutInflater ,
         container: ViewGroup? ,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         Timber.d("onCreateView")
         return dialogView
     }
@@ -90,6 +90,11 @@ class CuisineChoiceDialogFragment : DialogFragment() {
             cuisineAdapter.cuisines = it
             Timber.d("Cuisine list: ${it.map { cuisine -> cuisine.name }}")
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dialogView = null
     }
 
     companion object {

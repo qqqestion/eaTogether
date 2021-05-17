@@ -3,6 +3,7 @@ package ru.blackbull.eatogether.ui.main.nearby
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,12 +20,13 @@ import ru.blackbull.eatogether.adapters.NearbyUserAdapter
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.services.MainService
+import ru.blackbull.eatogether.ui.BaseFragment
 import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
 
 
 @AndroidEntryPoint
-class NearbyFragment : Fragment(R.layout.fragment_nearby) {
+class NearbyFragment : BaseFragment(R.layout.fragment_nearby) {
 
     private val viewModel: NearbyViewModel by viewModels()
     private lateinit var usersAdapter: NearbyUserAdapter
@@ -34,19 +36,23 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
         setupRecyclerView()
         subscribeToObservers()
         viewModel.getNearbyUsers()
-
     }
 
     private fun subscribeToObservers() {
         viewModel.nearbyUsers.observe(viewLifecycleOwner , EventObserver(
             onError = {
                 snackbar(it)
+                hideLoadingBar()
             } ,
             onLoading = {
-
+                showLoadingBar()
             }
         ) { nearbyUsers ->
+            hideLoadingBar()
             usersAdapter.users = nearbyUsers
+            if (nearbyUsers.isEmpty()) {
+                tvUserListIsEmpty.isVisible = true
+            }
         })
         viewModel.likedUser.observe(viewLifecycleOwner , { event ->
             val content = event.getContentIfNotHandled()
@@ -55,8 +61,9 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
                     is Resource.Success -> {
                         Timber.d("content data: ${it.data}")
                         it.data?.let { user ->
+                            snackbar("У вас совпадение с пользователем ${user.fullName()}")
                             findNavController().navigate(
-                                NearbyFragmentDirections.actionNearbyFragmentToMatchFragment(user)
+                                NearbyFragmentDirections.actionNearbyFragmentToUserInfoFragment(user)
                             )
                         }
                     }
@@ -102,9 +109,9 @@ class NearbyFragment : Fragment(R.layout.fragment_nearby) {
     private fun setupRecyclerView() {
         usersAdapter = NearbyUserAdapter()
         usersAdapter.setOnCardClickListener {
-            findNavController().navigate(
-                NearbyFragmentDirections.actionNearbyFragmentToUserInfoFragment(it)
-            )
+//            findNavController().navigate(
+//                NearbyFragmentDirections.actionNearbyFragmentToUserInfoFragment(it)
+//            )
         }
         rvNearbyUsers.adapter = usersAdapter
         val layoutManager = object : LinearLayoutManager(context) {

@@ -5,6 +5,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Looper
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import android.view.inputmethod.EditorInfo
@@ -152,6 +155,9 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
             }
         })
 
+        /**
+         * TODO: Возможно баг при нажатии назад с других основных экранов
+         */
         requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
@@ -208,7 +214,7 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
             }
             for (place in results) {
                 if (place.location != null) {
-                    val point = Point(place.location.latitude , place.location.longitude)
+                    val point = Point(place.location!!.latitude , place.location!!.longitude)
                     val placemark = mapObjects.addPlacemark(
                         point ,
                         ImageProvider.fromResource(

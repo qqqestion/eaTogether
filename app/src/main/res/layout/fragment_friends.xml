@@ -4,35 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#80A898"
-    tools:context=".ui.main.nearby.NearbyFragment"
     >
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvNearbyUsers"
+        android:id="@+id/rvFriends"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".MainActivity"
-        tools:listitem="@layout/item_user_preview"
+        tools:itemCount="3"
+        tools:listitem="@layout/item_user_in_party_preview"
         />
 
-    <TextView
-        android:id="@+id/tvUserListIsEmpty"
-        android:layout_width="0dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabInvitation"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Похоже, что вы просмотрели всех пользователей"
-        android:textAlignment="center"
-        android:textColor="@color/colorWhite"
-        android:visibility="gone"
-        android:textSize="20sp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/ic_baseline_add_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

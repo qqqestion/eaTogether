@@ -102,10 +102,26 @@
     <fragment
         android:id="@+id/userInfoFragment"
         android:name="ru.blackbull.eatogether.ui.main.nearby.UserInfoFragment"
-        android:label="UserInfoFragment" >
+        android:label="Пользователь">
         <argument
             android:name="user"
             app:argType="ru.blackbull.eatogether.models.firebase.User" />
+    </fragment>
+    <fragment
+        android:id="@+id/friendsFragment"
+        android:name="ru.blackbull.eatogether.ui.main.friends.FriendsFragment"
+        android:label="Друзья">
+        <action
+            android:id="@+id/action_friendsFragment_to_userInfoFragment"
+            app:destination="@id/userInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lunchInvitationsFragment"
+        android:name="ru.blackbull.eatogether.ui.main.lunchinvitations.LunchInvitationsFragment"
+        android:label="Приглашения">
+        <action
+            android:id="@+id/action_lunchInvitationsFragment_to_partyDetailFragment"
+            app:destination="@id/partyDetailFragment" />
     </fragment>
     <!--    <fragment-->
     <!--        android:id="@+id/recycleRestaurantsFragment"-->
