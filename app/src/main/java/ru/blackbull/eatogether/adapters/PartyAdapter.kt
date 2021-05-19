@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.item_party_preview.view.*
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.models.PartyWithUser
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.other.PhotoUtility.getFormattedTime
 import timber.log.Timber
@@ -24,12 +25,12 @@ import timber.log.Timber
  */
 class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
 
-    private val differCallback = object : DiffUtil.ItemCallback<Party>() {
-        override fun areItemsTheSame(oldItem: Party , newItem: Party): Boolean {
+    private val differCallback = object : DiffUtil.ItemCallback<PartyWithUser>() {
+        override fun areItemsTheSame(oldItem: PartyWithUser , newItem: PartyWithUser): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Party , newItem: Party): Boolean {
+        override fun areContentsTheSame(oldItem: PartyWithUser , newItem: PartyWithUser): Boolean {
             return oldItem == newItem
         }
 
@@ -37,7 +38,7 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
 
     private val differ = AsyncListDiffer(this , differCallback)
 
-    var parties: List<Party>
+    var parties: List<PartyWithUser>
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
@@ -59,19 +60,24 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
             party.time?.let { time ->
                 tvPartyPreviewTime.text = getFormattedTime(time.toDate())
             }
-            if (FirebaseAuth.getInstance().uid in party.users) {
+            if (party.isCurrentUserInParty) {
                 btnPartyPreviewJoin.isVisible = false
             }
-            // TODO: переписать этот ужас
-            FirebaseStorage.getInstance()
-                .reference.child(party.users[0])
-                .downloadUrl.addOnSuccessListener { uri ->
-                    ivPartyPreviewFirstPhoto.load(uri) {
-                        transformations(CircleCropTransformation())
-                    }
-                }.addOnFailureListener { e ->
-                    Timber.d(e)
+            // TODO: значок + должен быть виден, когда пользователь еще не в компании
+            setOnClickListener {
+                onItemViewClickListener?.let {
+                    it(party)
                 }
+            }
+            btnPartyPreviewJoin.setOnClickListener {
+                onJoinCLickListener?.let {
+                    it(party)
+                }
+            }
+
+            ivPartyPreviewFirstPhoto.load(party.users[0].mainImageUri) {
+                transformations(CircleCropTransformation())
+            }
 
             /**
              * Depends on users size we manage ui.
@@ -85,17 +91,9 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
                     ivPartyPreviewSecondPhoto.isVisible = false
                 }
                 2 -> {
-                    FirebaseStorage.getInstance()
-                        .reference.child(party.users[1])
-                        .downloadUrl
-                        .addOnSuccessListener { uri ->
-                            ivPartyPreviewSecondPhoto.load(uri) {
-                                transformations(CircleCropTransformation())
-                            }
-                        }
-                        .addOnFailureListener { e ->
-                            Timber.d(e)
-                        }
+                    ivPartyPreviewSecondPhoto.load(party.users[1].mainImageUri!!) {
+                        transformations(CircleCropTransformation())
+                    }
                 }
                 else -> {
                     ivPartyPreviewSecondPhoto.apply {
@@ -105,30 +103,19 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
                     }
                 }
             }
-            // TODO: значок + должен быть виден, когда пользователь еще не в компании
-            setOnClickListener {
-                onItemViewClickListener?.let {
-                    it(party)
-                }
-            }
-            btnPartyPreviewJoin.setOnClickListener {
-                onJoinCLickListener?.let {
-                    it(party)
-                }
-            }
         }
     }
 
     override fun getItemCount(): Int = parties.size
 
-    private var onItemViewClickListener: ((Party) -> Unit)? = null
-    private var onJoinCLickListener: ((Party) -> Unit)? = null
+    private var onItemViewClickListener: ((PartyWithUser) -> Unit)? = null
+    private var onJoinCLickListener: ((PartyWithUser) -> Unit)? = null
 
-    fun setOnItemViewClickListener(listener: (Party) -> Unit) {
+    fun setOnItemViewClickListener(listener: (PartyWithUser) -> Unit) {
         onItemViewClickListener = listener
     }
 
-    fun setOnJoinCLickListener(listener: (Party) -> Unit) {
+    fun setOnJoinCLickListener(listener: (PartyWithUser) -> Unit) {
         onJoinCLickListener = listener
     }
 }

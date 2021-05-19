@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.yandex.mapkit.geometry.Geometry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.blackbull.eatogether.models.PartyWithUser
 import ru.blackbull.eatogether.models.PlaceDetail
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.other.Event
@@ -39,8 +40,8 @@ class MapViewModel @Inject constructor(
         placeRepository.getPlaceDetail(placeId)
     }
 
-    private val _searchParties: MutableLiveData<Event<Resource<List<Party>>>> = MutableLiveData()
-    val searchParties: LiveData<Event<Resource<List<Party>>>> = _searchParties
+    private val _searchParties: MutableLiveData<Event<Resource<List<PartyWithUser>>>> = MutableLiveData()
+    val searchParties: LiveData<Event<Resource<List<PartyWithUser>>>> = _searchParties
 
     fun searchPartyByPlace(placeId: String) = viewModelScope.launch {
         _searchParties.postValue(Event(Resource.Loading()))
@@ -48,8 +49,8 @@ class MapViewModel @Inject constructor(
         _searchParties.postValue(Event(parties))
     }
 
-    fun addUserToParty(party: Party) = viewModelScope.launch {
-        firebaseRepository.addCurrentUserToParty(party)
+    fun addUserToParty(party: PartyWithUser) = viewModelScope.launch {
+        firebaseRepository.addCurrentUserToParty(party.toParty())
     }
 
 //

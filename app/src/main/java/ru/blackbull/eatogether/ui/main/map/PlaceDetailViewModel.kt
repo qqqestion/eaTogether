@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.blackbull.eatogether.models.PartyWithUser
 import ru.blackbull.eatogether.models.PlaceDetail
 import ru.blackbull.eatogether.models.firebase.Party
 import ru.blackbull.eatogether.other.Event
@@ -22,8 +23,9 @@ class PlaceDetailViewModel @Inject constructor(
 
     val placeDetail: LiveData<Event<Resource<PlaceDetail>>> = placeRepository.placeDetail
 
-    private val _searchParties: MutableLiveData<Event<Resource<List<Party>>>> = MutableLiveData()
-    val searchParties: LiveData<Event<Resource<List<Party>>>> = _searchParties
+    private val _searchParties: MutableLiveData<Event<Resource<List<PartyWithUser>>>> =
+        MutableLiveData()
+    val searchParties: LiveData<Event<Resource<List<PartyWithUser>>>> = _searchParties
 
     fun getPlaceDetail(placeId: String) = viewModelScope.launch {
         placeRepository.getPlaceDetail(placeId)
