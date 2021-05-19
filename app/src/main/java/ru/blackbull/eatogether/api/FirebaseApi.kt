@@ -75,6 +75,9 @@ class FirebaseApi {
             .get()
             .await()
             .toObjects(Party::class.java)
+            .onEach {
+                it.isCurrentUserInParty = auth.uid in it.users
+            }
     }
 
     /**
@@ -97,6 +100,9 @@ class FirebaseApi {
             .get()
             .await()
             .toObjects(Party::class.java)
+            .onEach {
+                it.isCurrentUserInParty = auth.uid in it.users
+            }
     }
 
     /**
@@ -317,5 +323,15 @@ class FirebaseApi {
             .get()
             .await()
             .toObjects(LunchInvitation::class.java)
+    }
+
+    suspend fun getPastPartiesByUser(userId: String): List<Party> {
+        val time = Calendar.getInstance().time
+        return partiesRef
+            .whereArrayContains("users" , userId)
+            .whereLessThan("time" , Timestamp(time))
+            .get()
+            .await()
+            .toObjects(Party::class.java)
     }
 }
