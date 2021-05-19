@@ -67,17 +67,25 @@ class RegistrationPhoneNumberFragment : BaseFragment(R.layout.fragment_registrat
 
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
                 Timber.d("onVerificationCompleted:$credential")
+                hideLoadingBar()
             }
 
             override fun onVerificationFailed(e: FirebaseException) {
                 Timber.d(e , "onVerificationFailed")
+                hideLoadingBar()
 
-                if (e is FirebaseAuthInvalidCredentialsException) {
-                    Timber.d("Invalid request")
-                    showErrorDialog("Неправильный запрос")
-                } else if (e is FirebaseTooManyRequestsException) {
-                    Timber.d("SMS quota for the project has been exceeded")
-                    showErrorDialog("СМС квота израсходована")
+                when (e) {
+                    is FirebaseAuthInvalidCredentialsException -> {
+                        Timber.d("Invalid request")
+                        showErrorDialog("Неправильный запрос")
+                    }
+                    is FirebaseTooManyRequestsException -> {
+                        Timber.d("SMS quota for the project has been exceeded")
+                        showErrorDialog("СМС квота израсходована")
+                    }
+                    else -> {
+                        showErrorDialog("Ошибка, попробуйте еще раз")
+                    }
                 }
             }
 
@@ -88,6 +96,7 @@ class RegistrationPhoneNumberFragment : BaseFragment(R.layout.fragment_registrat
                 this@RegistrationPhoneNumberFragment.token = token
                 this@RegistrationPhoneNumberFragment.verificationId = verificationId
                 Timber.d("onCodeSent:$verificationId")
+                hideLoadingBar()
                 findNavController().navigate(
                     RegistrationPhoneNumberFragmentDirections
                         .actionRegistrationPhoneNumberFragmentToRegistrationVerificationPhoneFragment(
@@ -104,6 +113,7 @@ class RegistrationPhoneNumberFragment : BaseFragment(R.layout.fragment_registrat
             .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
             .build()
         Timber.d("Verifying phone number")
+        showLoadingBar()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
