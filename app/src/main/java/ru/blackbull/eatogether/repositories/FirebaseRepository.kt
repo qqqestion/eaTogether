@@ -9,6 +9,8 @@ import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.api.FirebaseApi
 import ru.blackbull.eatogether.models.InvitationWithUser
 import ru.blackbull.eatogether.models.LunchInvitationWithUser
+import ru.blackbull.eatogether.models.PartyWithUser
+import ru.blackbull.eatogether.models.Statistic
 import ru.blackbull.eatogether.models.firebase.*
 import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
@@ -29,9 +31,21 @@ class FirebaseRepository @Inject constructor(
 
     suspend fun searchPartyByPlace(
         placeId: String
-    ): Resource<List<Party>> = withContext(Dispatchers.IO) {
+    ): Resource<List<PartyWithUser>> = withContext(Dispatchers.IO) {
         safeCall {
-            Resource.Success(firebaseApi.searchPartyByPlace(placeId))
+            Resource.Success(
+                firebaseApi.searchPartyByPlace(placeId)
+                    .map { party ->
+                        val users = party.users.map { firebaseApi.getUser(it) }.toMutableList()
+                        PartyWithUser(
+                            party.id ,
+                            party.placeId ,
+                            party.isCurrentUserInParty ,
+                            party.time ,
+                            users
+                        )
+                    }
+            )
         }
     }
 
@@ -46,11 +60,24 @@ class FirebaseRepository @Inject constructor(
         firebaseApi.updateParty(party)
     }
 
-    suspend fun getPartiesByCurrentUser(): Resource<List<Party>> = withContext(Dispatchers.IO) {
-        safeCall {
-            Resource.Success(firebaseApi.getPartiesByCurrentUser())
+    suspend fun getPartiesByCurrentUser(): Resource<List<PartyWithUser>> =
+        withContext(Dispatchers.IO) {
+            safeCall {
+                Resource.Success(
+                    firebaseApi.getPartiesByCurrentUser()
+                        .map { party ->
+                            val users = party.users.map { firebaseApi.getUser(it) }.toMutableList()
+                            PartyWithUser(
+                                party.id ,
+                                party.placeId ,
+                                party.isCurrentUserInParty ,
+                                party.time ,
+                                users
+                            )
+                        }
+                )
+            }
         }
-    }
 
     suspend fun getCurrentUser(): Resource<User> = getUser(getCurrentUserId())
 
@@ -326,4 +353,15 @@ class FirebaseRepository @Inject constructor(
                 Resource.Success(lunchInvitations)
             }
         }
+
+    suspend fun getStatistic(): Resource<Statistic> = withContext(Dispatchers.IO) {
+        safeCall {
+            val parties = firebaseApi.getPastPartiesByUser(getCurrentUserId())
+            val statistic = Statistic(
+                parties.map { it.placeId }.toHashSet().size ,
+                parties.size
+            )
+            Resource.Success(statistic)
+        }
+    }
 }

@@ -4,24 +4,24 @@
     <item
         android:id="@+id/actionSave"
         android:icon="@drawable/ic_baseline_check_24"
-        android:title="Сохранить"
+        android:title="Сохранить изменения"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/actionAddNew"
         android:icon="@drawable/ic_baseline_edit_24"
-        android:title="Добавить новую"
+        android:title="Добавить новую фотографию"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/actionMakeMain"
         android:icon="@drawable/ic_baseline_edit_24"
-        android:title="Сделать основным"
+        android:title="Сделать фотографию основной"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/actionDelete"
         android:icon="@drawable/ic_baseline_remove_24"
-        android:title="Удалить"
+        android:title="Удалить фотографию"
         app:showAsAction="never" />
 </menu>

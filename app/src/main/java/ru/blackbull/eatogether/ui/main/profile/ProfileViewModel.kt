@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.blackbull.eatogether.models.Statistic
 import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.Resource
@@ -48,5 +49,14 @@ class ProfileViewModel @Inject constructor(
 
     fun makeImageMain(uri: Uri) = viewModelScope.launch {
         firebaseRepository.makeImageMain(uri)
+    }
+
+    private val _statisticStatus = MutableLiveData<Event<Resource<Statistic>>>()
+    val statisticStatus: LiveData<Event<Resource<Statistic>>> = _statisticStatus
+
+    fun getStatistic() = viewModelScope.launch {
+        _statisticStatus.postValue(Event(Resource.Loading()))
+        val response = firebaseRepository.getStatistic()
+        _statisticStatus.postValue(Event(response))
     }
 }
