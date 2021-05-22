@@ -35,7 +35,7 @@ class FirebaseApi {
     /**
      * Обновляет поле пользователя "lastLocation" в Firestore
      *
-     * @param point
+     * @param location
      */
     suspend fun updateUserLocation(location: Location) {
         val geoPoint = GeoPoint(
@@ -49,7 +49,7 @@ class FirebaseApi {
     }
 
     /**
-     * Ищет компании по id места, выдает только те, которые проходят сегодня
+     * Ищет компании по id места, возвращает только те, которые проходят сегодня.
      *
      * @param placeId id места из Yandex MapKit
      * @return List<Party>

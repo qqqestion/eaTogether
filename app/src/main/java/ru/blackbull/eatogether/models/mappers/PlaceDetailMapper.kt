@@ -8,7 +8,7 @@ import ru.blackbull.eatogether.models.PlaceDetail
 import javax.inject.Inject
 
 /**
- * Класс для создания PlaceDetail из GeoObject
+ * Класс для создания PlaceDetail из com.yandex.mapkit.GeoObject
  * Берет нужную информацию из последнего и передаёт ее в конструктор первого
  *
  */

@@ -13,6 +13,10 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.firebase.User
 import javax.inject.Inject
 
+/**
+ * Адаптер для отображения списка друзей для приглашения в компанию
+ *
+ */
 class InviteUserForLunchAdapter @Inject constructor() :
     RecyclerView.Adapter<InviteUserForLunchAdapter.ViewHolder>() {
 

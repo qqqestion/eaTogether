@@ -13,6 +13,10 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.InvitationWithUser
 import javax.inject.Inject
 
+/**
+ * Адаптер для отображения списка заявок в друзья
+ *
+ */
 class InvitationAdapter @Inject constructor() :
     RecyclerView.Adapter<InvitationAdapter.ViewHolder>() {
 

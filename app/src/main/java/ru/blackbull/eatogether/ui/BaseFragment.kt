@@ -20,10 +20,10 @@ open class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
 
     private fun loadingBarVisibility(isVisible: Boolean) = with(activity) {
         if (this is MainActivity) {
-            Timber.d("Main activity app bar is ${if (isVisible) "visible" else "invisible"}")
+            Timber.d("Main activity loading bar is ${if (isVisible) "visible" else "invisible"}")
             this.mainLoadingProgressBar.isVisible = isVisible
         } else if (this is AuthActivity) {
-            Timber.d("Auth activity app bar is ${if (isVisible) "visible" else "invisible"}")
+            Timber.d("Auth activity loading bar is ${if (isVisible) "visible" else "invisible"}")
             this.authLoadingProgressBar.isVisible = isVisible
         }
     }

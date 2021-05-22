@@ -13,6 +13,10 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.models.LunchInvitationWithUser
 import javax.inject.Inject
 
+/**
+ * Адаптер для отображения списка приглашений в компании
+ *
+ */
 class LunchInvitationAdapter @Inject constructor() :
     RecyclerView.Adapter<LunchInvitationAdapter.ViewHolder>() {
 

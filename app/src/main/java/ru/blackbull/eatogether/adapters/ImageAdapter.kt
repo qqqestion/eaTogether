@@ -12,6 +12,10 @@ import kotlinx.android.synthetic.main.item_image.view.*
 import ru.blackbull.eatogether.R
 import javax.inject.Inject
 
+/**
+ * Адаптер для отображения картинок пользователя в ViewPager2
+ *
+ */
 class ImageAdapter @Inject constructor() : RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
     private val callback = object : DiffUtil.ItemCallback<Uri>() {

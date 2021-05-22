@@ -19,6 +19,11 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
+/**
+ * Репозиторий для работы с Google Firebase
+ *
+ * @property firebaseApi
+ */
 class FirebaseRepository @Inject constructor(
     private val firebaseApi: FirebaseApi
 ) {

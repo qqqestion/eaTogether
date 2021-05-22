@@ -18,6 +18,12 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
+/**
+ * Репозиторий для работы с Yandex MapKit
+ *
+ * @property searchManager
+ * @property placeDetailMapper
+ */
 class PlaceRepository @Inject constructor(
     private val searchManager: SearchManager ,
     private val placeDetailMapper: PlaceDetailMapper
