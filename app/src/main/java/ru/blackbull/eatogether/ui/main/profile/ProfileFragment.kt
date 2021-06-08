@@ -28,6 +28,10 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
             )
         }
 
+//        btnMore.setOnClickListener {
+//            snackbar("Clicked")
+//        }
+//
         // TODO: когда будет статистика, добавить отображение загрузки
         viewModel.currentUser.observe(viewLifecycleOwner , EventObserver(
             onError = {

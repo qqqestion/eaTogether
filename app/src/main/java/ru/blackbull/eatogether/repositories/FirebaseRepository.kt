@@ -2,9 +2,11 @@ package ru.blackbull.eatogether.repositories
 
 import android.location.Location
 import android.net.Uri
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.api.FirebaseApi
 import ru.blackbull.eatogether.models.InvitationWithUser
@@ -16,6 +18,7 @@ import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
 import ru.blackbull.eatogether.other.safeCall
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 
@@ -27,8 +30,6 @@ import javax.inject.Inject
 class FirebaseRepository @Inject constructor(
     private val firebaseApi: FirebaseApi
 ) {
-
-    val matchesRef = Firebase.firestore.collection("matches")
 
     suspend fun updateUserLocation(location: Location): Unit = withContext(Dispatchers.IO) {
         firebaseApi.updateUserLocation(location)
@@ -100,8 +101,6 @@ class FirebaseRepository @Inject constructor(
 
     suspend fun updateUser(user: User) = withContext(Dispatchers.IO) {
         safeCall {
-            // Чтобы не фотография из firebase не загружалась повторно в firebase
-            // TODO: добавить обновление фотографии
             val imageUris = mutableListOf<String>()
             Timber.d("Local uris: ${user.images}")
 
@@ -183,6 +182,50 @@ class FirebaseRepository @Inject constructor(
         party: Party
     ): Resource<List<User>> = withContext(Dispatchers.IO) {
         safeCall {
+            Timber.d("Start working")
+//            val currentUser = firebaseApi.getUser(firebaseApi.getCurrentUserId())
+//            var count = 0
+//            FirebaseFirestore.getInstance()
+//                .collection("users")
+//                .get()
+//                .await()
+//                .toObjects(User::class.java)
+//                .subList(0 , 6)
+//                .onEach { user ->
+//                    if (!user.friendList.contains(firebaseApi.getCurrentUserId())) {
+//                        user.friendList += firebaseApi.getCurrentUserId()
+//                        Timber.d("Updating ${user.fullName()}")
+//                        FirebaseFirestore.getInstance()
+//                            .collection("users")
+//                            .document(user.id!!)
+//                            .update("friendList" , user.friendList)
+//                            .await()
+//                    }
+//                    if (!currentUser.friendList.contains(user.id)) {
+//                        currentUser.friendList += user.id!!
+//                    }
+//                    val curParty = Party(
+//                        placeId = party.placeId ,
+//                        time = Timestamp(Date(Date().time + 3000000)) ,
+//                        users = mutableListOf(user.id!!)
+//                    )
+//                    firebaseApi.addParty(curParty)
+//                    if (count % 2 == 0) {
+//                        curParty.users += firebaseApi.getCurrentUserId()
+//                        firebaseApi.updateParty(curParty)
+//                    } else {
+//                        val lunchInvitation = LunchInvitation(
+//                            inviter = user.id ,
+//                            invitee = firebaseApi.getCurrentUserId() ,
+//                            partyId = curParty.id
+//                        )
+//                        firebaseApi.addLunchInvitation(lunchInvitation)
+//                    }
+//                    count += 1
+//                }
+//            firebaseApi.updateUser(currentUser)
+            Timber.d("Done!")
+
             Resource.Success(firebaseApi.getPartyParticipants(party))
         }
     }
@@ -192,6 +235,7 @@ class FirebaseRepository @Inject constructor(
         if (!party.users.contains(uid)) {
             party.users.add(uid)
             firebaseApi.updateParty(party)
+            firebaseApi.deleteInvitationToParty(party.id!!)
         }
     }
 
@@ -282,7 +326,9 @@ class FirebaseRepository @Inject constructor(
     suspend fun getFriendList(): Resource<List<User>> = withContext(Dispatchers.IO) {
         safeCall {
             val currentUser = firebaseApi.getUser(getCurrentUserId())
-            val friendList = firebaseApi.getFriendList(currentUser)
+            val friendList =
+                if (currentUser.friendList.isNotEmpty()) firebaseApi.getFriendList(currentUser)
+                else listOf()
             Resource.Success(friendList)
         }
     }
@@ -330,7 +376,7 @@ class FirebaseRepository @Inject constructor(
     suspend fun sendLunchInvitation(partyId: String , user: User): Resource<Unit> =
         withContext(Dispatchers.IO) {
             safeCall {
-                val invitation = LunchInvitation(
+                val invitation = ru.blackbull.eatogether.models.firebase.LunchInvitation(
                     inviter = getCurrentUserId() ,
                     invitee = user.id ,
                     partyId = partyId
@@ -355,6 +401,7 @@ class FirebaseRepository @Inject constructor(
                             it.partyId
                         )
                     }
+                Timber.d("Lunch invitations: $lunchInvitations")
                 Resource.Success(lunchInvitations)
             }
         }

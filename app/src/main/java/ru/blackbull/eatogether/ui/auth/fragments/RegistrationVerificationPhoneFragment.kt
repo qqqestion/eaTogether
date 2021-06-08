@@ -29,6 +29,7 @@ class RegistrationVerificationPhoneFragment :
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
         btnRegistrationNext.setOnClickListener {
+            showLoadingBar()
             val userCode = pinView.text.toString().trim()
             if (userCode.isNotEmpty()) {
                 val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
@@ -52,6 +53,7 @@ class RegistrationVerificationPhoneFragment :
             }
         }
         viewModel.isRegistrationComplete.observe(viewLifecycleOwner , { isComplete ->
+            hideLoadingBar()
             if (isComplete) {
                 Intent(requireActivity() , MainActivity::class.java).also {
                     requireActivity().startActivity(it)

@@ -82,11 +82,11 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-core:19.0.0'
-    implementation 'com.google.firebase:firebase-analytics:18.0.3'
     implementation 'com.google.firebase:firebase-firestore-ktx:23.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
     implementation 'com.google.firebase:firebase-auth:21.0.1'
     implementation 'com.google.firebase:firebase-storage:20.0.0'
+    implementation 'com.google.firebase:firebase-analytics:18.0.3'
 
     // OkHttp
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
@@ -115,10 +115,14 @@ dependencies {
     // COIL
     implementation "io.coil-kt:coil:1.1.1"
 
-    // Testing
-    testImplementation 'junit:junit:4.13.2'
+    // Testing framework
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation "org.junit.jupiter:junit-jupiter:5.7.2"
+    // Assertions
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.19.0'
+    // Mocking
+    testImplementation 'io.mockk:mockk:1.11.0'
 
     // Navigation Components
     implementation "androidx.navigation:navigation-fragment-ktx:2.3.5"

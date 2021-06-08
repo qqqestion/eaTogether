@@ -48,9 +48,7 @@ class NearbyFragment : BaseFragment(R.layout.fragment_nearby) {
         ) { nearbyUsers ->
             hideLoadingBar()
             usersAdapter.users = nearbyUsers
-            if (nearbyUsers.isEmpty()) {
-                tvUserListIsEmpty.isVisible = true
-            }
+            tvUserListIsEmpty.isVisible = nearbyUsers.isEmpty()
         })
         viewModel.likedUser.observe(viewLifecycleOwner , { event ->
             val content = event.getContentIfNotHandled()
@@ -128,9 +126,14 @@ class NearbyFragment : BaseFragment(R.layout.fragment_nearby) {
             ): Boolean = true
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder , direction: Int) {
-                val position = viewHolder.adapterPosition
+//                val position = viewHolder.adapterPosition
+                val position = viewHolder.bindingAdapterPosition
                 val user = usersAdapter.users[position]
+                Timber.d("Users before deleting: ${usersAdapter.users.map { it.fullName() }}")
+                val size = usersAdapter.users.size
                 usersAdapter.users -= user
+                Timber.d("Users after deleting: ${usersAdapter.users.map { it.fullName() }}")
+                tvUserListIsEmpty.isVisible = size - 1 == 0
 
                 when (direction) {
                     ItemTouchHelper.START -> {

@@ -93,31 +93,32 @@ class MainService : LifecycleService() {
         }
 
         // TODO: Переписать на lambda, без firebase импортов
-        repository
-            .matchesRef
-            .whereEqualTo("firstLiker" , repository.getCurrentUserId())
-            .whereEqualTo("processed" , false)
-            .addSnapshotListener { value , error ->
-                if (error != null) {
-                    Timber.d(error , "Failed in listener")
-                    matches.postValue(Event(Resource.Error(error)))
-                    return@addSnapshotListener
-                }
-                val resource = safeCall {
-                    val matchesList = mutableListOf<Match>()
-                    value?.documents?.forEach { document ->
-                        matchesList.add(document.toObject(Match::class.java)!!)
-                    }
-                    Timber.d("matches: $matchesList")
-                    Resource.Success(matchesList)
-                }
-                matches.postValue(Event(resource))
-
-                baseNotificationBuilder.setContentText("У вас ${value?.documents?.size} уведомлений")
-                with(NotificationManagerCompat.from(this)) {
-                    notify(NOTIFICATION_ID , baseNotificationBuilder.build())
-                }
-            }
+        // TODO: разобраться с этим
+//        repository
+//            .matchesRef
+//            .whereEqualTo("firstLiker" , repository.getCurrentUserId())
+//            .whereEqualTo("processed" , false)
+//            .addSnapshotListener { value , error ->
+//                if (error != null) {
+//                    Timber.d(error , "Failed in listener")
+//                    matches.postValue(Event(Resource.Error(error)))
+//                    return@addSnapshotListener
+//                }
+//                val resource = safeCall {
+//                    val matchesList = mutableListOf<Match>()
+//                    value?.documents?.forEach { document ->
+//                        matchesList.add(document.toObject(Match::class.java)!!)
+//                    }
+//                    Timber.d("matches: $matchesList")
+//                    Resource.Success(matchesList)
+//                }
+//                matches.postValue(Event(resource))
+//
+//                baseNotificationBuilder.setContentText("У вас ${value?.documents?.size} уведомлений")
+//                with(NotificationManagerCompat.from(this)) {
+//                    notify(NOTIFICATION_ID , baseNotificationBuilder.build())
+//                }
+//            }
     }
 
     private fun killService() {

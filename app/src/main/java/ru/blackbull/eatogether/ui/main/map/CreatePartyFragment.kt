@@ -46,9 +46,6 @@ class CreatePartyFragment : Fragment(R.layout.fragment_create_party) {
                 placeId = placeId
             )
         }
-        btnCreatePartyCancel.setOnClickListener {
-            findNavController().popBackStack()
-        }
     }
 
     private fun pickDateTime() {

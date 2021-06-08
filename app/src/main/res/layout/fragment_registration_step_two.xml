@@ -134,7 +134,7 @@
                     style="@style/MyTextInputEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapSentences"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="100"
                     android:overScrollMode="always"
                     android:paddingStart="10dp"

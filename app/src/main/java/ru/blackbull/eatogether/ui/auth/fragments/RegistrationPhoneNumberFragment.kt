@@ -108,7 +108,7 @@ class RegistrationPhoneNumberFragment : BaseFragment(R.layout.fragment_registrat
         Timber.d("Making request for phone auth")
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phone)       // Phone number to verify
-            .setTimeout(60L , TimeUnit.SECONDS) // Timeout and unit
+            .setTimeout(30L , TimeUnit.SECONDS) // Timeout and unit
             .setActivity(requireActivity())                 // Activity (for callback binding)
             .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
             .build()

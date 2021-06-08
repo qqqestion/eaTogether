@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.map.CreatePartyFragment">
+    tools:context=".ui.main.map.CreatePartyFragment"
+    >
 
     <!--    <TextView-->
     <!--        android:id="@+id/tvCreatePartyPlaceAddress"-->
@@ -23,7 +24,8 @@
         android:layout_marginStart="50dp"
         android:src="@drawable/ic_baseline_place_24"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/tvAddress"
@@ -34,7 +36,8 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/ivPlace"
         app:layout_constraintTop_toTopOf="@id/ivPlace"
-        tools:text="Каменноостровский пр., 39, 190000" />
+        tools:text="Каменноостровский пр., 39, 190000"
+        />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/placeBarrier"
@@ -42,7 +45,8 @@
         android:layout_height="0dp"
         android:orientation="horizontal"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="ivPlace, tvAddress" />
+        app:constraint_referenced_ids="ivPlace, tvAddress"
+        />
 
     <ImageView
         android:id="@+id/ivClock"
@@ -50,7 +54,8 @@
         android:layout_height="25dp"
         android:src="@drawable/ic_clock"
         app:layout_constraintStart_toStartOf="@id/ivPlace"
-        app:layout_constraintTop_toBottomOf="@id/placeBarrier" />
+        app:layout_constraintTop_toBottomOf="@id/placeBarrier"
+        />
 
     <TextView
         android:id="@+id/tvChooseDate"
@@ -60,7 +65,8 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/ivClock"
-        app:layout_constraintTop_toTopOf="@id/ivClock" />
+        app:layout_constraintTop_toTopOf="@id/ivClock"
+        />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/clockBarrier"
@@ -68,7 +74,8 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         app:barrierDirection="end"
-        app:constraint_referenced_ids="ivClock, tvChooseDate" />
+        app:constraint_referenced_ids="ivClock, tvChooseDate"
+        />
 
     <TextView
         android:id="@+id/tvTime"
@@ -78,23 +85,20 @@
         app:layout_constraintStart_toStartOf="@id/clockBarrier"
         app:layout_constraintTop_toTopOf="@id/ivClock"
         app:layout_goneMarginStart="0dp"
-        tools:text="15:00" />
+        tools:text="15:00"
+        />
 
 
     <Button
         android:id="@+id/btnCreatePartyConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/rounded_button_green"
         android:text="@string/btntext_create_party"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ivClock" />
-
-    <Button
-        android:id="@+id/btnCreatePartyCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btntext_cancel"
-        app:layout_constraintStart_toEndOf="@id/btnCreatePartyConfirm"
-        app:layout_constraintTop_toBottomOf="@id/ivClock" />
+        app:layout_constraintTop_toBottomOf="@id/ivClock"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

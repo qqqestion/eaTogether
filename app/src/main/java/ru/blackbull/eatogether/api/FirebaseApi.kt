@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -21,7 +22,7 @@ import java.util.*
  * Класс, работающий с Firebase
  *
  */
-class FirebaseApi {
+open class FirebaseApi {
 
     val auth = FirebaseAuth.getInstance()
 
@@ -86,7 +87,7 @@ class FirebaseApi {
      * @param party
      */
     suspend fun addParty(party: Party) {
-        partiesRef.add(party).await()
+        party.id = partiesRef.add(party).await().id
     }
 
     /**
@@ -97,6 +98,7 @@ class FirebaseApi {
     suspend fun getPartiesByCurrentUser(): List<Party> {
         return partiesRef
             .whereArrayContains("users" , auth.uid!!)
+            .orderBy("time")
             .get()
             .await()
             .toObjects(Party::class.java)
@@ -167,6 +169,7 @@ class FirebaseApi {
     ) {
         val firebaseUser: FirebaseUser? = auth.currentUser
         user.mainImageUri = Constants.DEFAULT_IMAGE_URL
+        user.images += user.mainImageUri!!
         user.isRegistrationComplete = true
         usersRef.document(firebaseUser!!.uid).set(user).await()
     }
@@ -177,24 +180,32 @@ class FirebaseApi {
      *
      * @return
      */
+    companion object h {
+        var callCount = 0
+    }
+
     suspend fun getNearbyUsers(): List<User> {
         val currentUser = getUser(auth.uid!!)
-
+        callCount += 1
         /**
          * Generates list of users to exclude, so that it won't appear in result set
          */
-        val excludeUsers = currentUser.likedUsers +
+        // TODO: сделать
+        val excludeUsers = (currentUser.likedUsers +
                 currentUser.dislikedUsers +
-                currentUser.id
-        val queryRef = usersRef.whereNotIn(
-            /**
-             * Comparing Document ID
-             */
-            FieldPath.documentId() ,
-            excludeUsers
-        )
-
-        val users = queryRef.get().await().toObjects(User::class.java)
+                currentUser.friendList +
+                currentUser.id).toHashSet()
+        val users = if (excludeUsers.size <= 9) {
+            usersRef.whereIn(
+                FieldPath.documentId() ,
+                excludeUsers.toList()
+            ).get().await().toObjects(User::class.java)
+        } else {
+            usersRef.get()
+                .await()
+                .toObjects(User::class.java)
+                .filter { !excludeUsers.contains(it.id) }
+        }
         Timber.d("users: $users")
         return users
     }
@@ -292,6 +303,21 @@ class FirebaseApi {
             .document(invitation.id!!)
             .delete()
             .await()
+    }
+
+    suspend fun deleteInvitationToParty(partyId: String) {
+        lunchInvitationsRef
+            .whereEqualTo("partyId" , partyId)
+            .whereEqualTo("invitee" , getCurrentUserId())
+            .get()
+            .await()
+            .toObjects(LunchInvitation::class.java)
+            .forEach { invitation ->
+                lunchInvitationsRef
+                    .document(invitation.id!!)
+                    .delete()
+                    .await()
+            }
     }
 
     suspend fun getFriendList(user: User): List<User> {
