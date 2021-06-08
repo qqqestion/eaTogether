@@ -1,10 +1,7 @@
 package ru.blackbull.eatogether
 
-import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
-import org.junit.Test
-
-import org.junit.Assert.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 
 class ExampleUnitTest {
