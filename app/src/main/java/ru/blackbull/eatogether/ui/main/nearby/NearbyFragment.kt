@@ -18,7 +18,6 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.NearbyUserAdapter
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.services.MainService
 import ru.blackbull.eatogether.ui.BaseFragment
 import timber.log.Timber
 
@@ -70,32 +69,6 @@ class NearbyFragment : BaseFragment(R.layout.fragment_nearby) {
                     }
                     is Resource.Loading -> {
 
-                    }
-                }
-            }
-        })
-
-        MainService.matches.observe(viewLifecycleOwner , { event ->
-            val content = event.getContentIfNotHandled()
-            content?.let { resource ->
-                when (resource) {
-                    is Resource.Success -> {
-                        resource.data?.forEach { match ->
-                            CoroutineScope(Dispatchers.Main).launch {
-                                val secondLiker = viewModel.getUser(match.secondLiker!!)
-//                                secondLiker?.let { user ->
-//                                    findNavController().navigate(
-//                                        NearbyFragmentDirections.actionNearbyFragmentToMatchFragment(
-//                                            user
-//                                        )
-//                                    )
-//                                }
-                            }
-                        }
-                    }
-                    is Resource.Error -> {
-                        Timber.d(resource.error)
-                        snackbar(resource.msg ?: "Unknown error")
                     }
                 }
             }
