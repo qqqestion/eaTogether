@@ -16,7 +16,6 @@ import ru.blackbull.eatogether.models.Statistic
 import ru.blackbull.eatogether.models.firebase.*
 import ru.blackbull.eatogether.other.Constants
 import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.other.safeCall
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -414,6 +413,15 @@ class FirebaseRepository @Inject constructor(
                 parties.size
             )
             Resource.Success(statistic)
+        }
+    }
+
+    private inline fun <T> safeCall(action: () -> Resource<T>): Resource<T> {
+        return try {
+            action()
+        } catch (e: Exception) {
+            Timber.d(e)
+            Resource.Error(e)
         }
     }
 }

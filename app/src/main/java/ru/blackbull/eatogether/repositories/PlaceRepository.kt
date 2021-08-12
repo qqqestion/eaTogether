@@ -28,17 +28,6 @@ class PlaceRepository @Inject constructor(
     private val searchManager: SearchManager ,
     private val placeDetailMapper: PlaceDetailMapper
 ) {
-//
-//    suspend fun getNearbyPlaces(
-//        location: String
-//    ): Resource<List<BasicLocation>> = withContext(Dispatchers.IO) {
-//        val response = googlePlaceApiService.getNearbyPlaces(location)
-//        return@withContext if (response.status == "OK") {
-//            Resource.Success(response.placeList)
-//        } else {
-//            Resource.Error(msg = response.errorMessage)
-//        }
-//    }
 
     private val _placeDetail: MutableLiveData<Event<Resource<PlaceDetail>>> = MutableLiveData()
     val placeDetail: LiveData<Event<Resource<PlaceDetail>>> = _placeDetail
@@ -232,7 +221,13 @@ class PlaceRepository @Inject constructor(
                 override fun onSearchResponse(response: Response) {
                     Timber.d("Place detail: ${filters(response)}")
                     for (searchResult in response.collection.children) {
-                        Timber.d("Place detail success: ${placeDetailMapper.toPlaceDetail(searchResult.obj!!)}")
+                        Timber.d(
+                            "Place detail success: ${
+                                placeDetailMapper.toPlaceDetail(
+                                    searchResult.obj!!
+                                )
+                            }"
+                        )
                         _placeDetail.postValue(
                             Event(
                                 Resource.Success(

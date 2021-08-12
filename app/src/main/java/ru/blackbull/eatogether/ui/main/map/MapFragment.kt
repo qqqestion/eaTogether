@@ -42,7 +42,6 @@ import ru.blackbull.eatogether.other.Constants.FASTEST_LOCATION_INTERVAL
 import ru.blackbull.eatogether.other.Constants.LOCATION_UPDATE_INTERVAL
 import ru.blackbull.eatogether.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.other.LocationUtility
 import ru.blackbull.eatogether.ui.main.dialogs.CuisineChoiceDialogFragment
 import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber
@@ -277,7 +276,7 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
 
     @SuppressLint("MissingPermission")
     private fun setupFusedLocationProviderClient() {
-        if (!LocationUtility.hasLocationPermission(requireContext())) {
+        if (!hasLocationPermission()) {
             return
         }
         val request = LocationRequest.create().apply {
@@ -304,7 +303,7 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
     }
 
     private fun requestPermission() {
-        if (LocationUtility.hasLocationPermission(requireContext())) {
+        if (hasLocationPermission()) {
             return
         }
         EasyPermissions.requestPermissions(
@@ -315,6 +314,12 @@ class MapFragment : Fragment(R.layout.fragment_map) , EasyPermissions.Permission
             Manifest.permission.ACCESS_FINE_LOCATION
         )
     }
+
+    private fun hasLocationPermission() = EasyPermissions.hasPermissions(
+        requireContext() ,
+        Manifest.permission.ACCESS_FINE_LOCATION ,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
 
     override fun onPermissionsDenied(
         requestCode: Int ,
