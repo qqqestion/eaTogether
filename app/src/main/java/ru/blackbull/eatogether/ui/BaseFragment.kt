@@ -12,7 +12,7 @@ import ru.blackbull.eatogether.ui.auth.AuthActivity
 import ru.blackbull.eatogether.ui.main.MainActivity
 import timber.log.Timber
 
-open class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
+abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
 
     fun showLoadingBar() = loadingBarVisibility(true)
 

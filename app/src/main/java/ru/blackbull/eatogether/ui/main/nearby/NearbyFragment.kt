@@ -116,7 +116,6 @@ class NearbyFragment : BaseFragment(R.layout.fragment_nearby) {
                     ItemTouchHelper.END -> {
                         Log.d("NearbyDebug" , "likeUser $user")
                         viewModel.likeUser(user)
-                        viewModel.sendLikeNotification(user)
                     }
                     else -> {
                         Log.d("NearbyDebug" , "we got a problem")

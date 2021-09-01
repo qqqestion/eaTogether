@@ -182,47 +182,6 @@ class FirebaseRepository @Inject constructor(
     ): Resource<List<User>> = withContext(Dispatchers.IO) {
         safeCall {
             Timber.d("Start working")
-//            val currentUser = firebaseApi.getUser(firebaseApi.getCurrentUserId())
-//            var count = 0
-//            FirebaseFirestore.getInstance()
-//                .collection("users")
-//                .get()
-//                .await()
-//                .toObjects(User::class.java)
-//                .subList(0 , 6)
-//                .onEach { user ->
-//                    if (!user.friendList.contains(firebaseApi.getCurrentUserId())) {
-//                        user.friendList += firebaseApi.getCurrentUserId()
-//                        Timber.d("Updating ${user.fullName()}")
-//                        FirebaseFirestore.getInstance()
-//                            .collection("users")
-//                            .document(user.id!!)
-//                            .update("friendList" , user.friendList)
-//                            .await()
-//                    }
-//                    if (!currentUser.friendList.contains(user.id)) {
-//                        currentUser.friendList += user.id!!
-//                    }
-//                    val curParty = Party(
-//                        placeId = party.placeId ,
-//                        time = Timestamp(Date(Date().time + 3000000)) ,
-//                        users = mutableListOf(user.id!!)
-//                    )
-//                    firebaseApi.addParty(curParty)
-//                    if (count % 2 == 0) {
-//                        curParty.users += firebaseApi.getCurrentUserId()
-//                        firebaseApi.updateParty(curParty)
-//                    } else {
-//                        val lunchInvitation = LunchInvitation(
-//                            inviter = user.id ,
-//                            invitee = firebaseApi.getCurrentUserId() ,
-//                            partyId = curParty.id
-//                        )
-//                        firebaseApi.addLunchInvitation(lunchInvitation)
-//                    }
-//                    count += 1
-//                }
-//            firebaseApi.updateUser(currentUser)
             Timber.d("Done!")
 
             Resource.Success(firebaseApi.getPartyParticipants(party))
@@ -236,11 +195,6 @@ class FirebaseRepository @Inject constructor(
             firebaseApi.updateParty(party)
             firebaseApi.deleteInvitationToParty(party.id!!)
         }
-    }
-
-    suspend fun sendLikeNotification(user: User) {
-//        val notification = Notification(userId = user.id , type = "like")
-//        notificationsRef.add(notification).await()
     }
 
     suspend fun deleteImage(uri: Uri): Resource<User> = withContext(Dispatchers.IO) {

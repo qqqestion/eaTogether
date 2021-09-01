@@ -40,10 +40,6 @@ class NearbyViewModel @Inject constructor(
         firebaseRepository.dislikeUser(user)
     }
 
-    fun sendLikeNotification(user: User) = viewModelScope.launch {
-        firebaseRepository.sendLikeNotification(user)
-    }
-
     suspend fun getUser(uid: String): User? {
         val response = firebaseRepository.getUser(uid)
         if (response is Resource.Error) {
