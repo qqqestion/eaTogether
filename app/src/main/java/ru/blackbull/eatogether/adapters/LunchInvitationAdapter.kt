@@ -10,7 +10,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import kotlinx.android.synthetic.main.item_lunch_invitation.view.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.LunchInvitationWithUser
+import ru.blackbull.data.models.firebase.LunchInvitationWithUsers
 import javax.inject.Inject
 
 /**
@@ -20,17 +20,17 @@ import javax.inject.Inject
 class LunchInvitationAdapter @Inject constructor() :
     RecyclerView.Adapter<LunchInvitationAdapter.ViewHolder>() {
 
-    private val callback = object : DiffUtil.ItemCallback<LunchInvitationWithUser>() {
+    private val callback = object : DiffUtil.ItemCallback<LunchInvitationWithUsers>() {
         override fun areItemsTheSame(
-            oldItem: LunchInvitationWithUser ,
-            newItem: LunchInvitationWithUser
+            oldItem: LunchInvitationWithUsers ,
+            newItem: LunchInvitationWithUsers
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: LunchInvitationWithUser ,
-            newItem: LunchInvitationWithUser
+            oldItem: LunchInvitationWithUsers ,
+            newItem: LunchInvitationWithUsers
         ): Boolean {
             return oldItem == newItem
         }
@@ -38,7 +38,7 @@ class LunchInvitationAdapter @Inject constructor() :
 
     private val differ = AsyncListDiffer(this , callback)
 
-    var invitations: List<LunchInvitationWithUser>
+    var invitations: List<LunchInvitationWithUsers>
         get() = differ.currentList
         set(value) = differ.submitList(value)
 

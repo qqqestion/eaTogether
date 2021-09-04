@@ -97,7 +97,7 @@
         android:label="@string/title_match">
         <argument
             android:name="matchedUser"
-            app:argType="ru.blackbull.eatogether.models.firebase.User" />
+            app:argType="ru.blackbull.data.models.firebase.User" />
     </fragment>
     <fragment
         android:id="@+id/userInfoFragment"
@@ -105,7 +105,7 @@
         android:label="Пользователь">
         <argument
             android:name="user"
-            app:argType="ru.blackbull.eatogether.models.firebase.User" />
+            app:argType="ru.blackbull.data.models.firebase.User" />
     </fragment>
     <fragment
         android:id="@+id/friendsFragment"

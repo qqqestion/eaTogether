@@ -37,10 +37,10 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.PlaceDetail
-import ru.blackbull.eatogether.other.Constants.FASTEST_LOCATION_INTERVAL
-import ru.blackbull.eatogether.other.Constants.LOCATION_UPDATE_INTERVAL
-import ru.blackbull.eatogether.other.Constants.REQUEST_CODE_LOCATION_PERMISSION
+import ru.blackbull.data.models.mapkit.PlaceDetail
+import ru.blackbull.domain.Constants.FASTEST_LOCATION_INTERVAL
+import ru.blackbull.domain.Constants.LOCATION_UPDATE_INTERVAL
+import ru.blackbull.domain.Constants.REQUEST_CODE_LOCATION_PERMISSION
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.main.dialogs.CuisineChoiceDialogFragment
 import ru.blackbull.eatogether.ui.main.snackbar

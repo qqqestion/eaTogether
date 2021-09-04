@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_place_detail.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyAdapter
-import ru.blackbull.eatogether.models.PlaceDetail
+import ru.blackbull.data.models.mapkit.PlaceDetail
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber

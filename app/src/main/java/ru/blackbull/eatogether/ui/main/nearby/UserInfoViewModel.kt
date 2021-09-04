@@ -6,16 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.blackbull.eatogether.models.firebase.FriendState
-import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.data.models.firebase.User
+import ru.blackbull.domain.FirebaseDataSource
+import ru.blackbull.domain.models.FriendState
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.repositories.FirebaseRepository
+import ru.blackbull.domain.Resource
 import javax.inject.Inject
 
 @HiltViewModel
 class UserInfoViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseRepository: FirebaseDataSource
 ) : ViewModel() {
 
     private val _addToFriendListStatus = MutableLiveData<Event<Resource<FriendState>>>()
@@ -29,13 +29,13 @@ class UserInfoViewModel @Inject constructor(
             return@launch
         }
         _addToFriendListStatus.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.addToFriendList(user)
+        val response = firebaseRepository.addToFriendList(user.toDomainUser()).toResource()
         _addToFriendListStatus.postValue(Event(response))
     }
 
     fun checkUserStatus(user: User) = viewModelScope.launch {
         _userStatus.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.checkUserStatus(user)
+        val response = firebaseRepository.checkUserStatus(user.toDomainUser()).toResource()
         _userStatus.postValue(Event(response))
     }
 }

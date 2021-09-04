@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_place_preview.view.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.PlaceDetail
+import ru.blackbull.data.models.mapkit.PlaceDetail
 
 
 /**

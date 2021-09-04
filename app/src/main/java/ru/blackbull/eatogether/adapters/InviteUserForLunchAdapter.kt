@@ -10,7 +10,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import kotlinx.android.synthetic.main.item_invite_user_for_lunch.view.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.data.models.firebase.User
 import javax.inject.Inject
 
 /**

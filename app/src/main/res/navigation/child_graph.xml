@@ -45,7 +45,7 @@
             app:destination="@id/partyDetailFragment" />
         <argument
             android:name="placeDetail"
-            app:argType="ru.blackbull.eatogether.models.PlaceDetail" />
+            app:argType="ru.blackbull.data.models.mapkit.PlaceDetail" />
     </fragment>
     <fragment
         android:id="@+id/searchResultFragment"
@@ -63,7 +63,7 @@
         tools:layout="@layout/fragment_user_info">
         <argument
             android:name="user"
-            app:argType="ru.blackbull.eatogether.models.firebase.User" />
+            app:argType="ru.blackbull.data.models.firebase.User" />
     </fragment>
 
     <action

@@ -3,27 +3,22 @@ package ru.blackbull.eatogether.di
 import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.yandex.mapkit.search.SearchFactory
-import com.yandex.mapkit.search.SearchManager
 import com.yandex.mapkit.search.SearchManagerType
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.blackbull.eatogether.api.FirebaseApi
-import ru.blackbull.eatogether.models.mappers.PlaceDetailMapper
-import ru.blackbull.eatogether.repositories.PlaceRepository
+import ru.blackbull.data.FirebaseApi
+import ru.blackbull.data.FirebaseRepository
+import ru.blackbull.data.PartyRepository
+import ru.blackbull.domain.FirebaseDataSource
+import ru.blackbull.domain.PartyDataSource
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Singleton
-    @Provides
-    fun providePlaceRepository(
-        searchManager: SearchManager
-    ) = PlaceRepository(searchManager , PlaceDetailMapper())
 
     @Singleton
     @Provides
@@ -64,10 +59,6 @@ object AppModule {
 //    fun provideGooglePlaceApiService(
 //        retrofit: Retrofit
 //    ): GooglePlaceApiService = retrofit.create(GooglePlaceApiService::class.java)
-
-    @Singleton
-    @Provides
-    fun provideFirebaseApi() = FirebaseApi()
 
     @Singleton
     @Provides

@@ -1,2 +1,4 @@
 include ':app'
 rootProject.name = "eaTogether"
+include ':data'
+include ':domain'

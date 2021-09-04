@@ -15,7 +15,6 @@ class StartFragment : BaseFragment(R.layout.fragment_start) {
 
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
-        Timber.d("StartFragment")
 
         btnStart.setOnClickListener {
             findNavController().navigate(
@@ -23,5 +22,4 @@ class StartFragment : BaseFragment(R.layout.fragment_start) {
             )
         }
     }
-
 }

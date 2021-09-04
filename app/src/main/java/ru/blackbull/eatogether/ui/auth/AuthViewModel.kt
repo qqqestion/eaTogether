@@ -1,6 +1,5 @@
 package ru.blackbull.eatogether.ui.auth
 
-import android.app.Application
 import androidx.lifecycle.*
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.Timestamp
@@ -9,21 +8,20 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.blackbull.data.models.firebase.User
+import ru.blackbull.domain.FirebaseDataSource
 import ru.blackbull.eatogether.EaTogetherApplication
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.firebase.User
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.repositories.FirebaseRepository
+import ru.blackbull.domain.Resource
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    val firebaseRepository: FirebaseRepository ,
-    app: Application
-) : AndroidViewModel(app) {
+    private val firebaseRepository: FirebaseDataSource
+) : ViewModel() {
 
     private val _signInResult = MutableLiveData<Event<Resource<Unit>>>()
     val signInResult: LiveData<Event<Resource<Unit>>> = _signInResult
@@ -34,7 +32,7 @@ class AuthViewModel @Inject constructor(
     val isRegistrationComplete = MutableLiveData<Boolean>()
 
     fun checkIsRegistrationComplete() = viewModelScope.launch {
-        val user = firebaseRepository.getCurrentUser().data
+        val user = firebaseRepository.getCurrentUser().toResource().data
         if (user != null) {
             isRegistrationComplete.postValue(user.isRegistrationComplete)
         } else {
@@ -49,7 +47,7 @@ class AuthViewModel @Inject constructor(
             }
         }
         _signInResult.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.signIn(email , password)
+        val response = firebaseRepository.signIn(email , password).toResource()
         _signInResult.postValue(Event(response))
     }
 
@@ -86,7 +84,7 @@ class AuthViewModel @Inject constructor(
             }
         }
         _signUpResult.postValue(Event(Resource.Loading()))
-        val app = getApplication<EaTogetherApplication>()
+//        val app = getApplication<EaTogetherApplication>()
         val user: User
         try {
             user = validateUser(
@@ -99,13 +97,14 @@ class AuthViewModel @Inject constructor(
             Timber.d("Validation error: field(s) is empty")
             _signUpResult.postValue(
                 Event(
-                    Resource.Error(msg = app.getString(R.string.errormessage_fields_must_be_filled))
+                    Resource.Error(/*msg =  app.getString(R.string.errormessage_fields_must_be_filled) */)
                 )
             )
             return@launch
         }
         Timber.d("Validation complete")
-        val response = firebaseRepository.signUpWithEmailAndPassword(user)
+        val response =
+            firebaseRepository.signUpWithEmailAndPassword(user.toDomainUser()).toResource()
         if (response is Resource.Error) {
             val stringId = when (response.error) {
                 is FirebaseNetworkException ->
@@ -119,9 +118,10 @@ class AuthViewModel @Inject constructor(
                 else -> null
             }
             val msg = if (stringId == null) {
-                response.msg ?: app.getString(R.string.errormessage_unknown_error)
+                response.msg ?: "Ошибка" /* app.getString(R.string.errormessage_unknown_error) */
             } else {
-                app.getString(stringId)
+                "Ошибка с ID"
+//                app.getString(stringId)
             }
             Timber.d("Error: $msg")
             response.msg = msg

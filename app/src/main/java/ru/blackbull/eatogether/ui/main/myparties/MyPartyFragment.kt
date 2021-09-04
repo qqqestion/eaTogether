@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_my_parties_rv.*
+import ru.blackbull.data.models.firebase.toPartyWithUser
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyAdapter
 import ru.blackbull.eatogether.other.EventObserver
@@ -24,7 +25,7 @@ class MyPartyFragment : Fragment(R.layout.fragment_my_parties_rv) {
         super.onViewCreated(view , savedInstanceState)
         setupAdapter(rvMyParties)
         viewModel.userParties.observe(viewLifecycleOwner , EventObserver { parties ->
-            partiesAdapter.parties = parties
+            partiesAdapter.parties = parties.map { it.toPartyWithUser() }
         })
         viewModel.getPartiesByCurrentUser()
     }

@@ -7,18 +7,19 @@ import androidx.lifecycle.viewModelScope
 import com.yandex.mapkit.geometry.Geometry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.blackbull.eatogether.models.PartyWithUser
-import ru.blackbull.eatogether.models.PlaceDetail
-import ru.blackbull.eatogether.models.firebase.Party
+import ru.blackbull.data.models.firebase.PartyWithUser
+import ru.blackbull.data.models.mapkit.PlaceDetail
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.repositories.FirebaseRepository
+import ru.blackbull.domain.Resource
+import ru.blackbull.data.models.firebase.toPartyWithUser
+import ru.blackbull.domain.PartyDataSource
+import ru.blackbull.domain.functional.Either
 import ru.blackbull.eatogether.repositories.PlaceRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class MapViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository ,
+    private val partyRepository: PartyDataSource ,
     private val placeRepository: PlaceRepository
 ) : ViewModel() {
 
@@ -40,20 +41,20 @@ class MapViewModel @Inject constructor(
         placeRepository.getPlaceDetail(placeId)
     }
 
-    private val _searchParties: MutableLiveData<Event<Resource<List<PartyWithUser>>>> = MutableLiveData()
+    private val _searchParties: MutableLiveData<Event<Resource<List<PartyWithUser>>>> =
+        MutableLiveData()
     val searchParties: LiveData<Event<Resource<List<PartyWithUser>>>> = _searchParties
 
     fun searchPartyByPlace(placeId: String) = viewModelScope.launch {
         _searchParties.postValue(Event(Resource.Loading()))
-        val parties = firebaseRepository.searchPartyByPlace(placeId)
-        _searchParties.postValue(Event(parties))
+        val parties = (partyRepository.searchPartyByPlace(placeId) as Either.Right).b.map { it.toPartyWithUser() }
+        _searchParties.postValue(Event(Resource.Success(parties)))
     }
 
     fun addUserToParty(party: PartyWithUser) = viewModelScope.launch {
-        firebaseRepository.addCurrentUserToParty(party.toParty())
+        partyRepository.addCurrentUserToParty(party.toParty().toDomainParty())
     }
 
-//
 //    private val _nearbyPlaces: MutableLiveData<Event<Resource<List<BasicLocation>>>> =
 //        MutableLiveData()
 //    val nearbyPlaces: LiveData<Event<Resource<List<BasicLocation>>>> = _nearbyPlaces

@@ -6,42 +6,45 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.blackbull.eatogether.models.PlaceDetail
-import ru.blackbull.eatogether.models.firebase.Party
-import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.data.models.mapkit.PlaceDetail
+import ru.blackbull.data.models.firebase.Party
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.repositories.FirebaseRepository
+import ru.blackbull.domain.Resource
+import ru.blackbull.domain.FirebaseDataSource
+import ru.blackbull.domain.PartyDataSource
+import ru.blackbull.domain.models.DomainParty
+import ru.blackbull.domain.models.DomainUser
 import ru.blackbull.eatogether.repositories.PlaceRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class PartyDetailViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository ,
+    private val firebaseRepository: FirebaseDataSource ,
+    private val partyRepository: PartyDataSource ,
     private val placeRepository: PlaceRepository
 ) : ViewModel() {
 
-    private val _selectedParty: MutableLiveData<Event<Resource<Party>>> = MutableLiveData()
-    val selectedParty: LiveData<Event<Resource<Party>>> = _selectedParty
+    private val _selectedParty: MutableLiveData<Event<Resource<DomainParty>>> = MutableLiveData()
+    val selectedParty: LiveData<Event<Resource<DomainParty>>> = _selectedParty
 
-    private val _partyParticipants: MutableLiveData<Event<Resource<List<User>>>> = MutableLiveData()
-    val partyParticipants: LiveData<Event<Resource<List<User>>>> = _partyParticipants
+    private val _partyParticipants: MutableLiveData<Event<Resource<List<DomainUser>>>> = MutableLiveData()
+    val partyParticipants: LiveData<Event<Resource<List<DomainUser>>>> = _partyParticipants
 
     val placeDetail: LiveData<Event<Resource<PlaceDetail>>> = placeRepository.placeDetail
 
     fun getPartyParticipants(party: Party) = viewModelScope.launch {
         _partyParticipants.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.getPartyParticipants(party)
+        val response = partyRepository.getPartyParticipants(party.toDomainParty()).toResource()
         _partyParticipants.postValue(Event(response))
     }
 
     fun updateParty(party: Party) = viewModelScope.launch {
-        firebaseRepository.updateParty(party)
+        partyRepository.updateParty(party.toDomainParty())
     }
 
     fun getPartyById(id: String) = viewModelScope.launch {
         _selectedParty.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.getPartyById(id)
+        val response = partyRepository.getPartyById(id).toResource()
         _selectedParty.postValue(Event(response))
     }
 
@@ -54,16 +57,16 @@ class PartyDetailViewModel @Inject constructor(
 
     fun leaveParty(party: Party) = viewModelScope.launch {
         _leavePartyStatus.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.leaveParty(party)
+        val response = partyRepository.leaveParty(party.toDomainParty()).toResource()
         _leavePartyStatus.postValue(Event(response))
     }
 
-    private val _addUserStatus = MutableLiveData<Event<Resource<User>>>()
-    val addUserStatus: LiveData<Event<Resource<User>>> = _addUserStatus
+    private val _addUserStatus = MutableLiveData<Event<Resource<DomainUser>>>()
+    val addUserStatus: LiveData<Event<Resource<DomainUser>>> = _addUserStatus
 
     fun addUserToParty(party: Party) = viewModelScope.launch {
-        firebaseRepository.addCurrentUserToParty(party)
-        val response = firebaseRepository.getCurrentUser()
+        partyRepository.addCurrentUserToParty(party.toDomainParty())
+        val response = firebaseRepository.getCurrentUser().toResource()
         _addUserStatus.postValue(Event(response))
     }
 }

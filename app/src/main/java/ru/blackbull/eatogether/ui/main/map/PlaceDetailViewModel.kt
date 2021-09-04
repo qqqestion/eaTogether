@@ -6,26 +6,26 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.blackbull.eatogether.models.PartyWithUser
-import ru.blackbull.eatogether.models.PlaceDetail
-import ru.blackbull.eatogether.models.firebase.Party
+import ru.blackbull.data.models.mapkit.PlaceDetail
+import ru.blackbull.data.models.firebase.Party
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.repositories.FirebaseRepository
+import ru.blackbull.domain.Resource
+import ru.blackbull.domain.PartyDataSource
+import ru.blackbull.domain.models.DomainPartyWithUser
 import ru.blackbull.eatogether.repositories.PlaceRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class PlaceDetailViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository ,
+    private val partyRepository: PartyDataSource ,
     private val placeRepository: PlaceRepository
 ) : ViewModel() {
 
     val placeDetail: LiveData<Event<Resource<PlaceDetail>>> = placeRepository.placeDetail
 
-    private val _searchParties: MutableLiveData<Event<Resource<List<PartyWithUser>>>> =
+    private val _searchParties: MutableLiveData<Event<Resource<List<DomainPartyWithUser>>>> =
         MutableLiveData()
-    val searchParties: LiveData<Event<Resource<List<PartyWithUser>>>> = _searchParties
+    val searchParties: LiveData<Event<Resource<List<DomainPartyWithUser>>>> = _searchParties
 
     fun getPlaceDetail(placeId: String) = viewModelScope.launch {
         placeRepository.getPlaceDetail(placeId)
@@ -33,11 +33,11 @@ class PlaceDetailViewModel @Inject constructor(
 
     fun searchPartyByPlace(placeId: String) = viewModelScope.launch {
         _searchParties.postValue(Event(Resource.Loading()))
-        val parties = firebaseRepository.searchPartyByPlace(placeId)
+        val parties = partyRepository.searchPartyByPlace(placeId).toResource()
         _searchParties.postValue(Event(parties))
     }
 
     fun addUserToParty(party: Party) = viewModelScope.launch {
-        firebaseRepository.addCurrentUserToParty(party)
+        partyRepository.addCurrentUserToParty(party.toDomainParty())
     }
 }

@@ -11,13 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_nearby.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import ru.blackbull.data.models.firebase.toUser
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.NearbyUserAdapter
 import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.domain.Resource
 import ru.blackbull.eatogether.ui.BaseFragment
 import timber.log.Timber
 
@@ -46,7 +44,7 @@ class NearbyFragment : BaseFragment(R.layout.fragment_nearby) {
             }
         ) { nearbyUsers ->
             hideLoadingBar()
-            usersAdapter.users = nearbyUsers
+            usersAdapter.users = nearbyUsers.map { it.toUser() }
             tvUserListIsEmpty.isVisible = nearbyUsers.isEmpty()
         })
         viewModel.likedUser.observe(viewLifecycleOwner , { event ->
@@ -56,9 +54,9 @@ class NearbyFragment : BaseFragment(R.layout.fragment_nearby) {
                     is Resource.Success -> {
                         Timber.d("content data: ${it.data}")
                         it.data?.let { user ->
-                            snackbar("У вас совпадение с пользователем ${user.fullName()}")
+                            snackbar("У вас совпадение с пользователем ${user.firstName + ' ' + user.lastName}")
                             findNavController().navigate(
-                                NearbyFragmentDirections.actionNearbyFragmentToUserInfoFragment(user)
+                                NearbyFragmentDirections.actionNearbyFragmentToUserInfoFragment(user.toUser())
                             )
                         }
                     }

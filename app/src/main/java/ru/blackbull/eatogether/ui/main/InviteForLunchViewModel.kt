@@ -6,23 +6,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.data.models.firebase.User
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.repositories.FirebaseRepository
+import ru.blackbull.domain.Resource
+import ru.blackbull.domain.FirebaseDataSource
+import ru.blackbull.domain.models.DomainUser
 import javax.inject.Inject
 
 @HiltViewModel
 class InviteForLunchViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseRepository: FirebaseDataSource
 ) : ViewModel() {
 
-    private val _friendList = MutableLiveData<Event<Resource<List<User>>>>()
-    val friendList: LiveData<Event<Resource<List<User>>>> = _friendList
+    private val _friendList = MutableLiveData<Event<Resource<List<DomainUser>>>>()
+    val friendList: LiveData<Event<Resource<List<DomainUser>>>> = _friendList
 
     fun getFriendList(partyId: String) = viewModelScope.launch {
         _friendList.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.getFriendListForParty(partyId)
+        val response = firebaseRepository.getFriendListForParty(partyId).toResource()
         _friendList.postValue(Event(response))
     }
 
@@ -31,7 +32,8 @@ class InviteForLunchViewModel @Inject constructor(
 
     fun sendInvitation(partyId: String , user: User) = viewModelScope.launch {
         _invitationStatus.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.sendLunchInvitation(partyId , user)
+        val response =
+            firebaseRepository.sendLunchInvitation(partyId , user.toDomainUser()).toResource()
         if (response is Resource.Success) {
             _invitationStatus.postValue(Event(Resource.Success(user)))
         } else {

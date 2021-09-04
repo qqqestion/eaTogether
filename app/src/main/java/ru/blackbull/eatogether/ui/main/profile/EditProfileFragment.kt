@@ -14,16 +14,12 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.ImageAdapter
-import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.data.models.firebase.User
+import ru.blackbull.data.models.firebase.toUser
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.BaseFragment
 import ru.blackbull.eatogether.ui.auth.AuthActivity
@@ -115,11 +111,11 @@ class EditProfileFragment : BaseFragment(R.layout.fragment_edit_profile) {
             // когда выходишь из фрагмента, и сохранялось,
             // когда нажимаешь сохранить
             hideLoadingBar()
-            this.user = user
+            this.user = user?.toUser()
             Timber.d("User triggered $user")
             imageAdapter.images = user!!.images.map { Uri.parse(it) }
             viewPager.currentItem = user.images.indexOf(user.mainImageUri)
-            updateUserInfo(user!!)
+            updateUserInfo(user.toUser())
         })
         viewModel.deleteStatus.observe(viewLifecycleOwner , EventObserver(
             onError = {
@@ -132,7 +128,7 @@ class EditProfileFragment : BaseFragment(R.layout.fragment_edit_profile) {
         ) { user ->
             hideLoadingBar()
             imageAdapter.images = user.images.map { Uri.parse(it) }
-            this.user = user
+            this.user = user.toUser()
             Timber.d("Delete status success: $user")
         })
     }

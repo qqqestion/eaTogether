@@ -2,17 +2,15 @@ package ru.blackbull.eatogether.ui.auth.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.CommonStatusCodes
-import com.google.android.gms.safetynet.SafetyNet
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import kotlinx.android.synthetic.main.fragment_registration_phone_number.*
-import ru.blackbull.eatogether.BuildConfig
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.ui.BaseFragment
+import ru.blackbull.eatogether.ui.auth.PhoneAuthViewModel
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
@@ -21,6 +19,8 @@ class RegistrationPhoneNumberFragment : BaseFragment(R.layout.fragment_registrat
     private lateinit var verificationId: String
     private lateinit var token: PhoneAuthProvider.ForceResendingToken
 
+    private val viewModel: PhoneAuthViewModel by viewModels()
+
     override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
         super.onViewCreated(view , savedInstanceState)
 
@@ -28,33 +28,7 @@ class RegistrationPhoneNumberFragment : BaseFragment(R.layout.fragment_registrat
         btnRegistrationNext.setOnClickListener {
             val phone = etRegistrationPhoneNumber.text.toString()
             Timber.d("Phone number: $phone")
-            val response = SafetyNet.getClient(requireActivity())
-                .verifyWithRecaptcha(BuildConfig.RECAPTCHA_API_KEY)
-                .addOnSuccessListener(requireActivity()) { response ->
-                    // Indicates communication with reCAPTCHA service was
-                    // successful.
-                    val userResponseToken = response.tokenResult
-                    if (response.tokenResult?.isNotEmpty() == true) {
-                        // Validate the user response token using the
-                        // reCAPTCHA siteverify API.
-                        verifyPhoneNumber(phone)
-                    }
-                }
-                .addOnFailureListener(requireActivity()) { e ->
-                    if (e is ApiException) {
-                        // An error occurred when communicating with the
-                        // reCAPTCHA service. Refer to the status code to
-                        // handle the error appropriately.
-                        Timber.d(
-                            "Error: ${CommonStatusCodes.getStatusCodeString(e.statusCode)}"
-                        )
-                        showErrorDialog(CommonStatusCodes.getStatusCodeString(e.statusCode))
-                    } else {
-                        // A different, unknown type of error occurred.
-                        Timber.d("Error: ${e.message}")
-                        showErrorDialog(e.message.toString())
-                    }
-                }
+            verifyPhoneNumber(phone)
             Timber.d("Validation complete")
         }
     }
@@ -116,5 +90,4 @@ class RegistrationPhoneNumberFragment : BaseFragment(R.layout.fragment_registrat
         showLoadingBar()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
-
 }

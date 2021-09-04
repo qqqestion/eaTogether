@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_friends.*
+import ru.blackbull.data.models.firebase.toUser
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
 import ru.blackbull.eatogether.other.EventObserver
@@ -60,9 +61,9 @@ class FriendsFragment : BaseFragment(R.layout.fragment_friends) {
             onLoading = {
                 showLoadingBar()
             }
-        ) {
+        ) { users ->
             hideLoadingBar()
-            userAdapter.participants = it
+            userAdapter.participants = users.map { it.toUser() }
         })
     }
 }

@@ -7,6 +7,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_lunch_invitations.*
+import ru.blackbull.data.models.firebase.toLunchInvitationWithUsers
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.LunchInvitationAdapter
 import ru.blackbull.eatogether.other.EventObserver
@@ -31,8 +32,8 @@ class LunchInvitationsFragment : BaseFragment(R.layout.fragment_lunch_invitation
 
         viewModel.getLunchInvitations()
 
-        viewModel.lunchInvitations.observe(viewLifecycleOwner , EventObserver {
-            lunchInvitationsAdapter.invitations = it
+        viewModel.lunchInvitations.observe(viewLifecycleOwner , EventObserver { invitations ->
+            lunchInvitationsAdapter.invitations = invitations.map { it.toLunchInvitationWithUsers() }
         })
 
         lunchInvitationsAdapter.setOnViewPartyClickListener {

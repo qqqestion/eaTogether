@@ -10,7 +10,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import kotlinx.android.synthetic.main.item_invitation.view.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.InvitationWithUser
+import ru.blackbull.data.models.firebase.InvitationWithUsers
 import javax.inject.Inject
 
 /**
@@ -20,17 +20,17 @@ import javax.inject.Inject
 class InvitationAdapter @Inject constructor() :
     RecyclerView.Adapter<InvitationAdapter.ViewHolder>() {
 
-    private val callback = object : DiffUtil.ItemCallback<InvitationWithUser>() {
+    private val callback = object : DiffUtil.ItemCallback<InvitationWithUsers>() {
         override fun areItemsTheSame(
-            oldItem: InvitationWithUser ,
-            newItem: InvitationWithUser
+            oldItem: InvitationWithUsers ,
+            newItem: InvitationWithUsers
         ): Boolean {
             return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(
-            oldItem: InvitationWithUser ,
-            newItem: InvitationWithUser
+            oldItem: InvitationWithUsers ,
+            newItem: InvitationWithUsers
         ): Boolean {
             return oldItem == newItem
         }
@@ -38,7 +38,7 @@ class InvitationAdapter @Inject constructor() :
 
     private val differ = AsyncListDiffer(this , callback)
 
-    var invitations: List<InvitationWithUser>
+    var invitations: List<InvitationWithUsers>
         set(value) = differ.submitList(value)
         get() = differ.currentList
 
@@ -52,9 +52,9 @@ class InvitationAdapter @Inject constructor() :
         )
     }
 
-    private var onAddToFriendListClickListener: ((InvitationWithUser) -> Unit)? = null
+    private var onAddToFriendListClickListener: ((InvitationWithUsers) -> Unit)? = null
 
-    fun setOnAddToFriendListClickListener(listener: ((InvitationWithUser) -> Unit)?) {
+    fun setOnAddToFriendListClickListener(listener: ((InvitationWithUsers) -> Unit)?) {
         onAddToFriendListClickListener = listener
     }
 

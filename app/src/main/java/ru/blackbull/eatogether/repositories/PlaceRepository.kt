@@ -8,12 +8,12 @@ import com.yandex.mapkit.search.*
 import com.yandex.runtime.Error
 import com.yandex.runtime.network.NetworkError
 import com.yandex.runtime.network.RemoteError
-import ru.blackbull.eatogether.models.CuisineType
-import ru.blackbull.eatogether.models.PlaceDetail
-import ru.blackbull.eatogether.models.mappers.PlaceDetailMapper
-import ru.blackbull.eatogether.other.Constants
+import ru.blackbull.data.models.mapkit.CuisineType
+import ru.blackbull.data.models.mapkit.PlaceDetail
+import ru.blackbull.data.models.mapkit.toPlaceDetail
+import ru.blackbull.domain.Constants
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.domain.Resource
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,12 +22,9 @@ import javax.inject.Inject
  * Репозиторий для работы с Yandex MapKit
  *
  * @property searchManager
- * @property placeDetailMapper
  */
-class PlaceRepository @Inject constructor(
-    private val searchManager: SearchManager ,
-    private val placeDetailMapper: PlaceDetailMapper
-) {
+class PlaceRepository
+@Inject constructor(private val searchManager: SearchManager) {
 
     private val _placeDetail: MutableLiveData<Event<Resource<PlaceDetail>>> = MutableLiveData()
     val placeDetail: LiveData<Event<Resource<PlaceDetail>>> = _placeDetail
@@ -164,13 +161,14 @@ class PlaceRepository @Inject constructor(
      */
     private fun handleSearchResponse(response: Response) {
         Timber.d("Search: ${filters(response)}")
-        _searchPlaces.postValue(Event(Resource.Success(
+        _searchPlaces.postValue(Event(
+            Resource.Success(
             response.collection.children.filter { item ->
                 item.obj!!.metadataContainer.getItem(BusinessObjectMetadata::class.java).categories.find {
                     it.categoryClass in Constants.FOOD_CATEGORIES
                 } != null
             }.map {
-                placeDetailMapper.toPlaceDetail(it.obj!!)
+                it.obj!!.toPlaceDetail()
             }
         )))
     }
@@ -223,15 +221,13 @@ class PlaceRepository @Inject constructor(
                     for (searchResult in response.collection.children) {
                         Timber.d(
                             "Place detail success: ${
-                                placeDetailMapper.toPlaceDetail(
-                                    searchResult.obj!!
-                                )
+                                searchResult.obj!!.toPlaceDetail()
                             }"
                         )
                         _placeDetail.postValue(
                             Event(
                                 Resource.Success(
-                                    placeDetailMapper.toPlaceDetail(searchResult.obj!!)
+                                    searchResult.obj!!.toPlaceDetail()
                                 )
                             )
                         )

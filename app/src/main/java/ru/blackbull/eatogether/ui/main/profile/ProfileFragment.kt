@@ -9,11 +9,9 @@ import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.LunchInvitationWithUser
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.BaseFragment
 import timber.log.Timber
-import java.util.*
 
 @AndroidEntryPoint
 class ProfileFragment : BaseFragment(R.layout.fragment_profile) {

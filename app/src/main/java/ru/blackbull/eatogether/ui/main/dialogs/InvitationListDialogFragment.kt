@@ -12,7 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import ru.blackbull.eatogether.adapters.InvitationAdapter
-import ru.blackbull.eatogether.models.InvitationWithUser
+import ru.blackbull.data.models.firebase.InvitationWithUsers
+import ru.blackbull.data.models.firebase.toInvitationWithUsers
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.main.friends.FriendsViewModel
 import timber.log.Timber
@@ -28,9 +29,9 @@ class InvitationListDialogFragment : DialogFragment() {
 
     private val viewModel: FriendsViewModel by activityViewModels()
 
-    private var onAddToFriendListClickListener: ((InvitationWithUser) -> Unit)? = null
+    private var onAddToFriendListClickListener: ((InvitationWithUsers) -> Unit)? = null
 
-    fun setOnAddToFriendListClickListener(listener: (InvitationWithUser) -> Unit) {
+    fun setOnAddToFriendListClickListener(listener: (InvitationWithUsers) -> Unit) {
         onAddToFriendListClickListener = listener
     }
 
@@ -68,9 +69,9 @@ class InvitationListDialogFragment : DialogFragment() {
             invitationAdapter.invitations -= it
         })
 
-        viewModel.invitationList.observe(viewLifecycleOwner , EventObserver {
-            Timber.d("Invitations: $it")
-            invitationAdapter.invitations = it
+        viewModel.invitationList.observe(viewLifecycleOwner , EventObserver { invitations ->
+            Timber.d("Invitations: $invitations")
+            invitationAdapter.invitations = invitations.map { it.toInvitationWithUsers() }
         })
     }
 }

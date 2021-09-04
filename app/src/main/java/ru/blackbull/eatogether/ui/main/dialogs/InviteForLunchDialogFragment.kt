@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import ru.blackbull.data.models.firebase.toUser
 import ru.blackbull.eatogether.adapters.InviteUserForLunchAdapter
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.main.InviteForLunchViewModel
@@ -63,8 +64,8 @@ class InviteForLunchDialogFragment(
             invitationAdapter.users -= it
         })
 
-        viewModel.friendList.observe(viewLifecycleOwner , EventObserver {
-            invitationAdapter.users = it
+        viewModel.friendList.observe(viewLifecycleOwner , EventObserver { users ->
+            invitationAdapter.users = users.map { it.toUser() }
         })
     }
 }

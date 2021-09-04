@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import kotlinx.android.synthetic.main.item_user_preview.view.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.data.models.firebase.User
 
 /**
  * Адаптер для отображения пользователей рядом (карточка тиндера)

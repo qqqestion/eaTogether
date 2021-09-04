@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_cuisine.view.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.CuisineType
+import ru.blackbull.data.models.mapkit.CuisineType
 import javax.inject.Inject
 
 /**

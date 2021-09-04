@@ -11,7 +11,7 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import kotlinx.android.synthetic.main.item_party_preview.view.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.PartyWithUser
+import ru.blackbull.data.models.firebase.PartyWithUser
 import java.text.SimpleDateFormat
 import java.util.*
 

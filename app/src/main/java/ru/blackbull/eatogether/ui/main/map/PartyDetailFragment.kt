@@ -15,8 +15,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_party_detail.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
-import ru.blackbull.eatogether.models.PlaceDetail
-import ru.blackbull.eatogether.models.firebase.Party
+import ru.blackbull.data.models.mapkit.PlaceDetail
+import ru.blackbull.data.models.firebase.Party
+import ru.blackbull.data.models.firebase.toParty
+import ru.blackbull.data.models.firebase.toUser
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.main.dialogs.InviteForLunchDialogFragment
 import java.util.*
@@ -85,21 +87,21 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
 
     private fun subscribeToObservers() {
         viewModel.addUserStatus.observe(viewLifecycleOwner , EventObserver { user ->
-            partyParticipantAdapter.participants += user
+            partyParticipantAdapter.participants += user.toUser()
             btnJoinParty.isVisible = false
             btnInviteFriends.isVisible = true
             btnLeaveParty.isVisible = true
         })
         viewModel.selectedParty.observe(viewLifecycleOwner , EventObserver { party ->
-            this.party = party
-            updatePartyInfo(party)
-            viewModel.getPartyParticipants(party)
+            this.party = party.toParty()
+            updatePartyInfo(party.toParty())
+            viewModel.getPartyParticipants(party.toParty())
             viewModel.getPlaceDetail(party.placeId!!)
         })
         viewModel.partyParticipants.observe(
             viewLifecycleOwner ,
             EventObserver { participants ->
-                partyParticipantAdapter.participants = participants
+                partyParticipantAdapter.participants = participants.map { it.toUser() }
             })
         viewModel.placeDetail.observe(viewLifecycleOwner , EventObserver { placeDetail ->
             updatePlaceInfo(placeDetail)

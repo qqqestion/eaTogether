@@ -16,7 +16,7 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.CuisineAdapter
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.domain.Resource
 import ru.blackbull.eatogether.ui.main.map.MapViewModel
 import ru.blackbull.eatogether.ui.main.snackbar
 import timber.log.Timber

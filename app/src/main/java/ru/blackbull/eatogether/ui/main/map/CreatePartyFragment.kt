@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_party.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.other.Resource
+import ru.blackbull.domain.Resource
 import java.util.*
 
 

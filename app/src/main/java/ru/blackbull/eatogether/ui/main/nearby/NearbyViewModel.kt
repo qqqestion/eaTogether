@@ -6,42 +6,43 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.blackbull.eatogether.models.firebase.User
+import ru.blackbull.data.models.firebase.User
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.eatogether.other.Resource
-import ru.blackbull.eatogether.repositories.FirebaseRepository
+import ru.blackbull.domain.Resource
+import ru.blackbull.domain.FirebaseDataSource
+import ru.blackbull.domain.models.DomainUser
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class NearbyViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseRepository
+    private val firebaseRepository: FirebaseDataSource
 ) : ViewModel() {
 
-    private val _nearbyUsers = MutableLiveData<Event<Resource<MutableList<User>>>>()
-    val nearbyUsers: LiveData<Event<Resource<MutableList<User>>>> = _nearbyUsers
+    private val _nearbyUsers = MutableLiveData<Event<Resource<MutableList<DomainUser>>>>()
+    val nearbyUsers: LiveData<Event<Resource<MutableList<DomainUser>>>> = _nearbyUsers
 
-    private val _likedUser = MutableLiveData<Event<Resource<User?>>>()
-    val likedUser: LiveData<Event<Resource<User?>>> = _likedUser
+    private val _likedUser = MutableLiveData<Event<Resource<DomainUser?>>>()
+    val likedUser: LiveData<Event<Resource<DomainUser?>>> = _likedUser
 
     fun getNearbyUsers() = viewModelScope.launch {
         _nearbyUsers.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.getNearbyUsers()
+        val response = firebaseRepository.getNearbyUsers().toResource()
         _nearbyUsers.postValue(Event(response))
     }
 
     fun likeUser(user: User) = viewModelScope.launch {
         _likedUser.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.likeUser(user)
+        val response = firebaseRepository.likeUser(user.toDomainUser()).toResource()
         _likedUser.postValue(Event(response))
     }
 
     fun dislikeUser(user: User) = viewModelScope.launch {
-        firebaseRepository.dislikeUser(user)
+        firebaseRepository.dislikeUser(user.toDomainUser())
     }
 
-    suspend fun getUser(uid: String): User? {
-        val response = firebaseRepository.getUser(uid)
+    suspend fun getUser(uid: String): DomainUser? {
+        val response = firebaseRepository.getUser(uid).toResource()
         if (response is Resource.Error) {
             Timber.d(response.error)
         }
