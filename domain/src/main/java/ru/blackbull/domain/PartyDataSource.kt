@@ -1,9 +1,9 @@
 package ru.blackbull.domain
 
 import ru.blackbull.domain.functional.Either
-import ru.blackbull.domain.models.DomainParty
-import ru.blackbull.domain.models.DomainPartyWithUser
-import ru.blackbull.domain.models.DomainUser
+import ru.blackbull.domain.models.firebase.DomainParty
+import ru.blackbull.domain.models.firebase.DomainPartyWithUser
+import ru.blackbull.domain.models.firebase.DomainUser
 
 interface PartyDataSource {
     suspend fun searchPartyByPlace(

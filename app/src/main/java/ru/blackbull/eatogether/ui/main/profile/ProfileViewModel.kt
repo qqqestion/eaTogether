@@ -13,7 +13,7 @@ import ru.blackbull.data.models.firebase.User
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.domain.Resource
 import ru.blackbull.domain.FirebaseDataSource
-import ru.blackbull.domain.models.DomainUser
+import ru.blackbull.domain.models.firebase.DomainUser
 import javax.inject.Inject
 
 @HiltViewModel

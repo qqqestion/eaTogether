@@ -11,7 +11,7 @@ import ru.blackbull.data.models.firebase.Party
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.domain.Resource
 import ru.blackbull.domain.PartyDataSource
-import ru.blackbull.domain.models.DomainPartyWithUser
+import ru.blackbull.domain.models.firebase.DomainPartyWithUser
 import ru.blackbull.eatogether.repositories.PlaceRepository
 import javax.inject.Inject
 

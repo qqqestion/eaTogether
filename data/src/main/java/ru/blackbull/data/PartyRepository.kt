@@ -5,11 +5,10 @@ import kotlinx.coroutines.withContext
 import ru.blackbull.data.models.firebase.toParty
 import ru.blackbull.domain.PartyDataSource
 import ru.blackbull.domain.functional.Either
-import ru.blackbull.domain.models.DomainParty
-import ru.blackbull.domain.models.DomainPartyWithUser
-import ru.blackbull.domain.models.DomainUser
+import ru.blackbull.domain.models.firebase.DomainParty
+import ru.blackbull.domain.models.firebase.DomainPartyWithUser
+import ru.blackbull.domain.models.firebase.DomainUser
 import timber.log.Timber
-import javax.inject.Inject
 
 class PartyRepository
 constructor(

@@ -6,11 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.blackbull.data.models.firebase.LunchInvitationWithUsers
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.domain.Resource
 import ru.blackbull.domain.FirebaseDataSource
-import ru.blackbull.domain.models.DomainLunchInvitationWithUsers
+import ru.blackbull.domain.models.firebase.DomainLunchInvitationWithUsers
 import javax.inject.Inject
 
 @HiltViewModel

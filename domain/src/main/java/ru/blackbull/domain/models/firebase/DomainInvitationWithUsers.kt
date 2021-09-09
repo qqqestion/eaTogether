@@ -1,4 +1,4 @@
-package ru.blackbull.domain.models
+package ru.blackbull.domain.models.firebase
 
 /**
  * Класс, описывающий приглашение в друзья.

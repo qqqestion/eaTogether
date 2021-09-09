@@ -8,7 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.data.models.firebase.User
 import ru.blackbull.domain.FirebaseDataSource
-import ru.blackbull.domain.models.FriendState
+import ru.blackbull.domain.models.firebase.FriendState
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.domain.Resource
 import javax.inject.Inject

@@ -3,7 +3,7 @@ package ru.blackbull.data.models.firebase
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
-import ru.blackbull.domain.models.DomainParty
+import ru.blackbull.domain.models.firebase.DomainParty
 import java.io.Serializable
 import java.util.*
 

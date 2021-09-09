@@ -6,11 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.blackbull.data.models.firebase.User
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.domain.Resource
 import ru.blackbull.domain.FirebaseDataSource
-import ru.blackbull.domain.models.DomainUser
+import ru.blackbull.domain.models.firebase.DomainUser
 import timber.log.Timber
 import javax.inject.Inject
 

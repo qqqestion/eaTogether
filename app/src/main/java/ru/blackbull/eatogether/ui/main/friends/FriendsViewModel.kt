@@ -7,13 +7,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.data.models.firebase.InvitationWithUsers
-import ru.blackbull.data.models.firebase.User
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.domain.Resource
 import ru.blackbull.domain.FirebaseDataSource
-import ru.blackbull.domain.models.DomainInvitationWithUsers
-import ru.blackbull.domain.models.DomainUser
-import ru.blackbull.domain.models.FriendState
+import ru.blackbull.domain.models.firebase.DomainInvitationWithUsers
+import ru.blackbull.domain.models.firebase.DomainUser
+import ru.blackbull.domain.models.firebase.FriendState
 import javax.inject.Inject
 
 @HiltViewModel

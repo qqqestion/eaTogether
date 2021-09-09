@@ -6,7 +6,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.GeoPoint
-import ru.blackbull.domain.models.DomainUser
+import ru.blackbull.domain.models.firebase.DomainUser
 import ru.blackbull.domain.models.Location
 import java.util.*
 

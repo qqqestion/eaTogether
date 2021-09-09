@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_user_info.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.ImageAdapter
-import ru.blackbull.domain.models.FriendState
+import ru.blackbull.domain.models.firebase.FriendState
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.BaseFragment
 import javax.inject.Inject

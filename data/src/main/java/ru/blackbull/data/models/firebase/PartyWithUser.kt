@@ -1,8 +1,7 @@
 package ru.blackbull.data.models.firebase
 
 import com.google.firebase.Timestamp
-import ru.blackbull.domain.models.DomainPartyWithUser
-import java.sql.Time
+import ru.blackbull.domain.models.firebase.DomainPartyWithUser
 import java.util.*
 
 /**

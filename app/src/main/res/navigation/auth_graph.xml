@@ -39,4 +39,8 @@
             android:id="@+id/action_registrationVerificationPhoneFragment_to_registrationStepTwoFragment"
             app:destination="@id/registrationStepTwoFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.LoginFragment"
+        android:label="LoginFragment" />
 </navigation>

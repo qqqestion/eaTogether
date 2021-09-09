@@ -1,6 +1,6 @@
 package ru.blackbull.data.models.firebase
 
-import ru.blackbull.domain.models.DomainLunchInvitationWithUsers
+import ru.blackbull.domain.models.firebase.DomainLunchInvitationWithUsers
 
 /**
  * Класс, описывающий приглашение в компанию

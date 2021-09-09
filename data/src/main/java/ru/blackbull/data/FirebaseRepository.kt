@@ -11,8 +11,11 @@ import ru.blackbull.domain.Constants
 import ru.blackbull.domain.FirebaseDataSource
 import ru.blackbull.domain.functional.Either
 import ru.blackbull.domain.models.*
+import ru.blackbull.domain.models.firebase.DomainInvitationWithUsers
+import ru.blackbull.domain.models.firebase.DomainLunchInvitationWithUsers
+import ru.blackbull.domain.models.firebase.DomainUser
+import ru.blackbull.domain.models.firebase.FriendState
 import timber.log.Timber
-import javax.inject.Inject
 
 
 class FirebaseRepository

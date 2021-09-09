@@ -1,4 +1,6 @@
-package ru.blackbull.domain.models
+package ru.blackbull.domain.models.firebase
+
+import ru.blackbull.domain.models.Location
 
 data class DomainUser(
     var id: String? = null ,

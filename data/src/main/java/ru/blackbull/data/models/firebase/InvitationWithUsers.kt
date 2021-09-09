@@ -1,7 +1,6 @@
 package ru.blackbull.data.models.firebase
 
-import ru.blackbull.data.models.firebase.User
-import ru.blackbull.domain.models.DomainInvitationWithUsers
+import ru.blackbull.domain.models.firebase.DomainInvitationWithUsers
 
 /**
  * Класс, описывающий приглашение в друзья.

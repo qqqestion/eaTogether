@@ -1,4 +1,4 @@
-package ru.blackbull.domain.models
+package ru.blackbull.domain.models.firebase
 
 data class DomainLunchInvitationWithUsers(
     var id: String? = null ,

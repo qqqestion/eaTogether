@@ -2,6 +2,10 @@ package ru.blackbull.domain
 
 import ru.blackbull.domain.functional.Either
 import ru.blackbull.domain.models.*
+import ru.blackbull.domain.models.firebase.DomainInvitationWithUsers
+import ru.blackbull.domain.models.firebase.DomainLunchInvitationWithUsers
+import ru.blackbull.domain.models.firebase.DomainUser
+import ru.blackbull.domain.models.firebase.FriendState
 
 interface FirebaseDataSource {
     suspend fun getCurrentUser(): Either<Throwable , DomainUser>
