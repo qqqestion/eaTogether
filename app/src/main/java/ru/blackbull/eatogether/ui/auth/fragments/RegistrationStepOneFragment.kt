@@ -19,25 +19,25 @@ class RegistrationStepOneFragment : BaseFragment(R.layout.fragment_registration_
             val email = etRegistrationEmail.text.toString()
             if (email.isEmpty()) {
                 etRegistrationEmail.error =
-                    requireContext().getString(R.string.errormessage_email_is_empty)
+                    requireContext().getString(R.string.error_email_is_empty)
                 return@setOnClickListener
             }
             if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 etRegistrationEmail.error =
-                    requireContext().getString(R.string.errormessage_email_malformed)
+                    requireContext().getString(R.string.error_email_malformed)
                 return@setOnClickListener
             }
             val password = etRegistrationPassword.text.toString()
             if (password.isEmpty()) {
                 etRegistrationPassword.error =
-                    requireContext().getString(R.string.errormessage_password_is_empty)
+                    requireContext().getString(R.string.error_password_is_empty)
                 return@setOnClickListener
             }
             if (password != etRegistrationPasswordConfirmation.text.toString()) {
                 etRegistrationPassword.error =
-                    requireContext().getString(R.string.errormessage_passwords_mismatch)
+                    requireContext().getString(R.string.error_passwords_mismatch)
                 etRegistrationPasswordConfirmation.error =
-                    requireContext().getString(R.string.errormessage_passwords_mismatch)
+                    requireContext().getString(R.string.error_passwords_mismatch)
                 return@setOnClickListener
             }
 //            findNavController().navigate(

@@ -19,4 +19,14 @@ sealed class Either<out A , out B> {
             is Right -> Resource.Success(b)
         }
     }
+
+    fun <C> map(fn: (B) -> C): Either<A , C> = when (this) {
+        is Either.Left -> Either.Left(a)
+        is Either.Right -> Either.Right(fn(b))
+    }
 }
+
+//fun <A , B , C> Either<A , B>.map(fn: (B) -> C): Either<A , C> = when (this) {
+//    is Either.Left -> Either.Left(a)
+//    is Either.Right -> Either.Right(fn(b))
+//}

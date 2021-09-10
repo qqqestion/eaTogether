@@ -3,6 +3,7 @@ package ru.blackbull.domain
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import ru.blackbull.domain.functional.Either
 
 abstract class UseCase<in P , out R>(
     private val dispatchers: AppCoroutineDispatchers
@@ -11,9 +12,16 @@ abstract class UseCase<in P , out R>(
     operator fun invoke(
         params: P ,
         scope: CoroutineScope ,
-        onResult: (R) -> Unit = {}
+        onResult: (Either<Throwable , R>) -> Unit = {}
     ) {
-        val job = scope.async(dispatchers.io) { doWork(params) }
+        // TODO: добавить try/catch для отлова ошибок
+        val job = scope.async(dispatchers.io) {
+            try {
+                Either.Right(doWork(params))
+            } catch (e: Throwable) {
+                Either.Left(e)
+            }
+        }
         scope.launch(dispatchers.main) { onResult(job.await()) }
     }
 

@@ -2,17 +2,17 @@ package ru.blackbull.eatogether.ui.auth
 
 import androidx.annotation.StringRes
 
-sealed class UiState<T> {
+sealed class UiState {
 
-    data class Success<T>(val data: T) : UiState<T>()
+    object Success : UiState()
 
-    data class Failure<T>(@StringRes val messageId: Int) : UiState<T>()
+    data class Failure(@StringRes val messageId: Int) : UiState()
 
-    class Loading<T> : UiState<T>()
+    object Loading : UiState()
 }
 
-fun <T> success(data: T) = UiState.Success(data)
+fun success() = UiState.Success
 
-fun <T> failure(messageId: Int) = UiState.Failure<T>(messageId)
+fun failure(messageId: Int) = UiState.Failure(messageId)
 
-fun <T> loading() = UiState.Loading<T>()
+fun loading() = UiState.Loading

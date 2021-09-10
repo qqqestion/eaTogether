@@ -88,7 +88,7 @@ class CreatePartyFragment : Fragment(R.layout.fragment_create_party) {
                         findNavController().popBackStack()
                     }
                     is Resource.Error -> {
-                        val msg = result.msg ?: getString(R.string.errormessage_unknown_error)
+                        val msg = result.msg ?: getString(R.string.error_unknown_error)
                         Snackbar.make(
                             requireView() ,
                             msg ,

@@ -4,23 +4,25 @@ import androidx.lifecycle.*
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.data.models.firebase.User
 import ru.blackbull.domain.FirebaseDataSource
-import ru.blackbull.eatogether.EaTogetherApplication
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.domain.Resource
+import ru.blackbull.domain.usecases.SignInUseCase
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseDataSource
+    private val firebaseRepository: FirebaseDataSource ,
+    private val signIn: SignInUseCase
 ) : ViewModel() {
 
     private val _signInResult = MutableLiveData<Event<Resource<Unit>>>()
@@ -30,6 +32,9 @@ class AuthViewModel @Inject constructor(
     val signUpResult: LiveData<Event<Resource<Unit>>> = _signUpResult
 
     val isRegistrationComplete = MutableLiveData<Boolean>()
+
+    private val _signInStatus = MutableLiveData<UiState>()
+    val signInStatus: LiveData<UiState> = _signInStatus
 
     fun checkIsRegistrationComplete() = viewModelScope.launch {
         val user = firebaseRepository.getCurrentUser().toResource().data
@@ -41,6 +46,13 @@ class AuthViewModel @Inject constructor(
     }
 
     fun signIn(email: String , password: String) = viewModelScope.launch {
+        _signInStatus.value = loading()
+        signIn.invoke(SignInUseCase.Params(email , password) , viewModelScope) {
+            it.fold(
+                { t -> _signInStatus.value = failure(getSignInError(t)) } ,
+                { _signInStatus.value = success() }
+            )
+        }
         _signInResult.value?.let {
             if (it.peekContent() is Resource.Loading) {
                 return@launch
@@ -49,6 +61,12 @@ class AuthViewModel @Inject constructor(
         _signInResult.postValue(Event(Resource.Loading()))
         val response = firebaseRepository.signIn(email , password).toResource()
         _signInResult.postValue(Event(response))
+    }
+
+    private fun getSignInError(t: Throwable): Int = when (t) {
+        is FirebaseAuthInvalidUserException -> R.string.error_sign_in_failed
+        is FirebaseAuthInvalidCredentialsException -> R.string.error_sign_in_failed
+        else -> R.string.error_default
     }
 
     private fun validateUser(
@@ -108,13 +126,13 @@ class AuthViewModel @Inject constructor(
         if (response is Resource.Error) {
             val stringId = when (response.error) {
                 is FirebaseNetworkException ->
-                    R.string.errormessage_network_error
+                    R.string.error_network_error
                 is FirebaseAuthWeakPasswordException ->
-                    R.string.errormessage_weak_password
+                    R.string.error_weak_password
                 is FirebaseAuthInvalidCredentialsException ->
-                    R.string.errormessage_email_malformed
+                    R.string.error_email_malformed
                 is FirebaseAuthUserCollisionException ->
-                    R.string.errormessage_user_already_exists
+                    R.string.error_user_already_exists
                 else -> null
             }
             val msg = if (stringId == null) {

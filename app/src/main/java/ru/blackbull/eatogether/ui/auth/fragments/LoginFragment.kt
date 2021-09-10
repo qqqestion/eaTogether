@@ -30,7 +30,7 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
     private fun subscribeToObservers() {
         authViewModel.signInResult.observe(viewLifecycleOwner , EventObserver(
             onError = {
-                val msg = getString(R.string.errormessage_login_error)
+                val msg = getString(R.string.error_sign_in_failed)
 //                showErrorDialog(msg)
                 hideLoadingBar()
                 snackbar(it)
@@ -52,11 +52,11 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
         val password = etLoginPassword.text.toString()
         var isOkay = true
         if (email.isEmpty() || email.isBlank()) {
-            etLoginEmail.error = getString(R.string.errormessage_email_is_empty)
+            etLoginEmail.error = getString(R.string.error_email_is_empty)
             isOkay = false
         }
         if (password.isEmpty() || password.isBlank()) {
-            etLoginPassword.error = getString(R.string.errormessage_password_is_empty)
+            etLoginPassword.error = getString(R.string.error_password_is_empty)
             isOkay = false
         }
         if (isOkay) {
