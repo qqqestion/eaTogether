@@ -33,9 +33,6 @@ class AuthViewModel @Inject constructor(
 
     val isRegistrationComplete = MutableLiveData<Boolean>()
 
-    private val _signInStatus = MutableLiveData<UiState>()
-    val signInStatus: LiveData<UiState> = _signInStatus
-
     fun checkIsRegistrationComplete() = viewModelScope.launch {
         val user = firebaseRepository.getCurrentUser().toResource().data
         if (user != null) {
@@ -46,13 +43,6 @@ class AuthViewModel @Inject constructor(
     }
 
     fun signIn(email: String , password: String) = viewModelScope.launch {
-        _signInStatus.value = loading()
-        signIn.invoke(SignInUseCase.Params(email , password) , viewModelScope) {
-            it.fold(
-                { t -> _signInStatus.value = failure(getSignInError(t)) } ,
-                { _signInStatus.value = success() }
-            )
-        }
         _signInResult.value?.let {
             if (it.peekContent() is Resource.Loading) {
                 return@launch
@@ -61,12 +51,6 @@ class AuthViewModel @Inject constructor(
         _signInResult.postValue(Event(Resource.Loading()))
         val response = firebaseRepository.signIn(email , password).toResource()
         _signInResult.postValue(Event(response))
-    }
-
-    private fun getSignInError(t: Throwable): Int = when (t) {
-        is FirebaseAuthInvalidUserException -> R.string.error_sign_in_failed
-        is FirebaseAuthInvalidCredentialsException -> R.string.error_sign_in_failed
-        else -> R.string.error_default
     }
 
     private fun validateUser(
