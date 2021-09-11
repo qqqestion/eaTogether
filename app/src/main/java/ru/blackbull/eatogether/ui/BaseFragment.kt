@@ -34,6 +34,8 @@ abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
         Snackbar.LENGTH_LONG
     ).show()
 
+    fun snackbar(msgId: Int) = snackbar(getString(msgId))
+
     fun showErrorDialog(errorMessage: String) =
         MaterialAlertDialogBuilder(requireContext() , R.style.TestDialogTheme)
             .setTitle("Ошибка")
