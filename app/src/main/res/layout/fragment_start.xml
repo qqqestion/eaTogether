@@ -35,6 +35,19 @@
         />
 
     <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="130dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/rounded_button_green"
+        android:text="@string/log_in"
+        android:textColor="@color/colorLiteGrey"
+        app:layout_constraintBottom_toTopOf="@id/btnStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+    <Button
         android:id="@+id/btnStart"
         android:layout_width="130dp"
         android:layout_height="55dp"
