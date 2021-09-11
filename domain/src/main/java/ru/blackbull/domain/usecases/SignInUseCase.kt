@@ -16,7 +16,7 @@ class SignInUseCase @Inject constructor(
         if (params.email.isEmailValid().not()) {
             throw EmailValidationException()
         }
-        if (params.email.isPasswordValid().not()) {
+        if (params.password.isPasswordValid().not()) {
             throw PasswordValidationException()
         }
         authRepository.signInWithEmailAndPassword(params.email , params.password)
