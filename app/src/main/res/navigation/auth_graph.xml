@@ -15,11 +15,14 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_startFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
     <fragment
         android:id="@+id/registrationStepTwoFragment"
         android:name="ru.blackbull.eatogether.ui.auth.fragments.RegistrationStepTwoFragment"
-        android:label="RegistrationStepTwoFragment"/>
+        android:label="RegistrationStepTwoFragment" />
     <fragment
         android:id="@+id/registrationPhoneNumberFragment"
         android:name="ru.blackbull.eatogether.ui.auth.fragments.RegistrationPhoneNumberFragment"
