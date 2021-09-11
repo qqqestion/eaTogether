@@ -8,6 +8,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.blackbull.domain.exceptions.EmailValidationException
+import ru.blackbull.domain.exceptions.PasswordValidationException
 import ru.blackbull.domain.usecases.SignInUseCase
 import ru.blackbull.eatogether.R
 import javax.inject.Inject
@@ -34,6 +36,8 @@ class SignInViewModel @Inject constructor(
     private fun getSignInError(t: Throwable): Int = when (t) {
         is FirebaseAuthInvalidUserException -> R.string.error_sign_in_failed
         is FirebaseAuthInvalidCredentialsException -> R.string.error_sign_in_failed
+        is EmailValidationException -> R.string.error_email_malformed
+        is PasswordValidationException -> R.string.error_password_is_empty
         else -> R.string.error_default
     }
 }
