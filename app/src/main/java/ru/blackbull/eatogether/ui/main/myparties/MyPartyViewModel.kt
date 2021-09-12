@@ -13,6 +13,7 @@ import ru.blackbull.domain.UseCase
 import ru.blackbull.domain.models.firebase.DomainPartyWithUser
 import ru.blackbull.domain.usecases.GetPartiesByCurrentUserCase
 import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.other.UiStateWithData
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -21,17 +22,17 @@ class MyPartyViewModel @Inject constructor(
     private val useCase: GetPartiesByCurrentUserCase
 ) : ViewModel() {
 
-    private val _userParties: MutableLiveData<Event<Resource<List<DomainPartyWithUser>>>> =
+    private val _userParties: MutableLiveData<UiStateWithData<List<DomainPartyWithUser>>> =
         MutableLiveData()
-    val userParties: LiveData<Event<Resource<List<DomainPartyWithUser>>>> = _userParties
+    val userParties: LiveData<UiStateWithData<List<DomainPartyWithUser>>> = _userParties
 
     fun getPartiesByCurrentUser() = viewModelScope.launch {
-        _userParties.postValue(Event(Resource.Loading()))
+        _userParties.postValue(UiStateWithData.Loading())
         useCase.invoke(UseCase.None,viewModelScope){ result ->
             result.fold({
-                _userParties.postValue(Event(Resource.Error(it)))
+                _userParties.postValue(UiStateWithData.Failure(error = it,messageId = R.string.error_default))
             },{
-                _userParties.postValue(Event(Resource.Success(it)))
+                _userParties.postValue(UiStateWithData.Success(it))
             })
         }
 

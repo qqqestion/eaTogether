@@ -12,9 +12,11 @@ import ru.blackbull.domain.models.firebase.DomainParty
 import ru.blackbull.domain.models.firebase.DomainPartyWithUser
 import ru.blackbull.domain.models.firebase.DomainUser
 import timber.log.Timber
+import javax.inject.Inject
 
 class PartyRepository
-constructor(
+//TODO вставил inject так как он вроде должен тута быть
+@Inject constructor(
     private val firebaseApi: FirebaseApi
 ) : PartyDataSource {
 
