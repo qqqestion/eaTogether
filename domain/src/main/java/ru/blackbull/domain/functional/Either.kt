@@ -20,13 +20,10 @@ sealed class Either<out A , out B> {
         }
     }
 
-    fun <C> map(fn: (B) -> C): Either<A , C> = when (this) {
-        is Either.Left -> Either.Left(a)
-        is Either.Right -> Either.Right(fn(b))
+    suspend fun <C> map(fn: suspend (B) -> C): Either<A , C> = when (this) {
+        is Left -> Left(a)
+        is Right -> Right(fn(b))
     }
 }
 
-//fun <A , B , C> Either<A , B>.map(fn: (B) -> C): Either<A , C> = when (this) {
-//    is Either.Left -> Either.Left(a)
-//    is Either.Right -> Either.Right(fn(b))
-//}
+

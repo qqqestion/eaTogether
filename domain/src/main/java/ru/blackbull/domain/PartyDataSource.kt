@@ -14,7 +14,7 @@ interface PartyDataSource {
 
     suspend fun updateParty(party: DomainParty)
 
-    suspend fun getPartiesByCurrentUser(): Either<Throwable , List<DomainPartyWithUser>>
+    suspend fun getPartiesByCurrentUser(): List<DomainParty>
 
     suspend fun getPartyById(partyId: String): Either<Throwable , DomainParty>
 
@@ -23,4 +23,6 @@ interface PartyDataSource {
     suspend fun addCurrentUserToParty(party: DomainParty)
 
     suspend fun leaveParty(party: DomainParty): Either<Throwable , Unit>
+
+    suspend fun getUser(uid: String): Either<Throwable , DomainUser>
 }

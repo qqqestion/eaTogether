@@ -4,8 +4,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
+import ru.blackbull.data.models.firebase.User
 import ru.blackbull.domain.AuthDataSource
 import ru.blackbull.domain.models.DomainAuthUser
+import ru.blackbull.domain.models.firebase.DomainUser
 import javax.inject.Inject
 
 class AuthRepository
@@ -29,6 +31,7 @@ class AuthRepository
         val firebaseUser = auth.currentUser
         refUsers.document(firebaseUser!!.uid).set(authUser).await()
     }
+
 
     override fun signOut() {
         auth.signOut()

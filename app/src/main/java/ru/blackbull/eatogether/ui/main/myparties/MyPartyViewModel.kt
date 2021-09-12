@@ -9,12 +9,16 @@ import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.domain.Resource
 import ru.blackbull.domain.PartyDataSource
+import ru.blackbull.domain.UseCase
 import ru.blackbull.domain.models.firebase.DomainPartyWithUser
+import ru.blackbull.domain.usecases.GetPartiesByCurrentUserCase
+import ru.blackbull.eatogether.R
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPartyViewModel @Inject constructor(
-    private val partyRepository: PartyDataSource
+    private val useCase: GetPartiesByCurrentUserCase
 ) : ViewModel() {
 
     private val _userParties: MutableLiveData<Event<Resource<List<DomainPartyWithUser>>>> =
@@ -23,7 +27,14 @@ class MyPartyViewModel @Inject constructor(
 
     fun getPartiesByCurrentUser() = viewModelScope.launch {
         _userParties.postValue(Event(Resource.Loading()))
-        val parties = partyRepository.getPartiesByCurrentUser().toResource()
-        _userParties.postValue(Event(parties))
+        useCase.invoke(UseCase.None,viewModelScope){ result ->
+            result.fold({
+                _userParties.postValue(Event(Resource.Error(it)))
+            },{
+                _userParties.postValue(Event(Resource.Success(it)))
+            })
+        }
+
     }
+
 }

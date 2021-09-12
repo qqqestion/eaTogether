@@ -26,4 +26,6 @@ abstract class UseCase<in P , out R>(
     }
 
     abstract suspend fun doWork(params: P): R
+
+    object None
 }

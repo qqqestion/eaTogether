@@ -1,7 +1,10 @@
 package ru.blackbull.data
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import ru.blackbull.data.models.firebase.Party
+import ru.blackbull.data.models.firebase.User
 import ru.blackbull.data.models.firebase.toParty
 import ru.blackbull.domain.PartyDataSource
 import ru.blackbull.domain.functional.Either
@@ -49,26 +52,18 @@ constructor(
         firebaseApi.updateParty(party.toParty())
     }
 
-    override suspend fun getPartiesByCurrentUser(): Either<Throwable , List<DomainPartyWithUser>> =
+    override suspend fun getPartiesByCurrentUser(): List<DomainParty> = firebaseApi.getPartiesByCurrentUser().map { it.toDomainParty() }
+
+
+    override suspend fun getUser(uid: String): Either<Throwable , DomainUser> =
         withContext(Dispatchers.IO) {
             safeCall {
                 Either.Right(
-                    firebaseApi.getPartiesByCurrentUser()
-                        .map { party ->
-                            val users = party.users
-                                .map { firebaseApi.getUser(it).toDomainUser() }
-                                .toMutableList()
-                            DomainPartyWithUser(
-                                party.id ,
-                                party.placeId ,
-                                party.isCurrentUserInParty ,
-                                party.time?.seconds ,
-                                users
-                            )
-                        }
+                    firebaseApi.getUser(uid).toDomainUser()
                 )
             }
         }
+
 
     override suspend fun getPartyById(partyId: String): Either<Throwable , DomainParty> =
         withContext(Dispatchers.IO) {
