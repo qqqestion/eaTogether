@@ -6,7 +6,9 @@ interface AuthDataSource {
 
     suspend fun signInWithEmailAndPassword(email: String , password: String)
 
-    suspend fun signUpWithEmailAndPassword(email: String , password: String , authUser: DomainAuthUser)
+    suspend fun createAccount(email: String , password: String)
+
+    suspend fun setAccountInfo(user: DomainAuthUser)
 
     fun signOut()
 }

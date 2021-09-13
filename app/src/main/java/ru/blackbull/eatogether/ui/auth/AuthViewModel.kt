@@ -4,7 +4,6 @@ import androidx.lifecycle.*
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,19 +13,14 @@ import ru.blackbull.domain.FirebaseDataSource
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.Event
 import ru.blackbull.domain.Resource
-import ru.blackbull.domain.usecases.SignInUseCase
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseDataSource ,
-    private val signIn: SignInUseCase
+    private val firebaseRepository: FirebaseDataSource
 ) : ViewModel() {
-
-    private val _signInResult = MutableLiveData<Event<Resource<Unit>>>()
-    val signInResult: LiveData<Event<Resource<Unit>>> = _signInResult
 
     private val _signUpResult = MutableLiveData<Event<Resource<Unit>>>()
     val signUpResult: LiveData<Event<Resource<Unit>>> = _signUpResult
@@ -40,17 +34,6 @@ class AuthViewModel @Inject constructor(
         } else {
             isRegistrationComplete.postValue(false)
         }
-    }
-
-    fun signIn(email: String , password: String) = viewModelScope.launch {
-        _signInResult.value?.let {
-            if (it.peekContent() is Resource.Loading) {
-                return@launch
-            }
-        }
-        _signInResult.postValue(Event(Resource.Loading()))
-        val response = firebaseRepository.signIn(email , password).toResource()
-        _signInResult.postValue(Event(response))
     }
 
     private fun validateUser(
@@ -116,7 +99,7 @@ class AuthViewModel @Inject constructor(
                 is FirebaseAuthInvalidCredentialsException ->
                     R.string.error_email_malformed
                 is FirebaseAuthUserCollisionException ->
-                    R.string.error_user_already_exists
+                    R.string.error_email_already_exists
                 else -> null
             }
             val msg = if (stringId == null) {

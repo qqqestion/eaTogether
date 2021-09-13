@@ -7,7 +7,7 @@ import android.text.format.DateUtils
 import android.view.View
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_registration_step_two.*
+import kotlinx.android.synthetic.main.fragment_set_account_info.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.BaseFragment
@@ -17,7 +17,7 @@ import timber.log.Timber
 import java.util.*
 
 @AndroidEntryPoint
-class RegistrationStepTwoFragment : BaseFragment(R.layout.fragment_registration_step_two) {
+class SetAccountInfoFragment : BaseFragment(R.layout.fragment_set_account_info) {
 
     private val viewModel: AuthViewModel by viewModels()
 

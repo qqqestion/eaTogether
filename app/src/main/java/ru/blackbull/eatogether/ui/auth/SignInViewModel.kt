@@ -23,7 +23,7 @@ class SignInViewModel @Inject constructor(
     val signInStatus: LiveData<UiState> = _signInStatus
 
     fun signIn(email: String , password: String) = viewModelScope.launch {
-        _signInStatus.value?.let { if (it is UiState.Loading) return@launch }
+        signInStatus.value?.let { if (it is UiState.Loading) return@launch }
         _signInStatus.value = loading()
         signIn.invoke(SignInUseCase.Params(email , password) , viewModelScope) {
             it.fold(

@@ -20,14 +20,16 @@ class AuthRepository
             .await()
     }
 
-    override suspend fun signUpWithEmailAndPassword(
+    override suspend fun createAccount(
         email: String ,
-        password: String ,
-        authUser: DomainAuthUser
+        password: String
     ) {
         auth.createUserWithEmailAndPassword(email , password).await()
+    }
+
+    override suspend fun setAccountInfo(user: DomainAuthUser) {
         val firebaseUser = auth.currentUser
-        refUsers.document(firebaseUser!!.uid).set(authUser).await()
+        refUsers.document(firebaseUser!!.uid).set(user).await()
     }
 
     override fun signOut() {
