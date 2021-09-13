@@ -27,8 +27,10 @@ class CreateAccountFragment : BaseFragment(R.layout.fragment_create_account) {
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 hideKeyboard()
                 applyAccountCreation()
+                true
+            } else {
+                false
             }
-            true
         }
 
 

@@ -32,8 +32,10 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 hideKeyboard()
                 applySignIn()
+                true
+            } else {
+                false
             }
-            true
         }
     }
 

@@ -9,9 +9,9 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_set_account_info.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.BaseFragment
-import ru.blackbull.eatogether.ui.auth.AuthViewModel
+import ru.blackbull.eatogether.ui.auth.SetAccountInfoViewModel
+import ru.blackbull.eatogether.ui.auth.UiState
 import ru.blackbull.eatogether.ui.main.MainActivity
 import timber.log.Timber
 import java.util.*
@@ -19,7 +19,7 @@ import java.util.*
 @AndroidEntryPoint
 class SetAccountInfoFragment : BaseFragment(R.layout.fragment_set_account_info) {
 
-    private val viewModel: AuthViewModel by viewModels()
+    private val viewModel: SetAccountInfoViewModel by viewModels()
 
     private val selectedDate = Calendar.getInstance()
 
@@ -35,13 +35,18 @@ class SetAccountInfoFragment : BaseFragment(R.layout.fragment_set_account_info) 
         }
 
         btnRegistrationConfirm.setOnClickListener {
-            viewModel.signUp(
-                etRegistrationFirstName.text.toString() ,
-                etRegistrationLastName.text.toString() ,
-                selectedDate.time ,
-                etRegistrationDescription.text.toString()
-            )
+            submitAccountInfo()
         }
+    }
+
+    private fun submitAccountInfo() {
+        viewModel.submitAccountInfo(
+            etRegistrationFirstName.text.toString() ,
+            etRegistrationLastName.text.toString() ,
+            etRegistrationDescription.text.toString() ,
+            selectedDate.time.time ,
+            ""
+        )
     }
 
     private fun displayDatePickerDialog() {
@@ -69,20 +74,18 @@ class SetAccountInfoFragment : BaseFragment(R.layout.fragment_set_account_info) 
     }
 
     private fun subscribeToObservers() {
-        viewModel.signUpResult.observe(viewLifecycleOwner , EventObserver(
-            onError = {
-                hideLoadingBar()
-                showErrorDialog(it)
-            } ,
-            onLoading = {
-                showLoadingBar()
+        viewModel.setAccountInfoStatus.observe(viewLifecycleOwner) {
+            when (it) {
+                is UiState.Failure -> {
+                    hideLoadingBar()
+                    snackbar(it.messageId)
+                }
+                UiState.Loading -> showLoadingBar()
+                UiState.Success -> {
+                    hideLoadingBar()
+                    startActivity(Intent(requireActivity() , MainActivity::class.java))
+                }
             }
-        ) {
-            hideLoadingBar()
-            Intent(requireContext() , MainActivity::class.java).also {
-                startActivity(it)
-                requireActivity().finish()
-            }
-        })
+        }
     }
 }

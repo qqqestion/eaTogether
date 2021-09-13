@@ -17,8 +17,8 @@ class SetAccountInfoViewModel @Inject constructor(
     private val setAccountInfo: SetAccountInfoUseCase
 ) : ViewModel() {
 
-    private val _signUpStatus = MutableLiveData<UiState>()
-    val signUpStatus: LiveData<UiState> = _signUpStatus
+    private val _setAccountInfoStatus = MutableLiveData<UiState>()
+    val setAccountInfoStatus: LiveData<UiState> = _setAccountInfoStatus
 
     fun submitAccountInfo(
         firstName: String ,
@@ -27,8 +27,8 @@ class SetAccountInfoViewModel @Inject constructor(
         birthday: Long ,
         imageUrl: String
     ) = viewModelScope.launch {
-        signUpStatus.value?.let { if (it is UiState.Loading) return@launch }
-        _signUpStatus.value = loading()
+        setAccountInfoStatus.value?.let { if (it is UiState.Loading) return@launch }
+        _setAccountInfoStatus.value = loading()
         setAccountInfo.invoke(
             SetAccountInfoUseCase.Params(
                 DomainAuthUser(firstName , lastName , description , birthday , imageUrl)
@@ -36,9 +36,9 @@ class SetAccountInfoViewModel @Inject constructor(
             viewModelScope
         ) {
             it.onFailure { t ->
-                _signUpStatus.value = UiState.Failure(getSignUpError(t))
+                _setAccountInfoStatus.value = UiState.Failure(getSignUpError(t))
             }.onSuccess {
-                _signUpStatus.value = success()
+                _setAccountInfoStatus.value = success()
             }
         }
     }
