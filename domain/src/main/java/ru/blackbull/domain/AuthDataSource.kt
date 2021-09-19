@@ -10,5 +10,7 @@ interface AuthDataSource {
 
     suspend fun setAccountInfo(user: DomainAuthUser)
 
+    suspend fun isAccountInfoSet(): Boolean
+
     fun signOut()
 }
