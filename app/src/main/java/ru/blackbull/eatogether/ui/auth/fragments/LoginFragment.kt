@@ -1,18 +1,16 @@
 package ru.blackbull.eatogether.ui.auth.fragments
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_login.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.ui.BaseFragment
 import ru.blackbull.eatogether.ui.auth.SignInViewModel
 import ru.blackbull.eatogether.ui.auth.UiState
-import ru.blackbull.eatogether.ui.main.MainActivity
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -58,10 +56,9 @@ class LoginFragment : BaseFragment(R.layout.fragment_login) {
                 }
                 UiState.Success -> {
                     hideLoadingBar()
-                    Intent(requireContext() , MainActivity::class.java).apply {
-                        startActivity(this)
-                        requireActivity().finish()
-                    }
+                    findNavController().navigate(
+                        LoginFragmentDirections.actionLoginFragmentToMapFragment()
+                    )
                 }
             }
         }

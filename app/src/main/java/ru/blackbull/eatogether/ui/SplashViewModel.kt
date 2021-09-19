@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.domain.UseCase
-import ru.blackbull.domain.usecases.IsAccountInfoSetUseCase
+import ru.blackbull.domain.usecases.IsSignInUseCase
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.UiStateWithData
 import ru.blackbull.eatogether.other.failure
@@ -18,26 +18,26 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel
 @Inject constructor(
-    private val isAccountInfoSet: IsAccountInfoSetUseCase
+    private val isSignIn: IsSignInUseCase
 ) : ViewModel() {
 
-    private val _accountInfoSetStatus = MutableLiveData<UiStateWithData<Boolean>>()
-    val accountInfoSetStatus: LiveData<UiStateWithData<Boolean>> = _accountInfoSetStatus
+    private val _isSignInStatus = MutableLiveData<UiStateWithData<Boolean>>()
+    val isSignInStatus: LiveData<UiStateWithData<Boolean>> = _isSignInStatus
 
     init {
         isSignIn()
     }
 
     private fun isSignIn() = viewModelScope.launch {
-        _accountInfoSetStatus.value = loading()
-        isAccountInfoSet.invoke(
+        _isSignInStatus.value = loading()
+        isSignIn.invoke(
             UseCase.None ,
             viewModelScope
         ) {
             it.onFailure { t ->
-                _accountInfoSetStatus.value = failure(getError(t))
+                _isSignInStatus.value = failure(getError(t))
             }.onSuccess { result ->
-                _accountInfoSetStatus.value = success(result)
+                _isSignInStatus.value = success(result)
             }
         }
     }

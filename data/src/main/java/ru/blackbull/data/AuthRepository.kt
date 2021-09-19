@@ -28,6 +28,8 @@ class AuthRepository
         auth.createUserWithEmailAndPassword(email , password).await()
     }
 
+    override fun isSignIn() = auth.uid != null
+
     override suspend fun isAccountInfoSet(): Boolean {
         if (auth.uid == null) return false
         return refUsers.document(auth.uid!!).get().await().toObject(DomainUser::class.java) == null

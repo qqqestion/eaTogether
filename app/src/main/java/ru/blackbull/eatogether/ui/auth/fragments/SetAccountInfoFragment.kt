@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_set_account_info.*
 import ru.blackbull.eatogether.R
@@ -83,7 +84,9 @@ class SetAccountInfoFragment : BaseFragment(R.layout.fragment_set_account_info) 
                 UiState.Loading -> showLoadingBar()
                 UiState.Success -> {
                     hideLoadingBar()
-                    startActivity(Intent(requireActivity() , MainActivity::class.java))
+                    findNavController().navigate(
+                        SetAccountInfoFragmentDirections.actionSetAccountInfoFragmentToMapFragment()
+                    )
                 }
             }
         }
