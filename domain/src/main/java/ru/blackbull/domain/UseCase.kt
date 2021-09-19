@@ -19,6 +19,7 @@ abstract class UseCase<in P , out R>(
             try {
                 Either.Right(doWork(params))
             } catch (e: Throwable) {
+                e.printStackTrace()
                 Either.Left(e)
             }
         }

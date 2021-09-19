@@ -19,12 +19,9 @@ import ru.blackbull.domain.models.firebase.DomainPartyWithUser
 import ru.blackbull.domain.models.firebase.DomainUser
 import timber.log.Timber
 import java.util.*
-import javax.inject.Inject
 
-class PartyRepository
-//TODO вставил inject так как он вроде должен тута быть
-@Inject constructor(
-) : PartyDataSource {
+
+class PartyRepository : PartyDataSource {
 
     val auth = FirebaseAuth.getInstance()
 
@@ -79,7 +76,7 @@ class PartyRepository
     override suspend fun addParty(party: DomainParty): Either<Throwable , Unit> =
         withContext(Dispatchers.IO) {
             safeCall {
-                party.id = partiesRef.add(party).await().id
+                party.id = partiesRef.add(party.toParty()).await().id
                 Either.Right(Unit)
             }
         }

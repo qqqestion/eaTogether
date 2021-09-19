@@ -25,7 +25,7 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun providePartyRepository(api: FirebaseApi): PartyDataSource = PartyRepository(api)
+    fun providePartyRepository(): PartyDataSource = PartyRepository()
 
     @Singleton
     @Provides

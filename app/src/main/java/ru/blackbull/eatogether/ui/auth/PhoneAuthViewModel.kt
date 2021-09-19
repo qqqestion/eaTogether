@@ -13,8 +13,8 @@ import javax.inject.Inject
 class PhoneAuthViewModel
 @Inject constructor() : ViewModel() {
 
-    private val verificationPhoneNumberData = MutableLiveData<UiState<Unit>>()
-    private val verificationPhoneNumber: LiveData<UiState<Unit>> = verificationPhoneNumberData
+    private val verificationPhoneNumberData = MutableLiveData<UiState>()
+    private val verificationPhoneNumber: LiveData<UiState> = verificationPhoneNumberData
 
     fun verifyPhoneNumber(phoneNumber: String) {
         if (Patterns.PHONE.matcher(phoneNumber).matches().not()) {

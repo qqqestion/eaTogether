@@ -114,7 +114,7 @@ class FirebaseApi
     }
 
     /**
-     * Signs out
+     * Signs outми
      *
      */
     fun signOut() {
