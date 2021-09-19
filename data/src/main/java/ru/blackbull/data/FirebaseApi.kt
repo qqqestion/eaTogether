@@ -28,26 +28,9 @@ class FirebaseApi
 
     private val usersRef = Firebase.firestore.collection("users")
     private val partiesRef = Firebase.firestore.collection("parties")
-    private val notificationsRef = Firebase.firestore.collection("notifications")
     private val invitationsRef = Firebase.firestore.collection("invitations")
     private val lunchInvitationsRef = Firebase.firestore.collection("lunchInvitations")
     private val matchesRef = Firebase.firestore.collection("matches")
-
-    /**
-     * Обновляет поле пользователя "lastLocation" в Firestore
-     *
-     * @param location
-     */
-    suspend fun updateUserLocation(location: Location) {
-        val geoPoint = GeoPoint(
-            location.latitude , location.longitude
-        )
-        usersRef.document(
-            auth.uid!!
-        ).update(
-            "lastLocation" , geoPoint
-        ).await()
-    }
 
     /**
      * Ищет компании по id места, возвращает только те, которые проходят сегодня.
