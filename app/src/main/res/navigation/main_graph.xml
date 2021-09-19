@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main_graph"
-    app:startDestination="@id/mapFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/profileFragment"
@@ -122,6 +122,55 @@
         <action
             android:id="@+id/action_lunchInvitationsFragment_to_partyDetailFragment"
             app:destination="@id/partyDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="ru.blackbull.eatogether.ui.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_splashFragment_to_startFragment2"
+            app:destination="@id/startFragment2" />
+        <action
+            android:id="@+id/action_splashFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createAccountFragment2"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.CreateAccountFragment"
+        android:label="CreateAccountFragment" >
+        <action
+            android:id="@+id/action_createAccountFragment2_to_setAccountInfoFragment2"
+            app:destination="@id/setAccountInfoFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/startFragment2"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.StartFragment"
+        android:label="StartFragment" >
+        <action
+            android:id="@+id/action_startFragment2_to_createAccountFragment2"
+            app:destination="@id/createAccountFragment2" />
+        <action
+            android:id="@+id/action_startFragment2_to_loginFragment2"
+            app:destination="@id/loginFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment2"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment2_to_setAccountInfoFragment2"
+            app:destination="@id/setAccountInfoFragment2" />
+        <action
+            android:id="@+id/action_loginFragment2_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setAccountInfoFragment2"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.SetAccountInfoFragment"
+        android:label="SetAccountInfoFragment" >
+        <action
+            android:id="@+id/action_setAccountInfoFragment2_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <!--    <fragment-->
     <!--        android:id="@+id/recycleRestaurantsFragment"-->
