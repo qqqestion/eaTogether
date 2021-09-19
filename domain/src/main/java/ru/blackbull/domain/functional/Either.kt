@@ -21,8 +21,8 @@ sealed class Either<out A , out B> {
     }
 
     fun <C> map(fn: (B) -> C): Either<A , C> = when (this) {
-        is Either.Left -> Either.Left(a)
-        is Either.Right -> Either.Right(fn(b))
+        is Left -> Left(a)
+        is Right -> Right(fn(b))
     }
 
     fun onSuccess(fn: (B) -> Unit): Either<A , B> = this.apply {
@@ -33,8 +33,3 @@ sealed class Either<out A , out B> {
         if (this is Left) fn(a)
     }
 }
-
-//fun <A , B , C> Either<A , B>.map(fn: (B) -> C): Either<A , C> = when (this) {
-//    is Either.Left -> Either.Left(a)
-//    is Either.Right -> Either.Right(fn(b))
-//}
