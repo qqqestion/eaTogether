@@ -2,18 +2,12 @@ package ru.blackbull.eatogether.other
 
 import androidx.annotation.StringRes
 
-sealed class UiStateWithData<T>(
-    val data: T?,
-    @StringRes var messageId: Int? ,
-    val error: Throwable?
-) {
+sealed class UiStateWithData<out T> {
 
+    class Success<T>(val data: T) : UiStateWithData<T>()
 
+    class Failure(val messageId: Int) : UiStateWithData<Nothing>()
 
-    class Success<T>(data: T?) : UiStateWithData<T>(data,null,null)
-
-    class Failure<T>(data: T? = null,messageId: Int? = null, error: Throwable? = null) : UiStateWithData<T>(data,messageId,error)
-
-    class Loading<T>(data: T? = null) : UiStateWithData<T>(data,null,null)
+    object Loading : UiStateWithData<Nothing>()
 }
 

@@ -32,17 +32,13 @@ class MyPartyFragment : Fragment(R.layout.fragment_my_parties_rv) {
         viewModel.userParties.observe(viewLifecycleOwner , { result ->
             when (result) {
                 is UiStateWithData.Success -> {
-                    result.data?.let { parties ->
-                        partiesAdapter.parties = parties.map { it.toPartyWithUser() }
-                    }
+                    partiesAdapter.parties = result.data.map { it.toPartyWithUser() }
                 }
                 is UiStateWithData.Failure -> {
-                    result.messageId?.let {
-                        Snackbar.make(
-                            requireView() ,
-                            it , Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
+                    Snackbar.make(
+                        requireView() ,
+                        result.messageId , Snackbar.LENGTH_SHORT
+                    ).show()
                 }
                 is UiStateWithData.Loading -> {
                     Timber.d("Лох, пидр, нет друзей")

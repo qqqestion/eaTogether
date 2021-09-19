@@ -27,10 +27,10 @@ class MyPartyViewModel @Inject constructor(
     val userParties: LiveData<UiStateWithData<List<DomainPartyWithUser>>> = _userParties
 
     fun getPartiesByCurrentUser() = viewModelScope.launch {
-        _userParties.postValue(UiStateWithData.Loading())
+        _userParties.postValue(UiStateWithData.Loading)
         useCase.invoke(UseCase.None,viewModelScope){ result ->
             result.fold({
-                _userParties.postValue(UiStateWithData.Failure(error = it,messageId = R.string.error_default))
+                _userParties.postValue(UiStateWithData.Failure(R.string.error_default))
             },{
                 _userParties.postValue(UiStateWithData.Success(it))
             })
