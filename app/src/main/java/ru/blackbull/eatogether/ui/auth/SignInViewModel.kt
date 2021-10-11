@@ -8,15 +8,18 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import ru.blackbull.domain.UseCase
 import ru.blackbull.domain.exceptions.EmailValidationException
 import ru.blackbull.domain.exceptions.PasswordValidationException
+import ru.blackbull.domain.usecases.IsAccountInfoSetUseCase
 import ru.blackbull.domain.usecases.SignInUseCase
 import ru.blackbull.eatogether.R
 import javax.inject.Inject
 
 @HiltViewModel
 class SignInViewModel @Inject constructor(
-    private val signIn: SignInUseCase
+    private val signIn: SignInUseCase ,
+    private val isAccountInfoSet: IsAccountInfoSetUseCase
 ) : ViewModel() {
 
     private val _signInStatus = MutableLiveData<UiState>()
@@ -25,11 +28,18 @@ class SignInViewModel @Inject constructor(
     fun signIn(email: String , password: String) = viewModelScope.launch {
         signInStatus.value?.let { if (it is UiState.Loading) return@launch }
         _signInStatus.value = loading()
-        signIn.invoke(SignInUseCase.Params(email , password) , viewModelScope) {
-            it.fold(
-                { t -> _signInStatus.value = failure(getSignInError(t)) } ,
-                { _signInStatus.value = success() }
-            )
+        signIn.invoke(SignInUseCase.Params(email , password) , viewModelScope) { result ->
+            result
+                .onFailure { t ->
+                    _signInStatus.value = failure(getSignInError(t))
+                }
+                .onSuccess {
+                    isAccountInfoSet.invoke(UseCase.None , viewModelScope) { infoSetResult ->
+                        infoSetResult.onFailure {
+                            _signInStatus.value = success()
+                        }
+                    }
+                }
         }
     }
 
