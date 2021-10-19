@@ -4,3 +4,6 @@
 /captures
 .externalNativeBuild
 .cxx
+build
+.idea
+local.properties
