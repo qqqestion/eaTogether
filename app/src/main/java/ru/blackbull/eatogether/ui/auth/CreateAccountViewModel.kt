@@ -30,14 +30,11 @@ class CreateAccountViewModel @Inject constructor(
         confirmedPassword: String
     ) = viewModelScope.launch {
         createAccount.invoke(
-            CreateAccountUseCase.Params(email , password , confirmedPassword) ,
-            viewModelScope
-        ) {
-            it.onSuccess {
-                _createAccountStatus.value = success()
-            }.onFailure {
-                _createAccountStatus.value = failure(getCreateAccountError(it))
-            }
+            CreateAccountUseCase.Params(email , password , confirmedPassword)
+        ).onSuccess {
+            _createAccountStatus.value = success()
+        }.onFailure {
+            _createAccountStatus.value = failure(getCreateAccountError(it))
         }
     }
 

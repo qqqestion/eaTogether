@@ -19,17 +19,22 @@ sealed class Either<out A , out B> {
             is Right -> Resource.Success(b)
         }
     }
+}
 
-    fun <C> map(fn: (B) -> C): Either<A , C> = when (this) {
-        is Left -> Left(a)
-        is Right -> Right(fn(b))
-    }
+inline fun <A , B , C> Either<A , B>.map(fn: (B) -> C): Either<A , C> = when (this) {
+    is Either.Left -> Either.Left(a)
+    is Either.Right -> Either.Right(fn(b))
+}
 
-    fun onSuccess(fn: (B) -> Unit): Either<A , B> = this.apply {
-        if (this is Right) fn(b)
-    }
+inline fun <A , B> Either<A , B>.onSuccess(fn: (B) -> Unit): Either<A , B> = this.apply {
+    if (this is Either.Right) fn(b)
+}
 
-    fun onFailure(fn: (A) -> Unit): Either<A , B> = this.apply {
-        if (this is Left) fn(a)
-    }
+inline fun <A , B> Either<A , B>.onFailure(fn: (A) -> Unit): Either<A , B> = this.apply {
+    if (this is Either.Left) fn(a)
+}
+
+inline fun <A , B , C> Either<A , B>.mapFailure(fn: (A) -> C): Either<C , B> = when (this) {
+    is Either.Left -> Either.Left(fn(a))
+    is Either.Right -> Either.Right(b)
 }

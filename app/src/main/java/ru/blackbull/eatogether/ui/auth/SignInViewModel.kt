@@ -7,13 +7,17 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ru.blackbull.domain.UseCase
-import ru.blackbull.domain.exceptions.EmailValidationException
-import ru.blackbull.domain.exceptions.PasswordValidationException
+import ru.blackbull.domain.functional.Either
+import ru.blackbull.domain.functional.onFailure
+import ru.blackbull.domain.functional.onSuccess
 import ru.blackbull.domain.usecases.IsAccountInfoSetUseCase
 import ru.blackbull.domain.usecases.SignInUseCase
-import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.ui.auth.fragments.AuthState
+import ru.blackbull.eatogether.ui.auth.fragments.SignInError
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,32 +26,40 @@ class SignInViewModel @Inject constructor(
     private val isAccountInfoSet: IsAccountInfoSetUseCase
 ) : ViewModel() {
 
-    private val _signInStatus = MutableLiveData<UiState>()
-    val signInStatus: LiveData<UiState> = _signInStatus
+    private val _signInStatus = MutableLiveData<AuthState>()
+    val signInStatus: LiveData<AuthState> = _signInStatus
+
+    private val effectsData = MutableSharedFlow<SignInEffect>(
+        replay = 0 ,
+        extraBufferCapacity = 1 ,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+    val effects: SharedFlow<SignInEffect> = effectsData.asSharedFlow()
 
     fun signIn(email: String , password: String) = viewModelScope.launch {
-        signInStatus.value?.let { if (it is UiState.Loading) return@launch }
-        _signInStatus.value = loading()
-        signIn.invoke(SignInUseCase.Params(email , password) , viewModelScope) { result ->
-            result
-                .onFailure { t ->
-                    _signInStatus.value = failure(getSignInError(t))
-                }
-                .onSuccess {
-                    isAccountInfoSet.invoke(UseCase.None , viewModelScope) { infoSetResult ->
-                        infoSetResult.onFailure {
-                            _signInStatus.value = success()
-                        }
+        _signInStatus.value = AuthState.Loading
+        when (val signInStatus = signIn.invoke(SignInUseCase.Params(email , password))) {
+            is Either.Left -> {
+                _signInStatus.value = AuthState.SignInFailure(getSignInError(signInStatus.a))
+            }
+            is Either.Right -> {
+                isAccountInfoSet.invoke(UseCase.None)
+                    .onFailure {
+                        // TODO: what state should be here
+//                            _signInStatus.value = AuthState.
+                    }.onSuccess { isInfoSet ->
+                        val effect =
+                            if (isInfoSet) SignInEffect.NavigateToMain
+                            else SignInEffect.NavigateToSetAccountInfo
+                        effectsData.tryEmit(effect)
+                        _signInStatus.value = AuthState.SignInSuccessfully
                     }
-                }
+            }
         }
     }
 
-    private fun getSignInError(t: Throwable): Int = when (t) {
-        is FirebaseAuthInvalidUserException -> R.string.error_sign_in_failed
-        is FirebaseAuthInvalidCredentialsException -> R.string.error_sign_in_failed
-        is EmailValidationException -> R.string.error_email_malformed
-        is PasswordValidationException -> R.string.error_password_is_empty
-        else -> R.string.error_default
+    private fun getSignInError(t: Throwable): SignInError = when (t) {
+        is FirebaseAuthInvalidUserException , is FirebaseAuthInvalidCredentialsException -> SignInError.EmailOrPasswordAreWrong
+        else -> SignInError.Unknown
     }
 }

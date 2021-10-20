@@ -2,13 +2,16 @@ package ru.blackbull.eatogether.ui.auth.fragments
 
 sealed class AuthState {
 
-    object AccountInfoSet : AuthState()
-    object AccountNotInfoSet : AuthState()
+    object Loading : AuthState()
 
-    sealed class AuthError : AuthState() {
+    object SignInSuccessfully : AuthState()
+    object SignUpSuccessfully : AuthState()
 
-        object SignInError : AuthError()
-        object SignUpError : AuthError()
-        object UnknownError : AuthError()
+    sealed class InputFailure : AuthState() {
+        object Email : InputFailure()
+        object Password : InputFailure()
     }
+
+    data class SignInFailure(val error: SignInError) : AuthState()
+    data class SignUpFailure(val error: SignUpError) : AuthState()
 }
