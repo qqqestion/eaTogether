@@ -1,12 +1,15 @@
 package ru.blackbull.data
 
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 import ru.blackbull.domain.AuthDataSource
+import ru.blackbull.domain.functional.Either
 import ru.blackbull.domain.models.DomainAuthUser
 import ru.blackbull.domain.models.firebase.DomainUser
+import java.lang.Exception
 import javax.inject.Inject
 
 class AuthRepository
@@ -28,11 +31,11 @@ class AuthRepository
         auth.createUserWithEmailAndPassword(email , password).await()
     }
 
-    override fun isSignIn() = auth.uid != null
+    override suspend fun isSignIn() = auth.uid != null && isAccountInfoSet()
 
     override suspend fun isAccountInfoSet(): Boolean {
         if (auth.uid == null) return false
-        return refUsers.document(auth.uid!!).get().await().toObject(DomainUser::class.java) == null
+        return refUsers.document(auth.uid!!).get().await().toObject(DomainUser::class.java) != null
     }
 
     override suspend fun setAccountInfo(user: DomainAuthUser) {
