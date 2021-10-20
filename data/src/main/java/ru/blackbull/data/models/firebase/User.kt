@@ -27,8 +27,6 @@ import java.util.*
 data class User(
     @DocumentId
     var id: String? = null ,
-    @get:Exclude
-    var phone: String? = null ,
     var firstName: String? = null ,
     var lastName: String? = null ,
     var description: String? = null ,
@@ -44,7 +42,6 @@ data class User(
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-        parcel.readString() ,
         parcel.readString() ,
         parcel.readString() ,
         parcel.readString() ,
@@ -69,7 +66,6 @@ data class User(
     override fun writeToParcel(parcel: Parcel? , flags: Int) {
         parcel?.let {
             it.writeString(id)
-            it.writeString(phone)
             it.writeString(firstName)
             it.writeString(lastName)
             it.writeString(description)
@@ -100,7 +96,6 @@ data class User(
     fun toDomainUser(): DomainUser {
         return DomainUser(
             id ,
-            phone ,
             firstName ,
             lastName ,
             description ,
@@ -122,7 +117,6 @@ data class User(
 fun DomainUser.toUser(): User {
     return User(
         id ,
-        phone ,
         firstName ,
         lastName ,
         description ,
