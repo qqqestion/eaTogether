@@ -4,6 +4,7 @@ import android.content.Context
 import android.inputmethodservice.InputMethodService
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -37,7 +38,7 @@ abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
         Snackbar.LENGTH_LONG
     ).show()
 
-    fun snackbar(msgId: Int) = snackbar(getString(msgId))
+    fun snackbar(@StringRes msgId: Int) = snackbar(getString(msgId))
 
     fun hideKeyboard() {
         requireActivity().currentFocus?.let {
