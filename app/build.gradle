@@ -10,13 +10,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "ru.blackbull.eatogether"
         minSdkVersion 22
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         buildConfigField("String", "YANDEX_MAPKIT_API_KEY", YANDEX_MAPKIT_API_KEY)
@@ -48,6 +47,7 @@ android {
 repositories {
     maven {
         url "http://maven.google.com/"
+        allowInsecureProtocol = true
     }
 }
 
@@ -133,7 +133,7 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:2.3.5"
 
     // Coroutine Lifecycle Scopes
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-rc01"
 
     implementation 'android.arch.lifecycle:extensions:1.1.1'
 
