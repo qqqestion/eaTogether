@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.domain.exceptions.*
+import ru.blackbull.domain.functional.onFailure
+import ru.blackbull.domain.functional.onSuccess
 import ru.blackbull.domain.models.DomainAuthUser
 import ru.blackbull.domain.usecases.SetAccountInfoUseCase
 import ru.blackbull.eatogether.R
@@ -21,26 +23,24 @@ class SetAccountInfoViewModel @Inject constructor(
     val setAccountInfoStatus: LiveData<UiState> = _setAccountInfoStatus
 
     fun submitAccountInfo(
-        firstName: String ,
-        lastName: String ,
-        description: String ,
-        birthday: Long ,
+        firstName: String,
+        lastName: String,
+        description: String,
+        birthday: Long,
         imageUrl: String
     ) = viewModelScope.launch {
         setAccountInfoStatus.value?.let { if (it is UiState.Loading) return@launch }
         _setAccountInfoStatus.value = loading()
         setAccountInfo.invoke(
             SetAccountInfoUseCase.Params(
-                DomainAuthUser(firstName , lastName , description , birthday , imageUrl)
-            ) ,
-            viewModelScope
-        ) {
-            it.onFailure { t ->
-                _setAccountInfoStatus.value = UiState.Failure(getSignUpError(t))
-            }.onSuccess {
-                _setAccountInfoStatus.value = success()
-            }
+                DomainAuthUser(firstName, lastName, description, birthday, imageUrl)
+            )
+        ).onFailure { t ->
+            _setAccountInfoStatus.value = UiState.Failure(getSignUpError(t))
+        }.onSuccess {
+            _setAccountInfoStatus.value = success()
         }
+
     }
 
     private fun getSignUpError(throwable: Throwable): Int = when (throwable) {

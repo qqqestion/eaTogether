@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 import ru.blackbull.domain.exceptions.ConfirmPasswordException
 import ru.blackbull.domain.exceptions.EmailValidationException
 import ru.blackbull.domain.exceptions.PasswordValidationException
+import ru.blackbull.domain.functional.onFailure
+import ru.blackbull.domain.functional.onSuccess
 import ru.blackbull.domain.usecases.CreateAccountUseCase
 import ru.blackbull.eatogether.R
 import javax.inject.Inject

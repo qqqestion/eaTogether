@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.domain.UseCase
+import ru.blackbull.domain.functional.onFailure
+import ru.blackbull.domain.functional.onSuccess
 import ru.blackbull.domain.usecases.IsSignInUseCase
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.UiStateWithData
@@ -30,16 +32,13 @@ class SplashViewModel
 
     private fun isSignIn() = viewModelScope.launch {
         _isSignInStatus.value = loading()
-        isSignIn.invoke(
-            UseCase.None ,
-            viewModelScope
-        ) {
-            it.onFailure { t ->
+        isSignIn.invoke(UseCase.None)
+            .onFailure { t ->
                 _isSignInStatus.value = failure(getError(t))
             }.onSuccess { result ->
                 _isSignInStatus.value = success(result)
             }
-        }
+
     }
 
     private fun getError(t: Throwable) = when (t) {
