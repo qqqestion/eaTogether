@@ -1,6 +1,5 @@
 package ru.blackbull.eatogether.ui
 
-import android.util.Log
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -22,7 +21,6 @@ class SplashViewModel
     }
 
     private fun handleError(error: CheckAuthenticatedUseCaseError) {
-        Log.d("!!!", "Handle error: $error")
         navigate(SplashFragmentDirections.actionSplashFragmentToStartFragment())
     }
 

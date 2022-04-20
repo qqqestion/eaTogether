@@ -81,4 +81,5 @@
     <string name="drawer_close">Закрыть</string>
     <string name="failure_phone_number_misformat">Please provide corrent phone number</string>
     <string name="error_no_internet">Нет соединения с интенетом</string>
+    <string name="error_user_already_exists">Пользователь с такой почтой уже существует</string>
 </resources>

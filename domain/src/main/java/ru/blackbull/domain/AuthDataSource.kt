@@ -15,7 +15,7 @@ interface AuthDataSource {
 
     suspend fun createAccount(email: String, password: String): Either<SignUpError, Unit>
 
-    suspend fun setAccountInfo(user: DomainAuthUser)
+    suspend fun setAccountInfo(user: DomainAuthUser): Either<NetworkError, Unit>
 
     suspend fun checkAuthenticated(): Either<NetworkError, Boolean>
 

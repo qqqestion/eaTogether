@@ -136,10 +136,11 @@
     </fragment>
     <fragment
         android:id="@+id/createAccountFragment"
-        android:name="ru.blackbull.eatogether.ui.auth.fragments.CreateAccountFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.SignUpFragment"
         android:label="CreateAccountFragment">
         <action
             android:id="@+id/action_createAccountFragment_to_setAccountInfoFragment"
+            app:popUpTo="@id/startFragment"
             app:destination="@id/setAccountInfoFragment" />
     </fragment>
     <fragment
@@ -166,7 +167,7 @@
     </fragment>
     <fragment
         android:id="@+id/setAccountInfoFragment"
-        android:name="ru.blackbull.eatogether.ui.auth.fragments.SetAccountInfoFragment"
+        android:name="ru.blackbull.eatogether.ui.auth.fragments.CompleteRegistrationFragment"
         android:label="SetAccountInfoFragment">
         <action
             android:id="@+id/action_setAccountInfoFragment_to_mapFragment"

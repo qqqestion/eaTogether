@@ -5,7 +5,8 @@ sealed interface NetworkError :
     CheckAuthenticatedUseCaseError,
     SignInError,
     CheckRegistrationCompleteUseCaseError,
-    SignUpError
+    SignUpError,
+    CompleteRegistrationUseCaseError
 
 object NoInternetError : NetworkError
 object UnexpectedNetworkCommunicationError : NetworkError

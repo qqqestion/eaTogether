@@ -85,10 +85,16 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    override suspend fun setAccountInfo(user: DomainAuthUser) {
-        val firebaseUser = auth.currentUser
-        refUsers.document(firebaseUser!!.uid).set(user).await()
-    }
+    override suspend fun setAccountInfo(user: DomainAuthUser): Either<NetworkError, Unit> =
+        runEither {
+            refUsers.document(checkNotNull(auth.uid)).set(user).await()
+            Unit
+        }.mapFailure { exception ->
+            when (exception) {
+                is FirebaseFirestoreException -> NoInternetError
+                else -> UnexpectedNetworkCommunicationError
+            }
+        }
 
     override fun signOut() {
         auth.signOut()
