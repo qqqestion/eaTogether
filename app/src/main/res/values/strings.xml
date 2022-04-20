@@ -80,4 +80,5 @@
     <string name="drawer_open">Открыть</string>
     <string name="drawer_close">Закрыть</string>
     <string name="failure_phone_number_misformat">Please provide corrent phone number</string>
+    <string name="error_no_internet">Нет соединения с интенетом</string>
 </resources>

@@ -11,7 +11,7 @@ import ru.blackbull.data.models.firebase.toUser
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
 import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.ui.BaseFragment
+import ru.blackbull.eatogether.core.BaseFragment
 import ru.blackbull.eatogether.ui.main.dialogs.InvitationListDialogFragment
 import javax.inject.Inject
 

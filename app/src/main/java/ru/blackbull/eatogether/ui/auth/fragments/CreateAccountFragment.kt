@@ -1,61 +1,73 @@
 package ru.blackbull.eatogether.ui.auth.fragments
 
 import android.os.Bundle
-import android.view.KeyEvent
 import android.view.View
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_create_account.*
+import ru.blackbull.domain.usecases.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.BaseFragment
+import ru.blackbull.eatogether.core.BaseFragmentV2
 import ru.blackbull.eatogether.ui.auth.CreateAccountViewModel
-import ru.blackbull.eatogether.ui.auth.UiState
+import ru.blackbull.eatogether.ui.clearError
+import ru.blackbull.eatogether.ui.onKeyEnter
+import ru.blackbull.eatogether.ui.trimmedText
 
 @AndroidEntryPoint
-class CreateAccountFragment : BaseFragment(R.layout.fragment_create_account) {
+class CreateAccountFragment : BaseFragmentV2<CreateAccountViewModel>(
+    R.layout.fragment_create_account, CreateAccountViewModel::class
+) {
 
-    private val viewModel: CreateAccountViewModel by viewModels()
-
-    override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
-        super.onViewCreated(view , savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         btnRegistrationNext.setOnClickListener {
             applyAccountCreation()
         }
-        etRegistrationPasswordConfirmation.setOnKeyListener { v , keyCode , event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                hideKeyboard()
-                applyAccountCreation()
-                true
-            } else {
-                false
-            }
+        etRegistrationPasswordConfirmation.onKeyEnter {
+            hideKeyboard()
+            applyAccountCreation()
         }
 
 
-        viewModel.createAccountStatus.observe(viewLifecycleOwner) {
-            when (it) {
-                is UiState.Loading -> showLoadingBar()
-                is UiState.Failure -> {
-                    snackbar(it.messageId)
-                    hideLoadingBar()
-                }
-                UiState.Success -> {
-                    hideLoadingBar()
-                    findNavController().navigate(
-                        CreateAccountFragmentDirections.actionCreateAccountFragmentToSetAccountInfoFragment()
-                    )
+        viewModel.state.observe(viewLifecycleOwner) { state ->
+            val isLoading = (state is SignUpState.Loading)
+
+            btnRegistrationNext.isEnabled = isLoading.not()
+            if (isLoading) {
+                showLoadingBar()
+            } else {
+                hideLoadingBar()
+            }
+            when (state) {
+                is SignUpState.Error -> handleError(state.error)
+                else -> {
+                    tilRegistrationEmail.clearError()
+                    tilRegistrationPassword.clearError()
+                    tilRegistrationPasswordConfirm.clearError()
                 }
             }
         }
     }
 
+    private fun handleError(error: SignUpUseCaseError) {
+        when (error) {
+            PasswordIsEmptyError -> TODO()
+            PasswordsMismatchError -> TODO()
+            EmailMalformedError -> TODO()
+            UserAlreadyExists -> TODO()
+            WeakPasswordError -> TODO()
+            NoInternetError -> {
+                showErrorDialog(R.string.error_no_internet)
+            }
+            UnexpectedNetworkCommunicationError -> TODO()
+        }
+    }
+
     private fun applyAccountCreation() {
         viewModel.submitAccount(
-            etRegistrationEmail.text.toString() ,
-            etRegistrationPassword.text.toString() ,
-            etRegistrationPasswordConfirmation.text.toString()
+            etRegistrationEmail.trimmedText,
+            etRegistrationPassword.trimmedText,
+            etRegistrationPasswordConfirmation.trimmedText
         )
     }
 }

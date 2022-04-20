@@ -12,7 +12,7 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.ImageAdapter
 import ru.blackbull.domain.models.firebase.FriendState
 import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.ui.BaseFragment
+import ru.blackbull.eatogether.core.BaseFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint

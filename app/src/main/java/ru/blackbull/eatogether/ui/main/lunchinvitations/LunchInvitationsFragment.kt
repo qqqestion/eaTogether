@@ -11,7 +11,7 @@ import ru.blackbull.data.models.firebase.toLunchInvitationWithUsers
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.LunchInvitationAdapter
 import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.ui.BaseFragment
+import ru.blackbull.eatogether.core.BaseFragment
 import javax.inject.Inject
 
 @AndroidEntryPoint

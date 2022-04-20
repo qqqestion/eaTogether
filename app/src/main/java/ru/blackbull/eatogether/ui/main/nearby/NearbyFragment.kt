@@ -16,7 +16,7 @@ import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.NearbyUserAdapter
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.domain.Resource
-import ru.blackbull.eatogether.ui.BaseFragment
+import ru.blackbull.eatogether.core.BaseFragment
 import timber.log.Timber
 
 

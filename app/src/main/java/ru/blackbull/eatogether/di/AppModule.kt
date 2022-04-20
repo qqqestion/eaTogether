@@ -4,19 +4,17 @@ import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.yandex.mapkit.search.SearchFactory
 import com.yandex.mapkit.search.SearchManagerType
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.blackbull.data.FirebaseApi
-import ru.blackbull.data.FirebaseRepository
-import ru.blackbull.data.PartyRepository
-import ru.blackbull.domain.FirebaseDataSource
-import ru.blackbull.domain.PartyDataSource
+import ru.blackbull.data.AuthRepository
+import ru.blackbull.domain.AuthDataSource
 import javax.inject.Singleton
 
-@Module
+@Module(includes = [BindsModule::class])
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
@@ -25,44 +23,18 @@ object AppModule {
     fun provideFusedLocationProviderClient(
         @ApplicationContext app: Context
     ) = FusedLocationProviderClient(app)
-//
-//    @Singleton
-//    @Provides
-//    fun provideLoggingInterceptor() = HttpLoggingInterceptor().apply {
-//        level = HttpLoggingInterceptor.Level.NONE
-//    }
-//
-//    @Singleton
-//    @Provides
-//    fun provideHttpClient(
-//        loggingInterceptor: HttpLoggingInterceptor
-//    ) = OkHttpClient.Builder()
-//        .addInterceptor(loggingInterceptor)
-//        .addNetworkInterceptor(loggingInterceptor)
-//        .connectTimeout(10 , TimeUnit.SECONDS)
-//        .writeTimeout(30 , TimeUnit.SECONDS)
-//        .readTimeout(30 , TimeUnit.SECONDS)
-//        .build()
-//
-//    @Singleton
-//    @Provides
-//    fun provideRetrofitInstance(
-//        httpClient: OkHttpClient
-//    ): Retrofit = Retrofit.Builder()
-//        .baseUrl(Constants.BASE_GOOGLE_API_URL)
-//        .client(httpClient)
-//        .addConverterFactory(MoshiConverterFactory.create())
-//        .build()
-//
-//    @Singleton
-//    @Provides
-//    fun provideGooglePlaceApiService(
-//        retrofit: Retrofit
-//    ): GooglePlaceApiService = retrofit.create(GooglePlaceApiService::class.java)
 
     @Singleton
     @Provides
     fun provideSearchManager() = SearchFactory.getInstance().createSearchManager(
         SearchManagerType.ONLINE
     )
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+interface BindsModule {
+
+    @Binds
+    fun bindAuthDataSource(authRepository: AuthRepository): AuthDataSource
 }

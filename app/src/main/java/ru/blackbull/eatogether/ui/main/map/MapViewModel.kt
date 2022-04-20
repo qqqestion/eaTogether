@@ -47,7 +47,7 @@ class MapViewModel @Inject constructor(
 
     fun searchPartyByPlace(placeId: String) = viewModelScope.launch {
         _searchParties.postValue(Event(Resource.Loading()))
-        val parties = (partyRepository.searchPartyByPlace(placeId) as Either.Right).b.map { it.toPartyWithUser() }
+        val parties = (partyRepository.searchPartyByPlace(placeId) as Either.Right).value.map { it.toPartyWithUser() }
         _searchParties.postValue(Event(Resource.Success(parties)))
     }
 

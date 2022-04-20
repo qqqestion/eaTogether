@@ -1,7 +1,6 @@
 package ru.blackbull.eatogether.ui.auth.fragments
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
@@ -10,10 +9,9 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_set_account_info.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.BaseFragment
+import ru.blackbull.eatogether.core.BaseFragment
 import ru.blackbull.eatogether.ui.auth.SetAccountInfoViewModel
 import ru.blackbull.eatogether.ui.auth.UiState
-import ru.blackbull.eatogether.ui.main.MainActivity
 import timber.log.Timber
 import java.util.*
 

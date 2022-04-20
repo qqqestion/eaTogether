@@ -1,19 +1,33 @@
 package ru.blackbull.domain.usecases
 
-import ru.blackbull.domain.AppCoroutineDispatchers
 import ru.blackbull.domain.AuthDataSource
-import ru.blackbull.domain.UseCase
-import ru.blackbull.domain.UserAuthValidator
+import ru.blackbull.domain.functional.Either
 import javax.inject.Inject
 
 class SignInUseCase @Inject constructor(
-    private val authRepository: AuthDataSource ,
-    dispatchers: AppCoroutineDispatchers
-) : UseCase<SignInUseCase.Params , Unit>(dispatchers) {
+    private val authRepository: AuthDataSource,
+) {
 
-    override suspend fun doWork(params: Params) {
-        authRepository.signInWithEmailAndPassword(params.email , params.password)
+    suspend operator fun invoke(email: String, password: String): Either<SignInUseCaseError, Unit> {
+        val isEmailInvalid = email.isEmailInvalid()
+        val isPasswordInvalid = password.isPasswordInvalid()
+        return when {
+            isEmailInvalid && isPasswordInvalid -> Either.Left(EmailAndPasswordFormatError)
+            isEmailInvalid -> Either.Left(EmailFormatError)
+            isPasswordInvalid -> Either.Left(PasswordFormatError)
+            else -> authRepository.signInWithEmailAndPassword(email, password)
+        }
     }
 
-    data class Params(val email: String , val password: String)
+    private fun String.isEmailInvalid(): Boolean = isEmpty()
+    private fun String.isPasswordInvalid(): Boolean = isEmpty()
 }
+
+sealed interface SignInUseCaseError
+
+object EmailFormatError : SignInUseCaseError
+object PasswordFormatError : SignInUseCaseError
+object EmailAndPasswordFormatError : SignInUseCaseError
+
+sealed interface SignInError : SignInUseCaseError
+object InvalidCredentials : SignInError

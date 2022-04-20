@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.ui.BaseFragment
+import ru.blackbull.eatogether.core.BaseFragment
 import timber.log.Timber
 
 @AndroidEntryPoint
