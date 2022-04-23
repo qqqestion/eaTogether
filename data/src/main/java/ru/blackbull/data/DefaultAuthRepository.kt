@@ -1,18 +1,17 @@
 package ru.blackbull.data
 
 import com.google.firebase.FirebaseNetworkException
-import com.google.firebase.auth.*
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import ru.blackbull.data.firebase.AuthManager
+import ru.blackbull.data.firebase.UserCollection
 import ru.blackbull.domain.AppCoroutineDispatchers
-import ru.blackbull.domain.AuthDataSource
-import ru.blackbull.domain.functional.Either
-import ru.blackbull.domain.functional.map
-import ru.blackbull.domain.functional.mapFailure
-import ru.blackbull.domain.functional.runEither
+import ru.blackbull.domain.AuthRepository
+import ru.blackbull.domain.functional.*
 import ru.blackbull.domain.models.DomainAuthUser
 import ru.blackbull.domain.models.firebase.DomainUser
 import ru.blackbull.domain.usecases.*
@@ -20,21 +19,18 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AuthRepository @Inject constructor(
-    /* Как воткнуть сюда auth и ссылки чтобы тестилось красиво */
+class DefaultAuthRepository @Inject constructor(
     private val dispatchers: AppCoroutineDispatchers,
-) : AuthDataSource {
-
-    private val auth = FirebaseAuth.getInstance()
-    private val refUsers = Firebase.firestore.collection("users")
+    private val sharedPreferencesDataSource: SharedPreferencesDataSource,
+    private val userCollection: UserCollection,
+    private val authManager: AuthManager
+) : AuthRepository {
 
     override suspend fun signInWithEmailAndPassword(
         email: String,
         password: String,
     ): Either<SignInError, Unit> = runEither {
-        auth.signInWithEmailAndPassword(email, password)
-            .await()
-        Unit
+        authManager.signInWithEmailAndPassword(email, password)
     }.mapFailure { exception ->
         when (exception) {
             is FirebaseAuthInvalidUserException,
@@ -48,8 +44,7 @@ class AuthRepository @Inject constructor(
         email: String,
         password: String,
     ): Either<SignUpError, Unit> = runEither {
-        auth.createUserWithEmailAndPassword(email, password).await()
-        Unit
+        authManager.createUserWithEmailAndPassword(email, password)
     }.mapFailure { exception ->
         when (exception) {
             is FirebaseAuthWeakPasswordException -> WeakPasswordError
@@ -61,22 +56,24 @@ class AuthRepository @Inject constructor(
     }
 
     override suspend fun checkAuthenticated(): Either<NetworkError, Boolean> {
-        if (auth.uid == null) Either.Right(false)
+        if (authManager.uid == null) Either.Right(false)
         return isAccountInfoSet()
     }
 
     override suspend fun isAccountInfoSet(): Either<NetworkError, Boolean> {
-        if (auth.uid == null) return Either.Right(false)
-        return withContext(dispatchers.io) { getCurrentUser().map { it != null } }
+        if (authManager.uid == null) return Either.Right(false)
+        if (sharedPreferencesDataSource.read(Preference.RegistrationComplete))
+            return Either.Right(true)
+        return withContext(dispatchers.io) {
+            getCurrentUser().map { it != null }
+        }.onSuccess { isComplete ->
+            sharedPreferencesDataSource.write(Preference.RegistrationComplete, isComplete)
+        }
     }
 
     private suspend fun getCurrentUser(): Either<NetworkError, DomainUser?> {
         return runEither {
-            refUsers
-                .document(auth.uid!!)
-                .get()
-                .await()
-                .toObject(DomainUser::class.java)
+            userCollection.getById(checkNotNull(authManager.uid))
         }.mapFailure { exception ->
             when (exception) {
                 is FirebaseFirestoreException -> NoInternetError
@@ -85,10 +82,10 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    override suspend fun setAccountInfo(user: DomainAuthUser): Either<NetworkError, Unit> =
+    override suspend fun completeRegistration(user: DomainAuthUser): Either<NetworkError, Unit> =
         runEither {
-            refUsers.document(checkNotNull(auth.uid)).set(user).await()
-            Unit
+            userCollection.save(checkNotNull(authManager.uid), user)
+            sharedPreferencesDataSource.write(Preference.RegistrationComplete, true)
         }.mapFailure { exception ->
             when (exception) {
                 is FirebaseFirestoreException -> NoInternetError
@@ -96,7 +93,16 @@ class AuthRepository @Inject constructor(
             }
         }
 
-    override fun signOut() {
-        auth.signOut()
+    override fun signOut() = runEither {
+        authManager.signOut()
+
+        with(sharedPreferencesDataSource) {
+            remove(Preference.RegistrationComplete)
+        }
+    }.mapFailure { exception ->
+        when (exception) {
+            is FirebaseFirestoreException -> NoInternetError
+            else -> UnexpectedNetworkCommunicationError
+        }
     }
 }

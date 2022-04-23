@@ -10,8 +10,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.blackbull.data.AuthRepository
-import ru.blackbull.domain.AuthDataSource
+import ru.blackbull.data.DefaultAuthRepository
+import ru.blackbull.domain.AuthRepository
 import javax.inject.Singleton
 
 @Module(includes = [BindsModule::class])
@@ -36,5 +36,5 @@ object AppModule {
 interface BindsModule {
 
     @Binds
-    fun bindAuthDataSource(authRepository: AuthRepository): AuthDataSource
+    fun bindAuthDataSource(authRepository: DefaultAuthRepository): AuthRepository
 }

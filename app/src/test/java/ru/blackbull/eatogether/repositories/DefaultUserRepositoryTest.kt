@@ -1,23 +1,25 @@
 package ru.blackbull.eatogether.repositories
 
-import io.mockk.*
+import io.mockk.clearMocks
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
-import ru.blackbull.data.FirebaseRepository
+import ru.blackbull.data.DefaultUserRepository
 import ru.blackbull.data.FirebaseApi
 import ru.blackbull.data.models.firebase.User
 import ru.blackbull.domain.Resource
-import java.util.*
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class FirebaseRepositoryTest {
+class DefaultUserRepositoryTest {
 
     private val api: FirebaseApi = mockk()
 
-    private val repository: FirebaseRepository = FirebaseRepository(api)
+    private val repository: DefaultUserRepository = DefaultUserRepository(api)
 
     private val currentUserId = "current_user_id"
 
@@ -77,13 +79,6 @@ class FirebaseRepositoryTest {
 //        runBlocking { repository.addParty(Party()) }
 //        coVerify(exactly = 1) { api.addParty(Party()) }
 //    }
-
-    @Test
-    fun `should call signOut only once`() {
-        every { api.signOut() } returns Unit
-        runBlocking { repository.signOut() }
-        coVerify(exactly = 1) { api.signOut() }
-    }
 
     @Test
     fun `should update user images`() {

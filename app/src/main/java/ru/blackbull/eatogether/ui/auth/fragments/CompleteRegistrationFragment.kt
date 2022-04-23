@@ -6,19 +6,26 @@ import android.text.format.DateUtils
 import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
+import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_set_account_info.*
+import ru.blackbull.domain.usecases.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.core.BaseFragmentV2
+import ru.blackbull.eatogether.databinding.FragmentCompleteRegistrationBinding
 import ru.blackbull.eatogether.ui.auth.CompleteRegistrationState
 import ru.blackbull.eatogether.ui.auth.CompleteRegistrationViewModel
+import ru.blackbull.eatogether.ui.clearError
 import ru.blackbull.eatogether.ui.trimmedText
 import java.util.*
 
 @AndroidEntryPoint
 class CompleteRegistrationFragment : BaseFragmentV2<CompleteRegistrationViewModel>(
-    R.layout.fragment_set_account_info, CompleteRegistrationViewModel::class
+    R.layout.fragment_complete_registration, CompleteRegistrationViewModel::class
 ) {
+
+    private val binding: FragmentCompleteRegistrationBinding by viewBinding(
+        FragmentCompleteRegistrationBinding::bind
+    )
 
     private val selectedDate = Calendar.getInstance()
 
@@ -28,29 +35,43 @@ class CompleteRegistrationFragment : BaseFragmentV2<CompleteRegistrationViewMode
         viewModel.state.observe(viewLifecycleOwner) { state ->
             val isLoading = (state is CompleteRegistrationState.Loading)
 
-            btnRegistrationConfirm.isEnabled = isLoading.not()
-            progressBar.isVisible = isLoading
+            binding.btnRegistrationConfirm.isEnabled = isLoading.not()
+            binding.progressBar.isVisible = isLoading
             when (state) {
-                is CompleteRegistrationState.Error -> {
-                    Log.d("!!!", "Error: ${state.error}")
-                }
+                is CompleteRegistrationState.Error -> handleError(state.error)
                 else -> {
-
+                    with(binding) {
+                        tilRegistrationFirstName.clearError()
+                        tilRegistrationLastName.clearError()
+                        tilRegistrationBirthday.clearError()
+                        tilRegistrationDescription.clearError()
+                    }
                 }
             }
         }
 
-        etRegistrationBirthday.setOnClickListener {
+        binding.etRegistrationBirthday.setOnClickListener {
             displayDatePickerDialog()
         }
 
-        btnRegistrationConfirm.setOnClickListener {
-            viewModel.submitAccountInfo(
-                etRegistrationFirstName.trimmedText,
-                etRegistrationLastName.trimmedText,
-                etRegistrationDescription.trimmedText,
+        binding.btnRegistrationConfirm.setOnClickListener {
+            viewModel.completeRegistration(
+                binding.etRegistrationFirstName.trimmedText,
+                binding.etRegistrationLastName.trimmedText,
+                binding.etRegistrationDescription.trimmedText,
                 selectedDate.time.time,
             )
+        }
+    }
+
+    private fun handleError(error: CompleteRegistrationUseCaseError) {
+        Log.d("!!!", "Error on CompleteRegistration screen: $error")
+        when (error) {
+            BirthdayError -> TODO()
+            FirstNameFormatError -> TODO()
+            LastNameFormatError -> TODO()
+            NoInternetError -> TODO()
+            UnexpectedNetworkCommunicationError -> TODO()
         }
     }
 
@@ -65,7 +86,7 @@ class CompleteRegistrationFragment : BaseFragmentV2<CompleteRegistrationViewMode
             requireContext(),
             { _, year, month, day ->
                 selectedDate.set(year, month, day)
-                etRegistrationBirthday.setText(
+                binding.etRegistrationBirthday.setText(
                     DateUtils.formatDateTime(
                         requireContext(),
                         selectedDate.timeInMillis,
@@ -78,5 +99,4 @@ class CompleteRegistrationFragment : BaseFragmentV2<CompleteRegistrationViewMode
             startDay
         ).show()
     }
-
 }

@@ -6,21 +6,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import ru.blackbull.data.models.mapkit.PlaceDetail
 import ru.blackbull.data.models.firebase.Party
-import ru.blackbull.eatogether.other.Event
-import ru.blackbull.domain.Resource
-import ru.blackbull.domain.FirebaseDataSource
+import ru.blackbull.data.models.mapkit.PlaceDetail
 import ru.blackbull.domain.PartyDataSource
+import ru.blackbull.domain.Resource
+import ru.blackbull.domain.UserRepository
 import ru.blackbull.domain.models.firebase.DomainParty
 import ru.blackbull.domain.models.firebase.DomainUser
+import ru.blackbull.eatogether.other.Event
 import ru.blackbull.eatogether.repositories.PlaceRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class PartyDetailViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseDataSource ,
-    private val partyRepository: PartyDataSource ,
+    private val firebaseRepository: UserRepository,
+    private val partyRepository: PartyDataSource,
     private val placeRepository: PlaceRepository
 ) : ViewModel() {
 

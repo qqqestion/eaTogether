@@ -1,28 +1,20 @@
 package ru.blackbull.domain
 
 import ru.blackbull.domain.functional.Either
-import ru.blackbull.domain.models.*
+import ru.blackbull.domain.models.Statistic
 import ru.blackbull.domain.models.firebase.DomainInvitationWithUsers
 import ru.blackbull.domain.models.firebase.DomainLunchInvitationWithUsers
 import ru.blackbull.domain.models.firebase.DomainUser
 import ru.blackbull.domain.models.firebase.FriendState
 
-interface FirebaseDataSource {
+interface UserRepository {
     suspend fun getCurrentUser(): Either<Throwable , DomainUser>
 
     suspend fun getUser(uid: String): Either<Throwable , DomainUser>
 
     fun getCurrentUserId(): String
 
-    fun signOut()
-
     suspend fun updateUser(user: DomainUser): Either<Throwable , DomainUser>
-
-    suspend fun signIn(email: String , password: String): Either<Throwable , Unit>
-
-    suspend fun signUpWithEmailAndPassword(
-        user: DomainUser
-    ): Either<Throwable , Unit>
 
     suspend fun getNearbyUsers(): Either<Throwable , MutableList<DomainUser>>
 

@@ -21,8 +21,7 @@ import javax.inject.Inject
  * Класс, работающий с Firebase
  *
  */
-class FirebaseApi
-@Inject constructor() {
+class FirebaseApi @Inject constructor() {
 
     val auth = FirebaseAuth.getInstance()
 

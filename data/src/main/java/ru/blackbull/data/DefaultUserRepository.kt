@@ -3,39 +3,40 @@ package ru.blackbull.data
 import android.net.Uri
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import ru.blackbull.data.firebase.AuthManager
+import ru.blackbull.data.firebase.UserCollection
 import ru.blackbull.data.models.firebase.Invitation
 import ru.blackbull.data.models.firebase.InvitationWithUsers
 import ru.blackbull.data.models.firebase.LunchInvitationWithUsers
 import ru.blackbull.data.models.firebase.toUser
+import ru.blackbull.domain.AppCoroutineDispatchers
 import ru.blackbull.domain.Constants
-import ru.blackbull.domain.FirebaseDataSource
+import ru.blackbull.domain.UserRepository
 import ru.blackbull.domain.functional.Either
-import ru.blackbull.domain.models.*
+import ru.blackbull.domain.functional.runEither
+import ru.blackbull.domain.models.Statistic
 import ru.blackbull.domain.models.firebase.DomainInvitationWithUsers
 import ru.blackbull.domain.models.firebase.DomainLunchInvitationWithUsers
 import ru.blackbull.domain.models.firebase.DomainUser
 import ru.blackbull.domain.models.firebase.FriendState
 import timber.log.Timber
 
+class DefaultUserRepository constructor(
+    private val firebaseApi: FirebaseApi,
+    private val userCollection: UserCollection,
+    private val authManager: AuthManager,
+    private val dispatchers: AppCoroutineDispatchers
+) : UserRepository {
 
-class FirebaseRepository
-constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
+    override suspend fun getCurrentUser(): Either<Throwable, DomainUser> =
+        getUser(checkNotNull(authManager.uid))
 
-    override suspend fun getCurrentUser(): Either<Throwable , DomainUser> =
-        getUser(getCurrentUserId())
-
-    override suspend fun getUser(uid: String): Either<Throwable , DomainUser> =
-        withContext(Dispatchers.IO) {
-            safeCall {
-                Either.Right(firebaseApi.getUser(uid).toDomainUser())
-            }
+    override suspend fun getUser(uid: String): Either<Throwable, DomainUser> =
+        withContext(dispatchers.io) {
+            runEither { checkNotNull(userCollection.getById(uid)) }
         }
 
-    override fun getCurrentUserId(): String = firebaseApi.getCurrentUserId()
-
-    override fun signOut() {
-        firebaseApi.signOut()
-    }
+    override fun getCurrentUserId(): String = checkNotNull(authManager.uid)
 
     override suspend fun updateUser(user: DomainUser) = withContext(Dispatchers.IO) {
         safeCall {
@@ -67,23 +68,7 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
         }
     }
 
-    override suspend fun signIn(email: String , password: String) = withContext(Dispatchers.IO) {
-        safeCall {
-            firebaseApi.signIn(email , password)
-            Either.Right(Unit)
-        }
-    }
-
-    override suspend fun signUpWithEmailAndPassword(
-        user: DomainUser
-    ) = withContext(Dispatchers.IO) {
-        safeCall {
-            firebaseApi.signUpWithEmailAndPassword(user.toUser())
-            Either.Right(Unit)
-        }
-    }
-
-    override suspend fun getNearbyUsers(): Either<Throwable , MutableList<DomainUser>> =
+    override suspend fun getNearbyUsers(): Either<Throwable, MutableList<DomainUser>> =
         withContext(Dispatchers.IO) {
             safeCall {
                 Either.Right(firebaseApi.getNearbyUsers()
@@ -102,14 +87,14 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
         }
     }
 
-    override suspend fun likeUser(user: DomainUser): Either<Throwable , DomainUser?> =
+    override suspend fun likeUser(user: DomainUser): Either<Throwable, DomainUser?> =
         withContext(Dispatchers.IO) {
             safeCall {
                 Either.Right(firebaseApi.likeUser(user.toUser())?.toDomainUser())
             }
         }
 
-    override suspend fun deleteImage(uri: String): Either<Throwable , DomainUser> =
+    override suspend fun deleteImage(uri: String): Either<Throwable, DomainUser> =
         withContext(Dispatchers.IO) {
             safeCall {
                 val user = firebaseApi.getUser(firebaseApi.getCurrentUserId())
@@ -129,7 +114,7 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
             }
         }
 
-    override suspend fun makeImageMain(uri: String): Either<Throwable , DomainUser> =
+    override suspend fun makeImageMain(uri: String): Either<Throwable, DomainUser> =
         withContext(Dispatchers.IO) {
             safeCall {
                 val user = firebaseApi.getUser(firebaseApi.getCurrentUserId())
@@ -142,13 +127,13 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
             }
         }
 
-    override suspend fun addToFriendList(user: DomainUser): Either<Throwable , FriendState> =
+    override suspend fun addToFriendList(user: DomainUser): Either<Throwable, FriendState> =
         withContext(Dispatchers.IO) {
             safeCall {
                 val invitationFromAnotherUser =
-                    firebaseApi.getInvitationWithInviterAndInvitee(user.id!! , getCurrentUserId())
+                    firebaseApi.getInvitationWithInviterAndInvitee(user.id!!, getCurrentUserId())
                 if (invitationFromAnotherUser == null) {
-                    val invitation = Invitation(inviter = getCurrentUserId() , invitee = user.id)
+                    val invitation = Invitation(inviter = getCurrentUserId(), invitee = user.id)
                     firebaseApi.addInvitation(invitation)
                     Either.Right(FriendState.INVITATION_SENT)
                 } else {
@@ -163,7 +148,7 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
             }
         }
 
-    override suspend fun checkUserStatus(user: DomainUser): Either<Throwable , FriendState> =
+    override suspend fun checkUserStatus(user: DomainUser): Either<Throwable, FriendState> =
         withContext(Dispatchers.IO) {
             safeCall {
                 if (user.id == getCurrentUserId()) {
@@ -183,7 +168,7 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
             }
         }
 
-    override suspend fun getFriendList(): Either<Throwable , List<DomainUser>> =
+    override suspend fun getFriendList(): Either<Throwable, List<DomainUser>> =
         withContext(Dispatchers.IO) {
             safeCall {
                 val currentUser = firebaseApi.getUser(getCurrentUserId())
@@ -194,7 +179,7 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
             }
         }
 
-    override suspend fun getFriendListForParty(partyId: String): Either<Throwable , List<DomainUser>> =
+    override suspend fun getFriendListForParty(partyId: String): Either<Throwable, List<DomainUser>> =
         withContext(Dispatchers.IO) {
             safeCall {
                 val party = firebaseApi.getPartyById(partyId)
@@ -210,7 +195,7 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
             }
         }
 
-    override suspend fun getInvitationList(): Either<Throwable , List<DomainInvitationWithUsers>> =
+    override suspend fun getInvitationList(): Either<Throwable, List<DomainInvitationWithUsers>> =
         withContext(Dispatchers.IO) {
             safeCall {
                 val currentUser = firebaseApi.getUser(getCurrentUserId())
@@ -218,7 +203,7 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
                     .getInvitationsForUser(getCurrentUserId())
                     .map {
                         val inviter = firebaseApi.getUser(it.inviter!!)
-                        InvitationWithUsers(it.id , inviter , currentUser)
+                        InvitationWithUsers(it.id, inviter, currentUser)
                     }
                 Timber.d("Invitations: $invitations")
                 Either.Right(invitations.map { it.toDomainInvitationWithUsers() })
@@ -226,14 +211,14 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
         }
 
     override suspend fun sendLunchInvitation(
-        partyId: String ,
+        partyId: String,
         user: DomainUser
-    ): Either<Throwable , Unit> =
+    ): Either<Throwable, Unit> =
         withContext(Dispatchers.IO) {
             safeCall {
                 val invitation = ru.blackbull.data.models.firebase.LunchInvitation(
-                    inviter = getCurrentUserId() ,
-                    invitee = user.id ,
+                    inviter = getCurrentUserId(),
+                    invitee = user.id,
                     partyId = partyId
                 )
                 firebaseApi.addLunchInvitation(invitation)
@@ -241,7 +226,7 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
             }
         }
 
-    override suspend fun getLunchInvitations(): Either<Throwable , List<DomainLunchInvitationWithUsers>> =
+    override suspend fun getLunchInvitations(): Either<Throwable, List<DomainLunchInvitationWithUsers>> =
         withContext(Dispatchers.IO) {
             safeCall {
                 val currentUser = firebaseApi.getUser(getCurrentUserId())
@@ -250,9 +235,9 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
                     .map {
                         val inviter = firebaseApi.getUser(it.inviter!!)
                         LunchInvitationWithUsers(
-                            it.id ,
-                            inviter ,
-                            currentUser ,
+                            it.id,
+                            inviter,
+                            currentUser,
                             it.partyId
                         )
                     }
@@ -261,19 +246,19 @@ constructor(private val firebaseApi: FirebaseApi) : FirebaseDataSource {
             }
         }
 
-    override suspend fun getStatistic(): Either<Throwable , Statistic> =
+    override suspend fun getStatistic(): Either<Throwable, Statistic> =
         withContext(Dispatchers.IO) {
             safeCall {
                 val parties = firebaseApi.getPastPartiesByUser(getCurrentUserId())
                 val statistic = Statistic(
-                    parties.map { it.placeId }.toHashSet().size ,
+                    parties.map { it.placeId }.toHashSet().size,
                     parties.size
                 )
                 Either.Right(statistic)
             }
         }
 
-    private inline fun <T> safeCall(action: () -> Either<Throwable , T>): Either<Throwable , T> {
+    private inline fun <T> safeCall(action: () -> Either<Throwable, T>): Either<Throwable, T> {
         return try {
             action()
         } catch (e: Exception) {

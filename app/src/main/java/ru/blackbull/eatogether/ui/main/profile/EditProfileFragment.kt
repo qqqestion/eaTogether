@@ -16,12 +16,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
-import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.adapters.ImageAdapter
 import ru.blackbull.data.models.firebase.User
 import ru.blackbull.data.models.firebase.toUser
-import ru.blackbull.eatogether.other.EventObserver
+import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.adapters.ImageAdapter
 import ru.blackbull.eatogether.core.BaseFragment
+import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.auth.AuthActivity
 import timber.log.Timber
 import java.util.*
@@ -48,7 +48,6 @@ class EditProfileFragment : BaseFragment(R.layout.fragment_edit_profile) {
         setHasOptionsMenu(true)
         subscribeToObservers()
         Timber.d("onViewCreated")
-        viewModel.getCurrentUser()
 
         viewPager.adapter = imageAdapter
 

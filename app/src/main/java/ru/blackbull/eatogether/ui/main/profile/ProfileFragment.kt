@@ -9,8 +9,8 @@ import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.core.BaseFragment
+import ru.blackbull.eatogether.other.EventObserver
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -25,11 +25,6 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
                 ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment()
             )
         }
-
-//        btnMore.setOnClickListener {
-//            snackbar("Clicked")
-//        }
-//
         // TODO: когда будет статистика, добавить отображение загрузки
         viewModel.currentUser.observe(viewLifecycleOwner , EventObserver(
             onError = {
@@ -49,7 +44,5 @@ class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
             btnUniquePlaces.text = "${statistic.uniquePlaces} новых мест посещено"
             btnPartiesCount.text = "${statistic.partyEnded} завершенных компаний"
         })
-        viewModel.getCurrentUser()
-        viewModel.getStatistic()
     }
 }

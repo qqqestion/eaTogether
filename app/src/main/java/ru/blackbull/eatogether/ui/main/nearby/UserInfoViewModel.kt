@@ -7,15 +7,15 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.data.models.firebase.User
-import ru.blackbull.domain.FirebaseDataSource
+import ru.blackbull.domain.Resource
+import ru.blackbull.domain.UserRepository
 import ru.blackbull.domain.models.firebase.FriendState
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.domain.Resource
 import javax.inject.Inject
 
 @HiltViewModel
 class UserInfoViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseDataSource
+    private val firebaseRepository: UserRepository
 ) : ViewModel() {
 
     private val _addToFriendListStatus = MutableLiveData<Event<Resource<FriendState>>>()

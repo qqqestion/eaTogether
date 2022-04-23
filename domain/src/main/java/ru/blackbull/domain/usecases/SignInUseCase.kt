@@ -1,11 +1,11 @@
 package ru.blackbull.domain.usecases
 
-import ru.blackbull.domain.AuthDataSource
+import ru.blackbull.domain.AuthRepository
 import ru.blackbull.domain.functional.Either
 import javax.inject.Inject
 
 class SignInUseCase @Inject constructor(
-    private val authRepository: AuthDataSource,
+    private val authRepository: AuthRepository,
 ) {
 
     suspend operator fun invoke(email: String, password: String): Either<SignInUseCaseError, Unit> {

@@ -9,17 +9,17 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.data.models.firebase.User
-import ru.blackbull.domain.FirebaseDataSource
+import ru.blackbull.domain.Resource
+import ru.blackbull.domain.UserRepository
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.domain.Resource
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseDataSource
+    private val firebaseRepository: UserRepository
 ) : ViewModel() {
 
     private val _signUpResult = MutableLiveData<Event<Resource<Unit>>>()

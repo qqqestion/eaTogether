@@ -1,12 +1,12 @@
 package ru.blackbull.domain.usecases
 
-import ru.blackbull.domain.AuthDataSource
+import ru.blackbull.domain.AuthRepository
 import ru.blackbull.domain.functional.Either
 import ru.blackbull.domain.functional.map
 import javax.inject.Inject
 
 class SignUpUseCase @Inject constructor(
-    private val authRepository: AuthDataSource,
+    private val authRepository: AuthRepository,
 ) {
 
     suspend operator fun invoke(

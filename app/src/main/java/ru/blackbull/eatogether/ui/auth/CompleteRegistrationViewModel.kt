@@ -20,7 +20,7 @@ class CompleteRegistrationViewModel @Inject constructor(
     private val _state = MutableLiveData<CompleteRegistrationState>()
     val state: LiveData<CompleteRegistrationState> = _state
 
-    fun submitAccountInfo(
+    fun completeRegistration(
         firstName: String,
         lastName: String,
         description: String,

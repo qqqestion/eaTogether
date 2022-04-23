@@ -35,7 +35,7 @@
         />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRegistrationEmail"
+        android:id="@+id/tilRegistrationFirstName"
         style="@style/MyTextInputLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRegistrationPassword"
+        android:id="@+id/tilRegistrationLastName"
         style="@style/MyTextInputLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
         android:hint="@string/ethint_surname"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilRegistrationEmail"
+        app:layout_constraintTop_toBottomOf="@id/tilRegistrationFirstName"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -83,7 +83,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilRegistrationPasswordConfirm"
+        android:id="@+id/tilRegistrationBirthday"
         style="@style/MyTextInputLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
         android:hint="@string/ethint_birthday"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilRegistrationPassword"
+        app:layout_constraintTop_toBottomOf="@id/tilRegistrationLastName"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -113,7 +113,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilRegistrationPasswordConfirm"
+        app:layout_constraintTop_toBottomOf="@id/tilRegistrationBirthday"
         >
 
         <com.google.android.material.textfield.TextInputLayout

@@ -20,6 +20,18 @@ sealed class Either<out A, out B> {
     }
 }
 
+val <A, B> Either<A, B>.value: B?
+    get() = when(this) {
+        is Either.Left -> null
+        is Either.Right -> value
+    }
+
+val <A, B> Either<A, B>.error: A?
+    get() = when(this) {
+        is Either.Left -> error
+        is Either.Right -> null
+    }
+
 val <A, B> Either<A, B>.isSuccess: Boolean
     get() = this is Either.Right<B>
 

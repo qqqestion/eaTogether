@@ -9,7 +9,6 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.createViewModelLazy
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -78,7 +77,6 @@ abstract class BaseFragmentV2<VM : BaseViewModel>(
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             viewModel.navigationCommands
-                .flowWithLifecycle(lifecycle)
                 .collect { navCommand ->
                     when (navCommand) {
                         is NavigationCommand.To -> findNavController().navigate(

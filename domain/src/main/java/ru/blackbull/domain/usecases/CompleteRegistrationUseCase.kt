@@ -1,12 +1,12 @@
 package ru.blackbull.domain.usecases
 
-import ru.blackbull.domain.AuthDataSource
+import ru.blackbull.domain.AuthRepository
 import ru.blackbull.domain.functional.Either
 import ru.blackbull.domain.models.DomainAuthUser
 import javax.inject.Inject
 
 class CompleteRegistrationUseCase @Inject constructor(
-    private val authRepository: AuthDataSource,
+    private val authRepository: AuthRepository,
 ) {
 
     suspend operator fun invoke(
@@ -16,7 +16,7 @@ class CompleteRegistrationUseCase @Inject constructor(
         birthday: Long,
     ): Either<CompleteRegistrationUseCaseError, Unit> {
         // TODO: validation
-        return authRepository.setAccountInfo(DomainAuthUser(firstName, lastName, description, birthday, imageUrl = ""))
+        return authRepository.completeRegistration(DomainAuthUser(firstName, lastName, description, birthday, imageUrl = ""))
     }
 }
 

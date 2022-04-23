@@ -8,15 +8,15 @@ import com.google.firebase.Timestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.data.models.firebase.Party
-import ru.blackbull.domain.Resource
-import ru.blackbull.domain.FirebaseDataSource
 import ru.blackbull.domain.PartyDataSource
+import ru.blackbull.domain.Resource
+import ru.blackbull.domain.UserRepository
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class CreatePartyViewModel @Inject constructor(
-    private val firebaseRepository: FirebaseDataSource ,
+    private val firebaseRepository: UserRepository,
     private val partyRepository: PartyDataSource
 ) : ViewModel() {
 
@@ -24,7 +24,7 @@ class CreatePartyViewModel @Inject constructor(
     val createPartyResult: LiveData<Resource<Unit>> = _createPartyResult
 
     fun createParty(
-        datetime: Date ,
+        datetime: Date,
         placeId: String
     ) = viewModelScope.launch {
         _createPartyResult.value?.let {
@@ -34,8 +34,8 @@ class CreatePartyViewModel @Inject constructor(
         }
         _createPartyResult.value = Resource.Loading()
         val party = Party(
-            time = Timestamp(datetime) ,
-            placeId = placeId ,
+            time = Timestamp(datetime),
+            placeId = placeId,
             users = mutableListOf(firebaseRepository.getCurrentUserId())
         )
         val response = partyRepository.addParty(party.toDomainParty()).toResource()

@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import ru.blackbull.domain.usecases.CheckAuthenticatedUseCase
 import ru.blackbull.domain.usecases.CheckAuthenticatedUseCaseError
 import ru.blackbull.eatogether.core.BaseViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +22,7 @@ class SplashViewModel
     }
 
     private fun handleError(error: CheckAuthenticatedUseCaseError) {
+        Timber.d("Error: $error")
         navigate(SplashFragmentDirections.actionSplashFragmentToStartFragment())
     }
 
