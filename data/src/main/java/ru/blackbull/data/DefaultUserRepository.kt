@@ -1,9 +1,11 @@
 package ru.blackbull.data
 
 import android.net.Uri
+import com.google.firebase.firestore.FirebaseFirestoreException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import ru.blackbull.data.firebase.AuthManager
+import ru.blackbull.data.firebase.FileManager
 import ru.blackbull.data.firebase.UserCollection
 import ru.blackbull.data.models.firebase.Invitation
 import ru.blackbull.data.models.firebase.InvitationWithUsers
@@ -13,60 +15,81 @@ import ru.blackbull.domain.AppCoroutineDispatchers
 import ru.blackbull.domain.Constants
 import ru.blackbull.domain.UserRepository
 import ru.blackbull.domain.functional.Either
+import ru.blackbull.domain.functional.mapFailure
 import ru.blackbull.domain.functional.runEither
 import ru.blackbull.domain.models.Statistic
 import ru.blackbull.domain.models.firebase.DomainInvitationWithUsers
 import ru.blackbull.domain.models.firebase.DomainLunchInvitationWithUsers
 import ru.blackbull.domain.models.firebase.DomainUser
 import ru.blackbull.domain.models.firebase.FriendState
+import ru.blackbull.domain.usecases.*
 import timber.log.Timber
+import javax.inject.Inject
 
-class DefaultUserRepository constructor(
+class DefaultUserRepository @Inject constructor(
     private val firebaseApi: FirebaseApi,
     private val userCollection: UserCollection,
     private val authManager: AuthManager,
+    private val fileManager: FileManager,
     private val dispatchers: AppCoroutineDispatchers
 ) : UserRepository {
 
-    override suspend fun getCurrentUser(): Either<Throwable, DomainUser> =
+    override suspend fun getCurrentUser(): Either<GetUserError, DomainUser> =
         getUser(checkNotNull(authManager.uid))
 
-    override suspend fun getUser(uid: String): Either<Throwable, DomainUser> =
+    override suspend fun getUser(uid: String): Either<GetUserError, DomainUser> =
         withContext(dispatchers.io) {
-            runEither { checkNotNull(userCollection.getById(uid)) }
+            runEither {
+                userCollection.getById(uid)
+                    ?: return@withContext Either.Left(UserNotFound)
+            }.mapFailure { exception ->
+                when (exception) {
+                    is FirebaseFirestoreException -> NoInternetError
+                    else -> UnexpectedNetworkCommunicationError
+                }
+            }
         }
 
     override fun getCurrentUserId(): String = checkNotNull(authManager.uid)
 
-    override suspend fun updateUser(user: DomainUser) = withContext(Dispatchers.IO) {
-        safeCall {
-            val imageUris = mutableListOf<String>()
-            Timber.d("Local uris: ${user.images}")
+//    override suspend fun uploadImage(uri: String): Either<UploadError, String> =
+//        withContext(dispatchers.io) {
+//            runEither { fileManager.upload(Uri.parse(uri)) ?: return@withContext  }
+//        }
 
-            for (image in user.images) {
-                val imageUri = Uri.parse(image)
-                if (imageUri.host != "firebasestorage.googleapis.com") {
-                    val remoteImageUri = firebaseApi.uploadImage(imageUri).toString()
-                    if (image == user.mainImageUri) {
-                        user.mainImageUri = remoteImageUri
+    override suspend fun updateUser(user: DomainUser): Either<UpdateUserError, DomainUser> =
+        withContext(dispatchers.io) {
+            runEither {
+                val imageUris = mutableListOf<String>()
+
+                for (image in user.images) {
+                    val imageUri = Uri.parse(image)
+                    if (imageUri.host != "firebasestorage.googleapis.com") {
+                        val remoteImageUri = fileManager.upload(imageUri).toString()
+                        if (image == user.mainImageUri) {
+                            user.mainImageUri = remoteImageUri
+                        }
+                        imageUris.add(remoteImageUri)
+                    } else {
+                        imageUris.add(image)
                     }
-                    imageUris.add(remoteImageUri)
-                } else {
-                    imageUris.add(image)
+                }
+                if (Constants.DEFAULT_IMAGE_URL in imageUris && imageUris.size > 1) {
+                    imageUris -= Constants.DEFAULT_IMAGE_URL
+                    if (user.mainImageUri == Constants.DEFAULT_IMAGE_URL) {
+                        user.mainImageUri = imageUris.first()
+                    }
+                }
+                user.images = imageUris
+                firebaseApi.updateUser(user.toUser())
+                user
+            }.mapFailure { exception ->
+                when (exception) {
+                    is FirebaseFirestoreException -> NoInternetError
+                    else -> UnexpectedNetworkCommunicationError
                 }
             }
-            if (Constants.DEFAULT_IMAGE_URL in imageUris && imageUris.size > 1) {
-                imageUris -= Constants.DEFAULT_IMAGE_URL
-                if (user.mainImageUri == Constants.DEFAULT_IMAGE_URL) {
-                    user.mainImageUri = imageUris.first()
-                }
-            }
-            user.images = imageUris
-            Timber.d("Firebase uris: $imageUris")
-            firebaseApi.updateUser(user.toUser())
-            Either.Right(user)
         }
-    }
 
     override suspend fun getNearbyUsers(): Either<Throwable, MutableList<DomainUser>> =
         withContext(Dispatchers.IO) {

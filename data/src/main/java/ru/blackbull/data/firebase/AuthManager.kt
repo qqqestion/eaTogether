@@ -7,7 +7,8 @@ import javax.inject.Inject
 class AuthManager @Inject constructor(
     private val auth: FirebaseAuth
 ) {
-    val uid: String? = auth.uid
+
+    val uid: String? get() = auth.uid
 
     suspend fun signInWithEmailAndPassword(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).await()

@@ -4,10 +4,9 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
-import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.GeoPoint
-import ru.blackbull.domain.models.firebase.DomainUser
 import ru.blackbull.domain.models.Location
+import ru.blackbull.domain.models.firebase.DomainUser
 import java.util.*
 
 /**
@@ -26,50 +25,50 @@ import java.util.*
  */
 data class User(
     @DocumentId
-    var id: String? = null ,
-    var firstName: String? = null ,
-    var lastName: String? = null ,
-    var description: String? = null ,
-    var birthday: Timestamp? = null ,
+    var id: String? = null,
+    var firstName: String? = null,
+    var lastName: String? = null,
+    var description: String? = null,
+    var birthday: Timestamp? = null,
     @field:JvmField
-    var isRegistrationComplete: Boolean = true ,
-    var mainImageUri: String? = null ,
-    var images: List<String> = listOf() ,
-    var likedUsers: List<String> = mutableListOf() ,
-    var dislikedUsers: List<String> = mutableListOf() ,
-    var friendList: List<String> = mutableListOf() ,
+    var isRegistrationComplete: Boolean = true,
+    var mainImageUri: String? = null,
+    var images: List<String> = listOf(),
+    var likedUsers: List<String> = mutableListOf(),
+    var dislikedUsers: List<String> = mutableListOf(),
+    var friendList: List<String> = mutableListOf(),
     var lastLocation: GeoPoint? = null
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
-        parcel.readString() ,
-        parcel.readString() ,
-        parcel.readString() ,
-        parcel.readString() ,
-        parcel.readParcelable(Timestamp::class.java.classLoader) ,
-        parcel.readInt() != 0 ,
-        parcel.readString() ,
-        parcel.createStringArrayList() ?: listOf() ,
-        parcel.createStringArrayList() ?: listOf() ,
-        parcel.createStringArrayList() ?: listOf() ,
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readParcelable(Timestamp::class.java.classLoader),
+        parcel.readInt() != 0,
+        parcel.readString(),
+        parcel.createStringArrayList() ?: listOf(),
+        parcel.createStringArrayList() ?: listOf(),
+        parcel.createStringArrayList() ?: listOf(),
         parcel.createStringArrayList() ?: listOf()
     ) {
         val latitude = parcel.readDouble()
         val longitude = parcel.readDouble()
-        lastLocation = GeoPoint(latitude , longitude)
+        lastLocation = GeoPoint(latitude, longitude)
     }
 
     fun fullName(): String {
         return "$firstName $lastName"
     }
 
-    override fun writeToParcel(parcel: Parcel? , flags: Int) {
+    override fun writeToParcel(parcel: Parcel?, flags: Int) {
         parcel?.let {
             it.writeString(id)
             it.writeString(firstName)
             it.writeString(lastName)
             it.writeString(description)
-            it.writeParcelable(birthday , flags)
+            it.writeParcelable(birthday, flags)
             it.writeInt(if (isRegistrationComplete) 1 else 0)
             it.writeString(mainImageUri)
             it.writeList(images)
@@ -84,6 +83,7 @@ data class User(
     override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<User> {
+
         override fun createFromParcel(parcel: Parcel): User {
             return User(parcel)
         }
@@ -95,19 +95,19 @@ data class User(
 
     fun toDomainUser(): DomainUser {
         return DomainUser(
-            id ,
-            firstName ,
-            lastName ,
-            description ,
-            birthday?.seconds ,
-            isRegistrationComplete ,
-            mainImageUri ,
-            images ,
-            likedUsers ,
-            dislikedUsers ,
-            friendList ,
+            id,
+            firstName,
+            lastName,
+            description,
+            birthday?.seconds,
+            isRegistrationComplete,
+            mainImageUri,
+            images,
+            likedUsers,
+            dislikedUsers,
+            friendList,
             if (lastLocation != null) Location(
-                lastLocation!!.latitude ,
+                lastLocation!!.latitude,
                 lastLocation!!.longitude
             ) else null
         )
@@ -116,19 +116,19 @@ data class User(
 
 fun DomainUser.toUser(): User {
     return User(
-        id ,
-        firstName ,
-        lastName ,
-        description ,
-        Timestamp(Date(birthday!!)) ,
-        isRegistrationComplete ,
-        mainImageUri ,
-        images ,
-        likedUsers ,
-        dislikedUsers ,
-        friendList ,
+        id,
+        firstName,
+        lastName,
+        description,
+        Timestamp(Date(birthday!!)),
+        isRegistrationComplete,
+        mainImageUri,
+        images,
+        likedUsers,
+        dislikedUsers,
+        friendList,
         if (lastLocation != null) GeoPoint(
-            lastLocation!!.latitude ,
+            lastLocation!!.latitude,
             lastLocation!!.longitude
         ) else null
     )

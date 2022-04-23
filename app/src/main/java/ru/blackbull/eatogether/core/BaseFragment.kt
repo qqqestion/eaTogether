@@ -13,12 +13,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_auth.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.auth.AuthActivity
 import ru.blackbull.eatogether.ui.main.MainActivity
 import timber.log.Timber
 import kotlin.reflect.KClass
@@ -33,9 +31,6 @@ abstract class BaseFragment(@LayoutRes layoutId: Int) : Fragment(layoutId) {
         if (this is MainActivity) {
             Timber.d("Main activity loading bar is ${if (isVisible) "visible" else "invisible"}")
             this.mainLoadingProgressBar.isVisible = isVisible
-        } else if (this is AuthActivity) {
-            Timber.d("Auth activity loading bar is ${if (isVisible) "visible" else "invisible"}")
-            this.authLoadingProgressBar.isVisible = isVisible
         }
     }
 
@@ -123,9 +118,6 @@ abstract class BaseFragmentV2<VM : BaseViewModel>(
         if (this is MainActivity) {
             Timber.d("Main activity loading bar is ${if (isVisible) "visible" else "invisible"}")
             this.mainLoadingProgressBar.isVisible = isVisible
-        } else if (this is AuthActivity) {
-            Timber.d("Auth activity loading bar is ${if (isVisible) "visible" else "invisible"}")
-            this.authLoadingProgressBar.isVisible = isVisible
         }
     }
 }

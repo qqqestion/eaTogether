@@ -2,47 +2,45 @@ package ru.blackbull.eatogether.ui.main.profile
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.core.BaseFragment
-import ru.blackbull.eatogether.other.EventObserver
-import timber.log.Timber
+import ru.blackbull.eatogether.core.BaseFragmentV2
 
 @AndroidEntryPoint
-class ProfileFragment : BaseFragment(R.layout.fragment_profile) {
+class ProfileFragment : BaseFragmentV2<ProfileViewModel>(
+    R.layout.fragment_profile,
+    ProfileViewModel::class
+) {
 
-    private val viewModel: ProfileViewModel by viewModels()
-
-    override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
-        super.onViewCreated(view , savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         ibtnProfileSettings.setOnClickListener {
-            findNavController().navigate(
-                ProfileFragmentDirections.actionProfileFragmentToEditProfileFragment()
-            )
+            viewModel.onProfileClicked()
         }
-        // TODO: когда будет статистика, добавить отображение загрузки
-        viewModel.currentUser.observe(viewLifecycleOwner , EventObserver(
-            onError = {
-//                showErrorDialog(it)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect(::handleState)
             }
-        ) { user ->
-            ibtnProfileImage.load(user?.mainImageUri) {
+        }
+    }
+
+    private fun handleState(state: ProfileState) {
+        state.image?.let { image ->
+            ibtnProfileImage.load(image) {
                 transformations(CircleCropTransformation())
             }
-        })
-        viewModel.statisticStatus.observe(viewLifecycleOwner , EventObserver(
-            onError = {
-                snackbar(it)
-                Timber.d(it)
-            }
-        ) { statistic ->
-            btnUniquePlaces.text = "${statistic.uniquePlaces} новых мест посещено"
-            btnPartiesCount.text = "${statistic.partyEnded} завершенных компаний"
-        })
+        }
+        state.statistic?.let { statistics ->
+            btnUniquePlaces.text = "${statistics.uniquePlaces} новых мест посещено"
+            btnPartiesCount.text = "${statistics.partyEnded} завершенных компаний"
+        }
     }
 }

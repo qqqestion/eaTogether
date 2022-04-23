@@ -6,7 +6,6 @@ import android.text.format.DateUtils
 import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
-import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import ru.blackbull.domain.usecases.*
 import ru.blackbull.eatogether.R
@@ -23,14 +22,14 @@ class CompleteRegistrationFragment : BaseFragmentV2<CompleteRegistrationViewMode
     R.layout.fragment_complete_registration, CompleteRegistrationViewModel::class
 ) {
 
-    private val binding: FragmentCompleteRegistrationBinding by viewBinding(
-        FragmentCompleteRegistrationBinding::bind
-    )
+    private var _binding: FragmentCompleteRegistrationBinding? = null
+    private val binding get() = _binding!!
 
     private val selectedDate = Calendar.getInstance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        _binding = FragmentCompleteRegistrationBinding.bind(view)
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
             val isLoading = (state is CompleteRegistrationState.Loading)

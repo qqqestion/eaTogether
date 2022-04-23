@@ -4,7 +4,6 @@ import android.location.Location
 import android.net.Uri
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.firestore.ktx.firestore
@@ -12,7 +11,6 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import ru.blackbull.data.models.firebase.*
-import ru.blackbull.domain.Constants
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -129,14 +127,6 @@ class FirebaseApi @Inject constructor() {
         partiesRef.document(party.id!!).set(party).await()
     }
 
-    /**
-     * Signs out
-     *
-     */
-    fun signOut() {
-        FirebaseAuth.getInstance().signOut()
-    }
-
     suspend fun uploadImage(localImageUri: Uri): Uri? {
         val res = FirebaseStorage.getInstance()
             .reference
@@ -148,27 +138,6 @@ class FirebaseApi @Inject constructor() {
 
     suspend fun updateUser(user: User) {
         usersRef.document(user.id!!).set(user).await()
-    }
-
-    suspend fun signIn(email: String , password: String) {
-        auth.signInWithEmailAndPassword(email , password)
-            .await()
-    }
-
-    /**
-     * Firstly we create user account with given email and password, then save all other information
-     *
-     * @param user where all user info stores, except for password
-     * @param password
-     */
-    suspend fun signUpWithEmailAndPassword(
-        user: User
-    ) {
-        val firebaseUser: FirebaseUser? = auth.currentUser
-        user.mainImageUri = Constants.DEFAULT_IMAGE_URL
-        user.images += user.mainImageUri!!
-        user.isRegistrationComplete = true
-        usersRef.document(firebaseUser!!.uid).set(user).await()
     }
 
     /**
@@ -205,13 +174,6 @@ class FirebaseApi @Inject constructor() {
         }
         Timber.d("users: $users")
         return users
-    }
-
-    suspend fun dislikeUser(user: User) {
-        val curUserRef = usersRef.document(auth.uid!!)
-        val curUser = curUserRef.get().await().toObject(User::class.java)
-        curUser!!.dislikedUsers += user.id!!
-        curUserRef.update("dislikedUsers" , curUser!!.dislikedUsers).await()
     }
 
     /**
@@ -254,10 +216,6 @@ class FirebaseApi @Inject constructor() {
     }
 
     fun getCurrentUserId(): String = auth.uid!!
-
-    fun isAuthenticated(): Boolean {
-        return auth.currentUser != null
-    }
 
     suspend fun deleteImage(uri: Uri) {
         FirebaseStorage.getInstance().getReferenceFromUrl(uri.toString()).delete().await()
