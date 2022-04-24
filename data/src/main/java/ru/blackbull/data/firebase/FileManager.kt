@@ -19,4 +19,8 @@ class FileManager @Inject constructor(
         ?.reference
         ?.downloadUrl
         ?.await()
+
+    suspend fun delete(url: String) {
+        storage.getReferenceFromUrl(url).delete().await()
+    }
 }

@@ -15,7 +15,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import ru.blackbull.domain.AppCoroutineDispatchers
-import ru.blackbull.domain.PartyDataSource
+import ru.blackbull.domain.PartyRepository
 import ru.blackbull.domain.UserRepository
 import javax.inject.Named
 import javax.inject.Singleton
@@ -23,10 +23,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class DataModule {
-
-    @Singleton
-    @Provides
-    fun providePartyRepository(api: FirebaseApi): PartyDataSource = PartyRepository(api)
 
     @Singleton
     @Provides
@@ -59,6 +55,9 @@ interface BindsModule {
 
     @Binds
     fun bindUserRepository(implementation: DefaultUserRepository): UserRepository
+
+    @Binds
+    fun bindPartyRepository(implementation: DefaultPartyRepository): PartyRepository
 }
 
 const val USER_COLLECTION_REF = "user-collection-ref"

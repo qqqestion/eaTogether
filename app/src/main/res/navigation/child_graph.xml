@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/createPartyFragment"
-        android:name="ru.blackbull.eatogether.ui.main.map.CreatePartyFragment"
+        android:name="ru.blackbull.eatogether.ui.map.CreatePartyFragment"
         android:label="@string/title_create_party"
         tools:layout="@layout/fragment_create_party">
         <argument
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/partyDetailFragment"
-        android:name="ru.blackbull.eatogether.ui.main.map.PartyDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.map.PartyDetailFragment"
         android:label="@string/title_party_detail"
         tools:layout="@layout/fragment_party_detail">
         <argument
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/placeDetailFragment"
-        android:name="ru.blackbull.eatogether.ui.main.map.PlaceDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.map.PlaceDetailFragment"
         android:label="@string/title_place_detail"
         tools:layout="@layout/fragment_place_detail">
         <action
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchResultFragment"
-        android:name="ru.blackbull.eatogether.ui.main.map.SearchResultFragment"
+        android:name="ru.blackbull.eatogether.ui.map.SearchResultFragment"
         android:label="@string/title_place_list"
         tools:layout="@layout/fragment_search_result">
         <action
@@ -58,7 +58,7 @@
     </fragment>
     <fragment
         android:id="@+id/userInfoFragment"
-        android:name="ru.blackbull.eatogether.ui.main.nearby.UserInfoFragment"
+        android:name="ru.blackbull.eatogether.ui.nearby.UserInfoFragment"
         android:label="UserInfoFragment"
         tools:layout="@layout/fragment_user_info">
         <argument

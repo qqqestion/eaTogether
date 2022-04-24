@@ -19,7 +19,7 @@
         >
 
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
+            android:id="@+id/vp_images"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="10dp"
@@ -29,32 +29,19 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <!--        <ImageView-->
-        <!--            android:id="@+id/ivEditProfileImage"-->
-        <!--            android:layout_width="150dp"-->
-        <!--            android:layout_height="150dp"-->
-        <!--            android:layout_marginBottom="20dp"-->
-        <!--            android:contentDescription="@string/content_description_profile_image"-->
-        <!--            android:scaleType="centerCrop"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent"-->
-        <!--            tools:src="@tools:sample/avatars"-->
-        <!--            />-->
-
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilFirstName"
+            android:id="@+id/til_first_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:hint="@string/ethint_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/viewPager"
+            app:layout_constraintTop_toBottomOf="@id/vp_images"
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEditProfileFirstName"
+                android:id="@+id/et_first_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorDark"
@@ -67,17 +54,17 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilLastName"
+            android:id="@+id/til_last_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/ethint_surname"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilFirstName"
+            app:layout_constraintTop_toBottomOf="@id/til_first_name"
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEditProfileLastName"
+                android:id="@+id/et_last_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorDark"
@@ -89,62 +76,17 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilBirthday"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/ethint_birthday"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilLastName"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEditProfileBirthday"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorDark"
-                android:drawableEnd="@drawable/ic_baseline_edit_24"
-                android:focusable="false"
-                android:inputType="date"
-                android:textColor="@color/colorDark"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!--        <com.google.android.material.textfield.TextInputLayout-->
-        <!--            android:id="@+id/tilPhone"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:hint="@string/ethint_email"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toBottomOf="@id/tilBirthday"-->
-        <!--            >-->
-
-        <!--            <com.google.android.material.textfield.TextInputEditText-->
-        <!--                android:id="@+id/etEditProfilePhoneNumber"-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:backgroundTint="@color/colorDark"-->
-        <!--                android:drawableEnd="@drawable/ic_baseline_edit_24"-->
-        <!--                android:inputType="textEmailAddress"-->
-        <!--                android:textColor="@color/colorDark"-->
-        <!--                />-->
-
-        <!--        </com.google.android.material.textfield.TextInputLayout>-->
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilDescription"
+            android:id="@+id/til_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/ethint_description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilBirthday"
+            app:layout_constraintTop_toBottomOf="@id/til_last_name"
             >
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etEditProfileDescription"
+                android:id="@+id/et_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorDark"
@@ -155,8 +97,20 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="@dimen/loading_progress_bar_size"
+            android:layout_height="@dimen/loading_progress_bar_size"
+            android:indeterminateTint="@color/colorGreen"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
         <Button
-            android:id="@+id/btnEditProfileSignOut"
+            android:id="@+id/btn_sign_out"
             android:layout_width="150dp"
             android:layout_height="45dp"
             android:layout_marginTop="16dp"
@@ -166,7 +120,7 @@
             android:textColor="@color/colorWhite"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tilDescription"
+            app:layout_constraintTop_toBottomOf="@id/til_description"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

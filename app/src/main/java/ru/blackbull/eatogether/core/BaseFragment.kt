@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.ui.main.MainActivity
+import ru.blackbull.eatogether.ui.MainActivity
 import timber.log.Timber
 import kotlin.reflect.KClass
 
