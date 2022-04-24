@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main_graph"
-    app:startDestination="@id/profileFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/profileFragment"
-        android:name="ru.blackbull.eatogether.ui.main.profile.ProfileFragment"
+        android:name="ru.blackbull.eatogether.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile">
         <action
@@ -16,12 +16,18 @@
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="ru.blackbull.eatogether.ui.main.profile.EditProfileFragment"
+        android:name="ru.blackbull.eatogether.ui.edit_profile.EditProfileFragment"
         android:label="@string/title_edit_profile"
-        tools:layout="@layout/fragment_edit_profile" />
+        tools:layout="@layout/fragment_edit_profile" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_startFragment"
+            app:destination="@id/startFragment"
+            app:launchSingleTop="true"
+            />
+    </fragment>
     <fragment
         android:id="@+id/mapFragment"
-        android:name="ru.blackbull.eatogether.ui.main.map.MapFragment"
+        android:name="ru.blackbull.eatogether.ui.map.MapFragment"
         android:label="@string/title_map">
         <!--        <action-->
         <!--            android:id="@+id/action_mapFragment_to_recycleRestaurantsFragment"-->
@@ -32,7 +38,7 @@
     </fragment>
     <fragment
         android:id="@+id/nearbyFragment"
-        android:name="ru.blackbull.eatogether.ui.main.nearby.NearbyFragment"
+        android:name="ru.blackbull.eatogether.ui.nearby.NearbyFragment"
         android:label="@string/title_nearby"
         tools:layout="@layout/fragment_nearby">
         <action
@@ -44,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/myPartyFragment"
-        android:name="ru.blackbull.eatogether.ui.main.myparties.MyPartyFragment"
+        android:name="ru.blackbull.eatogether.ui.myparties.MyPartyFragment"
         android:label="@string/title_my_parties">
         <action
             android:id="@+id/action_myPartyFragment_to_partyDetailFragment"
@@ -52,7 +58,7 @@
     </fragment>
     <!--    <fragment-->
     <!--        android:id="@+id/createPartyFragment"-->
-    <!--        android:name="ru.blackbull.eatogether.ui.main.map.CreatePartyFragment"-->
+    <!--        android:name="ru.blackbull.eatogether.ui.CreatePartyFragment"-->
     <!--        android:label="@string/title_create_party"-->
     <!--        tools:layout="@layout/fragment_create_party">-->
     <!--        <argument-->
@@ -67,7 +73,7 @@
     <!--    </fragment>-->
     <fragment
         android:id="@+id/partyDetailFragment"
-        android:name="ru.blackbull.eatogether.ui.main.map.PartyDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.map.PartyDetailFragment"
         android:label="@string/title_party_detail">
         <argument
             android:name="partyId"
@@ -78,7 +84,7 @@
     </fragment>
     <!--    <fragment-->
     <!--        android:id="@+id/placeDetailFragment"-->
-    <!--        android:name="ru.blackbull.eatogether.ui.main.map.PlaceDetailFragment"-->
+    <!--        android:name="ru.blackbull.eatogether.ui.PlaceDetailFragment"-->
     <!--        android:label="@string/title_place_detail"-->
     <!--        tools:layout="@layout/fragment_place_detail">-->
     <!--        <action-->
@@ -93,23 +99,23 @@
     <!--    </fragment>-->
     <fragment
         android:id="@+id/matchFragment"
-        android:name="ru.blackbull.eatogether.ui.main.nearby.MatchFragment"
+        android:name="ru.blackbull.eatogether.ui.nearby.MatchFragment"
         android:label="@string/title_match">
         <argument
             android:name="matchedUser"
-            app:argType="ru.blackbull.eatogether.models.firebase.User" />
+            app:argType="ru.blackbull.data.models.firebase.User" />
     </fragment>
     <fragment
         android:id="@+id/userInfoFragment"
-        android:name="ru.blackbull.eatogether.ui.main.nearby.UserInfoFragment"
+        android:name="ru.blackbull.eatogether.ui.nearby.UserInfoFragment"
         android:label="Пользователь">
         <argument
             android:name="user"
-            app:argType="ru.blackbull.eatogether.models.firebase.User" />
+            app:argType="ru.blackbull.data.models.firebase.User" />
     </fragment>
     <fragment
         android:id="@+id/friendsFragment"
-        android:name="ru.blackbull.eatogether.ui.main.friends.FriendsFragment"
+        android:name="ru.blackbull.eatogether.ui.friends.FriendsFragment"
         android:label="Друзья">
         <action
             android:id="@+id/action_friendsFragment_to_userInfoFragment"
@@ -117,11 +123,61 @@
     </fragment>
     <fragment
         android:id="@+id/lunchInvitationsFragment"
-        android:name="ru.blackbull.eatogether.ui.main.lunchinvitations.LunchInvitationsFragment"
+        android:name="ru.blackbull.eatogether.ui.lunchinvitations.LunchInvitationsFragment"
         android:label="Приглашения">
         <action
             android:id="@+id/action_lunchInvitationsFragment_to_partyDetailFragment"
             app:destination="@id/partyDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="ru.blackbull.eatogether.ui.splash.SplashFragment"
+        android:label="SplashFragment">
+        <action
+            android:id="@+id/action_splashFragment_to_startFragment"
+            app:destination="@id/startFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/createAccountFragment"
+        android:name="ru.blackbull.eatogether.ui.sign_up.SignUpFragment"
+        android:label="CreateAccountFragment">
+        <action
+            android:id="@+id/action_createAccountFragment_to_setAccountInfoFragment"
+            app:popUpTo="@id/startFragment"
+            app:destination="@id/setAccountInfoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="ru.blackbull.eatogether.ui.start.StartFragment"
+        android:label="StartFragment">
+        <action
+            android:id="@+id/action_startFragment_to_createAccountFragment"
+            app:destination="@id/createAccountFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ru.blackbull.eatogether.ui.sign_in.SignInFragment"
+        android:label="LoginFragment">
+        <action
+            android:id="@+id/action_loginFragment_to_setAccountInfoFragment"
+            app:destination="@id/setAccountInfoFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/setAccountInfoFragment"
+        android:name="ru.blackbull.eatogether.ui.complete_registration.CompleteRegistrationFragment"
+        android:label="SetAccountInfoFragment">
+        <action
+            android:id="@+id/action_setAccountInfoFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <!--    <fragment-->
     <!--        android:id="@+id/recycleRestaurantsFragment"-->

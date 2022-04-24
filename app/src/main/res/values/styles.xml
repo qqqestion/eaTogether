@@ -38,7 +38,7 @@
 
     <style name="MyTextInputLayout">
         <item name="android:background">@drawable/rounded_button_light_grey</item>
-        <item name="android:padding">7dp</item>
+        <item name="android:padding">4dp</item>
     </style>
 
     <style name="MyTextInputEditText">

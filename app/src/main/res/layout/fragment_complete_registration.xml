@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/tvRegistrationAppName"
+        android:layout_width="@dimen/eatogether_title_width"
+        android:layout_height="@dimen/eatogether_title_height"
+        android:layout_marginTop="@dimen/eatogether_title_mangin_top"
+        android:background="@drawable/rounded_button_light_grey"
+        android:fontFamily="@font/spirax"
+        android:gravity="center"
+        android:text="@string/eatogether"
+        android:textColor="@color/colorPink"
+        android:textSize="@dimen/eatogether_title_font"
+        android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilRegistrationFirstName"
+        style="@style/MyTextInputLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:hint="@string/ethint_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvRegistrationAppName"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etRegistrationFirstName"
+            style="@style/MyTextInputEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName|textCapWords"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilRegistrationLastName"
+        style="@style/MyTextInputLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_input_margin_in_list"
+        android:hint="@string/ethint_surname"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilRegistrationFirstName"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etRegistrationLastName"
+            style="@style/MyTextInputEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName|textCapWords"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilRegistrationBirthday"
+        style="@style/MyTextInputLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/text_input_margin_in_list"
+        android:hint="@string/ethint_birthday"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilRegistrationLastName"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etRegistrationBirthday"
+            style="@style/MyTextInputEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:inputType="date"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilRegistrationBirthday"
+        >
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilRegistrationDescription"
+            style="@style/MyTextInputLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/text_input_margin_in_list"
+            android:hint="@string/ethint_description"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etRegistrationDescription"
+                style="@style/MyTextInputEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="100"
+                android:overScrollMode="always"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/loading_progress_bar_size"
+        android:layout_height="@dimen/loading_progress_bar_size"
+        android:indeterminateTint="@color/colorGreen"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <Button
+        android:id="@+id/btnRegistrationConfirm"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/auth_buttons_margin_bot"
+        android:background="@drawable/rounded_button_green"
+        android:text="@string/confirm"
+        android:textColor="@color/colorLiteGrey"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

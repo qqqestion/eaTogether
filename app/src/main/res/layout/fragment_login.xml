@@ -36,8 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+            android:padding="10dp"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -60,8 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textPassword"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
+            android:padding="10dp"
             />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -91,6 +89,18 @@
         android:textColor="@color/colorPink"
         android:textSize="@dimen/eatogether_title_font"
         android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/loading_progress_bar_size"
+        android:layout_height="@dimen/loading_progress_bar_size"
+        android:indeterminateTint="@color/colorGreen"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

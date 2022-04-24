@@ -1,6 +1,7 @@
 package ru.blackbull.eatogether.other
 
 import androidx.lifecycle.Observer
+import ru.blackbull.domain.Resource
 import timber.log.Timber
 
 /**

@@ -42,17 +42,22 @@
     <string name="content_description_save_btn">Кнопка сохранить</string>
     <string name="content_description_profile_image">Фотография профиля</string>
 
-    <string name="errormessage_email_is_empty">Введите электронную почту</string>
-    <string name="errormessage_password_is_empty">Введите пароль</string>
-    <string name="errormessage_login_error">Почта и/или пароль введены неверно</string>
-    <string name="errormessage_user_already_exists">"Пользователь с данной электронной почтой уже существует"</string>
-    <string name="errormessage_email_malformed">Введите корректную электронную почту</string>
-    <string name="errormessage_weak_password">Данный пароль слишком слабый</string>
-    <string name="errormessage_unknown_error">Ошибка</string>
-    <string name="errormessage_passwords_mismatch">Пароли не совпадают</string>
-    <string name="errormessage_fields_must_be_filled">Заполните все поля</string>
-    <string name="errormessage_date_misformat">Введите корректное число</string>
-    <string name="errormessage_network_error">Ошибка подключения к интернету</string>
+    <!--  Errors  -->
+    <string name="error_email_is_empty">Введите электронную почту</string>
+    <string name="error_password_is_empty">Введите пароль</string>
+    <string name="error_sign_in_failed">Почта и/или пароль введены неверно</string>
+    <string name="error_email_already_exists">"Пользователь с данной электронной почтой уже существует"</string>
+    <string name="error_email_malformed">Введите корректную электронную почту</string>
+    <string name="error_weak_password">Данный пароль слишком слабый</string>
+    <string name="error_unknown_error">Ошибка</string>
+    <string name="error_passwords_mismatch">Пароли не совпадают</string>
+    <string name="error_fields_must_be_filled">Заполните все поля</string>
+    <string name="error_date_misformat">Введите корректное число</string>
+    <string name="error_network_error">Ошибка подключения к интернету</string>
+    <string name="error_default">Произошла ошибка</string>
+    <string name="error_too_young">Для регистрации в приложении вам должно быть больше 18 лет</string>
+    <string name="error_first_name_is_empty">Введите имя</string>
+    <string name="error_last_name_is_empty">Введите фамилию</string>
 
     <string name="requestpermission_rationale">Вы должны дать согласие на использование вашей локации</string>
     <string name="success_party_created">Компания успешно создана!</string>
@@ -74,4 +79,7 @@
 
     <string name="drawer_open">Открыть</string>
     <string name="drawer_close">Закрыть</string>
+    <string name="failure_phone_number_misformat">Please provide corrent phone number</string>
+    <string name="error_no_internet">Нет соединения с интенетом</string>
+    <string name="error_user_already_exists">Пользователь с такой почтой уже существует</string>
 </resources>

@@ -9,14 +9,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.item_party_preview.view.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.models.PartyWithUser
-import ru.blackbull.eatogether.models.firebase.Party
-import ru.blackbull.eatogether.other.PhotoUtility.getFormattedTime
-import timber.log.Timber
+import ru.blackbull.data.models.firebase.PartyWithUser
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 /**
@@ -52,6 +49,11 @@ class PartyAdapter : RecyclerView.Adapter<PartyAdapter.PartyViewHolder>() {
                 false
             )
         )
+    }
+
+    private fun getFormattedTime(date: Date): String {
+        val formatter = SimpleDateFormat("HH:mm" , Locale.getDefault())
+        return formatter.format(date)
     }
 
     override fun onBindViewHolder(holder: PartyViewHolder , position: Int) {

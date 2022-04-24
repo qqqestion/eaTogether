@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.AuthActivity"
+    tools:context=".ui.main.auth.AuthActivity"
     >
 
     <ImageView
@@ -32,6 +32,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="130dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/rounded_button_green"
+        android:text="@string/log_in"
+        android:textColor="@color/colorLiteGrey"
+        app:layout_constraintBottom_toTopOf="@id/btnStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         />
 
     <Button
