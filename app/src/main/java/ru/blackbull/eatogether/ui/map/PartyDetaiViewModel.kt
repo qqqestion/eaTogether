@@ -1,27 +1,23 @@
 package ru.blackbull.eatogether.ui.map
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import ru.blackbull.data.models.firebase.Party
-import ru.blackbull.data.models.mapkit.PlaceDetail
 import ru.blackbull.domain.PartyRepository
 import ru.blackbull.domain.Resource
 import ru.blackbull.domain.UserRepository
 import ru.blackbull.domain.models.firebase.DomainParty
 import ru.blackbull.domain.models.firebase.DomainUser
 import ru.blackbull.eatogether.other.Event
-import ru.blackbull.eatogether.repositories.PlaceRepository
+import ru.blackbull.eatogether.other.PlaceManager
 import javax.inject.Inject
 
 @HiltViewModel
 class PartyDetailViewModel @Inject constructor(
     private val firebaseRepository: UserRepository,
     private val partyRepository: PartyRepository,
-    private val placeRepository: PlaceRepository
+    private val placeManager: PlaceManager
 ) : ViewModel() {
 
     private val _selectedParty: MutableLiveData<Event<Resource<DomainParty>>> = MutableLiveData()
@@ -30,7 +26,7 @@ class PartyDetailViewModel @Inject constructor(
     private val _partyParticipants: MutableLiveData<Event<Resource<List<DomainUser>>>> = MutableLiveData()
     val partyParticipants: LiveData<Event<Resource<List<DomainUser>>>> = _partyParticipants
 
-    val placeDetail: LiveData<Event<Resource<PlaceDetail>>> = placeRepository.placeDetail
+    val placeDetail = placeManager.placeDetail.asLiveData()
 
     fun getPartyParticipants(party: Party) = viewModelScope.launch {
         _partyParticipants.postValue(Event(Resource.Loading()))
@@ -49,7 +45,7 @@ class PartyDetailViewModel @Inject constructor(
     }
 
     fun getPlaceDetail(placeId: String) = viewModelScope.launch {
-        placeRepository.getPlaceDetail(placeId)
+        placeManager.fetchPlaceDetail(placeId)
     }
 
     private val _leavePartyStatus = MutableLiveData<Event<Resource<Unit>>>()

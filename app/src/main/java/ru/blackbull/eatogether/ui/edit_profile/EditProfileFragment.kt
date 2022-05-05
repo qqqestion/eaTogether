@@ -23,9 +23,9 @@ import ru.blackbull.data.models.firebase.toUser
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.adapters.ImageAdapter
 import ru.blackbull.eatogether.core.BaseFragmentV2
+import ru.blackbull.eatogether.core.onTextChanged
 import ru.blackbull.eatogether.databinding.FragmentEditProfileBinding
 import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.ui.onTextChanged
 import timber.log.Timber
 import javax.inject.Inject
 

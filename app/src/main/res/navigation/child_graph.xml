@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/placeDetailFragment"
-        android:name="ru.blackbull.eatogether.ui.map.PlaceDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.place_detail.PlaceDetailFragment"
         android:label="@string/title_place_detail"
         tools:layout="@layout/fragment_place_detail">
         <action
@@ -44,12 +44,12 @@
             android:id="@+id/action_placeDetailFragment_to_partyDetailFragment"
             app:destination="@id/partyDetailFragment" />
         <argument
-            android:name="placeDetail"
-            app:argType="ru.blackbull.data.models.mapkit.PlaceDetail" />
+            android:name="placeId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/searchResultFragment"
-        android:name="ru.blackbull.eatogether.ui.map.SearchResultFragment"
+        android:name="ru.blackbull.eatogether.ui.place_search_result.SearchResultFragment"
         android:label="@string/title_place_list"
         tools:layout="@layout/fragment_search_result">
         <action

@@ -7,11 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_create_account.*
 import ru.blackbull.domain.usecases.*
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.core.BaseFragmentV2
-import ru.blackbull.eatogether.ui.clearError
-import ru.blackbull.eatogether.ui.onKeyEnter
-import ru.blackbull.eatogether.ui.setErrorMessage
-import ru.blackbull.eatogether.ui.trimmedText
+import ru.blackbull.eatogether.core.*
 
 @AndroidEntryPoint
 class SignUpFragment : BaseFragmentV2<SignUpViewModel>(

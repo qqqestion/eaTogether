@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_cuisine.view.*
-import ru.blackbull.data.models.mapkit.CuisineType
+import ru.blackbull.data.models.mapkit.CuisineUi
 import ru.blackbull.eatogether.R
 import javax.inject.Inject
 
@@ -15,28 +15,29 @@ import javax.inject.Inject
  * Адаптер для отображения различных видов кухонь
  *
  */
-class CuisineAdapter @Inject constructor() :
-    RecyclerView.Adapter<CuisineAdapter.ViewHolder>() {
+class CuisineAdapter @Inject constructor(
+    private val onCheckCuisine: (CuisineUi) -> Unit
+) : RecyclerView.Adapter<CuisineAdapter.ViewHolder>() {
 
-    private val diffCallback = object : DiffUtil.ItemCallback<CuisineType>() {
-        override fun areItemsTheSame(oldItem: CuisineType , newItem: CuisineType): Boolean {
+    private val diffCallback = object : DiffUtil.ItemCallback<CuisineUi>() {
+        override fun areItemsTheSame(oldItem: CuisineUi, newItem: CuisineUi): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: CuisineType , newItem: CuisineType): Boolean {
+        override fun areContentsTheSame(oldItem: CuisineUi, newItem: CuisineUi): Boolean {
             return oldItem == newItem
         }
     }
 
-    private val differ = AsyncListDiffer(this , diffCallback)
+    private val differ = AsyncListDiffer(this, diffCallback)
 
-    var cuisines: List<CuisineType>
+    var cuisines: List<CuisineUi>
         get() = differ.currentList
         set(value) = differ.submitList(value)
 
-    override fun onCreateViewHolder(parent: ViewGroup , viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_cuisine , null , false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_cuisine, null, false)
         )
     }
 
@@ -46,7 +47,7 @@ class CuisineAdapter @Inject constructor() :
             cbCuisine.text = cuisine.name
             cbCuisine.isChecked = cuisine.isChecked
             cbCuisine.setOnClickListener {
-                cuisine.isChecked = cbCuisine.isChecked
+                onCheckCuisine(cuisine)
             }
         }
     }

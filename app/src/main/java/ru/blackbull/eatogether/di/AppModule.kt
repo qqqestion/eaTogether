@@ -4,17 +4,14 @@ import android.content.Context
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.yandex.mapkit.search.SearchFactory
 import com.yandex.mapkit.search.SearchManagerType
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.blackbull.data.DefaultAuthRepository
-import ru.blackbull.domain.AuthRepository
 import javax.inject.Singleton
 
-@Module(includes = [BindsModule::class])
+@Module()
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
@@ -29,12 +26,4 @@ object AppModule {
     fun provideSearchManager() = SearchFactory.getInstance().createSearchManager(
         SearchManagerType.ONLINE
     )
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-interface BindsModule {
-
-    @Binds
-    fun bindAuthDataSource(authRepository: DefaultAuthRepository): AuthRepository
 }

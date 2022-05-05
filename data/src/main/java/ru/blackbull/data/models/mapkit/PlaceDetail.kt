@@ -21,43 +21,44 @@ import ru.blackbull.domain.models.Location
  * @property cuisine кухни, которые используют в этом заведении (русскую, европейскую)
  */
 data class PlaceDetail(
-    val id: String? = "" ,
-    val name: String? = "" ,
-    val address: String? = "" ,
-    val phone: String? = "" ,
-    val workingState: String? = "" ,
-    val score: Float? = 0F ,
-    val ratings: Int? = 0 ,
-    val categories: List<String> = listOf() ,
-    val cuisine: List<String> = listOf() ,
-    var location: Location? = null
+    val id: String = "",
+    val name: String = "",
+    val address: String = "",
+    val phone: String = "",
+    val workingState: String = "",
+    val score: Float = 0F,
+    val ratings: Int = 0,
+    val categories: List<String> = listOf(),
+    val cuisine: List<String> = listOf(),
+    val location: Location? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString() ,
-        parcel.readString() ,
-        parcel.readString() ,
-        parcel.readString() ,
-        parcel.readString() ,
-        parcel.readValue(Float::class.java.classLoader) as? Float ,
-        parcel.readValue(Int::class.java.classLoader) as? Int ,
-        parcel.createStringArrayList() ?: listOf() ,
-        parcel.createStringArrayList() ?: listOf() ,
-    ) {
-        location = Location(parcel.readDouble() , parcel.readDouble())
-    }
+        checkNotNull(parcel.readString()),
+        checkNotNull(parcel.readString()),
+        checkNotNull(parcel.readString()),
+        checkNotNull(parcel.readString()),
+        checkNotNull(parcel.readString()),
+        checkNotNull(parcel.readFloat()),
+        checkNotNull(parcel.readInt()),
+        parcel.createStringArrayList() ?: listOf(),
+        parcel.createStringArrayList() ?: listOf(),
+        location = Location(parcel.readDouble(), parcel.readDouble())
+    )
 
-    override fun writeToParcel(parcel: Parcel , flags: Int) {
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
         parcel.writeString(name)
         parcel.writeString(address)
         parcel.writeString(phone)
         parcel.writeString(workingState)
-        parcel.writeValue(score)
-        parcel.writeValue(ratings)
+        parcel.writeFloat(score)
+        parcel.writeInt(ratings)
         parcel.writeStringList(categories)
         parcel.writeStringList(cuisine)
-        parcel.writeDouble(location!!.latitude)
-        parcel.writeDouble(location!!.longitude)
+        location?.let { loc ->
+            parcel.writeDouble(loc.latitude)
+            parcel.writeDouble(loc.longitude)
+        }
     }
 
     override fun describeContents(): Int {
@@ -95,20 +96,20 @@ fun GeoObject.toPlaceDetail(): PlaceDetail {
     val links = businessMetadata.links
     val geometry = geometry.firstOrNull()?.point
     val location = if (geometry != null) {
-        Location(geometry.latitude , geometry.longitude)
+        Location(geometry.latitude, geometry.longitude)
     } else {
         null
     }
     return PlaceDetail(
-        id ,
-        name ,
-        address ,
-        phones.firstOrNull() ,
-        workingHours ,
-        score ,
-        ratings ,
-        categories ,
-        cuisine ,
+        id,
+        name,
+        address,
+        phones.firstOrNull().orEmpty(),
+        workingHours.orEmpty(),
+        score ?: 0f,
+        ratings ?: 0,
+        categories,
+        cuisine,
         location
     )
 }

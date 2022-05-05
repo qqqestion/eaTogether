@@ -1,7 +1,7 @@
 package ru.blackbull.data.firebase
 
 import com.google.firebase.firestore.CollectionReference
-import ru.blackbull.data.PARTY_COLLECTION_REF
+import ru.blackbull.data.di.PARTY_COLLECTION_REF
 import javax.inject.Inject
 import javax.inject.Named
 

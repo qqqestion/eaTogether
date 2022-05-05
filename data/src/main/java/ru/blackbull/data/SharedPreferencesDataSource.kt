@@ -4,15 +4,16 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import javax.inject.Inject
 
-sealed class Preference<T : Any>(
+internal sealed class Preference<T : Any>(
     val key: String,
     val default: T
 ) {
 
     object RegistrationComplete : Preference<Boolean>("registration_complete", false)
+    object SelectedCuisines : Preference<Set<String>>("selected_cuisines", emptySet())
 }
 
-class SharedPreferencesDataSource @Inject constructor(
+internal class SharedPreferencesDataSource @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) {
 
@@ -52,17 +53,23 @@ class SharedPreferencesDataSource @Inject constructor(
         }
     }
 
-    fun read(preference: Preference<String>) = sharedPreferences.getString(preference.key, preference.default)
+    fun read(preference: Preference<String>) =
+        sharedPreferences.getString(preference.key, preference.default)
 
-    fun read(preference: Preference<Long>) = sharedPreferences.getLong(preference.key, preference.default)
+    fun read(preference: Preference<Long>) =
+        sharedPreferences.getLong(preference.key, preference.default)
 
-    fun read(preference: Preference<Int>) = sharedPreferences.getInt(preference.key, preference.default)
+    fun read(preference: Preference<Int>) =
+        sharedPreferences.getInt(preference.key, preference.default)
 
-    fun read(preference: Preference<Float>) = sharedPreferences.getFloat(preference.key, preference.default)
+    fun read(preference: Preference<Float>) =
+        sharedPreferences.getFloat(preference.key, preference.default)
 
-    fun read(preference: Preference<Boolean>) = sharedPreferences.getBoolean(preference.key, preference.default)
+    fun read(preference: Preference<Boolean>) =
+        sharedPreferences.getBoolean(preference.key, preference.default)
 
-    fun read(preference: Preference<Set<String>>) = sharedPreferences.getStringSet(preference.key, preference.default)
+    fun read(preference: Preference<Set<String>>): Set<String> =
+        sharedPreferences.getStringSet(preference.key, preference.default) ?: preference.default
 
     fun remove(preference: Preference<*>) = sharedPreferences.edit { remove(preference.key) }
 }

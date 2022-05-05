@@ -6,7 +6,7 @@ import ru.blackbull.domain.models.firebase.DomainPartyWithUser
 import ru.blackbull.domain.models.firebase.DomainUser
 
 interface PartyRepository {
-    suspend fun searchPartyByPlace(
+    suspend fun getPartiesByPlaceId(
         placeId: String
     ): Either<Throwable , List<DomainPartyWithUser>>
 

@@ -10,9 +10,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import ru.blackbull.domain.usecases.*
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.core.BaseFragmentV2
+import ru.blackbull.eatogether.core.clearError
+import ru.blackbull.eatogether.core.trimmedText
 import ru.blackbull.eatogether.databinding.FragmentCompleteRegistrationBinding
-import ru.blackbull.eatogether.ui.clearError
-import ru.blackbull.eatogether.ui.trimmedText
 import java.util.*
 
 @AndroidEntryPoint

@@ -19,7 +19,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DefaultAuthRepository @Inject constructor(
+class DefaultAuthRepository @Inject internal constructor(
     private val dispatchers: AppCoroutineDispatchers,
     private val sharedPreferencesDataSource: SharedPreferencesDataSource,
     private val userCollection: UserCollection,

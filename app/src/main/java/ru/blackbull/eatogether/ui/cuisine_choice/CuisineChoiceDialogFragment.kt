@@ -6,20 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.yandex.mapkit.search.SearchManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_cuisine_choice.*
-import ru.blackbull.domain.Resource
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.core.snackbar
-import ru.blackbull.eatogether.other.Event
-import ru.blackbull.eatogether.other.EventObserver
-import ru.blackbull.eatogether.ui.map.MapViewModel
 import timber.log.Timber
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -27,12 +26,7 @@ class CuisineChoiceDialogFragment : DialogFragment() {
 
     private var dialogView: View? = null
 
-    private val viewModel: MapViewModel by activityViewModels()
-
-    @Inject
-    lateinit var searchManager: SearchManager
-
-    private val cuisineAdapter = CuisineAdapter()
+    private val viewModel: CuisineChoiceViewModel by viewModels()
 
     /**
      * Создаем view для диалога и ставим кнопку "подтвердить",
@@ -43,7 +37,7 @@ class CuisineChoiceDialogFragment : DialogFragment() {
      */
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         dialogView = LayoutInflater.from(requireContext()).inflate(
-            R.layout.fragment_cuisine_choice ,
+            R.layout.fragment_cuisine_choice,
             null
         )
         Timber.d("onCreateDialog")
@@ -51,44 +45,40 @@ class CuisineChoiceDialogFragment : DialogFragment() {
         return MaterialAlertDialogBuilder(requireContext())
             .setTitle("Выбор кухни")
             .setView(dialogView)
-            .setPositiveButton("Подтвердить") { _ , _ ->
-                viewModel.cuisine.postValue(Event(Resource.Success(cuisineAdapter.cuisines)))
-            }
+            .setPositiveButton("Подтвердить") { _, _ -> }
             .create()
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater ,
-        container: ViewGroup? ,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         Timber.d("onCreateView")
         return dialogView
     }
 
-    override fun onViewCreated(view: View , savedInstanceState: Bundle?) {
-        super.onViewCreated(view , savedInstanceState)
-        setupRecyclerView()
-        Timber.d("onViewCreated")
-        subscribeToObservers()
-        viewModel.getCuisineList()
-    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    private fun setupRecyclerView() {
+        val cuisineAdapter = CuisineAdapter { cuisine ->
+            viewModel.toggleCuisine(cuisine)
+        }
         rvCuisine.adapter = cuisineAdapter
-        rvCuisine.layoutManager = GridLayoutManager(requireContext() , 2)
+        rvCuisine.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.cuisines.collect { state ->
+                    cuisineAdapter.cuisines = state.cuisines
+                }
+            }
+        }
     }
 
-    private fun subscribeToObservers() {
-        viewModel.cuisine.observe(viewLifecycleOwner , EventObserver(
-            onError = {
-                snackbar(it)
-                Timber.d(it)
-            }
-        ) {
-            cuisineAdapter.cuisines = it
-            Timber.d("Cuisine list: ${it.map { cuisine -> cuisine.name }}")
-        })
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveSelected()
     }
 
     override fun onDestroy() {
@@ -98,5 +88,16 @@ class CuisineChoiceDialogFragment : DialogFragment() {
 
     companion object {
         const val TAG = "PurchaseConfirmationDialog"
+
+        fun getInstance() = CuisineChoiceDialogFragment()
+
+        fun showOnlyOnce(fragmentManager: FragmentManager) {
+            if (fragmentManager.findFragmentByTag(TAG) == null) {
+                getInstance().show(
+                    fragmentManager,
+                    TAG
+                )
+            }
+        }
     }
 }

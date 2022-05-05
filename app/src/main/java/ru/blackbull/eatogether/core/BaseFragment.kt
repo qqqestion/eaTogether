@@ -9,6 +9,7 @@ import androidx.annotation.StringRes
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.createViewModelLazy
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -66,7 +67,14 @@ abstract class BaseFragmentV2<VM : BaseViewModel>(
     viewModelClazz: KClass<VM>,
 ) : Fragment(layoutId) {
 
-    protected val viewModel: VM by createViewModelLazy(viewModelClazz, { viewModelStore })
+    open val factoryProducer: (() -> ViewModelProvider.Factory)?
+        get() = null
+
+    protected val viewModel: VM by createViewModelLazy(
+        viewModelClazz,
+        { viewModelStore },
+        factoryProducer
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

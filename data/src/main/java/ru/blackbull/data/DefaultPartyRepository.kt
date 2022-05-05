@@ -15,7 +15,7 @@ class DefaultPartyRepository @Inject constructor(
     private val firebaseApi: FirebaseApi
 ) : PartyRepository {
 
-    override suspend fun searchPartyByPlace(
+    override suspend fun getPartiesByPlaceId(
         placeId: String
     ): Either<Throwable , List<DomainPartyWithUser>> = withContext(Dispatchers.IO) {
         safeCall {

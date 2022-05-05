@@ -20,6 +20,9 @@ sealed class Either<out A, out B> {
     }
 }
 
+fun <B> Right(value: B) = Either.Right(value)
+fun <A> Left(value: A) = Either.Left(value)
+
 val <A, B> Either<A, B>.value: B?
     get() = when(this) {
         is Either.Left -> null

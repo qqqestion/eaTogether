@@ -13,12 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_party_detail.*
-import ru.blackbull.eatogether.R
-import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
-import ru.blackbull.data.models.mapkit.PlaceDetail
 import ru.blackbull.data.models.firebase.Party
 import ru.blackbull.data.models.firebase.toParty
 import ru.blackbull.data.models.firebase.toUser
+import ru.blackbull.data.models.mapkit.PlaceDetail
+import ru.blackbull.domain.functional.value
+import ru.blackbull.eatogether.R
+import ru.blackbull.eatogether.adapters.PartyParticipantAdapter
 import ru.blackbull.eatogether.other.EventObserver
 import ru.blackbull.eatogether.ui.invite_for_lunch.InviteForLunchDialogFragment
 import java.util.*
@@ -103,9 +104,9 @@ class PartyDetailFragment : Fragment(R.layout.fragment_party_detail) {
             EventObserver { participants ->
                 partyParticipantAdapter.participants = participants.map { it.toUser() }
             })
-        viewModel.placeDetail.observe(viewLifecycleOwner , EventObserver { placeDetail ->
-            updatePlaceInfo(placeDetail)
-        })
+        viewModel.placeDetail.observe(viewLifecycleOwner) { either ->
+            either.value?.let(::updatePlaceInfo)
+        }
         viewModel.leavePartyStatus.observe(viewLifecycleOwner , EventObserver {
             findNavController().popBackStack()
         })

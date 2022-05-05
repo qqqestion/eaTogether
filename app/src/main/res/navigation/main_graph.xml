@@ -3,22 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main_graph"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/splashFragment"
+    >
 
     <fragment
         android:id="@+id/profileFragment"
         android:name="ru.blackbull.eatogether.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile">
+        tools:layout="@layout/fragment_profile"
+        >
         <action
             android:id="@+id/action_profileFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
+            app:destination="@id/editProfileFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="ru.blackbull.eatogether.ui.edit_profile.EditProfileFragment"
         android:label="@string/title_edit_profile"
-        tools:layout="@layout/fragment_edit_profile" >
+        tools:layout="@layout/fragment_edit_profile"
+        >
         <action
             android:id="@+id/action_editProfileFragment_to_startFragment"
             app:destination="@id/startFragment"
@@ -28,7 +32,8 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="ru.blackbull.eatogether.ui.map.MapFragment"
-        android:label="@string/title_map">
+        android:label="@string/title_map"
+        >
         <!--        <action-->
         <!--            android:id="@+id/action_mapFragment_to_recycleRestaurantsFragment"-->
         <!--            app:destination="@id/recycleRestaurantsFragment" />-->
@@ -40,154 +45,144 @@
         android:id="@+id/nearbyFragment"
         android:name="ru.blackbull.eatogether.ui.nearby.NearbyFragment"
         android:label="@string/title_nearby"
-        tools:layout="@layout/fragment_nearby">
+        tools:layout="@layout/fragment_nearby"
+        >
         <action
             android:id="@+id/action_nearbyFragment_to_matchFragment"
-            app:destination="@id/matchFragment" />
+            app:destination="@id/matchFragment"
+            />
         <action
             android:id="@+id/action_nearbyFragment_to_userInfoFragment"
-            app:destination="@id/userInfoFragment" />
+            app:destination="@id/userInfoFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/myPartyFragment"
         android:name="ru.blackbull.eatogether.ui.myparties.MyPartyFragment"
-        android:label="@string/title_my_parties">
+        android:label="@string/title_my_parties"
+        >
         <action
             android:id="@+id/action_myPartyFragment_to_partyDetailFragment"
-            app:destination="@id/partyDetailFragment" />
+            app:destination="@id/partyDetailFragment"
+            />
     </fragment>
-    <!--    <fragment-->
-    <!--        android:id="@+id/createPartyFragment"-->
-    <!--        android:name="ru.blackbull.eatogether.ui.CreatePartyFragment"-->
-    <!--        android:label="@string/title_create_party"-->
-    <!--        tools:layout="@layout/fragment_create_party">-->
-    <!--        <argument-->
-    <!--            android:name="placeUri"-->
-    <!--            app:argType="string" />-->
-    <!--        <argument-->
-    <!--            android:name="placeName"-->
-    <!--            app:argType="string" />-->
-    <!--        <argument-->
-    <!--            android:name="placeAddress"-->
-    <!--            app:argType="string" />-->
-    <!--    </fragment>-->
     <fragment
         android:id="@+id/partyDetailFragment"
         android:name="ru.blackbull.eatogether.ui.map.PartyDetailFragment"
-        android:label="@string/title_party_detail">
+        android:label="@string/title_party_detail"
+        >
         <argument
             android:name="partyId"
-            app:argType="string" />
+            app:argType="string"
+            />
         <action
             android:id="@+id/action_partyDetailFragment_to_userInfoFragment"
-            app:destination="@id/userInfoFragment" />
+            app:destination="@id/userInfoFragment"
+            />
     </fragment>
-    <!--    <fragment-->
-    <!--        android:id="@+id/placeDetailFragment"-->
-    <!--        android:name="ru.blackbull.eatogether.ui.PlaceDetailFragment"-->
-    <!--        android:label="@string/title_place_detail"-->
-    <!--        tools:layout="@layout/fragment_place_detail">-->
-    <!--        <action-->
-    <!--            android:id="@+id/action_placeDetailFragment_to_createPartyFragment"-->
-    <!--            app:destination="@id/createPartyFragment" />-->
-    <!--        <action-->
-    <!--            android:id="@+id/action_placeDetailFragment_to_partyDetailFragment"-->
-    <!--            app:destination="@id/partyDetailFragment" />-->
-    <!--        <argument-->
-    <!--            android:name="placeUri"-->
-    <!--            app:argType="string" />-->
-    <!--    </fragment>-->
     <fragment
         android:id="@+id/matchFragment"
         android:name="ru.blackbull.eatogether.ui.nearby.MatchFragment"
-        android:label="@string/title_match">
+        android:label="@string/title_match"
+        >
         <argument
             android:name="matchedUser"
-            app:argType="ru.blackbull.data.models.firebase.User" />
+            app:argType="ru.blackbull.data.models.firebase.User"
+            />
     </fragment>
     <fragment
         android:id="@+id/userInfoFragment"
         android:name="ru.blackbull.eatogether.ui.nearby.UserInfoFragment"
-        android:label="Пользователь">
+        android:label="Пользователь"
+        >
         <argument
             android:name="user"
-            app:argType="ru.blackbull.data.models.firebase.User" />
+            app:argType="ru.blackbull.data.models.firebase.User"
+            />
     </fragment>
     <fragment
         android:id="@+id/friendsFragment"
         android:name="ru.blackbull.eatogether.ui.friends.FriendsFragment"
-        android:label="Друзья">
+        android:label="Друзья"
+        >
         <action
             android:id="@+id/action_friendsFragment_to_userInfoFragment"
-            app:destination="@id/userInfoFragment" />
+            app:destination="@id/userInfoFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/lunchInvitationsFragment"
         android:name="ru.blackbull.eatogether.ui.lunchinvitations.LunchInvitationsFragment"
-        android:label="Приглашения">
+        android:label="Приглашения"
+        >
         <action
             android:id="@+id/action_lunchInvitationsFragment_to_partyDetailFragment"
-            app:destination="@id/partyDetailFragment" />
+            app:destination="@id/partyDetailFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
         android:name="ru.blackbull.eatogether.ui.splash.SplashFragment"
-        android:label="SplashFragment">
+        android:label="SplashFragment"
+        >
         <action
             android:id="@+id/action_splashFragment_to_startFragment"
-            app:destination="@id/startFragment" />
+            app:destination="@id/startFragment"
+            />
         <action
             android:id="@+id/action_splashFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            app:destination="@id/mapFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
     <fragment
         android:id="@+id/createAccountFragment"
         android:name="ru.blackbull.eatogether.ui.sign_up.SignUpFragment"
-        android:label="CreateAccountFragment">
+        android:label="CreateAccountFragment"
+        >
         <action
             android:id="@+id/action_createAccountFragment_to_setAccountInfoFragment"
+            app:destination="@id/setAccountInfoFragment"
             app:popUpTo="@id/startFragment"
-            app:destination="@id/setAccountInfoFragment" />
+            />
     </fragment>
     <fragment
         android:id="@+id/startFragment"
         android:name="ru.blackbull.eatogether.ui.start.StartFragment"
-        android:label="StartFragment">
+        android:label="StartFragment"
+        >
         <action
             android:id="@+id/action_startFragment_to_createAccountFragment"
-            app:destination="@id/createAccountFragment" />
+            app:destination="@id/createAccountFragment"
+            />
         <action
             android:id="@+id/action_startFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="ru.blackbull.eatogether.ui.sign_in.SignInFragment"
-        android:label="LoginFragment">
+        android:label="LoginFragment"
+        >
         <action
             android:id="@+id/action_loginFragment_to_setAccountInfoFragment"
-            app:destination="@id/setAccountInfoFragment" />
+            app:destination="@id/setAccountInfoFragment"
+            />
         <action
             android:id="@+id/action_loginFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            app:destination="@id/mapFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/setAccountInfoFragment"
         android:name="ru.blackbull.eatogether.ui.complete_registration.CompleteRegistrationFragment"
-        android:label="SetAccountInfoFragment">
+        android:label="SetAccountInfoFragment"
+        >
         <action
             android:id="@+id/action_setAccountInfoFragment_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            app:destination="@id/mapFragment"
+            />
     </fragment>
-    <!--    <fragment-->
-    <!--        android:id="@+id/recycleRestaurantsFragment"-->
-    <!--        android:name="ru.blackbull.eatogether.ui.main.map.RecycleRestaurantsFragment"-->
-    <!--        android:label="@string/title_place_list">-->
-    <!--        <action-->
-    <!--            android:id="@+id/action_recycleRestaurantsFragment_to_placeDetailFragment"-->
-    <!--            app:destination="@id/placeDetailFragment" />-->
-    <!--        <argument-->
-    <!--            android:name="location"-->
-    <!--            app:argType="com.google.android.gms.maps.model.LatLng" />-->
-    <!--    </fragment>-->
 </navigation>

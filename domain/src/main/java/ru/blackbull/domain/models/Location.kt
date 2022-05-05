@@ -7,6 +7,6 @@ package ru.blackbull.domain.models
  * @property longitude долгота
  */
 data class Location(
-    val latitude: Double ,
+    val latitude: Double,
     val longitude: Double
 )
