@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.map
+package ru.blackbull.eatogether.ui.place_search_result
 
 import android.view.LayoutInflater
 import android.view.View

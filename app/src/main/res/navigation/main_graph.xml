@@ -68,7 +68,7 @@
     </fragment>
     <fragment
         android:id="@+id/partyDetailFragment"
-        android:name="ru.blackbull.eatogether.ui.map.PartyDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.party_detail.PartyDetailFragment"
         android:label="@string/title_party_detail"
         >
         <argument
@@ -112,7 +112,7 @@
     </fragment>
     <fragment
         android:id="@+id/lunchInvitationsFragment"
-        android:name="ru.blackbull.eatogether.ui.lunchinvitations.LunchInvitationsFragment"
+        android:name="ru.blackbull.eatogether.ui.lunch_invitations.LunchInvitationsFragment"
         android:label="Приглашения"
         >
         <action

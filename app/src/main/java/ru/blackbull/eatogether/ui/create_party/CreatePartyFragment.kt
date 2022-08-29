@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.map
+package ru.blackbull.eatogether.ui.create_party
 
 import android.app.TimePickerDialog
 import android.os.Bundle
@@ -13,8 +13,8 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_create_party.*
-import ru.blackbull.eatogether.R
 import ru.blackbull.domain.Resource
+import ru.blackbull.eatogether.R
 import java.util.*
 
 

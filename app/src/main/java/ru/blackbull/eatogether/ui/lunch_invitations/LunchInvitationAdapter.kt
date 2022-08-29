@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.lunchinvitations
+package ru.blackbull.eatogether.ui.lunch_invitations
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import kotlinx.android.synthetic.main.item_lunch_invitation.view.*
-import ru.blackbull.eatogether.R
 import ru.blackbull.data.models.firebase.LunchInvitationWithUsers
+import ru.blackbull.eatogether.R
 import javax.inject.Inject
 
 /**

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/createPartyFragment"
-        android:name="ru.blackbull.eatogether.ui.map.CreatePartyFragment"
+        android:name="ru.blackbull.eatogether.ui.create_party.CreatePartyFragment"
         android:label="@string/title_create_party"
         tools:layout="@layout/fragment_create_party">
         <argument
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/partyDetailFragment"
-        android:name="ru.blackbull.eatogether.ui.map.PartyDetailFragment"
+        android:name="ru.blackbull.eatogether.ui.party_detail.PartyDetailFragment"
         android:label="@string/title_party_detail"
         tools:layout="@layout/fragment_party_detail">
         <argument

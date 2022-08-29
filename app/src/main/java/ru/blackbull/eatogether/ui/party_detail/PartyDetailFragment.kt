@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.map
+package ru.blackbull.eatogether.ui.party_detail
 
 import android.app.TimePickerDialog
 import android.os.Bundle

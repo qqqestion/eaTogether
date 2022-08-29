@@ -6,17 +6,28 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/tv_place_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Cafe (One of the Best)" />
+
+    <TextView
         android:id="@+id/tvPlaceDetailCategories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_place_name"
         tools:text="Fast food, Restaurant" />
 
     <LinearLayout
         android:id="@+id/llScores"
         android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +87,7 @@
         android:id="@+id/ivPlace"
         android:layout_width="25dp"
         android:layout_height="25dp"
+        android:layout_marginTop="10dp"
         android:layout_marginStart="50dp"
         android:src="@drawable/ic_baseline_place_24"
         app:layout_constraintStart_toStartOf="parent"

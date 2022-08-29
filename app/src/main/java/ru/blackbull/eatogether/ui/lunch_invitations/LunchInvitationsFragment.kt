@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.lunchinvitations
+package ru.blackbull.eatogether.ui.lunch_invitations
 
 import android.os.Bundle
 import android.view.View

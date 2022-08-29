@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.map
+package ru.blackbull.eatogether.ui.party_detail
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel

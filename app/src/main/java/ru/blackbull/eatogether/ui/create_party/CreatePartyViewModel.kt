@@ -1,4 +1,4 @@
-package ru.blackbull.eatogether.ui.map
+package ru.blackbull.eatogether.ui.create_party
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

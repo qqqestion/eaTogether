@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.blackbull.eatogether.R
 import ru.blackbull.eatogether.core.BaseFragmentV2
-import ru.blackbull.eatogether.ui.map.PlaceAdapter
 
 @AndroidEntryPoint
 class SearchResultFragment : BaseFragmentV2<SearchResultViewModel>(

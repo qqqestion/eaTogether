@@ -118,7 +118,7 @@ class MapViewModel @Inject constructor(
         return true
     }
 
-    var isFirstLocation: Boolean = true
+    private var isFirstLocation: Boolean = true
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult) {
@@ -126,6 +126,8 @@ class MapViewModel @Inject constructor(
             result.lastLocation.let { loc ->
                 if (isFirstLocation) {
                     _currentLocation.value = Location(loc.latitude, loc.longitude)
+                } else {
+                    _currentLocation.value = null
                 }
                 isFirstLocation = false
             }
@@ -154,6 +156,6 @@ class MapViewModel @Inject constructor(
 }
 
 private fun PlaceDetail.toMark(): MapMark = MapMark(
-    checkNotNull(id),
+    id,
     checkNotNull(location)
 )

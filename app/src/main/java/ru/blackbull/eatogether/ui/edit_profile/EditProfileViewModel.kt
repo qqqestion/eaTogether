@@ -116,7 +116,10 @@ class EditProfileViewModel @Inject constructor(
         _deleteStatus.postValue(Event(Resource.Loading()))
         val response = userRepository.deleteImage(uri.toString()).toResource()
         _deleteStatus.postValue(Event(response))
-//        loadingManager.startLoading()
+
+        loadingManager.startLoading()
+        userRepository.deleteImage(uri.toString())
+        loadingManager.finishLoading()
     }
 
     fun makeImageMain(uri: Uri) = viewModelScope.launch {
